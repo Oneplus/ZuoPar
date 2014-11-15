@@ -1,29 +1,29 @@
-#ifndef __ZUOPAR_MODEL_SCORE_MAP_H__
-#define __ZUOPAR_MODEL_SCORE_MAP_H__
+#ifndef __ZUOPAR_MODEL_FEATURE_POINTWISE_PARAM_MAP_H__
+#define __ZUOPAR_MODEL_FEATURE_POINTWISE_PARAM_MAP_H__
 
 #include "settings.h"
-#include "ml/perceptron/param.h"
+#include "ml/pointwise_param.h"
 #include "utils/serialization/unordered_map.h"
 
 namespace ZuoPar {
 
-template <class _ScoreType,
+template <class _FeatureType,
           class _ScoreContextType,
           class _ActionType>
-class ScoreMap {
+class FeaturePointwiseParamMap {
 private:
   //! Define the parameter type.
-  typedef MachineLearning::Perceptron::Parameter param_t;
+  typedef MachineLearning::PointwiseParameter param_t;
   //! Define the mapping type.
-  typedef boost::unordered_map<_ScoreType, param_t> map_t;
+  typedef boost::unordered_map<_FeatureType, param_t> map_t;
   //! Define the cache type.
-  typedef std::vector<_ScoreType> cache_t;
+  typedef std::vector<_FeatureType> cache_t;
   //! Define the functor type.
   typedef std::function<void(const _ScoreContextType&,
       const _ActionType&, cache_t&)> extractor_t;
 
 public:
-  ScoreMap(extractor_t _extractor): extractor(_extractor) {}
+  FeaturePointwiseParamMap(extractor_t _extractor): extractor(_extractor) {}
 
   /**
    * Get the score for the (context, action) pair
@@ -42,7 +42,7 @@ public:
     //extractor(ctx, act);
     floatval_t ret = 0.;
     for (int i = 0; i < cache.size(); ++ i) {
-      const _ScoreType& entry = cache[i];
+      const _FeatureType& entry = cache[i];
       typename map_t::const_iterator itx = payload.find(entry);
       if (itx != payload.end()) {
         if (avg) {
@@ -68,7 +68,7 @@ public:
     cache.clear();
     extractor(ctx, act, cache);
     for (int i = 0; i < cache.size(); ++ i) {
-      const _ScoreType& entry = cache[i];
+      const _FeatureType& entry = cache[i];
       param_t& param = payload[entry];
       param.add(now, scale);
     }
@@ -112,6 +112,6 @@ private:
 };
 
 
-}
+} //  end for zuopar
 
-#endif  //  end for __ZGEN_SHIFTREDUCE_MODEL_SCORE_MAP_H__
+#endif  //  end for __ZUOPAR_MODEL_FEATURE_POINTWISE_PARAM_MAP_H__

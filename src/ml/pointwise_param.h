@@ -7,19 +7,28 @@ namespace ZuoPar {
 
 namespace MachineLearning {
 
-namespace Perceptron {
-
-//! It's a parameter class that support recording the updated time
+//! It's a pointwise-parameter facility that support recording the updated time
 //! and averaged parameter.
-struct Parameter {
-  Parameter() : w(0), w_sum(0), w_time(0) {}
-
-  Parameter(floatval_t _w, floatval_t _w_sum, floatval_t _w_time)
-    : w(_w), w_sum(_w_sum), w_time(_w_time) {}
-
+struct PointwiseParameter {
+  //!
   floatval_t w;
+
+  //!
   floatval_t w_sum;
+
+  //!
   int w_time;
+
+  PointwiseParameter()
+    : w(0),
+    w_sum(0),
+    w_time(0) {}
+
+  PointwiseParameter(floatval_t _w, floatval_t _w_sum, floatval_t _w_time)
+    : w(_w),
+    w_sum(_w_sum),
+    w_time(_w_time) {}
+
 
   friend class boost::serialization::access;
 
@@ -50,8 +59,6 @@ struct Parameter {
     w_time = now;
   }
 };
-
-} //  end for namespace Perceptron
 
 } //  end for namespace Machinelearning
 

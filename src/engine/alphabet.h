@@ -17,7 +17,7 @@ public:
    *  @return     int         return 1 if the name is not in
    *                          the alphabet, otherwise false.
    */
-  virtual int insert(const char* name);
+  virtual int insert(const char* name) {};
 
   /**
    * Get the name of index from the alphabet.

@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_MODEL_SCORE_H__
-#define __ZUOPAR_MODEL_SCORE_H__
+#ifndef __ZUOPAR_MODEL_FEATURE_H__
+#define __ZUOPAR_MODEL_FEATURE_H__
 
 #include "settings.h"
 #include <boost/tuple/tuple.hpp>
@@ -10,24 +10,25 @@
 
 namespace ZuoPar {
 
+//! Score is a kind of (code, action) tuple which representing the a feature.
 //! Unigram score type.
 template <class _ActionType>
-class UnigramScore {
+class UnigramFeature {
 private:
   boost::tuples::tuple<int, _ActionType> payload;
 
 public:
   //! The empty default allocator
-  UnigramScore() {}
+  UnigramFeature() {}
 
   //! The allocator with feature and action
-  UnigramScore(int feat, const _ActionType& act)
+  UnigramFeature(int feat, const _ActionType& act)
     : payload(feat, act) {
   }
 
   friend class boost::serialization::access;
 
-  bool operator == (const UnigramScore<_ActionType>& a) {
+  bool operator == (const UnigramFeature<_ActionType>& a) {
     return (
         a.payload.template get<0>() == payload.template get<0>() &&
         a.payload.template get<1>().hash() == payload.template get<1>().hash());
@@ -39,7 +40,7 @@ public:
       & payload.template get<1>();
   }
 
-  friend std::size_t hash_value(const UnigramScore<_ActionType>& s) {
+  friend std::size_t hash_value(const UnigramFeature<_ActionType>& s) {
     std::size_t seed = 0;
     boost::hash_combine(seed, s.payload.template get<0>());
     boost::hash_combine(seed, s.payload.template get<1>());
@@ -50,18 +51,18 @@ public:
 
 //! Bigram score type.
 template <class _ActionType>
-class BigramScore {
+class BigramFeature {
 private:
   boost::tuples::tuple<int, int, _ActionType> payload;
 
 public:
-  BigramScore() {}
+  BigramFeature() {}
 
-  BigramScore(int feat1, int feat2, const _ActionType& act)
+  BigramFeature(int feat1, int feat2, const _ActionType& act)
     : payload(feat1, feat2, act) {
   }
 
-  bool operator == (const BigramScore<_ActionType>& a) const {
+  bool operator == (const BigramFeature<_ActionType>& a) const {
     return (
         a.payload.template get<0>() == payload.template get<0>() &&
         a.payload.template get<1>() == payload.template get<1>() &&
@@ -77,7 +78,7 @@ public:
       & payload.template get<2>();
   }
 
-  friend std::size_t hash_value(const BigramScore<_ActionType>& s) {
+  friend std::size_t hash_value(const BigramFeature<_ActionType>& s) {
     std::size_t seed = 0;
     boost::hash_combine(seed, s.payload.template get<0>());
     boost::hash_combine(seed, s.payload.template get<1>());
@@ -89,14 +90,14 @@ public:
 
 // Trigram
 template<class _ActionType>
-struct TrigramScore {
-  TrigramScore() {}
+struct TrigramFeature {
+  TrigramFeature() {}
 
-  TrigramScore(int feat0, int feat1, int feat2, const _ActionType& act)
+  TrigramFeature(int feat0, int feat1, int feat2, const _ActionType& act)
     : payload(feat0, feat1, feat2, act) {
   }
 
-  bool operator == (const TrigramScore<_ActionType>& a) const {
+  bool operator == (const TrigramFeature<_ActionType>& a) const {
     return (
         a.payload.template get<0>() == payload.template get<0>() &&
         a.payload.template get<1>() == payload.template get<1>() &&
@@ -114,7 +115,7 @@ struct TrigramScore {
       & payload.template get<3>();
   }
 
-  friend std::size_t hash_value(const TrigramScore<_ActionType>& m) {
+  friend std::size_t hash_value(const TrigramFeature<_ActionType>& m) {
     std::size_t seed = 0;
     boost::hash_combine(seed, m.payload.template get<0>());
     boost::hash_combine(seed, m.payload.template get<1>());
@@ -128,4 +129,4 @@ struct TrigramScore {
 
 }   //  end for namespace ZuoPar
 
-#endif  //  end for __ZUOPAR_MODEL_SCORE_H__
+#endif  //  end for __ZUOPAR_MODEL_FEATURE_H__
