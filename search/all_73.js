@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['s0p',['S0p',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ScoreContext.html#a101513ae3e7e4f8ac12e1ee8a97ebd70',1,'ZuoPar::DependencyParser::ArcStandard::ScoreContext']]],
+  ['s0w',['S0w',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ScoreContext.html#a54970e083df728067d93497d771a8b97',1,'ZuoPar::DependencyParser::ArcStandard::ScoreContext']]],
+  ['save',['save',['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#a207228be2a12b194e03dff5ab06fdf62',1,'ZuoPar::Engine::TokenAlphabet::save()'],['../classZuoPar_1_1Engine_1_1WordAlphabet.html#a95f31949902ef64a94d04161df9a7a94',1,'ZuoPar::Engine::WordAlphabet::save()'],['../classZuoPar_1_1FeaturePointwiseParamMap.html#a33dbd7ab3b90aa71861191121b1f5965',1,'ZuoPar::FeaturePointwiseParamMap::save()'],['../classZuoPar_1_1PointwiseModel.html#a4a7e4d5de1b013a5479975ab7434d5dd',1,'ZuoPar::PointwiseModel::save()'],['../namespaceboost_1_1serialization.html#a04a81556a5eda4b2ee2aea89fa8bacab',1,'boost::serialization::save()']]],
+  ['sbar',['SBAR',['../classZGen_1_1Engine_1_1PennTreebankDeprelAlphabet.html#aad959b76c52ef601e70a51ca11b9dfceaf7634f519b85e9aecfdb0eb0f67256be',1,'ZGen::Engine::PennTreebankDeprelAlphabet']]],
+  ['score',['score',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a33c2ee5d8d6b7c88bc4e008b7f260755',1,'ZuoPar::DependencyParser::ArcStandard::State::score()'],['../classZuoPar_1_1FeaturePointwiseParamMap.html#a3a10fcdb06ece381f87d7b10e0bace6b',1,'ZuoPar::FeaturePointwiseParamMap::score()'],['../classZuoPar_1_1PointwiseModel.html#ae26c7fb17643329786307ba09ae8f587',1,'ZuoPar::PointwiseModel::score(const _StateType &amp;state, const _ActionType &amp;act, bool avg)'],['../classZuoPar_1_1PointwiseModel.html#a22b6f119314e46eeae70498ab82b35f6',1,'ZuoPar::PointwiseModel::score(const _ScoreContextType &amp;ctx, const _ActionType &amp;act, bool avg)']]],
+  ['score_5fcontext_2eh',['score_context.h',['../score__context_8h.html',1,'']]],
+  ['scorecontext',['ScoreContext',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ScoreContext.html#a31b8f90fd0fc2f792445360fdaf6505e',1,'ZuoPar::DependencyParser::ArcStandard::ScoreContext']]],
+  ['scorecontext',['ScoreContext',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ScoreContext.html',1,'ZuoPar::DependencyParser::ArcStandard']]],
+  ['search_5fbest_5fstate',['search_best_state',['../classZuoPar_1_1TransitionSystem.html#a64aa3ee363ade7298354b38964004b57',1,'ZuoPar::TransitionSystem']]],
+  ['search_5fcorrect_5fstate',['search_correct_state',['../classZuoPar_1_1TransitionSystem.html#af4f02620652f17252d3589a55234a458',1,'ZuoPar::TransitionSystem']]],
+  ['sentence_5ft',['sentence_t',['../namespaceZuoPar.html#ae62097962ac8c38c754265729feee0d6',1,'ZuoPar']]],
+  ['serialize',['serialize',['../structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html#a257290026141b95953798ef8f16266a1',1,'ZuoPar::MachineLearning::PointwiseParameter::serialize()'],['../classZuoPar_1_1UnigramFeature.html#ab4d4a7fb4d199c9c22848a8ee1291cdd',1,'ZuoPar::UnigramFeature::serialize()'],['../classZuoPar_1_1BigramFeature.html#aed4de8f698b5a6a13e7fff39b3149d01',1,'ZuoPar::BigramFeature::serialize()'],['../structZuoPar_1_1TrigramFeature.html#af384ddfd50c6346da1c77e5b02a47439',1,'ZuoPar::TrigramFeature::serialize()'],['../namespaceboost_1_1serialization.html#a38423d04b011754810c08d6e599f4789',1,'boost::serialization::serialize()']]],
+  ['settings_2eh',['settings.h',['../settings_8h.html',1,'']]],
+  ['sh',['SH',['../classZGen_1_1Engine_1_1ActionAlphabet.html#a42932b427358a3d11b10b20723ab3626adbeb83916b0e819d3fb538c74fb3dc1a',1,'ZGen::Engine::ActionAlphabet']]],
+  ['sharp',['SHARP',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429da604d7aae5f4aa58910913a2698a58ff5',1,'ZGen::Engine::PennTreebankPostagAlphabet']]],
+  ['size',['size',['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#ae365ff050f4827e3e9c015c75a7688c7',1,'ZuoPar::Engine::TokenAlphabet::size()'],['../classZuoPar_1_1Dependency.html#a89d56981bda0b5e4cfedcf258b801258',1,'ZuoPar::Dependency::size()'],['../structZuoPar_1_1DependencyParse.html#a9c5f004357c23064cdd301f4b1234cec',1,'ZuoPar::DependencyParse::size()']]],
+  ['special_5ftoken',['SPECIAL_TOKEN',['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5',1,'ZuoPar::Engine::TokenAlphabet']]],
+  ['special_5fword',['SPECIAL_WORD',['../classZuoPar_1_1Engine_1_1WordAlphabet.html#a5b3bd9ccdf42e52aafe190aaa36b57bc',1,'ZuoPar::Engine::WordAlphabet']]],
+  ['stack',['stack',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a143c1a1f05faef322b47aeb4117e5711',1,'ZuoPar::DependencyParser::ArcStandard::State']]],
+  ['state',['State',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html',1,'ZuoPar::DependencyParser::ArcStandard']]],
+  ['state',['State',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ac0f79ece0af54aea6bc6d05d6dec7858',1,'ZuoPar::DependencyParser::ArcStandard::State::State()'],['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#adebbae3388d5a040713da5e1a62050cf',1,'ZuoPar::DependencyParser::ArcStandard::State::State(const Dependency *r)']]],
+  ['state_2eh',['state.h',['../state_8h.html',1,'']]],
+  ['sub',['SUB',['../classZGen_1_1Engine_1_1PennTreebankDeprelAlphabet.html#aad959b76c52ef601e70a51ca11b9dfcea6bb6b7bf6586cf686f21ed862e8460f7',1,'ZGen::Engine::PennTreebankDeprelAlphabet']]],
+  ['sym',['SYM',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429da0f2e6c6c23e854c3baa3023228cc3c96',1,'ZGen::Engine::PennTreebankPostagAlphabet']]],
+  ['system_2eh',['system.h',['../system_8h.html',1,'']]]
+];

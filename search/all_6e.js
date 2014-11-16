@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['nmod',['NMOD',['../classZGen_1_1Engine_1_1PennTreebankDeprelAlphabet.html#aad959b76c52ef601e70a51ca11b9dfcea057d210b0880a9a4f59272129478a5a7',1,'ZGen::Engine::PennTreebankDeprelAlphabet']]],
+  ['nn',['NN',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429da91b091fb6bdb34c5d26246b25658bc6e',1,'ZGen::Engine::PennTreebankPostagAlphabet']]],
+  ['nnp',['NNP',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429da553834144f1b895c4e6fa94fdbcf7f81',1,'ZGen::Engine::PennTreebankPostagAlphabet']]],
+  ['nnps',['NNPS',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429dac0766edfcac7f6de6e88b3c94c40e38e',1,'ZGen::Engine::PennTreebankPostagAlphabet']]],
+  ['nns',['NNS',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429da634fcfe35100e2c86341e0536af7f4a6',1,'ZGen::Engine::PennTreebankPostagAlphabet']]],
+  ['none',['NONE',['../classZGen_1_1Engine_1_1ActionAlphabet.html#a42932b427358a3d11b10b20723ab3626a15042ef4e8acfb73824a63126946990c',1,'ZGen::Engine::ActionAlphabet::NONE()'],['../classZGen_1_1Engine_1_1PennTreebankDeprelAlphabet.html#aad959b76c52ef601e70a51ca11b9dfceaeb0a3387dc9b0a00952dcadd8a285e6c',1,'ZGen::Engine::PennTreebankDeprelAlphabet::NONE()'],['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429dae084c1129bcd9931da0155a5cff8576d',1,'ZGen::Engine::PennTreebankPostagAlphabet::NONE()'],['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5ad76b30c68b48cf8dd4c5499a0faeb3d9',1,'ZuoPar::Engine::TokenAlphabet::NONE()'],['../classZuoPar_1_1Engine_1_1WordAlphabet.html#a5b3bd9ccdf42e52aafe190aaa36b57bca811299b9843378f02a11ca5cb418bb1f',1,'ZuoPar::Engine::WordAlphabet::NONE()']]],
+  ['np',['NP',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429da287c98317b4061ec0ce4b96f4daae29c',1,'ZGen::Engine::PennTreebankPostagAlphabet']]]
+];
