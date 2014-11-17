@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(11)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -103,7 +103,6 @@ Inheritance diagram for ZuoPar::Engine::Alphabet:</div>
   <img src="classZuoPar_1_1Engine_1_1Alphabet.png" usemap="#ZuoPar::Engine::Alphabet_map" alt=""/>
   <map id="ZuoPar::Engine::Alphabet_map" name="ZuoPar::Engine::Alphabet_map">
 <area href="classZuoPar_1_1Engine_1_1TokenAlphabet.html" alt="ZuoPar::Engine::TokenAlphabet" shape="rect" coords="0,56,190,80"/>
-<area href="classZuoPar_1_1Engine_1_1WordAlphabet.html" alt="ZuoPar::Engine::WordAlphabet" shape="rect" coords="200,56,390,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -173,7 +172,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>const char* The name string. </dd></dl>
 
-<p>Implemented in <a class="el" href="classZuoPar_1_1Engine_1_1WordAlphabet.html#a5a63016bde872ce0776dd04b79db40fe">ZuoPar::Engine::WordAlphabet</a>, and <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af9161f520acdfdccc334a9c71db4056a">ZuoPar::Engine::TokenAlphabet</a>.</p>
+<p>Implemented in <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af9161f520acdfdccc334a9c71db4056a">ZuoPar::Engine::TokenAlphabet</a>.</p>
 
 </div>
 </div>
@@ -207,7 +206,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int The encoded index. </dd></dl>
 
-<p>Implemented in <a class="el" href="classZuoPar_1_1Engine_1_1WordAlphabet.html#ae77c957b4306e3833879e75307418a1a">ZuoPar::Engine::WordAlphabet</a>, and <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#abe61ae77ce117db13039c854c50533f7">ZuoPar::Engine::TokenAlphabet</a>.</p>
+<p>Implemented in <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#abe61ae77ce117db13039c854c50533f7">ZuoPar::Engine::TokenAlphabet</a>.</p>
 
 </div>
 </div>
@@ -241,7 +240,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int return 1 if the name is not in the alphabet, otherwise false. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classZuoPar_1_1Engine_1_1WordAlphabet.html#a4151476b8c1384facd739f543f1cf2b2">ZuoPar::Engine::WordAlphabet</a>, and <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ae097ff51c6639b2696cb8caff2236a24">ZuoPar::Engine::TokenAlphabet</a>.</p>
+<p>Reimplemented in <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ae097ff51c6639b2696cb8caff2236a24">ZuoPar::Engine::TokenAlphabet</a>.</p>
 
 </div>
 </div>

@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(11)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -101,6 +101,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aad4ba6af35626e03e04bd7d455708d05"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html#aad4ba6af35626e03e04bd7d455708d05">get_oracle_actions</a> (const <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a> &amp;instance, std::vector&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &gt; &amp;actions)</td></tr>
 <tr class="separator:aad4ba6af35626e03e04bd7d455708d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41fc43670643e5924284f4ef09761b98"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html#a41fc43670643e5924284f4ef09761b98">is_shift</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;act)</td></tr>
+<tr class="separator:a41fc43670643e5924284f4ef09761b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65bf48e17c11a22c221d1540dec70d04"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html#a65bf48e17c11a22c221d1540dec70d04">is_right_arc</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;act, int &amp;deprel)</td></tr>
+<tr class="separator:a65bf48e17c11a22c221d1540dec70d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8073cf104764c3951a15cc48b0a7ff8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html#ae8073cf104764c3951a15cc48b0a7ff8">is_left_arc</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;act, int &amp;deprel)</td></tr>
+<tr class="separator:ae8073cf104764c3951a15cc48b0a7ff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="aad4ba6af35626e03e04bd7d455708d05"></a>
@@ -142,6 +148,124 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="ae8073cf104764c3951a15cc48b0a7ff8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool ZuoPar::DependencyParser::ArcStandard::ActionUtils::is_left_arc </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td>
+          <td class="paramname"><em>act</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>deprel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Judge if the input action is a LeftArc action.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">deprel</td><td>The dependency relation. If input is not ArcLeft, set it to zero. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Return true on the action being a shift action, otherwise false. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a65bf48e17c11a22c221d1540dec70d04"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool ZuoPar::DependencyParser::ArcStandard::ActionUtils::is_right_arc </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td>
+          <td class="paramname"><em>act</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>deprel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Judge if the input action is a RightArc action.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">deprel</td><td>The dependency relation. If input is not ArcLeft, set it to zero. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Return true on the action being a shift action, otherwise false. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a41fc43670643e5924284f4ef09761b98"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool ZuoPar::DependencyParser::ArcStandard::ActionUtils::is_shift </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td>
+          <td class="paramname"><em>act</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Judge if the input action is a shift action.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Return true on the action being a shift action, otherwise false. </dd></dl>
 
 </div>
 </div>

@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(11)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -90,7 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ZuoPar::DependencyParser::ArcStandard::Action Class Reference</div>  </div>
@@ -101,25 +101,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a887d27413c327d81fb6332efcf636694"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a887d27413c327d81fb6332efcf636694aa10f809873cbe829d2f422623bdab50a">kShift</a> = 0, 
-<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a887d27413c327d81fb6332efcf636694a54ae3a5a659c1e7578ef849cfe72b9c7">kArcLeft</a>, 
-<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a887d27413c327d81fb6332efcf636694a1985b493871ca51bf26d0d603d451e6b">kArcRight</a>
+<tr class="memitem:a887d27413c327d81fb6332efcf636694"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a887d27413c327d81fb6332efcf636694a2eb27a8539381f7d8971c9b550711b8a">kNone</a> = 0, 
+<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a887d27413c327d81fb6332efcf636694aa10f809873cbe829d2f422623bdab50a">kShift</a>, 
+<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a887d27413c327d81fb6332efcf636694a6f5b0a8b2778c00c1690678be8186e52">kLeftArc</a>, 
+<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a887d27413c327d81fb6332efcf636694ac1f1a1757cf6ca80f0b4a7d08e598e59">kRightArc</a>
  }</td></tr>
 <tr class="separator:a887d27413c327d81fb6332efcf636694"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a467374bdb87fe7b5cd8901fa3d05798b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a467374bdb87fe7b5cd8901fa3d05798b">Action</a> ()</td></tr>
+<tr class="separator:a467374bdb87fe7b5cd8901fa3d05798b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe608b63ba6960ab7b29433e9760a16f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#afe608b63ba6960ab7b29433e9760a16f">Action</a> (int name, <a class="el" href="namespaceZuoPar.html#add15ec07d24d7bf36dabcffd01a219a9">deprel_t</a> rel)</td></tr>
 <tr class="separator:afe608b63ba6960ab7b29433e9760a16f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bc881f8f500b74973c4820ccf193920"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a0bc881f8f500b74973c4820ccf193920">operator=</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;a)</td></tr>
+<tr class="separator:a0bc881f8f500b74973c4820ccf193920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bfb6e18f9f86617100fbf26696e09db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a1bfb6e18f9f86617100fbf26696e09db">operator==</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;a) const </td></tr>
+<tr class="separator:a1bfb6e18f9f86617100fbf26696e09db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f29addd9a7a64ca03e60280d0fe0f69"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a9f29addd9a7a64ca03e60280d0fe0f69">operator!=</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;a) const </td></tr>
+<tr class="separator:a9f29addd9a7a64ca03e60280d0fe0f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f6695ae63565e769650b5d0b482b4d5"><td class="memTemplParams" colspan="2">template&lt;class Archive &gt; </td></tr>
+<tr class="memitem:a1f6695ae63565e769650b5d0b482b4d5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a1f6695ae63565e769650b5d0b482b4d5">serialize</a> (Archive &amp;ar, const unsigned int)</td></tr>
+<tr class="separator:a1f6695ae63565e769650b5d0b482b4d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a8dbc76624555ea09a671243babb110c9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a8dbc76624555ea09a671243babb110c9">action_name</a></td></tr>
-<tr class="memdesc:a8dbc76624555ea09a671243babb110c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The action name.  <a href="#a8dbc76624555ea09a671243babb110c9">More...</a><br/></td></tr>
-<tr class="separator:a8dbc76624555ea09a671243babb110c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aa9d2c57e3b20840e532771d44cff16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#add15ec07d24d7bf36dabcffd01a219a9">deprel_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a1aa9d2c57e3b20840e532771d44cff16">deprel</a></td></tr>
-<tr class="memdesc:a1aa9d2c57e3b20840e532771d44cff16"><td class="mdescLeft">&#160;</td><td class="mdescRight">The dependency relation.  <a href="#a1aa9d2c57e3b20840e532771d44cff16">More...</a><br/></td></tr>
-<tr class="separator:a1aa9d2c57e3b20840e532771d44cff16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:ac98d07dd8f7b70e16ccb9a01abf56b9c"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#ac98d07dd8f7b70e16ccb9a01abf56b9c">boost::serialization::access</a></td></tr>
+<tr class="memdesc:ac98d07dd8f7b70e16ccb9a01abf56b9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">For boost serialization.  <a href="#ac98d07dd8f7b70e16ccb9a01abf56b9c">More...</a><br/></td></tr>
+<tr class="separator:ac98d07dd8f7b70e16ccb9a01abf56b9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac055e2a6ada6edce6c7689cbd485ca86"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#ac055e2a6ada6edce6c7689cbd485ca86">ActionUtils</a></td></tr>
+<tr class="memdesc:ac055e2a6ada6edce6c7689cbd485ca86"><td class="mdescLeft">&#160;</td><td class="mdescRight">For is_shift, is_left_arc, is_right_arc;.  <a href="#ac055e2a6ada6edce6c7689cbd485ca86">More...</a><br/></td></tr>
+<tr class="separator:ac055e2a6ada6edce6c7689cbd485ca86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbddf9453ae80af403313e9321e4b62d"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#acbddf9453ae80af403313e9321e4b62d">hash_value</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;a)</td></tr>
+<tr class="memdesc:acbddf9453ae80af403313e9321e4b62d"><td class="mdescLeft">&#160;</td><td class="mdescRight">For boost hash map.  <a href="#acbddf9453ae80af403313e9321e4b62d">More...</a><br/></td></tr>
+<tr class="separator:acbddf9453ae80af403313e9321e4b62d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89ecf8f45b2bc1092b81d3d43353fe0e"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a89ecf8f45b2bc1092b81d3d43353fe0e">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;act)</td></tr>
+<tr class="memdesc:a89ecf8f45b2bc1092b81d3d43353fe0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload the ostream function.  <a href="#a89ecf8f45b2bc1092b81d3d43353fe0e">More...</a><br/></td></tr>
+<tr class="separator:a89ecf8f45b2bc1092b81d3d43353fe0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a887d27413c327d81fb6332efcf636694"></a>
@@ -132,12 +150,15 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a887d27413c327d81fb6332efcf636694aa10f809873cbe829d2f422623bdab50a"></a>kShift</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a887d27413c327d81fb6332efcf636694a2eb27a8539381f7d8971c9b550711b8a"></a>kNone</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a887d27413c327d81fb6332efcf636694a54ae3a5a659c1e7578ef849cfe72b9c7"></a>kArcLeft</em>&nbsp;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="a887d27413c327d81fb6332efcf636694aa10f809873cbe829d2f422623bdab50a"></a>kShift</em>&nbsp;</td><td class="fielddoc">
+<p>Placeholder for illegal action. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a887d27413c327d81fb6332efcf636694a6f5b0a8b2778c00c1690678be8186e52"></a>kLeftArc</em>&nbsp;</td><td class="fielddoc">
 <p>The index of shift action. </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="a887d27413c327d81fb6332efcf636694a1985b493871ca51bf26d0d603d451e6b"></a>kArcRight</em>&nbsp;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="a887d27413c327d81fb6332efcf636694ac1f1a1757cf6ca80f0b4a7d08e598e59"></a>kRightArc</em>&nbsp;</td><td class="fielddoc">
 <p>The index of arc left action. </p>
 <p>The index of arc right action. </p>
 </td></tr>
@@ -146,6 +167,29 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a467374bdb87fe7b5cd8901fa3d05798b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ZuoPar::DependencyParser::ArcStandard::Action::Action </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="afe608b63ba6960ab7b29433e9760a16f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -188,32 +232,219 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a8dbc76624555ea09a671243babb110c9"></a>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a9f29addd9a7a64ca03e60280d0fe0f69"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int ZuoPar::DependencyParser::ArcStandard::Action::action_name</td>
+          <td class="memname">bool ZuoPar::DependencyParser::ArcStandard::Action::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em>)</td><td></td>
+          <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-
-<p>The action name. </p>
 
 </div>
 </div>
-<a class="anchor" id="a1aa9d2c57e3b20840e532771d44cff16"></a>
+<a class="anchor" id="a0bc881f8f500b74973c4820ccf193920"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceZuoPar.html#add15ec07d24d7bf36dabcffd01a219a9">deprel_t</a> ZuoPar::DependencyParser::ArcStandard::Action::deprel</td>
+          <td class="memname"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>&amp; ZuoPar::DependencyParser::ArcStandard::Action::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em>)</td><td></td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>The dependency relation. </p>
+</div>
+</div>
+<a class="anchor" id="a1bfb6e18f9f86617100fbf26696e09db"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ZuoPar::DependencyParser::ArcStandard::Action::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em>)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1f6695ae63565e769650b5d0b482b4d5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Archive &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ZuoPar::DependencyParser::ArcStandard::Action::serialize </td>
+          <td>(</td>
+          <td class="paramtype">Archive &amp;&#160;</td>
+          <td class="paramname"><em>ar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>int</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="ac055e2a6ada6edce6c7689cbd485ca86"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For is_shift, is_left_arc, is_right_arc;. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac98d07dd8f7b70e16ccb9a01abf56b9c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class boost::serialization::access</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For boost serialization. </p>
+
+</div>
+</div>
+<a class="anchor" id="acbddf9453ae80af403313e9321e4b62d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t hash_value </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>For boost hash map. </p>
+
+</div>
+</div>
+<a class="anchor" id="a89ecf8f45b2bc1092b81d3d43353fe0e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream&amp; operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a> &amp;&#160;</td>
+          <td class="paramname"><em>act</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Overload the ostream function. </p>
 
 </div>
 </div>

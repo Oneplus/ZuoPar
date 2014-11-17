@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['encode',['encode',['../classZGen_1_1Engine_1_1ActionAlphabet.html#af3023e5d02e61f336510a35803ea56da',1,'ZGen::Engine::ActionAlphabet::encode()'],['../classZuoPar_1_1Engine_1_1Alphabet.html#a3f2bc5fb67c979a0e058adf5796a5943',1,'ZuoPar::Engine::Alphabet::encode()'],['../classZGen_1_1Engine_1_1PennTreebankDeprelAlphabet.html#aa7ac98c35ddf9e639cd43a55b65acdc8',1,'ZGen::Engine::PennTreebankDeprelAlphabet::encode()'],['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#adc52d49eb4078148d8e33e2782cf06d3',1,'ZGen::Engine::PennTreebankPostagAlphabet::encode()'],['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#abe61ae77ce117db13039c854c50533f7',1,'ZuoPar::Engine::TokenAlphabet::encode()'],['../classZuoPar_1_1Engine_1_1WordAlphabet.html#ae77c957b4306e3833879e75307418a1a',1,'ZuoPar::Engine::WordAlphabet::encode()']]]
+  ['encode',['encode',['../classZuoPar_1_1Engine_1_1Alphabet.html#a3f2bc5fb67c979a0e058adf5796a5943',1,'ZuoPar::Engine::Alphabet::encode()'],['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#abe61ae77ce117db13039c854c50533f7',1,'ZuoPar::Engine::TokenAlphabet::encode()']]],
+  ['extend_5fcandidate_5ftransition',['extend_candidate_transition',['../classZuoPar_1_1TransitionSystem.html#aef63cab77a21ce798662e041720bf10d',1,'ZuoPar::TransitionSystem']]]
 ];

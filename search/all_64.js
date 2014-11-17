@@ -1,25 +1,20 @@
 var searchData=
 [
   ['dataset_2eh',['dataset.h',['../dataset_8h.html',1,'']]],
-  ['decode',['decode',['../classZGen_1_1Engine_1_1ActionAlphabet.html#a6f91a84be7e79be057f02947be094081',1,'ZGen::Engine::ActionAlphabet::decode()'],['../classZuoPar_1_1Engine_1_1Alphabet.html#a5e601bd2c3ff03bfce907663e9707b60',1,'ZuoPar::Engine::Alphabet::decode()'],['../classZGen_1_1Engine_1_1PennTreebankDeprelAlphabet.html#a9cd9c6667cf610be3cd92cba64426596',1,'ZGen::Engine::PennTreebankDeprelAlphabet::decode()'],['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#ab7e54b0f37b25c4332de0dd7054e817a',1,'ZGen::Engine::PennTreebankPostagAlphabet::decode()'],['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#af9161f520acdfdccc334a9c71db4056a',1,'ZuoPar::Engine::TokenAlphabet::decode()'],['../classZuoPar_1_1Engine_1_1WordAlphabet.html#a5a63016bde872ce0776dd04b79db40fe',1,'ZuoPar::Engine::WordAlphabet::decode()'],['../classZuoPar_1_1TransitionSystem.html#a9685c351b6e358699e0776e576f159f4',1,'ZuoPar::TransitionSystem::decode()']]],
+  ['decode',['decode',['../classZuoPar_1_1Engine_1_1Alphabet.html#a5e601bd2c3ff03bfce907663e9707b60',1,'ZuoPar::Engine::Alphabet::decode()'],['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#af9161f520acdfdccc334a9c71db4056a',1,'ZuoPar::Engine::TokenAlphabet::decode()'],['../classZuoPar_1_1TransitionSystem.html#a8d5f3e5ee4e859a27b18454031c9a30e',1,'ZuoPar::TransitionSystem::decode()']]],
   ['decode_5fresult_5ft',['decode_result_t',['../classZuoPar_1_1TransitionSystem.html#a314acec21fc7458c0870779ac06a01a4',1,'ZuoPar::TransitionSystem']]],
+  ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html#a7e00387cf6d18c020796011c2915c03f',1,'ZuoPar::DependencyParser::ArcStandard::Decoder']]],
   ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html',1,'ZuoPar::DependencyParser::ArcStandard']]],
-  ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html#a6d8d1f6c81f651f1b782d2c709a0a8ba',1,'ZuoPar::DependencyParser::ArcStandard::Decoder']]],
   ['decoder_2eh',['decoder.h',['../decoder_8h.html',1,'']]],
-  ['dep',['DEP',['../classZGen_1_1Engine_1_1PennTreebankDeprelAlphabet.html#aad959b76c52ef601e70a51ca11b9dfceae994bb2cead503ae202b291e499784ce',1,'ZGen::Engine::PennTreebankDeprelAlphabet']]],
   ['dependency',['Dependency',['../classZuoPar_1_1Dependency.html',1,'ZuoPar']]],
   ['dependency_2eh',['dependency.h',['../dependency_8h.html',1,'']]],
   ['dependency_5ft',['dependency_t',['../namespaceZuoPar.html#ab7b83284a591da96282d3fbccd416356',1,'ZuoPar']]],
   ['dependencyparse',['DependencyParse',['../structZuoPar_1_1DependencyParse.html#a3d1e067ec4d91f157f87ba31875a66c3',1,'ZuoPar::DependencyParse']]],
   ['dependencyparse',['DependencyParse',['../structZuoPar_1_1DependencyParse.html',1,'ZuoPar']]],
   ['dependencyparsewithnp',['DependencyParseWithNP',['../structZuoPar_1_1DependencyParseWithNP.html',1,'ZuoPar']]],
-  ['deprel',['deprel',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html#a1aa9d2c57e3b20840e532771d44cff16',1,'ZuoPar::DependencyParser::ArcStandard::Action']]],
-  ['deprel_5falphabet_2eh',['deprel_alphabet.h',['../deprel__alphabet_8h.html',1,'']]],
   ['deprel_5ft',['deprel_t',['../namespaceZuoPar.html#add15ec07d24d7bf36dabcffd01a219a9',1,'ZuoPar']]],
   ['deprelengine',['DeprelEngine',['../namespaceZuoPar_1_1Engine.html#a3ac43e8eb8eab614a290389c91490efe',1,'ZuoPar::Engine']]],
   ['deprels',['deprels',['../classZuoPar_1_1Dependency.html#a22b612209ddf6972fe8898fabc508321',1,'ZuoPar::Dependency::deprels()'],['../structZuoPar_1_1DependencyParse.html#a1da156339c6d06c4662acfe716365a9d',1,'ZuoPar::DependencyParse::deprels()']]],
   ['display_5finterval',['display_interval',['../structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Option.html#adeb22aa132dd5974e156be9b8d85d6ef',1,'ZuoPar::DependencyParser::ArcStandard::Option']]],
-  ['dollar',['DOLLAR',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429daf56ce9bde9b6bebd963527af221d9817',1,'ZGen::Engine::PennTreebankPostagAlphabet']]],
-  ['dot',['dot',['../structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html#a716ba442e17592a24d1fa6707b2c0e2d',1,'ZuoPar::MachineLearning::PointwiseParameter']]],
-  ['dt',['DT',['../classZGen_1_1Engine_1_1PennTreebankPostagAlphabet.html#acfb91c6e86e5a0719fa7a994841e429da62ae36d970e02460c97a0676836e19f9',1,'ZGen::Engine::PennTreebankPostagAlphabet']]]
+  ['dot',['dot',['../structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html#a716ba442e17592a24d1fa6707b2c0e2d',1,'ZuoPar::MachineLearning::PointwiseParameter']]]
 ];
