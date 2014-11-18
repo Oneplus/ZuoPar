@@ -58,6 +58,11 @@ struct PointwiseParameter {
     w_sum += (now - w_time) * w;
     w_time = now;
   }
+
+  friend std::ostream& operator <<(std::ostream& os, const PointwiseParameter& p) {
+    os << "(" << p.w << ", " << p.w_sum << ", " << p.w_time << ")";
+    return os;
+  }
 };
 
 } //  end for namespace Machinelearning

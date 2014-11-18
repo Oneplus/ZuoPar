@@ -3,10 +3,20 @@
 
 #include "settings.h"
 #include "ml/pointwise_param.h"
+#include "utils/logging.h"
 #include "utils/serialization/unordered_map.h"
 
 namespace ZuoPar {
 
+/**
+ * FeaturePointwiseParamMap is the class use to store the model parameters 
+ * of the feature. One FeaturePointwiseParamMap maintains several Features.
+ * These features are extracted from the same feature template.
+ *
+ *
+ *
+ *
+ */
 template <class _FeatureType,
           class _ScoreContextType,
           class _ActionType>
@@ -43,8 +53,11 @@ public:
     floatval_t ret = 0.;
     for (int i = 0; i < cache.size(); ++ i) {
       const _FeatureType& entry = cache[i];
+      // _TRACE << "score " << (void *)this << ": score (try) " << entry;
+
       typename map_t::const_iterator itx = payload.find(entry);
       if (itx != payload.end()) {
+        // _TRACE << "score: score (hit) " << entry;
         if (avg) {
           ret += itx->second.w_sum;
         } else {
@@ -75,9 +88,9 @@ public:
   }
 
   /**
+   * Flush the last updated time for all the parameters.
    *
-   *
-   *
+   *  @param[in]  now   The timestamp.
    */
   void flush(int now) {
     for (typename map_t::iterator itx = payload.begin();
@@ -89,8 +102,7 @@ public:
   /**
    * Saving the score map to the archive.
    *
-   *
-   *
+   *  @param[in]  oa    The output archive stream.
    */
   void save(boost::archive::text_oarchive& oa) {
     oa << payload;
@@ -99,18 +111,22 @@ public:
   /**
    * Loading the score map from the archive.
    *
-   *  @param[in] ia   The input archive.
+   *  @param[in] ia   The input archive stream.
    */
   void load(boost::archive::text_iarchive& ia) {
     ia >> payload;
   }
 
 private:
+  //!
   map_t payload;
+
+  //! Use to cache extracted features.
   cache_t cache;
+
+  //!
   extractor_t extractor;
 };
-
 
 } //  end for zuopar
 

@@ -3,6 +3,9 @@ add_executable (arcstandard_depparser
     learn.cc
     test.cc
     opt_utils.cc
+    action.cc
+    action_utils.cc
+    state.cc
     pipe.cc
     weight.cc
     ${SOURCE_DIR}/types/dependency.cc

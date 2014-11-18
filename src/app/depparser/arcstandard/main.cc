@@ -5,8 +5,22 @@
 #include "test.h"
 #include "utils/logging.h"
 
+/**
+ * Perform the learning process of ZuoPar::arcstandard dependency parser.
+ *
+ *  @param[in]  argc  The number of arguments.
+ *  @param[in]  argv  The arguments.
+ *  @return     int   The status of running learning.
+ */
 int learn(int argc, char** argv);
 
+/**
+ * Perform the testing process of ZuoPar::arcstandard dependency parser.
+ *
+ *  @param[in]  argc  The number of arguments.
+ *  @param[in]  argv  The arguments.
+ *  @return     int   The status of running test.
+ */
 int test(int argc, char** argv);
 
 int main(int argc, char** argv) {

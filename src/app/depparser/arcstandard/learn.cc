@@ -5,6 +5,8 @@
 #include <boost/log/trivial.hpp>
 
 int learn(int argc, char** argv) {
+  namespace as = ZuoPar::DependencyParser::ArcStandard;
+
   std::string usage = "Training component of ZuoPar::arcstandard dependency parser.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: arcstandard_depparser learn [options]\n";
@@ -35,7 +37,6 @@ int learn(int argc, char** argv) {
     return 1;
   }
 
-  namespace as = ZuoPar::DependencyParser::ArcStandard;
   as::Pipe pipe(opts);
   pipe.run();
   return 0;

@@ -1,6 +1,7 @@
 #ifndef __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_MODEL_H__
 #define __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_MODEL_H__
 
+#include "types/common.h"
 #include "model/pointwise_model.h"
 #include "app/depparser/arcstandard/action.h"
 #include "app/depparser/arcstandard/state.h"

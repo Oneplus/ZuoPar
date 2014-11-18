@@ -13,4 +13,9 @@ Dependency::push_back(form_t form,
   deprels.push_back(deprel);
 }
 
+size_t
+Dependency::size() const {
+  return forms.size();
+}
+
 } //  end for namespace zuopar

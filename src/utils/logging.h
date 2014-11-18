@@ -4,7 +4,7 @@
 #include <boost/log/trivial.hpp>
 #define _TRACE BOOST_LOG_TRIVIAL(trace)
 #define _INFO  BOOST_LOG_TRIVIAL(info)
-#define _WARN  BOOST_LOG_TRIVIAL(warn)
+#define _WARN  BOOST_LOG_TRIVIAL(warning)
 #define _ERROR BOOST_LOG_TRIVIAL(error)
 
 namespace ZuoPar {

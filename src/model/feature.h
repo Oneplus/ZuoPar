@@ -28,10 +28,11 @@ public:
 
   friend class boost::serialization::access;
 
-  bool operator == (const UnigramFeature<_ActionType>& a) {
+  //! The equal operator.
+  bool operator == (const UnigramFeature<_ActionType>& a) const {
     return (
         a.payload.template get<0>() == payload.template get<0>() &&
-        a.payload.template get<1>().hash() == payload.template get<1>().hash());
+        a.payload.template get<1>() == payload.template get<1>());
   }
 
   template<class Archive>
@@ -44,8 +45,15 @@ public:
     std::size_t seed = 0;
     boost::hash_combine(seed, s.payload.template get<0>());
     boost::hash_combine(seed, s.payload.template get<1>());
-    boost::hash_combine(seed, s.payload.template get<2>().hash());
     return seed;
+  }
+
+  friend std::ostream& operator <<(std::ostream& os, 
+      const UnigramFeature<_ActionType>& s) {
+    os << "<" << s.payload.template get<0>() << ", "
+      << s.payload.template get<1>()
+      << ">";
+    return os;
   }
 };
 
@@ -66,7 +74,7 @@ public:
     return (
         a.payload.template get<0>() == payload.template get<0>() &&
         a.payload.template get<1>() == payload.template get<1>() &&
-        a.payload.template get<2>().hash() == payload.template get<2>().hash());
+        a.payload.template get<2>() == payload.template get<2>());
   }
 
   friend class boost::serialization::access;
@@ -82,15 +90,27 @@ public:
     std::size_t seed = 0;
     boost::hash_combine(seed, s.payload.template get<0>());
     boost::hash_combine(seed, s.payload.template get<1>());
-    boost::hash_combine(seed, s.payload.template get<2>().hash());
+    boost::hash_combine(seed, s.payload.template get<2>());
     return seed;
+  }
+
+  friend std::ostream& operator <<(std::ostream& os, 
+      const BigramFeature<_ActionType>& s) {
+    os << "<" << s.payload.template get<0>() << ", "
+      << s.payload.template get<1>() << ", "
+      << s.payload.template get<2>() << ">";
+    return os;
   }
 };
 
 
 // Trigram
 template<class _ActionType>
-struct TrigramFeature {
+class TrigramFeature {
+private:
+  boost::tuples::tuple<int, int, int, _ActionType> payload;
+
+public:
   TrigramFeature() {}
 
   TrigramFeature(int feat0, int feat1, int feat2, const _ActionType& act)
@@ -102,7 +122,7 @@ struct TrigramFeature {
         a.payload.template get<0>() == payload.template get<0>() &&
         a.payload.template get<1>() == payload.template get<1>() &&
         a.payload.template get<2>() == payload.template get<2>() &&
-        a.payload.template get<3>().hash() == payload.template get<3>().hash());
+        a.payload.template get<3>() == payload.template get<3>());
   }
 
   friend class boost::serialization::access;
@@ -120,11 +140,18 @@ struct TrigramFeature {
     boost::hash_combine(seed, m.payload.template get<0>());
     boost::hash_combine(seed, m.payload.template get<1>());
     boost::hash_combine(seed, m.payload.template get<2>());
-    boost::hash_combine(seed, m.payload.template get<3>().hash());
+    boost::hash_combine(seed, m.payload.template get<3>());
     return seed;
   }
 
-  boost::tuples::tuple<int, int, int, _ActionType> payload;
+  friend std::ostream& operator <<(std::ostream& os, 
+      const TrigramFeature<_ActionType>& s) {
+    os << "<" << s.payload.template get<0>() << ", "
+      << s.payload.template get<1>() << ", "
+      << s.payload.template get<2>() << ", "
+      << s.payload.template get<3>() << ">";
+    return os;
+  }
 };
 
 }   //  end for namespace ZuoPar

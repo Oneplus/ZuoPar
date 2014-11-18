@@ -12,6 +12,8 @@ typedef int postag_t;
 //! The internal representation of dependency relation.
 typedef int deprel_t;
 
+typedef double floatval_t;
+
 }
 
 #endif  //  end for __ZUOPAR_TYPES_COMMON_H__

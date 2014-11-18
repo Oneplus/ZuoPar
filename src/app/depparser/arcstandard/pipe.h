@@ -6,7 +6,7 @@
 #include "app/depparser/arcstandard/opt.h"
 #include "app/depparser/arcstandard/weight.h"
 #include "app/depparser/arcstandard/decoder.h"
-
+#include "app/depparser/arcstandard/learner.h"
 namespace eg = ZuoPar::Engine;
 
 namespace ZuoPar {
@@ -18,48 +18,71 @@ public:
   /**
    * The learning mode constructor.
    *
-   *  @param[in]  opts    The learning options.
+   *  @param[in]  opts  The learning options.
    */
   Pipe(const LearnOption& opts);
 
   /**
+   * The testing mode constructor.
    *
-   *
+   *  @param[in]  opts  The testing options.
    */
   Pipe(const TestOption& opts);
+
+  /**
+   * The dumping mode constructor.
+   *
+   *  @param[in]  opts  The dumping options.
+   */
+  Pipe(const DumpOption& opts);
+
+  /**
+   * Perform learning or testing according to the configuration.
+   */
+  void run();
 
   /**
    *
    *
    *
    */
-  void run();
-
+  void load_model(const std::string& model_path);
 private:
-  //! Use to specify if perform training.
-  bool learning;
+  //! The supported modes.
+  enum PipeMode { kPipeLearn, kPipeTest };
 
-  //!
+  //! Use to specify if perform training.
+  PipeMode mode;
+
+  //! The path to the reference file.
   std::string reference_path;
 
-  //!
+  //! The path to the model file.
+  std::string model_path;
+
+  //! The size of the beam.
   int beam_size;
 
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.
   Weight* weight;
 
+  //! The parameter learner.
+  Learner* learner;
+
   //! The pointer to the decoder.
   Decoder* decoder;
 
-  //!
+  //! The alphabets of forms.
   eg::TokenAlphabet forms_alphabet;
-  //!
+
+  //! The alphabets of postags.
   eg::TokenAlphabet postags_alphabet;
-  //!
+
+  //! The alphabets of dependency relations.
   eg::TokenAlphabet deprels_alphabet;
 
-  //!
+  //! The dataset.
   std::vector<Dependency> dataset;
 };
 

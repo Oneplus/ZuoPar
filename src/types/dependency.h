@@ -21,7 +21,22 @@ public:
   //!
   std::vector<deprel_t> deprels;
 
+  /**
+   * Push a dependency node into the dependency parse.
+   *
+   *  @param[in]  form    The form.
+   *  @param[in]  postag  The part-of-speech tag.
+   *  @param[in]  head    The index for the head.
+   *  @param[in]  deprel  The dependency relation.
+   */
   void push_back(form_t form, postag_t postag, int head, deprel_t deprel);
+
+  /**
+   * Get number of forms in the dependency.
+   *
+   *  @return size_t  The number of forms in the dependency parse.
+   */
+  size_t size() const;
 };
 
 } //  end for namespace zuopar
