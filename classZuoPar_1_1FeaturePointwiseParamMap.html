@@ -112,7 +112,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab44ff47cf63a6bb367fd0d7b70f93faa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ab44ff47cf63a6bb367fd0d7b70f93faa">load</a> (boost::archive::text_iarchive &amp;ia)</td></tr>
 <tr class="separator:ab44ff47cf63a6bb367fd0d7b70f93faa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;class _FeatureType, class _ScoreContextType, class _ActionType&gt;<br/>
+class ZuoPar::FeaturePointwiseParamMap&lt; _FeatureType, _ScoreContextType, _ActionType &gt;</h3>
+
+<p><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">FeaturePointwiseParamMap</a> is the class use to store the model parameters of the feature. One <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">FeaturePointwiseParamMap</a> maintains several Features. These features are extracted from the same feature template. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a36847c1ff34b932b69de543b507a1762"></a>
 <div class="memitem">
 <div class="memproto">
@@ -163,6 +168,13 @@ template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Flush the last updated time for all the parameters.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">now</td><td>The timestamp. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -192,7 +204,7 @@ template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt
 <p>Loading the score map from the archive.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ia</td><td>The input archive. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ia</td><td>The input archive stream. </td></tr>
   </table>
   </dd>
 </dl>
@@ -222,7 +234,13 @@ template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Saving the score map to the archive. </p>
+<p>Saving the score map to the archive.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">oa</td><td>The output archive stream. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -116,8 +116,8 @@ _StateType *, const _StateType * &gt;&#160;</td><td class="memItemRight" valign=
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a693bc71a3e11b1ce212b28fbc0606340"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a693bc71a3e11b1ce212b28fbc0606340">TransitionSystem</a> (int _beam_size, _ModelType &amp;_model)</td></tr>
-<tr class="separator:a693bc71a3e11b1ce212b28fbc0606340"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcfee49801806e4ee659d1d9af15e9cd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#adcfee49801806e4ee659d1d9af15e9cd">TransitionSystem</a> (int _beam_size, _ModelType *_model)</td></tr>
+<tr class="separator:adcfee49801806e4ee659d1d9af15e9cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bd3a5dd2dda304fdaa7e833acdb39b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a8bd3a5dd2dda304fdaa7e833acdb39b5">~TransitionSystem</a> ()</td></tr>
 <tr class="separator:a8bd3a5dd2dda304fdaa7e833acdb39b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d5f3e5ee4e859a27b18454031c9a30e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a49210d68b396fd948558582f40020452">const_decode_result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a8d5f3e5ee4e859a27b18454031c9a30e">decode</a> (const _StateType &amp;initial_state, const <a class="el" href="classZuoPar_1_1TransitionSystem.html#aa4ee26d60518801008ae70519588f6a9">action_sequence_t</a> &amp;gold_actions, int max_nr_actions)</td></tr>
@@ -201,7 +201,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a693bc71a3e11b1ce212b28fbc0606340"></a>
+<a class="anchor" id="adcfee49801806e4ee659d1d9af15e9cd"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -219,7 +219,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">_ModelType &amp;&#160;</td>
+          <td class="paramtype">_ModelType *&#160;</td>
           <td class="paramname"><em>_model</em>&#160;</td>
         </tr>
         <tr>
@@ -347,6 +347,15 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Insert the ScoredTransition into beam.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">trans</td><td>The scored transition. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">current_beam_size</td><td>The current beam size. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The number of inserted transition. </dd></dl>
 
 </div>
 </div>
