@@ -307,6 +307,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">initial_state</td><td>The initial state. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">gold_actions</td><td>The gold actions. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">max_nr_actions</td><td>The maximum number of transition actions. </td></tr>
   </table>
   </dd>
 </dl>
@@ -382,6 +383,13 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   </tr>
 </table>
 </div><div class="memdoc">
+<p>In class function for invoking the get possible action funtions. It's used by the decode funtion.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">source</td><td>The source state. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -452,6 +460,13 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   </tr>
 </table>
 </div><div class="memdoc">
+<p>In class function for invoking the score possible actions functions. It's used by the decode function.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">source</td><td>The source state. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -601,8 +616,8 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">previous_correct_state</td><td>The correct state. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">in/out]</td><td>begin The starting of the states. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">in/out]</td><td>end The ending of the states. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">begin</td><td>The starting of the states. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>The ending of the states. </td></tr>
   </table>
   </dd>
 </dl>

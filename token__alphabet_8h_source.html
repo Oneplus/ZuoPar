@@ -106,48 +106,48 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span>Engine {</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
 <div class="line"><a name="l00017"></a><span class="lineno"><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">   17</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">TokenAlphabet</a>: <span class="keyword">public</span> <a class="code" href="classZuoPar_1_1Engine_1_1Alphabet.html">Alphabet</a> {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#afc3eeacb0d802d4fd1fbafe1b5fd29a6">TokenAlphabet</a>();</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#a805c0afb3537a9a8571f8befab16eab9">~TokenAlphabet</a>();</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keywordtype">int</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ae097ff51c6639b2696cb8caff2236a24">insert</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af9161f520acdfdccc334a9c71db4056a">decode</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keywordtype">int</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#abe61ae77ce117db13039c854c50533f7">encode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#a207228be2a12b194e03dff5ab06fdf62">save</a>(std::ostream&amp; ofs) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#afefe0d665c89af39e95ec9fad2294ade">load</a>(std::istream&amp; ifs);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ae365ff050f4827e3e9c015c75a7688c7">size</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5">   64</a></span>&#160;  <span class="keyword">enum</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5">SPECIAL_TOKEN</a> {</div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5ad76b30c68b48cf8dd4c5499a0faeb3d9">   65</a></span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5ad76b30c68b48cf8dd4c5499a0faeb3d9">NONE</a>, <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5a08d34adca9b2019b31e53997cd02ccde">BEGIN</a>, <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5a552cb8435f43c17491415e81d390099c">END</a></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  };</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keyword">typedef</span> boost::unordered_map&lt;std::string, int&gt; map_t;</div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ac98d07dd8f7b70e16ccb9a01abf56b9c">   72</a></span>&#160;  <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ac98d07dd8f7b70e16ccb9a01abf56b9c" title="The serialization entry. ">boost::serialization::access</a>;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  std::vector&lt;std::string&gt; id2name;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  map_t name2id;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="keywordtype">int</span> global_id;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">class</span> Archive&gt;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespaceboost_1_1serialization.html#a38423d04b011754810c08d6e599f4789">serialize</a>(Archive &amp; ar, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> version) {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    ar &amp; global_id;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    ar &amp; name2id;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    ar &amp; id2name;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;};</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;} <span class="comment">//  end for namespace Engine</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;} <span class="comment">//  end for namespace ZuoPar</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#endif    //  end for __ZUOPAR_ENGINE_TOKEN_ALPHABET_H__</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#afc3eeacb0d802d4fd1fbafe1b5fd29a6" title="Constructor. ">TokenAlphabet</a>();</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#a805c0afb3537a9a8571f8befab16eab9" title="Destructor. ">~TokenAlphabet</a>();</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keywordtype">int</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ae097ff51c6639b2696cb8caff2236a24">insert</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af9161f520acdfdccc334a9c71db4056a">decode</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keywordtype">int</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#abe61ae77ce117db13039c854c50533f7">encode</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#a207228be2a12b194e03dff5ab06fdf62">save</a>(std::ostream&amp; ofs) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#afefe0d665c89af39e95ec9fad2294ade">load</a>(std::istream&amp; ifs);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ae365ff050f4827e3e9c015c75a7688c7" title="Get the number of elements in the alphabet. ">size</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5">   70</a></span>&#160;  <span class="keyword">enum</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5">SPECIAL_TOKEN</a> {</div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5ad76b30c68b48cf8dd4c5499a0faeb3d9">   71</a></span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5ad76b30c68b48cf8dd4c5499a0faeb3d9">NONE</a>, <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5a08d34adca9b2019b31e53997cd02ccde">BEGIN</a>, <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5a552cb8435f43c17491415e81d390099c">END</a></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  };</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keyword">typedef</span> boost::unordered_map&lt;std::string, int&gt; map_t;</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ac98d07dd8f7b70e16ccb9a01abf56b9c">   78</a></span>&#160;  <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ac98d07dd8f7b70e16ccb9a01abf56b9c" title="The serialization entry. ">boost::serialization::access</a>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  std::vector&lt;std::string&gt; id2name;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  map_t name2id;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keywordtype">int</span> global_id;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">class</span> Archive&gt;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespaceboost_1_1serialization.html#a38423d04b011754810c08d6e599f4789">serialize</a>(Archive &amp; ar, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> version) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    ar &amp; global_id;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    ar &amp; name2id;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    ar &amp; id2name;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;};</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;} <span class="comment">//  end for namespace Engine</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;} <span class="comment">//  end for namespace ZuoPar</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#endif    //  end for __ZUOPAR_ENGINE_TOKEN_ALPHABET_H__</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

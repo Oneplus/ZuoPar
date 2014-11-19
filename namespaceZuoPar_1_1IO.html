@@ -96,6 +96,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Functions</h2></td></tr>
 <tr class="memitem:a8e06a18f6e7ea1f60c346ee0c0edaf4c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a8e06a18f6e7ea1f60c346ee0c0edaf4c">read_plain_dependency_dataset</a> (std::istream &amp;is, std::vector&lt; <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a> &gt; &amp;dataset, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet, bool incremental=true)</td></tr>
 <tr class="separator:a8e06a18f6e7ea1f60c346ee0c0edaf4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe69892a055d39b8ed9459c0e3c8aefa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#abe69892a055d39b8ed9459c0e3c8aefa">write_dependency_instance</a> (std::ostream &amp;os, const <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a> &amp;output, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet)</td></tr>
+<tr class="separator:abe69892a055d39b8ed9459c0e3c8aefa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a8e06a18f6e7ea1f60c346ee0c0edaf4c"></a>
@@ -148,14 +150,59 @@ Functions</h2></td></tr>
 <p>Read plain dependency dataset</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">is</td><td>The </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">is</td><td>The input stream. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">dataset</td><td>The output dataset. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">forms_alphabet</td><td>The </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">postags_alphabet</td><td>The postag </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">deprels_alphabet</td><td></td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">forms_alphabet</td><td>The alphabet for forms. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">deprels_alphabet</td><td>The alphabet for dependency relations. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">incremental</td><td>If incremental is true, insert the token into the alphabet, otherwise not perform insertion. </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="abe69892a055d39b8ed9459c0e3c8aefa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ZuoPar::IO::write_dependency_instance </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Dependency &amp;&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>forms_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>postags_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>deprels_alphabet</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

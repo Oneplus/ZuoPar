@@ -12,5 +12,6 @@ var searchData=
   ['boost',['boost',['../namespaceboost.html',1,'']]],
   ['buffer',['buffer',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a62128fd62e4fb5e2672c8958e257f69c',1,'ZuoPar::DependencyParser::ArcStandard::State']]],
   ['buffer_5fempty',['buffer_empty',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ace1067175e8d1c9d98e49be9787869df',1,'ZuoPar::DependencyParser::ArcStandard::State']]],
+  ['build_5foutput',['build_output',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#aabf28c130a0ae953bdf157f35a034ce7',1,'ZuoPar::DependencyParser::ArcStandard::Pipe']]],
   ['serialization',['serialization',['../namespaceboost_1_1serialization.html',1,'boost']]]
 ];
