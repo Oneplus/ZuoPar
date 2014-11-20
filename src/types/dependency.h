@@ -29,7 +29,10 @@ public:
    *  @param[in]  head    The index for the head.
    *  @param[in]  deprel  The dependency relation.
    */
-  void push_back(form_t form, postag_t postag, int head, deprel_t deprel);
+  void push_back(const form_t& form,
+      const postag_t& postag,
+      const int& head,
+      const deprel_t& deprel);
 
   /**
    * Get number of forms in the dependency.

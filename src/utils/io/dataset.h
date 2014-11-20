@@ -14,11 +14,13 @@ namespace IO {
 /**
  * Read plain dependency dataset
  *
- *  @param[in]  is                The 
+ *  @param[in]  is                The input stream.
  *  @param[out] dataset           The output dataset.
- *  @param[out] forms_alphabet    The
- *  @param[out] postags_alphabet  The postag 
- *  @param[out] deprels_alphabet
+ *  @param[out] forms_alphabet    The alphabet for forms.
+ *  @param[out] postags_alphabet  The alphabet for postags.
+ *  @param[out] deprels_alphabet  The alphabet for dependency relations.
+ *  @param[in]  incremental       If incremental is true, insert the token into
+ *                                the alphabet, otherwise not perform insertion.
  */
 void read_plain_dependency_dataset(
     std::istream& is,

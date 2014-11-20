@@ -1,4 +1,5 @@
 #include "app/depparser/arcstandard/test.h"
+#include "app/depparser/arcstandard/pipe.h"
 #include "app/depparser/arcstandard/opt_utils.h"
 #include <boost/program_options.hpp>
 #include <boost/log/trivial.hpp>
@@ -15,6 +16,7 @@ int test(int argc, char** argv) {
     ("model,m", po::value<std::string>(), "The path to the model.")
     ("input,i", po::value<std::string>(), "The path to the input file.")
     ("output,o", po::value<std::string>(), "The path to the output file.")
+    ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")
     ("conll,c", "Specified the input in CoNLL format.")
     ("verbose,v", "Logging every detail.")
@@ -33,6 +35,8 @@ int test(int argc, char** argv) {
     std::cerr << optparser << std::endl;
     return 1;
   }
+  as::Pipe pipe(opts);
+  pipe.run();
 
   return 0;
 }

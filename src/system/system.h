@@ -27,11 +27,11 @@ private:
   //! Define a set of actions.
   typedef std::vector<_ActionType>  action_collection_t;
 
-  //!
+  //! Define the type of header element of lattice.
   typedef std::vector<_StateType*>  lattice_head_list_t;
 
-  //!
-  typedef std::vector<int>          lattice_size_list_t;
+  //! Define the type of element volumn of lattice.
+  typedef std::vector<int> lattice_size_list_t;
 
   //! Define the mapping between action and it's packed score.
   typedef boost::unordered_map<_ActionType, floatval_t> packed_score_t;
@@ -45,11 +45,13 @@ private:
     return x.template get<2>() > y.template get<2>();
   }
 private:
-  //!
+  //! The pointer to the model, used to score the certain transition.
   _ModelType* model;
-  //!
+
+  //! The header of each row in lattice.
   lattice_head_list_t lattice_heads;
-  //!
+
+  //! The size of each row in lattice.
   lattice_size_list_t lattice_size;
 
   //! The size of the beam.
@@ -59,7 +61,7 @@ private:
   bool use_avg;
 
   //!
-  _StateType dummy_state;
+  _StateType* dummy_state;
 protected:
   //!
   action_collection_t possible_actions;
@@ -70,12 +72,19 @@ protected:
   //!
   scored_transition_t* candidate_transitions;
 public:
+  /**
+   *
+   *
+   *
+   */
   TransitionSystem(
       int _beam_size,
       _ModelType* _model)
     : beam_size(_beam_size),
+    use_avg(false),
     model(_model) {
     candidate_transitions = new scored_transition_t[beam_size];
+    dummy_state = new _StateType;
   }
 
   ~TransitionSystem() {
@@ -85,6 +94,9 @@ public:
         lattice_heads[i] = 0;
       }
     }
+
+    delete []candidate_transitions;
+    delete dummy_state;
   }
 
   /**
@@ -92,6 +104,7 @@ public:
    *
    *  @param[in]  initial_state   The initial state.
    *  @param[in]  gold_actions    The gold actions.
+   *  @param[in]  max_nr_actions  The maximum number of transition actions.
    *  @return     decode_result_t The first element in decode result is the
    *                              terminal state of the search result. The
    *                              second element (optional) is the terminal
@@ -100,19 +113,26 @@ public:
   const_decode_result_t decode(const _StateType& initial_state,
       const action_sequence_t& gold_actions,
       int max_nr_actions) {
+    _TRACE << "sys: decoding on " << (void *)initial_state.ref
+      << " with " << initial_state.ref->size() << " forms.";
+    _TRACE << "sys: beam size equals " << beam_size;
+    _TRACE << "sys: gold action is ";
+    for (int i = 0; i < gold_actions.size(); ++ i) {
+      _TRACE << "sys: - " << gold_actions[i];
+    }
     use_avg = (gold_actions.size() == 0);
     _StateType* row = allocate_lattice(0);
     const _StateType* correct_state = NULL;
-    lattice_size.clear();
 
     // set the initial state.
     row[0].copy(initial_state);
     // set the lattice size to zero.
+    lattice_size.clear();
     lattice_size.push_back(1);
     correct_state = row;
 
     int step = 1;
-    for (step = 1; step < max_nr_actions; ++ step) {
+    for (step = 1; step <= max_nr_actions; ++ step) {
       _TRACE << "sys: round " << step;
 
       row = allocate_lattice(step);
@@ -135,13 +155,17 @@ public:
       _TRACE << "sys: nr extended states(current beam size) =" << current_beam_size;
       for (int i = 0; i < current_beam_size; ++ i) {
         const scored_transition_t& trans = candidate_transitions[i];
-        _TRACE << "sys: trans from " << ((void *)trans.template get<0>())
-          << " into " << (void *)(row+ i) << " by " << trans.template get<1>()
-          << " " << trans.template get<2>();
-        transit(*trans.template get<0>(),
+        transit((*trans.template get<0>()),
             trans.template get<1>(),
             trans.template get<2>(),
             (row+ i));
+      }
+
+      for (int i = 0; i < current_beam_size; ++ i) {
+        _StateType* now= row + i;
+        _TRACE << "sys: [" << i << "] " << (void *)(now->previous)
+          << "->" << (void *)(now) << " by " << now->last_action
+          << " =" << now->score;
       }
 
       if (gold_actions.size() != 0) {
@@ -150,19 +174,22 @@ public:
             gold_actions[step- 1], correct_state,
             row, row + current_beam_size);
 
-        bool correct_state_in_beam = (next_correct_state != NULL);
-        if (!correct_state_in_beam) {
-          _TRACE << "decode: error at step =" << step;
+        _TRACE << "sys: next_correct_state=" << (void *)next_correct_state;
+        if (NULL == next_correct_state) {
+          _TRACE << "sys: error at step =" << step;
           const _StateType* best_target = search_best_state(
               row, row + current_beam_size);
-          transit((*correct_state), gold_actions[step- 1], 0, &dummy_state);
-          return const_decode_result_t(best_target, &dummy_state);
+          transit((*correct_state), gold_actions[step- 1], 0, dummy_state);
+
+          _TRACE << "sys: " << (void *)dummy_state->previous << "->"
+            << (void *)dummy_state << " by " << dummy_state->last_action;
+          return const_decode_result_t(best_target, dummy_state);
         } else {
           correct_state = next_correct_state;
         }
       }
     }
-    const _StateType* best_target = search_best_state(row, row + lattice_size[step]);
+    const _StateType* best_target = search_best_state(row, row + lattice_size[step- 1]);
     return const_decode_result_t(best_target, correct_state);
   }
 
@@ -183,9 +210,10 @@ private:
   }
 protected:
   /**
+   * In class function for invoking the get possible action funtions. It's used
+   * by the decode funtion.
    *
-   *
-   *
+   *  @param[in]  source  The source state.
    */
   void get_possible_actions(const _StateType& source) {
     get_possible_actions(source, possible_actions);
@@ -201,9 +229,10 @@ protected:
       action_collection_t& actions) = 0;
 
   /**
+   * In class function for invoking the score possible actions functions. It's
+   * used by the decode function.
    *
-   *
-   *
+   *  @param[in]  source    The source state.
    */
   void score_possible_actions(const _StateType& source) {
     score_possible_actions(source, possible_actions, packed_scores);
@@ -273,9 +302,9 @@ protected:
    *
    *  @param[in] act                    The action.
    *  @param[in] previous_correct_state The correct state.
-   *  @param[in/out]  begin             The starting of the states.
-   *  @param[in/out]  end               The ending of the states.
-   *  @return         const StateItem*  The pointer to the state.
+   *  @param[in] begin                  The starting of the states.
+   *  @param[in] end                    The ending of the states.
+   *  @return    const StateItem*       The pointer to the state.
    */
   const _StateType* search_correct_state(const _ActionType& act,
       const _StateType* previous_correct_state,
@@ -295,8 +324,8 @@ protected:
   /**
    * Search the best state in the given range.
    *
-   *  @param[in]  begin   The begining of this range.
-   *  @param[in]  end     The end of this range.
+   *  @param[in]  begin             The begining of this range.
+   *  @param[in]  end               The end of this range.
    *  @return     const StateItem*  The pointer to the best state.
    */
   const _StateType* search_best_state(const _StateType* begin,

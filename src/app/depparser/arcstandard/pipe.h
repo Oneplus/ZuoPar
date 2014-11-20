@@ -30,23 +30,25 @@ public:
   Pipe(const TestOption& opts);
 
   /**
-   * The dumping mode constructor.
-   *
-   *  @param[in]  opts  The dumping options.
-   */
-  Pipe(const DumpOption& opts);
-
-  /**
    * Perform learning or testing according to the configuration.
    */
   void run();
 
   /**
+   * Load model from the specified path.
    *
-   *
-   *
+   *  @param[in]  model_path  The path to the model.
    */
   void load_model(const std::string& model_path);
+
+  /**
+   * Build the dependency output for the state chain which ends with the source
+   * state.
+   *
+   *  @param[in]  source  The last state in state chain.
+   *  @param[out] output  The output dependency parse.
+   */
+  void build_output(const State& source, Dependency& output);
 private:
   //! The supported modes.
   enum PipeMode { kPipeLearn, kPipeTest };
@@ -60,8 +62,14 @@ private:
   //! The path to the model file.
   std::string model_path;
 
+  //!
+  std::string input_path;
+
   //! The size of the beam.
   int beam_size;
+
+  //! The display.
+  int display_interval;
 
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.

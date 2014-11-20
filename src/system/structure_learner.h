@@ -35,7 +35,17 @@ public:
       correct_state_chain.push_back(p);
     }
 
-    //BOOST_ASSERT(predict_state_chain.size() == correct_state_chain.size());
+    BOOST_ASSERT(predict_state_chain.size() == correct_state_chain.size());
+    for (int i = predict_state_chain.size() - 1; i >= 0; -- i) {
+      _TRACE << "learn: from " << predict_state_chain[i] << " by "
+        << predict_state_chain[i]->last_action;
+    }
+
+    for (int i = correct_state_chain.size() - 1; i >= 0; -- i) {
+      _TRACE << "learn: from " << correct_state_chain[i] << " by "
+        << correct_state_chain[i]->last_action;
+    }
+
     int i;
     for (i = predict_state_chain.size()- 1; i >= 0; -- i) {
       if (predict_state_chain[i]->last_action != correct_state_chain[i]->last_action) {
@@ -46,10 +56,10 @@ public:
     for (i = i+ 1; i > 0; -- i) {
       const _ActionType& predict_action = predict_state_chain[i- 1]->last_action;
       const _ActionType& correct_action = correct_state_chain[i- 1]->last_action;
-      _TRACE << "learn: update " << (void *)predict_state_chain[i] << ", " << predict_action
-        << " by -1";
-      _TRACE << "learn: update " << (void *)correct_state_chain[i] << ", " << correct_action
-        << " by +1";
+      _TRACE << "learn: update " << (void *)predict_state_chain[i] << ", "
+        << predict_action << " by -1";
+      _TRACE << "learn: update " << (void *)correct_state_chain[i] << ", "
+        << correct_action << " by +1";
       model->update((*predict_state_chain[i]), predict_action, timestamp, -1.);
       model->update((*correct_state_chain[i]), correct_action, timestamp, 1.);
     }

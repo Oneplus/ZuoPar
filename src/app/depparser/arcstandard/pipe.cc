@@ -2,6 +2,7 @@
 #include <fstream>
 #include "utils/logging.h"
 #include "utils/io/dataset.h"
+#include "utils/io/instance.h"
 #include "app/depparser/arcstandard/action_utils.h"
 #include "app/depparser/arcstandard/pipe.h"
 
@@ -19,6 +20,7 @@ Pipe::Pipe(const LearnOption& opts)
   this->reference_path = opts.reference_path;
   this->model_path = opts.model_path;
   this->beam_size = opts.beam_size;
+  this->display_interval = opts.display_interval;
   load_model(opts.model_path);
   _INFO << "report: model is loaded.";
 }
@@ -27,6 +29,9 @@ Pipe::Pipe(const TestOption& opts)
   : mode(kPipeTest), weight(0), decoder(0), learner(0) {
   BOOST_LOG_TRIVIAL(info) << "::TEST:: mode is actived.";
   this->model_path = opts.model_path;
+  this->input_path = opts.input_path;
+  this->beam_size = opts.beam_size;
+  this->display_interval = opts.display_interval;
   _INFO << "report: model file is " << opts.model_path;
   load_model(opts.model_path);
   _INFO << "report: model is loaded.";
@@ -78,15 +83,23 @@ Pipe::run() {
 
     _INFO << "report: loading dataset from reference file.";
     ioutils::read_plain_dependency_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, deprels_alphabet);
+        postags_alphabet, deprels_alphabet, true);
     _INFO << "report: dataset is loaded from reference file.";
-    _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
-    _INFO << "report: " << forms_alphabet.size() << " forms(s) is detected.";
-    _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
-    _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is detected.";
   } else {
     // not implemented.
+    std::ifstream ifs(input_path.c_str());
+    if (!ifs.good()) {
+      _ERROR << "#: failed to open input file.";
+      _ERROR << "#: testing halt";
+      return;
+    }
+    ioutils::read_plain_dependency_dataset(ifs, dataset, forms_alphabet,
+        postags_alphabet, deprels_alphabet, true);
   }
+  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
+  _INFO << "report: " << forms_alphabet.size() << " forms(s) is detected.";
+  _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
+  _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is detected.";
 
   decoder = new Decoder(deprels_alphabet.size(), beam_size, weight);
 
@@ -110,8 +123,24 @@ Pipe::run() {
     if (mode == kPipeLearn) {
       learner->set_timestamp(n+ 1);
       learner->learn(result.first, result.second);
+    } else {
+      Dependency output;
+      for (int i = 0; i < instance.size(); ++ i) {
+        output.push_back(instance.forms[i], instance.postags[i], 0, 0);
+      }
+      build_output((*result.first), output);
+      ioutils::write_dependency_instance(std::cout,
+          output,
+          forms_alphabet,
+          postags_alphabet,
+          deprels_alphabet);
+    }
+
+    if ((n+ 1)% display_interval == 0) {
+      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
     }
   }
+  _INFO << "pipe: processed #" << N << " instances.";
 
   if (mode == kPipeLearn) {
     learner->set_timestamp(N);
@@ -129,6 +158,27 @@ Pipe::run() {
     }
   }
 }
+
+void
+Pipe::build_output(const State& source, Dependency& output) {
+  size_t len = source.ref->size();
+  if (output.heads.size() != len) {
+    output.heads.resize(len);
+  }
+
+  if (output.deprels.size() != len) {
+    output.deprels.resize(len);
+  }
+
+  for (size_t i = 0; i < len; ++ i) {
+    output.heads[i] = source.heads[i];
+    output.deprels[i] = source.deprels[i];
+    if (output.heads[i] == -1) {
+      output.deprels[i] = deprels_alphabet.encode("ROOT");
+    }
+  }
+}
+
 
 } //  end for namespace arcstandard
 } //  end for namespace dependencyparser

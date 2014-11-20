@@ -3,10 +3,10 @@
 namespace ZuoPar {
 
 void
-Dependency::push_back(form_t form,
-    postag_t tag,
-    int head,
-    deprel_t deprel) {
+Dependency::push_back(const form_t& form,
+    const postag_t& tag,
+    const int& head,
+    const deprel_t& deprel) {
   forms.push_back(form);
   postags.push_back(tag);
   heads.push_back(head);

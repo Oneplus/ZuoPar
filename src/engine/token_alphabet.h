@@ -15,9 +15,13 @@ namespace ZuoPar {
 namespace Engine {
 
 class TokenAlphabet: public Alphabet {
+//! Tokenalphabet is the class used to store bidirection relations on string->int
+//! int->string.
 public:
+  //! Constructor
   TokenAlphabet();
 
+  //! Destructor
   ~TokenAlphabet();
 
   /**
@@ -32,16 +36,17 @@ public:
   /**
    * Get the name for a given index.
    *
-   *  @param[in]  int         The index.
+   *  @param[in]  id          The index.
    *  @return     const char* Return the pointer to the name. If the index is
    *                          not in legal range, NULL is returned.
    */
   const char* decode(int id) const;
 
   /**
+   * Get the index for a given name.
    *
-   *
-   *
+   *  @param[in]  name        The name string.
+   *  @return     int         Return the index of the name.
    */
   int encode(const char* name) const;
 
@@ -59,6 +64,7 @@ public:
    */
   bool load(std::istream& ifs);
 
+  //! Get the number of elements in the alphabet.
   size_t size() const;
 
   enum SPECIAL_TOKEN {

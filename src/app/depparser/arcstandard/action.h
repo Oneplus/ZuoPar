@@ -48,6 +48,7 @@ public:
   }
 
   bool operator == (const Action& a) const {
+    //return (a.action_name== action_name && a.deprel == deprel);
     return (a.seed == seed);
   }
 
@@ -71,11 +72,13 @@ public:
   //! Overload the ostream function.
   friend std::ostream& operator<<(std::ostream& os, const Action& act) {
     if (act.action_name == kShift) {
-      os << "SH(" << act.seed << ")";
+      os << "SH";
     } else if (act.action_name == kLeftArc) {
-      os << "LA-" << act.deprel << "(" << act.seed << ")";
+      os << "LA~" << act.deprel;
     } else if (act.action_name == kRightArc) {
-      os << "RA-" << act.deprel << "(" << act.seed << ")";
+      os << "RA~" << act.deprel;
+    } else if (act.action_name == kNone) {
+      os << "NO";
     } else {
       BOOST_ASSERT_MSG(false, "unknown actions.");
     }

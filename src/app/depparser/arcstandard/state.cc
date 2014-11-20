@@ -20,8 +20,12 @@ State::copy(const State& source) {
   this->ref = source.ref;
   this->score = source.score;
   this->previous = source.previous;
-  this->stack = source.stack;
   this->buffer = source.buffer;
+  this->top0 = source.top0;
+  this->top1 = source.top1;
+  this->stack = source.stack;
+  this->last_action = source.last_action;
+
   #define _COPY(name) memcpy((name), source.name, sizeof(name));
   _COPY(heads);
   _COPY(deprels);
@@ -40,9 +44,11 @@ State::clear() {
   this->previous = 0;
   this->top0 = 0;
   this->top1 = 0;
+  this->buffer = 0;
   stack.clear();
 
   memset(heads, -1, sizeof(heads));
+  memset(deprels, 0, sizeof(deprels));
   memset(nr_left_children, 0, sizeof(nr_left_children));
   memset(nr_right_children, 0, sizeof(nr_right_children));
   memset(left_most_child, -1, sizeof(left_most_child));
@@ -84,11 +90,11 @@ State::shift(const State& source) {
 
 bool
 State::left_arc(const State& source, deprel_t deprel) {
-  this->copy(source);
-  if (stack.size() < 2) {
+  if (source.stack.size() < 2) {
     return false;
   }
 
+  this->copy(source);
   stack.pop_back();
   stack.back() = top0;
 
@@ -116,10 +122,11 @@ State::left_arc(const State& source, deprel_t deprel) {
 
 bool
 State::right_arc(const State& source, deprel_t deprel) {
-  this->copy(source);
-  if (stack.size() < 2) {
+  if (source.stack.size() < 2) {
     return false;
   }
+
+  this->copy(source);
   stack.pop_back();
   heads[top0] = top1;
   deprels[top0] = deprel;
