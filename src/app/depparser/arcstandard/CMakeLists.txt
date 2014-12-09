@@ -14,6 +14,7 @@ add_executable (arcstandard_depparser
     ${SOURCE_DIR}/utils/logging.cc
     ${SOURCE_DIR}/utils/io/dataset.cc
     ${SOURCE_DIR}/utils/io/instance.cc
+    ${SOURCE_DIR}/utils/io/stream.cc
     )
 
 target_link_libraries (arcstandard_depparser

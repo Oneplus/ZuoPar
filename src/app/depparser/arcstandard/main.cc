@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cstring>  // strcmp
 #include "opt.h"
-#include "learn.h"
-#include "test.h"
+#include "app/depparser/arcstandard/learn.h"
+#include "app/depparser/arcstandard/test.h"
 #include "utils/logging.h"
 
 /**

@@ -6,24 +6,24 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-#define _u(name) [](const ScoreContext& ctx, const Action& act, \
-    std::vector<uf_t>& cache) -> void{ \
+#define _u(name) [](const ScoreContext& ctx, \
+    std::vector<ufp_t>& cache) -> void{ \
   if (ctx.name) { \
-    cache.push_back( uf_t(ctx.name, act) ); \
+    cache.push_back( ufp_t(ctx.name) ); \
   } \
 }
 
-#define _b(name1, name2) [](const ScoreContext& ctx, const Action& act, \
-    std::vector<bf_t>& cache) -> void{ \
+#define _b(name1, name2) [](const ScoreContext& ctx, \
+    std::vector<bfp_t>& cache) -> void{ \
   if (ctx.name1 && ctx.name2) { \
-    cache.push_back( bf_t(ctx.name1, ctx.name2, act) ); \
+    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
   } \
 }
 
-#define _t(name1, name2, name3) [](const ScoreContext& ctx, const Action& act, \
-    std::vector<tf_t>& cache) -> void{ \
+#define _t(name1, name2, name3) [](const ScoreContext& ctx, \
+    std::vector<tfp_t>& cache) -> void{ \
   if (ctx.name1 && ctx.name2 && ctx.name3) { \
-    cache.push_back( tf_t(ctx.name1, ctx.name2, ctx.name3, act) ); \
+    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
   } \
 }
 

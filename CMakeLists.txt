@@ -4,7 +4,7 @@ project ("ZuoPar")
 find_package (Boost REQUIRED)
 add_definitions (-DBOOST_LOG_DYN_LINK)
 
-set (CMAKE_CXX_FLAGS "-std=c++11")
+set (CMAKE_CXX_FLAGS "-std=c++11 -g")
 set (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set (SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 

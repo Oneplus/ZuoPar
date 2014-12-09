@@ -9,12 +9,13 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/singleton.hpp>
 #include "types/common.h"
+#include "system/action/abstract_action.h"
 
 namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-class Action {
+class Action: public AbstractAction {
 public:
   enum {
     kNone = 0,  //! Placeholder for illegal action.
@@ -23,8 +24,7 @@ public:
     kRightArc   //! The index of arc right action.
   };
 
-  Action()
-    : action_name(kNone), deprel(0), seed(0) {}
+  Action() : AbstractAction() {}
 
   /**
    * Constructor for action.
@@ -32,42 +32,7 @@ public:
    *  @param[in]  name  The name for the action.
    *  @param[in]  rel   The dependency relation.
    */
-  Action(int name, deprel_t rel)
-    : action_name(name),
-    deprel(rel) {
-    seed = 0;
-    boost::hash_combine(seed, name);
-    boost::hash_combine(seed, rel);
-  }
-
-  Action& operator = (const Action& a) {
-    seed = a.seed;
-    action_name = a.action_name;
-    deprel = a.deprel;
-    return (*this);
-  }
-
-  bool operator == (const Action& a) const {
-    //return (a.action_name== action_name && a.deprel == deprel);
-    return (a.seed == seed);
-  }
-
-  bool operator != (const Action& a) const {
-    return !((*this) == a);
-  }
-
-  //! For boost serialization
-  friend class boost::serialization::access;
-
-  template<class Archive>
-    void serialize(Archive & ar, const unsigned int /* file_version */) {
-    ar & seed & action_name & deprel;
-  }
-
-  //! For boost hash map.
-  friend std::size_t hash_value(const Action& a) {
-    return a.seed;
-  }
+  Action(int name, deprel_t rel) : AbstractAction(name, rel) {}
 
   //! Overload the ostream function.
   friend std::ostream& operator<<(std::ostream& os, const Action& act) {
@@ -88,15 +53,6 @@ public:
 
   //! For is_shift, is_left_arc, is_right_arc;
   friend class ActionUtils;
-private:
-  //! The action name.
-  int action_name;
-
-  //! The dependency relation.
-  deprel_t deprel;
-
-  //! The seed for hashing.
-  size_t seed;
 };
 
 class ActionFactory {

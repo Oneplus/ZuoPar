@@ -10,146 +10,139 @@
 
 namespace ZuoPar {
 
-//! Score is a kind of (code, action) tuple which representing the a feature.
-//! Unigram score type.
-template <class _ActionType>
-class UnigramFeature {
+class AbstractFeaturePrefix {
+protected:
+  std::size_t seed;
+public:
+  AbstractFeaturePrefix() : seed(0) {}
+  friend class boost::serialization::access;
+  friend std::size_t hash_value(const AbstractFeaturePrefix& s) {
+    return s.seed;
+  }
+};
+
+class UnigramFeaturePrefix: public AbstractFeaturePrefix {
 private:
-  boost::tuples::tuple<int, _ActionType> payload;
+  int feat;
 
 public:
-  //! The empty default allocator
-  UnigramFeature() {}
-
-  //! The allocator with feature and action
-  UnigramFeature(int feat, const _ActionType& act)
-    : payload(feat, act) {
+  UnigramFeaturePrefix() { }
+  UnigramFeaturePrefix(int f) : feat(f) {
+    boost::hash_combine(seed, f);
   }
-
-  friend class boost::serialization::access;
 
   //! The equal operator.
-  bool operator == (const UnigramFeature<_ActionType>& a) const {
-    return (
-        a.payload.template get<0>() == payload.template get<0>() &&
-        a.payload.template get<1>() == payload.template get<1>());
+  bool operator == (const UnigramFeaturePrefix& a) const {
+    return (a.seed == seed && a.feat == feat);
   }
 
   template<class Archive>
   void serialize(Archive & ar, const unsigned version) {
-    ar & payload.template get<0>()
-      & payload.template get<1>();
+    ar & seed & feat;
   }
 
-  friend std::size_t hash_value(const UnigramFeature<_ActionType>& s) {
-    std::size_t seed = 0;
-    boost::hash_combine(seed, s.payload.template get<0>());
-    boost::hash_combine(seed, s.payload.template get<1>());
-    return seed;
-  }
-
-  friend std::ostream& operator <<(std::ostream& os, 
-      const UnigramFeature<_ActionType>& s) {
-    os << "<" << s.payload.template get<0>() << ", "
-      << s.payload.template get<1>()
-      << ">";
+  friend std::ostream& operator <<(std::ostream& os,
+      const UnigramFeaturePrefix& s) {
+    os << s.feat;
     return os;
   }
 };
 
-//! Bigram score type.
-template <class _ActionType>
-class BigramFeature {
+class BigramFeaturePrefix: public AbstractFeaturePrefix {
 private:
-  boost::tuples::tuple<int, int, _ActionType> payload;
-
+  int feat0, feat1;
 public:
-  BigramFeature() {}
-
-  BigramFeature(int feat1, int feat2, const _ActionType& act)
-    : payload(feat1, feat2, act) {
+  BigramFeaturePrefix() { }
+  BigramFeaturePrefix(int f0, int f1): feat0(f0), feat1(f1) {
+    boost::hash_combine(seed, f0);
+    boost::hash_combine(seed, f1);
   }
 
-  bool operator == (const BigramFeature<_ActionType>& a) const {
-    return (
-        a.payload.template get<0>() == payload.template get<0>() &&
-        a.payload.template get<1>() == payload.template get<1>() &&
-        a.payload.template get<2>() == payload.template get<2>());
+  //! The equal operator.
+  bool operator == (const BigramFeaturePrefix& a) const {
+    return (a.seed  == seed && a.feat0 == feat0 && a.feat1 == feat1);
   }
-
-  friend class boost::serialization::access;
-
-  template<class Archive>
-  void serialize(Archive& ar, const unsigned version) {
-    ar & payload.template get<0>()
-      & payload.template get<1>()
-      & payload.template get<2>();
-  }
-
-  friend std::size_t hash_value(const BigramFeature<_ActionType>& s) {
-    std::size_t seed = 0;
-    boost::hash_combine(seed, s.payload.template get<0>());
-    boost::hash_combine(seed, s.payload.template get<1>());
-    boost::hash_combine(seed, s.payload.template get<2>());
-    return seed;
-  }
-
-  friend std::ostream& operator <<(std::ostream& os, 
-      const BigramFeature<_ActionType>& s) {
-    os << "<" << s.payload.template get<0>() << ", "
-      << s.payload.template get<1>() << ", "
-      << s.payload.template get<2>() << ">";
-    return os;
-  }
-};
-
-
-// Trigram
-template<class _ActionType>
-class TrigramFeature {
-private:
-  boost::tuples::tuple<int, int, int, _ActionType> payload;
-
-public:
-  TrigramFeature() {}
-
-  TrigramFeature(int feat0, int feat1, int feat2, const _ActionType& act)
-    : payload(feat0, feat1, feat2, act) {
-  }
-
-  bool operator == (const TrigramFeature<_ActionType>& a) const {
-    return (
-        a.payload.template get<0>() == payload.template get<0>() &&
-        a.payload.template get<1>() == payload.template get<1>() &&
-        a.payload.template get<2>() == payload.template get<2>() &&
-        a.payload.template get<3>() == payload.template get<3>());
-  }
-
-  friend class boost::serialization::access;
 
   template<class Archive>
   void serialize(Archive & ar, const unsigned version) {
-    ar & payload.template get<0>()
-      & payload.template get<1>()
-      & payload.template get<2>()
-      & payload.template get<3>();
+    ar & seed & feat0 & feat1;
   }
 
-  friend std::size_t hash_value(const TrigramFeature<_ActionType>& m) {
-    std::size_t seed = 0;
-    boost::hash_combine(seed, m.payload.template get<0>());
-    boost::hash_combine(seed, m.payload.template get<1>());
-    boost::hash_combine(seed, m.payload.template get<2>());
-    boost::hash_combine(seed, m.payload.template get<3>());
-    return seed;
+  friend std::ostream& operator <<(std::ostream& os,
+      const BigramFeaturePrefix& s) {
+    os << s.feat0 << "," << s.feat1;
+    return os;
+  }
+};
+
+class TrigramFeaturePrefix: public AbstractFeaturePrefix {
+private:
+  int feat0, feat1, feat2;
+public:
+  TrigramFeaturePrefix() { }
+  TrigramFeaturePrefix(int f0, int f1, int f2) {
+    boost::hash_combine(seed, f0);
+    boost::hash_combine(seed, f1);
+    boost::hash_combine(seed, f2);
   }
 
-  friend std::ostream& operator <<(std::ostream& os, 
-      const TrigramFeature<_ActionType>& s) {
-    os << "<" << s.payload.template get<0>() << ", "
-      << s.payload.template get<1>() << ", "
-      << s.payload.template get<2>() << ", "
-      << s.payload.template get<3>() << ">";
+  //! The equal operator.
+  bool operator == (const TrigramFeaturePrefix& a) const {
+    return (a.seed  == seed && a.feat0 == feat0 && a.feat1 == feat1
+        && a.feat2 == feat2);
+  }
+
+  template<class Archive>
+  void serialize(Archive & ar, const unsigned version) {
+    ar & seed & feat0 & feat1 & feat2;
+  }
+
+  friend std::ostream& operator <<(std::ostream& os,
+      const TrigramFeaturePrefix& s) {
+    os << s.feat0 << "," << s.feat1 << "," << s.feat2;
+    return os;
+  }
+};
+
+template <class _CodeType, class _ActionType>
+class Feature {
+private:
+  std::size_t seed;
+  std::size_t seed1;
+  _CodeType   code;
+  _ActionType act;
+public:
+  Feature(): seed(0) {}
+  Feature(const _CodeType& code_, const _ActionType& act_)
+    : code(code_), act(act_), seed(0) {
+    boost::hash_combine(seed, code_);
+    seed1 = seed;
+    boost::hash_combine(seed, act_);
+  }
+
+  void replace_action(const _ActionType& act_) {
+    act = act_;
+    seed = seed1;
+    boost::hash_combine(seed, act);
+  }
+
+  //! The equal operator.
+  bool operator == (const Feature<_CodeType, _ActionType>& a) const {
+    return (a.seed == seed && a.code == code && a.act == act);
+  }
+
+  template<class Archive>
+  void serialize(Archive & ar, const unsigned version) {
+    ar & seed & code & act;
+  }
+
+  friend std::size_t hash_value(const Feature<_CodeType, _ActionType>& s) {
+    return s.seed;
+  }
+
+  friend std::ostream& operator <<(std::ostream& os,
+      const Feature<_CodeType, _ActionType>& s) {
+    os << "<" << s.code << ", " << s.act << ">";
     return os;
   }
 };

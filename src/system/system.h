@@ -251,10 +251,11 @@ protected:
       packed_score_t& scores) {
     scores.clear();
     _ScoreContextType ctx(source);
-    for (int i = 0; i < actions.size(); ++ i) {
+    model->batchly_score(ctx, actions, use_avg, scores);
+    /*for (int i = 0; i < actions.size(); ++ i) {
       const _ActionType& act = actions[i];
       scores[act] = model->score(ctx, act, use_avg);
-    }
+    }*/
   }
 
   /**

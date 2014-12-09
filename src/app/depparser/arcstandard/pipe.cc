@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "utils/logging.h"
+#include "utils/io/stream.h"
 #include "utils/io/dataset.h"
 #include "utils/io/instance.h"
 #include "app/depparser/arcstandard/action_utils.h"
@@ -21,8 +22,11 @@ Pipe::Pipe(const LearnOption& opts)
   this->model_path = opts.model_path;
   this->beam_size = opts.beam_size;
   this->display_interval = opts.display_interval;
-  load_model(opts.model_path);
-  _INFO << "report: model is loaded.";
+  if (load_model(opts.model_path)) {
+    _INFO << "report: model is loaded.";
+  } else {
+    _INFO << "report: model is not loaded.";
+  }
 }
 
 Pipe::Pipe(const TestOption& opts)
@@ -30,42 +34,48 @@ Pipe::Pipe(const TestOption& opts)
   BOOST_LOG_TRIVIAL(info) << "::TEST:: mode is actived.";
   this->model_path = opts.model_path;
   this->input_path = opts.input_path;
+  this->output_path = opts.output_path;
   this->beam_size = opts.beam_size;
   this->display_interval = opts.display_interval;
   _INFO << "report: model file is " << opts.model_path;
-  load_model(opts.model_path);
-  _INFO << "report: model is loaded.";
+  if (load_model(opts.model_path)) {
+    _INFO << "report: model is loaded.";
+  } else {
+    _INFO << "report: model is not loaded.";
+  }
 }
 
-void
+bool
 Pipe::load_model(const std::string& model_path) {
   weight = new Weight;
   std::ifstream mfs(model_path);
 
   if (!mfs.good()) {
     _WARN << "pipe: model doesn't exists.";
-    return;
+    return false;
   }
 
   if (!forms_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load forms alphabet.";
-    return;
+    return false;
   }
 
   if (!postags_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load postags alphabet.";
-    return;
+    return false;
   }
 
   if (!deprels_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load deprels alphabet.";
-    return;
+    return false;
   }
 
   if (!weight->load(mfs)) {
     _WARN << "pipe: failed to load weight.";
-    return;
+    return false;
   }
+
+  return true;
 }
 
 void
@@ -107,6 +117,7 @@ Pipe::run() {
     learner = new Learner(weight);
   }
   size_t N = dataset.size();
+  std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
   for (size_t n = 0; n < N; ++ n) {
     const Dependency& instance = dataset[n];
     // calculate the oracle transition actions.
@@ -129,7 +140,7 @@ Pipe::run() {
         output.push_back(instance.forms[i], instance.postags[i], 0, 0);
       }
       build_output((*result.first), output);
-      ioutils::write_dependency_instance(std::cout,
+      ioutils::write_dependency_instance((*os),
           output,
           forms_alphabet,
           postags_alphabet,

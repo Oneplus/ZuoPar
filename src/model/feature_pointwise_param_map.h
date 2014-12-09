@@ -3,6 +3,7 @@
 
 #include "settings.h"
 #include "ml/pointwise_param.h"
+#include "model/feature.h"
 #include "utils/logging.h"
 #include "utils/serialization/unordered_map.h"
 
@@ -17,20 +18,20 @@ namespace ZuoPar {
  *
  *
  */
-template <class _FeatureType,
+template <class _FeaturePrefixType,
           class _ScoreContextType,
           class _ActionType>
 class FeaturePointwiseParamMap {
 private:
+  typedef Feature<_FeaturePrefixType, _ActionType> feature_t;
   //! Define the parameter type.
   typedef MachineLearning::PointwiseParameter param_t;
   //! Define the mapping type.
-  typedef boost::unordered_map<_FeatureType, param_t> map_t;
+  typedef boost::unordered_map<feature_t, param_t> map_t;
   //! Define the cache type.
-  typedef std::vector<_FeatureType> cache_t;
+  typedef std::vector<_FeaturePrefixType> cache_t;
   //! Define the functor type.
-  typedef std::function<void(const _ScoreContextType&,
-      const _ActionType&, cache_t&)> extractor_t;
+  typedef std::function<void(const _ScoreContextType&, cache_t&)> extractor_t;
 
 public:
   FeaturePointwiseParamMap(extractor_t _extractor): extractor(_extractor) {}
@@ -48,11 +49,11 @@ public:
   floatval_t score(const _ScoreContextType& ctx, const _ActionType& act,
       bool avg, floatval_t default_return_value = 0.) {
     cache.clear();
-    extractor(ctx, act, cache);
+    extractor(ctx, cache);
     //extractor(ctx, act);
     floatval_t ret = 0.;
     for (int i = 0; i < cache.size(); ++ i) {
-      const _FeatureType& entry = cache[i];
+      const feature_t& entry = feature_t(cache[i], act);
       // _TRACE << "score " << (void *)this << ": score (try) " << entry;
 
       typename map_t::const_iterator itx = payload.find(entry);
@@ -69,6 +70,37 @@ public:
   }
 
   /**
+   * Get
+   */
+  void batchly_score(const _ScoreContextType& ctx,
+      const std::vector<_ActionType>& actions,
+      bool avg,
+      boost::unordered_map<_ActionType, floatval_t>& result) {
+    cache.clear();
+    extractor(ctx, cache);
+    for (int i = 0; i < cache.size(); ++ i) {
+      feature_t entry(cache[i], actions[0]);
+      for (int j = 0; j < actions.size(); ++ j) {
+        const _ActionType& act= actions[j];
+        if (j > 0) {
+          entry.replace_action(act);
+        }
+
+        typename map_t::const_iterator itx = payload.find(entry);
+        if (itx == payload.end()) {
+          continue;
+        }
+        // _TRACE << "score: score (hit) " << entry;
+        if (avg) {
+          result[act] += itx->second.w_sum;
+        } else {
+          result[act] += itx->second.w;
+        }
+      }
+    }
+  }
+
+  /**
    * Update the parameter for the (context, action) pair
    *
    *  @param[in]  ctx   The scoring context.
@@ -79,9 +111,9 @@ public:
   void update(const _ScoreContextType& ctx, const _ActionType& act,
       int now, floatval_t scale = 1.) {
     cache.clear();
-    extractor(ctx, act, cache);
+    extractor(ctx, cache);
     for (int i = 0; i < cache.size(); ++ i) {
-      const _FeatureType& entry = cache[i];
+      const feature_t& entry = feature_t(cache[i], act);
       param_t& param = payload[entry];
       param.add(now, scale);
     }

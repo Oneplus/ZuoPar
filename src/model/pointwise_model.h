@@ -4,6 +4,7 @@
 #include "feature.h"
 #include "feature_pointwise_param_map.h"
 #include <vector>
+#include <boost/unordered_map.hpp>
 
 namespace ZuoPar {
 
@@ -12,18 +13,22 @@ template <class _StateType,
           class _ActionType>
 class PointwiseModel {
 public:
+
+  typedef UnigramFeaturePrefix  ufp_t;
+  typedef BigramFeaturePrefix   bfp_t;
+  typedef TrigramFeaturePrefix  tfp_t;
   //! Instantiate the unigram score type
-  typedef UnigramFeature<_ActionType> uf_t;
+  typedef Feature<UnigramFeaturePrefix, _ActionType> uf_t;
   //! Instantiate the bigram score type
-  typedef BigramFeature<_ActionType>  bf_t;
+  typedef Feature<BigramFeaturePrefix, _ActionType>  bf_t;
   //! Instantiate the trigram score type
-  typedef TrigramFeature<_ActionType> tf_t;
+  typedef Feature<TrigramFeaturePrefix, _ActionType> tf_t;
   //! Instantiate the unigram mapping
-  typedef FeaturePointwiseParamMap< uf_t, _ScoreContextType, _ActionType > uf_map_t;
+  typedef FeaturePointwiseParamMap< ufp_t, _ScoreContextType, _ActionType > uf_map_t;
   //! Instantiate the bigram mapping
-  typedef FeaturePointwiseParamMap< bf_t, _ScoreContextType, _ActionType > bf_map_t;
+  typedef FeaturePointwiseParamMap< bfp_t, _ScoreContextType, _ActionType > bf_map_t;
   //! Instantiate the trigram mapping
-  typedef FeaturePointwiseParamMap< tf_t, _ScoreContextType, _ActionType > tf_map_t;
+  typedef FeaturePointwiseParamMap< tfp_t, _ScoreContextType, _ActionType > tf_map_t;
 
 public:
   PointwiseModel() {}
@@ -64,6 +69,24 @@ public:
       ret += tfeat_map_repo[i].score(ctx, act, avg, 0.);
     }
     return ret;
+  }
+
+
+  void batchly_score(const _ScoreContextType& ctx,
+      const std::vector<_ActionType>& actions,
+      bool avg,
+      boost::unordered_map<_ActionType, floatval_t>& result) {
+    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
+      ufeat_map_repo[i].batchly_score(ctx, actions, avg, result);
+    }
+
+    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
+      bfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
+    }
+
+    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
+      tfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
+    }
   }
 
   /**

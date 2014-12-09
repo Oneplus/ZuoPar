@@ -17,6 +17,13 @@ namespace eg = ZuoPar::Engine;
 
 class Decoder: public TransitionSystem<Action, State, ScoreContext, Weight> {
 public:
+  /**
+   * The decoder constructor.
+   *
+   *  @param[in]  nr        The number of dependency relations.
+   *  @param[in]  beam_size The size of beam.
+   *  @param[in]  weight    The pointer to the weight.
+   */
   Decoder(int nr, int beam_size, Weight* weight);
 
   //! Implement arc standard get possible actions.

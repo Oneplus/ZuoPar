@@ -13,6 +13,7 @@ namespace ArcStandard {
 
 class Weight: public PointwiseModel<State, ScoreContext, Action> {
 public:
+  //! The weight constructor.
   Weight();
 };
 

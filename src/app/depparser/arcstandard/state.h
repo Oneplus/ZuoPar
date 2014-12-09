@@ -12,6 +12,7 @@ namespace ArcStandard {
 
 class State {
 public:
+  //! The empty constructor.
   State();
 
   /**
@@ -90,7 +91,7 @@ public:
   //! Use to record the heads in current state.
   int heads[kMaxNumberOfWords];
 
-  //!
+  //! The dependency relation cached in state.
   deprel_t deprels[kMaxNumberOfWords];
 
   //! Use to record the number of left children in current state.

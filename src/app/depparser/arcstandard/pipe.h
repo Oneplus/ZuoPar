@@ -39,7 +39,7 @@ public:
    *
    *  @param[in]  model_path  The path to the model.
    */
-  void load_model(const std::string& model_path);
+  bool load_model(const std::string& model_path);
 
   /**
    * Build the dependency output for the state chain which ends with the source
@@ -64,6 +64,9 @@ private:
 
   //!
   std::string input_path;
+
+  //!
+  std::string output_path;
 
   //! The size of the beam.
   int beam_size;
