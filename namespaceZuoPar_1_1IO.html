@@ -98,8 +98,144 @@ Functions</h2></td></tr>
 <tr class="separator:a8e06a18f6e7ea1f60c346ee0c0edaf4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe69892a055d39b8ed9459c0e3c8aefa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#abe69892a055d39b8ed9459c0e3c8aefa">write_dependency_instance</a> (std::ostream &amp;os, const <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a> &amp;output, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet)</td></tr>
 <tr class="separator:abe69892a055d39b8ed9459c0e3c8aefa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af153fff7405d5f60891b145f894cc5e7"><td class="memItemLeft" align="right" valign="top">std::istream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#af153fff7405d5f60891b145f894cc5e7">get_istream</a> (const char *filename, std::istream *default_stream=(&amp;(std::cin)))</td></tr>
+<tr class="separator:af153fff7405d5f60891b145f894cc5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adec424c14bc0d928c9a1956229a9fc39"><td class="memItemLeft" align="right" valign="top">std::istream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#adec424c14bc0d928c9a1956229a9fc39">get_istream</a> (const std::string &amp;filename, std::istream *default_stream=(&amp;(std::cin)))</td></tr>
+<tr class="memdesc:adec424c14bc0d928c9a1956229a9fc39"><td class="mdescLeft">&#160;</td><td class="mdescRight">std::string wrapper for get_istream  <a href="#adec424c14bc0d928c9a1956229a9fc39">More...</a><br/></td></tr>
+<tr class="separator:adec424c14bc0d928c9a1956229a9fc39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95f3ada064d841733605745d107fb673"><td class="memItemLeft" align="right" valign="top">std::ostream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a95f3ada064d841733605745d107fb673">get_ostream</a> (const char *filename, std::ostream *default_stream=(&amp;(std::cout)))</td></tr>
+<tr class="separator:a95f3ada064d841733605745d107fb673"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8e3844745a117987994ce61fbf4afc0"><td class="memItemLeft" align="right" valign="top">std::ostream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#af8e3844745a117987994ce61fbf4afc0">get_ostream</a> (const std::string &amp;filename, std::ostream *default_stream=(&amp;(std::cout)))</td></tr>
+<tr class="memdesc:af8e3844745a117987994ce61fbf4afc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">std::string wrapper for get_ostream.  <a href="#af8e3844745a117987994ce61fbf4afc0">More...</a><br/></td></tr>
+<tr class="separator:af8e3844745a117987994ce61fbf4afc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="af153fff7405d5f60891b145f894cc5e7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::istream* ZuoPar::IO::get_istream </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::istream *&#160;</td>
+          <td class="paramname"><em>default_stream</em> = <code>(&amp;(std::cin))</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the ifstream from the file specified by filename. If opening fails, use the provided default stream instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>The name of the file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">default_stream</td><td>The user specified stream. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::istream The built stream. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="adec424c14bc0d928c9a1956229a9fc39"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::istream* ZuoPar::IO::get_istream </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::istream *&#160;</td>
+          <td class="paramname"><em>default_stream</em> = <code>(&amp;(std::cin))</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>std::string wrapper for get_istream </p>
+
+</div>
+</div>
+<a class="anchor" id="a95f3ada064d841733605745d107fb673"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream* ZuoPar::IO::get_ostream </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::ostream *&#160;</td>
+          <td class="paramname"><em>default_stream</em> = <code>(&amp;(std::cout))</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the ostream from the file specified by filename. If opening fails, use the provided default stream instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>The name of the file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">default_stream</td><td>The user specified stream. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::ostream The built stream. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af8e3844745a117987994ce61fbf4afc0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream* ZuoPar::IO::get_ostream </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::ostream *&#160;</td>
+          <td class="paramname"><em>default_stream</em> = <code>(&amp;(std::cout))</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>std::string wrapper for get_ostream. </p>
+
+</div>
+</div>
 <a class="anchor" id="a8e06a18f6e7ea1f60c346ee0c0edaf4c"></a>
 <div class="memitem">
 <div class="memproto">

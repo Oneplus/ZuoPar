@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bigramfeature',['BigramFeature',['../classZuoPar_1_1BigramFeature.html',1,'ZuoPar']]]
+  ['bigrammetafeature',['BigramMetaFeature',['../classZuoPar_1_1BigramMetaFeature.html',1,'ZuoPar']]]
 ];

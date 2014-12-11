@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_MODEL_H__</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="common_8h.html">types/common.h</a>&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="pointwise__model_8h.html">model/pointwise_model.h</a>&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="feature__param__map__collection_8h.html">model/associated/pointwise/feature_param_map_collection.h</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="arcstandard_2action_8h.html">app/depparser/arcstandard/action.h</a>&quot;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="arcstandard_2state_8h.html">app/depparser/arcstandard/state.h</a>&quot;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="arcstandard_2score__context_8h.html">app/depparser/arcstandard/score_context.h</a>&quot;</span></div>
@@ -102,21 +102,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>DependencyParser {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>ArcStandard {</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">class </span>Weight: <span class="keyword">public</span> PointwiseModel&lt;State, ScoreContext, Action&gt; {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html#a113590e9203f3d6af87e91ee8c36cba9">Weight</a>();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;};</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;} <span class="comment">//  end for namespace arcstandard</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;} <span class="comment">//  end for namespace dependencyparser</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_MODEL_H__</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">   14</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>: <span class="keyword">public</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html">FeaturePointwiseParameterCollection</a>&lt;State,</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  ScoreContext, Action&gt; {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html#a113590e9203f3d6af87e91ee8c36cba9">Weight</a>();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;};</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;} <span class="comment">//  end for namespace arcstandard</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;} <span class="comment">//  end for namespace dependencyparser</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_MODEL_H__</span></div>
 <div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight_html_a113590e9203f3d6af87e91ee8c36cba9"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html#a113590e9203f3d6af87e91ee8c36cba9">ZuoPar::DependencyParser::ArcStandard::Weight::Weight</a></div><div class="ttdeci">Weight()</div><div class="ttdoc">The weight constructor. </div></div>
-<div class="ttc" id="pointwise__model_8h_html"><div class="ttname"><a href="pointwise__model_8h.html">pointwise_model.h</a></div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParameterCollection_html"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParameterCollection.html">ZuoPar::FeaturePointwiseParameterCollection</a></div><div class="ttdef"><b>Definition:</b> feature_param_map_collection.h:14</div></div>
+<div class="ttc" id="feature__param__map__collection_8h_html"><div class="ttname"><a href="feature__param__map__collection_8h.html">feature_param_map_collection.h</a></div></div>
 <div class="ttc" id="arcstandard_2score__context_8h_html"><div class="ttname"><a href="arcstandard_2score__context_8h.html">score_context.h</a></div></div>
 <div class="ttc" id="arcstandard_2state_8h_html"><div class="ttname"><a href="arcstandard_2state_8h.html">state.h</a></div></div>
 <div class="ttc" id="arcstandard_2action_8h_html"><div class="ttname"><a href="arcstandard_2action_8h.html">action.h</a></div></div>
+<div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight_html"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">ZuoPar::DependencyParser::ArcStandard::Weight</a></div><div class="ttdef"><b>Definition:</b> weight.h:14</div></div>
 <div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

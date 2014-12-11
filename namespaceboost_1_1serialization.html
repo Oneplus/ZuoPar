@@ -94,6 +94,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a80583d81ce873f839d5ba9a5222e9807"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Type , class Key , class Compare , class Allocator &gt; </td></tr>
+<tr class="memitem:a80583d81ce873f839d5ba9a5222e9807"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a80583d81ce873f839d5ba9a5222e9807">save</a> (Archive &amp;ar, const google::dense_hash_map&lt; Key, Type, Compare, Allocator &gt; &amp;t, const unsigned int)</td></tr>
+<tr class="separator:a80583d81ce873f839d5ba9a5222e9807"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e655cffe08276628a6cee9aea395aa1"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Type , class Key , class Compare , class Allocator &gt; </td></tr>
+<tr class="memitem:a7e655cffe08276628a6cee9aea395aa1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a7e655cffe08276628a6cee9aea395aa1">load</a> (Archive &amp;ar, google::dense_hash_map&lt; Key, Type, Compare, Allocator &gt; &amp;t, const unsigned int)</td></tr>
+<tr class="separator:a7e655cffe08276628a6cee9aea395aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cfad31b0d25ed5037bc7b5008154d99"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Type , class Key , class Compare , class Allocator &gt; </td></tr>
+<tr class="memitem:a7cfad31b0d25ed5037bc7b5008154d99"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a7cfad31b0d25ed5037bc7b5008154d99">serialize</a> (Archive &amp;ar, google::dense_hash_map&lt; Key, Type, Compare, Allocator &gt; &amp;t, const unsigned int file_version)</td></tr>
+<tr class="separator:a7cfad31b0d25ed5037bc7b5008154d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04a81556a5eda4b2ee2aea89fa8bacab"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Type , class Key , class Hash , class Compare , class Allocator &gt; </td></tr>
 <tr class="memitem:a04a81556a5eda4b2ee2aea89fa8bacab"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a04a81556a5eda4b2ee2aea89fa8bacab">save</a> (Archive &amp;ar, const boost::unordered_map&lt; Key, Type, Hash, Compare, Allocator &gt; &amp;t, const unsigned int)</td></tr>
 <tr class="separator:a04a81556a5eda4b2ee2aea89fa8bacab"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -105,6 +114,48 @@ Functions</h2></td></tr>
 <tr class="separator:a38423d04b011754810c08d6e599f4789"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a7e655cffe08276628a6cee9aea395aa1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Archive , class Type , class Key , class Compare , class Allocator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void boost::serialization::load </td>
+          <td>(</td>
+          <td class="paramtype">Archive &amp;&#160;</td>
+          <td class="paramname"><em>ar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">google::dense_hash_map&lt; Key, Type, Compare, Allocator &gt; &amp;&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>int</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8d4be56406f8947db1a1accf28c7e046"></a>
 <div class="memitem">
 <div class="memproto">
@@ -124,6 +175,48 @@ template&lt;class Archive , class Type , class Key , class Hash , class Compare 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">boost::unordered_map&lt; Key, Type, Hash, Compare, Allocator &gt; &amp;&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned&#160;</td>
+          <td class="paramname"><em>int</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a80583d81ce873f839d5ba9a5222e9807"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Archive , class Type , class Key , class Compare , class Allocator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void boost::serialization::save </td>
+          <td>(</td>
+          <td class="paramtype">Archive &amp;&#160;</td>
+          <td class="paramname"><em>ar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const google::dense_hash_map&lt; Key, Type, Compare, Allocator &gt; &amp;&#160;</td>
           <td class="paramname"><em>t</em>, </td>
         </tr>
         <tr>
@@ -208,6 +301,48 @@ template&lt;class Archive , class Type , class Key , class Hash , class Compare 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">boost::unordered_map&lt; Key, Type, Hash, Compare, Allocator &gt; &amp;&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned int&#160;</td>
+          <td class="paramname"><em>file_version</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7cfad31b0d25ed5037bc7b5008154d99"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Archive , class Type , class Key , class Compare , class Allocator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void boost::serialization::serialize </td>
+          <td>(</td>
+          <td class="paramtype">Archive &amp;&#160;</td>
+          <td class="paramname"><em>ar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">google::dense_hash_map&lt; Key, Type, Compare, Allocator &gt; &amp;&#160;</td>
           <td class="paramname"><em>t</em>, </td>
         </tr>
         <tr>

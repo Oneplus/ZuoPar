@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unigramfeature',['UnigramFeature',['../classZuoPar_1_1UnigramFeature.html',1,'ZuoPar']]]
+  ['unigrammetafeature',['UnigramMetaFeature',['../classZuoPar_1_1UnigramMetaFeature.html',1,'ZuoPar']]]
 ];

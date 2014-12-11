@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['uf_5fmap_5ft',['uf_map_t',['../classZuoPar_1_1PointwiseModel.html#ac4a2bd7d28767841bcd19d7cf4ba216d',1,'ZuoPar::PointwiseModel']]],
-  ['uf_5ft',['uf_t',['../classZuoPar_1_1PointwiseModel.html#a9bcd57cfebb54b80aacd1cce11acfc67',1,'ZuoPar::PointwiseModel']]],
-  ['ufeat_5fcache',['ufeat_cache',['../classZuoPar_1_1PointwiseModel.html#af093225d60f0b9db46f2574718d97e06',1,'ZuoPar::PointwiseModel']]],
-  ['ufeat_5fmap_5frepo',['ufeat_map_repo',['../classZuoPar_1_1PointwiseModel.html#ac0c5e46b2c66c0fdf3b205f43f055e47',1,'ZuoPar::PointwiseModel']]],
-  ['unigramfeature',['UnigramFeature',['../classZuoPar_1_1UnigramFeature.html#aa55bc2c9e1459d5083de1ccfc4adb39b',1,'ZuoPar::UnigramFeature::UnigramFeature()'],['../classZuoPar_1_1UnigramFeature.html#ac718ac84a4308ebaf3f98e1177dffd25',1,'ZuoPar::UnigramFeature::UnigramFeature(int feat, const _ActionType &amp;act)']]],
-  ['unigramfeature',['UnigramFeature',['../classZuoPar_1_1UnigramFeature.html',1,'ZuoPar']]],
+  ['uf_5fmap_5ft',['uf_map_t',['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#a54f2fec68621a0a56afe7fe7fecf511b',1,'ZuoPar::FeaturePointwiseParameterCollection']]],
+  ['uf_5ft',['uf_t',['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#aa0e132fb13abccca0a30fffbe62dc7e1',1,'ZuoPar::FeaturePointwiseParameterCollection']]],
+  ['ufeat_5fcache',['ufeat_cache',['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#a605afb39dc03cda6eb7058384fc50e4c',1,'ZuoPar::FeaturePointwiseParameterCollection']]],
+  ['ufeat_5fmap_5frepo',['ufeat_map_repo',['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#a6fbb71599a2531bf6fbf267d5e76b820',1,'ZuoPar::FeaturePointwiseParameterCollection']]],
+  ['ufp_5ft',['ufp_t',['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#a35a4817b5b339c90196df80282dad09c',1,'ZuoPar::FeaturePointwiseParameterCollection']]],
+  ['unigrammetafeature',['UnigramMetaFeature',['../classZuoPar_1_1UnigramMetaFeature.html#a7bf42abc0eff2bb0f6868d2fc16ccbf8',1,'ZuoPar::UnigramMetaFeature::UnigramMetaFeature()'],['../classZuoPar_1_1UnigramMetaFeature.html#af05e4950b510d59e31fefea30ad5b24f',1,'ZuoPar::UnigramMetaFeature::UnigramMetaFeature(int f)']]],
+  ['unigrammetafeature',['UnigramMetaFeature',['../classZuoPar_1_1UnigramMetaFeature.html',1,'ZuoPar']]],
   ['unordered_5fmap_2eh',['unordered_map.h',['../unordered__map_8h.html',1,'']]],
-  ['update',['update',['../classZuoPar_1_1FeaturePointwiseParamMap.html#a0e7a385a5d7c40af40cfd47cbb67b489',1,'ZuoPar::FeaturePointwiseParamMap::update()'],['../classZuoPar_1_1PointwiseModel.html#a1333065b23278dc5882ab2815c2f12f6',1,'ZuoPar::PointwiseModel::update(const _StateType &amp;state, const _ActionType &amp;act, int timestamp, floatval_t scale)'],['../classZuoPar_1_1PointwiseModel.html#a3dfda936a3831b5be4e19a310da100ba',1,'ZuoPar::PointwiseModel::update(const _ScoreContextType &amp;ctx, const _ActionType &amp;act, int timestamp, floatval_t scale)']]]
+  ['update',['update',['../classZuoPar_1_1FeaturePointwiseParameterMap.html#a6d120e13828b0838606c7695dd511333',1,'ZuoPar::FeaturePointwiseParameterMap::update()'],['../classZuoPar_1_1FeaturePrefixActionPointwiseParamMap.html#aa1bf81f086e8ac736f97bac09392fcbb',1,'ZuoPar::FeaturePrefixActionPointwiseParamMap::update()'],['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#a0d83168b04e768bc36e50c8ae182108a',1,'ZuoPar::FeaturePointwiseParameterCollection::update(const _StateType &amp;state, const _ActionType &amp;act, int timestamp, floatval_t scale)'],['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#a13e96c3fba111d34f9bc14a1347abb54',1,'ZuoPar::FeaturePointwiseParameterCollection::update(const _ScoreContextType &amp;ctx, const _ActionType &amp;act, int timestamp, floatval_t scale)']]]
 ];

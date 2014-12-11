@@ -7,6 +7,7 @@ var searchData=
   ['zuopar',['ZuoPar',['../index.html',1,'']]],
   ['io',['IO',['../namespaceZuoPar_1_1IO.html',1,'ZuoPar']]],
   ['machinelearning',['MachineLearning',['../namespaceZuoPar_1_1MachineLearning.html',1,'ZuoPar']]],
+  ['math',['Math',['../namespaceZuoPar_1_1Math.html',1,'ZuoPar']]],
   ['utility',['Utility',['../namespaceZuoPar_1_1Utility.html',1,'ZuoPar']]],
   ['zuopar',['ZuoPar',['../namespaceZuoPar.html',1,'']]]
 ];

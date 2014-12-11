@@ -104,17 +104,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>DependencyParser {</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span>ArcStandard {</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span>Pipe {</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html">Pipe</a> {</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#a390e7ccea4c0a6eb0ef335cf6ffe8a15">Pipe</a>(<span class="keyword">const</span> LearnOption&amp; opts);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#a390e7ccea4c0a6eb0ef335cf6ffe8a15">Pipe</a>(<span class="keyword">const</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1LearnOption.html">LearnOption</a>&amp; opts);</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#a390e7ccea4c0a6eb0ef335cf6ffe8a15">Pipe</a>(<span class="keyword">const</span> TestOption&amp; opts);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#a390e7ccea4c0a6eb0ef335cf6ffe8a15">Pipe</a>(<span class="keyword">const</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1TestOption.html">TestOption</a>&amp; opts);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#a313245779940c9f052d65f1a28a95e62">run</a>();</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#a0f0b93755200be5097fffee71a3554d6">load_model</a>(<span class="keyword">const</span> std::string&amp; model_path);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#aabf28c130a0ae953bdf157f35a034ce7">build_output</a>(<span class="keyword">const</span> State&amp; source, Dependency&amp; output);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#aabf28c130a0ae953bdf157f35a034ce7">build_output</a>(<span class="keyword">const</span> <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>&amp; source, <a class="code" href="classZuoPar_1_1Dependency.html">Dependency</a>&amp; output);</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <span class="keyword">enum</span> PipeMode { kPipeLearn, kPipeTest };</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
@@ -126,31 +126,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  std::string input_path;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keywordtype">int</span> beam_size;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  std::string output_path;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keywordtype">int</span> display_interval;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keywordtype">int</span> beam_size;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  Weight* weight;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <a class="code" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a8af1051811164026f910fe0b7cfd10d0">Learner</a>* learner;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keywordtype">int</span> display_interval;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>* weight;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  Decoder* decoder;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <a class="code" href="classZuoPar_1_1TransitionStructureLearner.html">Learner</a>* learner;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> forms_alphabet;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <a class="code" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>* decoder;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> postags_alphabet;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> forms_alphabet;</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> deprels_alphabet;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> postags_alphabet;</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  std::vector&lt;Dependency&gt; dataset;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;};</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;} <span class="comment">//  end for namespace arcstandard</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;} <span class="comment">//  end for namespace dependencyparser</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_PIPE_H__</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> deprels_alphabet;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  std::vector&lt;Dependency&gt; dataset;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;};</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;} <span class="comment">//  end for namespace arcstandard</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;} <span class="comment">//  end for namespace dependencyparser</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_PIPE_H__</span></div>
+<div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State_html"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">ZuoPar::DependencyParser::ArcStandard::State</a></div><div class="ttdef"><b>Definition:</b> state.h:13</div></div>
 <div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:17</div></div>
 <div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe_html_aabf28c130a0ae953bdf157f35a034ce7"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#aabf28c130a0ae953bdf157f35a034ce7">ZuoPar::DependencyParser::ArcStandard::Pipe::build_output</a></div><div class="ttdeci">void build_output(const State &amp;source, Dependency &amp;output)</div></div>
 <div class="ttc" id="arcstandard_2learner_8h_html"><div class="ttname"><a href="arcstandard_2learner_8h.html">learner.h</a></div></div>
@@ -159,10 +162,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="token__alphabet_8h_html"><div class="ttname"><a href="token__alphabet_8h.html">token_alphabet.h</a></div></div>
 <div class="ttc" id="dependency_8h_html"><div class="ttname"><a href="dependency_8h.html">dependency.h</a></div></div>
 <div class="ttc" id="arcstandard_2decoder_8h_html"><div class="ttname"><a href="arcstandard_2decoder_8h.html">decoder.h</a></div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1TestOption_html"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1TestOption.html">ZuoPar::DependencyParser::ArcStandard::TestOption</a></div><div class="ttdef"><b>Definition:</b> opt.h:23</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1LearnOption_html"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1LearnOption.html">ZuoPar::DependencyParser::ArcStandard::LearnOption</a></div><div class="ttdef"><b>Definition:</b> opt.h:19</div></div>
+<div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe_html"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html">ZuoPar::DependencyParser::ArcStandard::Pipe</a></div><div class="ttdef"><b>Definition:</b> pipe.h:16</div></div>
 <div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe_html_a390e7ccea4c0a6eb0ef335cf6ffe8a15"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Pipe.html#a390e7ccea4c0a6eb0ef335cf6ffe8a15">ZuoPar::DependencyParser::ArcStandard::Pipe::Pipe</a></div><div class="ttdeci">Pipe(const LearnOption &amp;opts)</div></div>
+<div class="ttc" id="classZuoPar_1_1Dependency_html"><div class="ttname"><a href="classZuoPar_1_1Dependency.html">ZuoPar::Dependency</a></div><div class="ttdef"><b>Definition:</b> dependency.h:10</div></div>
 <div class="ttc" id="arcstandard_2weight_8h_html"><div class="ttname"><a href="arcstandard_2weight_8h.html">weight.h</a></div></div>
 <div class="ttc" id="arcstandard_2opt_8h_html"><div class="ttname"><a href="arcstandard_2opt_8h.html">opt.h</a></div></div>
-<div class="ttc" id="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard_html_a8af1051811164026f910fe0b7cfd10d0"><div class="ttname"><a href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a8af1051811164026f910fe0b7cfd10d0">ZuoPar::DependencyParser::ArcStandard::Learner</a></div><div class="ttdeci">TransitionStructureLearner&lt; Action, State, Weight &gt; Learner</div><div class="ttdef"><b>Definition:</b> learner.h:13</div></div>
+<div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder_html"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">ZuoPar::DependencyParser::ArcStandard::Decoder</a></div><div class="ttdef"><b>Definition:</b> decoder.h:18</div></div>
+<div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight_html"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">ZuoPar::DependencyParser::ArcStandard::Weight</a></div><div class="ttdef"><b>Definition:</b> weight.h:14</div></div>
+<div class="ttc" id="classZuoPar_1_1TransitionStructureLearner_html"><div class="ttname"><a href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a></div><div class="ttdef"><b>Definition:</b> structure_learner.h:12</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

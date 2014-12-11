@@ -275,12 +275,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00249"></a><span class="lineno"><a class="line" href="classZuoPar_1_1TransitionSystem.html#a0303e98711a65148a8a70d03227fedbb">  249</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1TransitionSystem.html#a0303e98711a65148a8a70d03227fedbb">score_possible_actions</a>(<span class="keyword">const</span> _StateType&amp; source,</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;      <span class="keyword">const</span> action_collection_t&amp; actions,</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;      packed_score_t&amp; scores) {</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    scores.clear();</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    _ScoreContextType ctx(source);</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; actions.size(); ++ i) {</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;      <span class="keyword">const</span> _ActionType&amp; act = actions[i];</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;      scores[act] = model-&gt;score(ctx, act, use_avg);</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    }</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">typename</span> packed_score_t::iterator itx = scores.begin();</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        itx != scores.end(); ++ itx) {</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;      itx-&gt;second = 0;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    _ScoreContextType ctx(source);</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    model-&gt;batchly_score(ctx, actions, use_avg, scores);</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;  }</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
 <div class="line"><a name="l00267"></a><span class="lineno"><a class="line" href="classZuoPar_1_1TransitionSystem.html#aef63cab77a21ce798662e041720bf10d">  267</a></span>&#160;  <span class="keywordtype">int</span> <a class="code" href="classZuoPar_1_1TransitionSystem.html#aef63cab77a21ce798662e041720bf10d">extend_candidate_transition</a>(<span class="keyword">const</span> scored_transition_t&amp; trans,</div>

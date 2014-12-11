@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['bf_5fmap_5ft',['bf_map_t',['../classZuoPar_1_1PointwiseModel.html#aba11fbd9aad46b182356f9fce06d5ca7',1,'ZuoPar::PointwiseModel']]],
-  ['bf_5ft',['bf_t',['../classZuoPar_1_1PointwiseModel.html#a5cac7edf9387a84f82eb679b57816a20',1,'ZuoPar::PointwiseModel']]]
+  ['bf_5fmap_5ft',['bf_map_t',['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#aab8fe0a99417465dc409260c705754b8',1,'ZuoPar::FeaturePointwiseParameterCollection']]],
+  ['bf_5ft',['bf_t',['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#a4a7ece7aed3de2a5f20be2c1a00e449f',1,'ZuoPar::FeaturePointwiseParameterCollection']]],
+  ['bfp_5ft',['bfp_t',['../classZuoPar_1_1FeaturePointwiseParameterCollection.html#a30050ea9d06ffce8e578ff61d3a9c5a0',1,'ZuoPar::FeaturePointwiseParameterCollection']]]
 ];

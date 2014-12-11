@@ -115,17 +115,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <span class="keyword">typedef</span> std::vector&lt;std::vector&lt;int&gt; &gt; tree_t;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> get_oracle_actions_travel(<span class="keywordtype">int</span> root,</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Dependency.html">Dependency</a>&amp; instance,</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keyword">const</span> tree_t&amp; tree,</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      std::vector&lt;Action&gt;&amp; actions);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;};</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">//  end for arceager</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">//  end for dependencyparser</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">//  end for zuopar</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">void</span> get_oracle_actions_onestep(<span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Dependency.html">Dependency</a>&amp; instance,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      std::vector&lt;int&gt;&amp; sigma,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      std::vector&lt;int&gt;&amp; heads,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <span class="keywordtype">int</span>&amp; beta,</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">int</span> len,</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      std::vector&lt;Action&gt;&amp; actions);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;};</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCEAGER_ACTION_UTILS_H__</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;} <span class="comment">//  end for arceager</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;} <span class="comment">//  end for dependencyparser</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;} <span class="comment">//  end for zuopar</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCEAGER_ACTION_UTILS_H__</span></div>
 <div class="ttc" id="dependency_8h_html"><div class="ttname"><a href="dependency_8h.html">dependency.h</a></div></div>
 <div class="ttc" id="classZuoPar_1_1DependencyParser_1_1ArcEager_1_1ActionUtils_html_af2933af88f14b8d1cb2c49d873e7fde9"><div class="ttname"><a href="classZuoPar_1_1DependencyParser_1_1ArcEager_1_1ActionUtils.html#af2933af88f14b8d1cb2c49d873e7fde9">ZuoPar::DependencyParser::ArcEager::ActionUtils::is_shift</a></div><div class="ttdeci">static bool is_shift(const Action &amp;act)</div></div>
 <div class="ttc" id="classZuoPar_1_1Dependency_html"><div class="ttname"><a href="classZuoPar_1_1Dependency.html">ZuoPar::Dependency</a></div><div class="ttdef"><b>Definition:</b> dependency.h:10</div></div>

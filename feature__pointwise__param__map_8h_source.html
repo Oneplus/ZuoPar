@@ -94,98 +94,131 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;settings.h&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="pointwise__param_8h.html">ml/pointwise_param.h</a>&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="logging_8h.html">utils/logging.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="unordered__map_8h.html">utils/serialization/unordered_map.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class </span>_FeatureType,</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;          <span class="keyword">class </span>_ScoreContextType,</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;          <span class="keyword">class </span>_ActionType&gt;</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html">   23</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html">FeaturePointwiseParamMap</a> {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">typedef</span> <a class="code" href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html">MachineLearning::PointwiseParameter</a> <a class="code" href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html">param_t</a>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">typedef</span> boost::unordered_map&lt;_FeatureType, param_t&gt; map_t;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">typedef</span> std::vector&lt;_FeatureType&gt; cache_t;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">typedef</span> std::function&lt;void(<span class="keyword">const</span> _ScoreContextType&amp;,</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;      <span class="keyword">const</span> _ActionType&amp;, cache_t&amp;)&gt; extractor_t;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a36847c1ff34b932b69de543b507a1762">   36</a></span>&#160;  <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a36847c1ff34b932b69de543b507a1762">FeaturePointwiseParamMap</a>(extractor_t _extractor): extractor(_extractor) {}</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a3a10fcdb06ece381f87d7b10e0bace6b">   48</a></span>&#160;  <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a3a10fcdb06ece381f87d7b10e0bace6b">score</a>(<span class="keyword">const</span> _ScoreContextType&amp; ctx, <span class="keyword">const</span> _ActionType&amp; act,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      <span class="keywordtype">bool</span> avg, <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> default_return_value = 0.) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    cache.clear();</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    extractor(ctx, act, cache);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">//extractor(ctx, act);</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> ret = 0.;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; cache.size(); ++ i) {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;      <span class="keyword">const</span> _FeatureType&amp; entry = cache[i];</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="comment">// _TRACE &lt;&lt; &quot;score &quot; &lt;&lt; (void *)this &lt;&lt; &quot;: score (try) &quot; &lt;&lt; entry;</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;      <span class="keyword">typename</span> map_t::const_iterator itx = payload.find(entry);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      <span class="keywordflow">if</span> (itx != payload.end()) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="comment">// _TRACE &lt;&lt; &quot;score: score (hit) &quot; &lt;&lt; entry;</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">if</span> (avg) {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;          ret += itx-&gt;second.w_sum;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;          ret += itx-&gt;second.w;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;      }</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">return</span> ret;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a0e7a385a5d7c40af40cfd47cbb67b489">   79</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a0e7a385a5d7c40af40cfd47cbb67b489">update</a>(<span class="keyword">const</span> _ScoreContextType&amp; ctx, <span class="keyword">const</span> _ActionType&amp; act,</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <span class="keywordtype">int</span> now, <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> scale = 1.) {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    cache.clear();</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    extractor(ctx, act, cache);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; cache.size(); ++ i) {</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="keyword">const</span> _FeatureType&amp; entry = cache[i];</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <a class="code" href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html">param_t</a>&amp; param = payload[entry];</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      param.<a class="code" href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html#afffc49c82d39b29902b9aaa94b824178">add</a>(now, scale);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ad8260b4a5dbb3c280bf0fc7909e4bf59">   95</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ad8260b4a5dbb3c280bf0fc7909e4bf59">flush</a>(<span class="keywordtype">int</span> now) {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">typename</span> map_t::iterator itx = payload.begin();</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        itx != payload.end(); ++ itx) {</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      itx-&gt;second.flush(now);</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    }</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  }</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a33dbd7ab3b90aa71861191121b1f5965">  107</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a33dbd7ab3b90aa71861191121b1f5965">save</a>(boost::archive::text_oarchive&amp; oa) {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    oa &lt;&lt; payload;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  }</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ab44ff47cf63a6bb367fd0d7b70f93faa">  116</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ab44ff47cf63a6bb367fd0d7b70f93faa">load</a>(boost::archive::text_iarchive&amp; ia) {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    ia &gt;&gt; payload;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;  map_t payload;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;  cache_t cache;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  extractor_t extractor;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;};</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;} <span class="comment">//  end for zuopar</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_MODEL_FEATURE_POINTWISE_PARAM_MAP_H__</span></div>
-<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_ab44ff47cf63a6bb367fd0d7b70f93faa"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#ab44ff47cf63a6bb367fd0d7b70f93faa">ZuoPar::FeaturePointwiseParamMap::load</a></div><div class="ttdeci">void load(boost::archive::text_iarchive &amp;ia)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:116</div></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="feature_8h.html">model/feature.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="logging_8h.html">utils/logging.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="unordered__map_8h.html">utils/serialization/unordered_map.h</a>&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class </span>_FeaturePrefixType,</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;          <span class="keyword">class </span>_ScoreContextType,</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;          <span class="keyword">class </span>_ActionType&gt;</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html">   24</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html">FeaturePointwiseParamMap</a> {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">typedef</span> <a class="code" href="classZuoPar_1_1Feature.html">Feature&lt;_FeaturePrefixType, _ActionType&gt;</a> <a class="code" href="classZuoPar_1_1Feature.html">feature_t</a>;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keyword">typedef</span> <a class="code" href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html">MachineLearning::PointwiseParameter</a> <a class="code" href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html">param_t</a>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">typedef</span> boost::unordered_map&lt;feature_t, param_t&gt; map_t;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keyword">typedef</span> std::vector&lt;_FeaturePrefixType&gt; cache_t;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keyword">typedef</span> std::function&lt;void(const _ScoreContextType&amp;, cache_t&amp;)&gt; extractor_t;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a5266c1b1c2630fcda24369b695cc9edb">   37</a></span>&#160;  <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a5266c1b1c2630fcda24369b695cc9edb">FeaturePointwiseParamMap</a>(extractor_t _extractor): extractor(_extractor) {}</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ad28597dd6d7d814432972da7409fea93">   49</a></span>&#160;  <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ad28597dd6d7d814432972da7409fea93">score</a>(<span class="keyword">const</span> _ScoreContextType&amp; ctx, <span class="keyword">const</span> _ActionType&amp; act,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      <span class="keywordtype">bool</span> avg, <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> default_return_value = 0.) {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    cache.clear();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    extractor(ctx, cache);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">//extractor(ctx, act);</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> ret = 0.;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; cache.size(); ++ i) {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Feature.html">feature_t</a>&amp; entry = <a class="code" href="classZuoPar_1_1Feature.html">feature_t</a>(cache[i], act);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      <span class="comment">// _TRACE &lt;&lt; &quot;score &quot; &lt;&lt; (void *)this &lt;&lt; &quot;: score (try) &quot; &lt;&lt; entry;</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      <span class="keyword">typename</span> map_t::const_iterator itx = payload.find(entry);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <span class="keywordflow">if</span> (itx != payload.end()) {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="comment">// _TRACE &lt;&lt; &quot;score: score (hit) &quot; &lt;&lt; entry;</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">if</span> (avg) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;          ret += itx-&gt;second.w_sum;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;          ret += itx-&gt;second.w;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> ret;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  }</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#adc20c897976e46ff17bf102e85ec6297">   75</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#adc20c897976e46ff17bf102e85ec6297">batchly_score</a>(<span class="keyword">const</span> _ScoreContextType&amp; ctx,</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <span class="keyword">const</span> std::vector&lt;_ActionType&gt;&amp; actions,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keywordtype">bool</span> avg,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      boost::unordered_map&lt;_ActionType, floatval_t&gt;&amp; result) {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    cache.clear();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    extractor(ctx, cache);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; cache.size(); ++ i) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      <a class="code" href="classZuoPar_1_1Feature.html">feature_t</a> entry(cache[i], actions[0]);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; actions.size(); ++ j) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keyword">const</span> _ActionType&amp; act= actions[j];</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">if</span> (j &gt; 0) {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;          entry.<a class="code" href="classZuoPar_1_1Feature.html#a8925577ba1da19db2803038faeb5590a">replace_action</a>(act);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keyword">typename</span> map_t::const_iterator itx = payload.find(entry);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">if</span> (itx == payload.end()) {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;          <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        }</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="comment">// _TRACE &lt;&lt; &quot;score: score (hit) &quot; &lt;&lt; entry;</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">if</span> (avg) {</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;          result[act] += itx-&gt;second.w_sum;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;          result[act] += itx-&gt;second.w;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  }</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#af1715e617fec6be24e49d8eb1442137e">  111</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#af1715e617fec6be24e49d8eb1442137e">update</a>(<span class="keyword">const</span> _ScoreContextType&amp; ctx, <span class="keyword">const</span> _ActionType&amp; act,</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;      <span class="keywordtype">int</span> now, <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> scale = 1.) {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    cache.clear();</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    extractor(ctx, cache);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; cache.size(); ++ i) {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;      <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Feature.html">feature_t</a>&amp; entry = <a class="code" href="classZuoPar_1_1Feature.html">feature_t</a>(cache[i], act);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;      <a class="code" href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html">param_t</a>&amp; param = payload[entry];</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;      param.<a class="code" href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html#afffc49c82d39b29902b9aaa94b824178">add</a>(now, scale);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    }</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  }</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a39cc200204e231df33316ece3e820453">  127</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a39cc200204e231df33316ece3e820453">flush</a>(<span class="keywordtype">int</span> now) {</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">typename</span> map_t::iterator itx = payload.begin();</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        itx != payload.end(); ++ itx) {</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;      itx-&gt;second.flush(now);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    }</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  }</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a9561acbbfb590085f2681d352d78d0a5">  139</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a9561acbbfb590085f2681d352d78d0a5">save</a>(boost::archive::text_oarchive&amp; oa) {</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    oa &lt;&lt; payload;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  }</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
+<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a09c5654fc2b41d4337454f13d1326982">  148</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a09c5654fc2b41d4337454f13d1326982">load</a>(boost::archive::text_iarchive&amp; ia) {</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    ia &gt;&gt; payload;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  }</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  map_t payload;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  cache_t cache;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  extractor_t extractor;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;};</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;} <span class="comment">//  end for zuopar</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_MODEL_FEATURE_POINTWISE_PARAM_MAP_H__</span></div>
 <div class="ttc" id="structZuoPar_1_1MachineLearning_1_1PointwiseParameter_html_afffc49c82d39b29902b9aaa94b824178"><div class="ttname"><a href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html#afffc49c82d39b29902b9aaa94b824178">ZuoPar::MachineLearning::PointwiseParameter::add</a></div><div class="ttdeci">void add(int now, floatval_t scale)</div><div class="ttdef"><b>Definition:</b> pointwise_param.h:48</div></div>
-<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_a36847c1ff34b932b69de543b507a1762"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#a36847c1ff34b932b69de543b507a1762">ZuoPar::FeaturePointwiseParamMap::FeaturePointwiseParamMap</a></div><div class="ttdeci">FeaturePointwiseParamMap(extractor_t _extractor)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:36</div></div>
-<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_ad8260b4a5dbb3c280bf0fc7909e4bf59"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#ad8260b4a5dbb3c280bf0fc7909e4bf59">ZuoPar::FeaturePointwiseParamMap::flush</a></div><div class="ttdeci">void flush(int now)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:95</div></div>
-<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_a3a10fcdb06ece381f87d7b10e0bace6b"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#a3a10fcdb06ece381f87d7b10e0bace6b">ZuoPar::FeaturePointwiseParamMap::score</a></div><div class="ttdeci">floatval_t score(const _ScoreContextType &amp;ctx, const _ActionType &amp;act, bool avg, floatval_t default_return_value=0.)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:48</div></div>
+<div class="ttc" id="classZuoPar_1_1Feature_html"><div class="ttname"><a href="classZuoPar_1_1Feature.html">ZuoPar::Feature</a></div><div class="ttdef"><b>Definition:</b> feature.h:108</div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_a9561acbbfb590085f2681d352d78d0a5"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#a9561acbbfb590085f2681d352d78d0a5">ZuoPar::FeaturePointwiseParamMap::save</a></div><div class="ttdeci">void save(boost::archive::text_oarchive &amp;oa)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:139</div></div>
 <div class="ttc" id="pointwise__param_8h_html"><div class="ttname"><a href="pointwise__param_8h.html">pointwise_param.h</a></div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_ad28597dd6d7d814432972da7409fea93"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#ad28597dd6d7d814432972da7409fea93">ZuoPar::FeaturePointwiseParamMap::score</a></div><div class="ttdeci">floatval_t score(const _ScoreContextType &amp;ctx, const _ActionType &amp;act, bool avg, floatval_t default_return_value=0.)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:49</div></div>
 <div class="ttc" id="logging_8h_html"><div class="ttname"><a href="logging_8h.html">logging.h</a></div></div>
 <div class="ttc" id="unordered__map_8h_html"><div class="ttname"><a href="unordered__map_8h.html">unordered_map.h</a></div></div>
-<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_a33dbd7ab3b90aa71861191121b1f5965"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#a33dbd7ab3b90aa71861191121b1f5965">ZuoPar::FeaturePointwiseParamMap::save</a></div><div class="ttdeci">void save(boost::archive::text_oarchive &amp;oa)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:107</div></div>
-<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a></div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:23</div></div>
-<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_a0e7a385a5d7c40af40cfd47cbb67b489"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#a0e7a385a5d7c40af40cfd47cbb67b489">ZuoPar::FeaturePointwiseParamMap::update</a></div><div class="ttdeci">void update(const _ScoreContextType &amp;ctx, const _ActionType &amp;act, int now, floatval_t scale=1.)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:79</div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_a09c5654fc2b41d4337454f13d1326982"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#a09c5654fc2b41d4337454f13d1326982">ZuoPar::FeaturePointwiseParamMap::load</a></div><div class="ttdeci">void load(boost::archive::text_iarchive &amp;ia)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:148</div></div>
+<div class="ttc" id="feature_8h_html"><div class="ttname"><a href="feature_8h.html">feature.h</a></div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a></div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:24</div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_af1715e617fec6be24e49d8eb1442137e"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#af1715e617fec6be24e49d8eb1442137e">ZuoPar::FeaturePointwiseParamMap::update</a></div><div class="ttdeci">void update(const _ScoreContextType &amp;ctx, const _ActionType &amp;act, int now, floatval_t scale=1.)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:111</div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_a39cc200204e231df33316ece3e820453"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#a39cc200204e231df33316ece3e820453">ZuoPar::FeaturePointwiseParamMap::flush</a></div><div class="ttdeci">void flush(int now)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:127</div></div>
 <div class="ttc" id="structZuoPar_1_1MachineLearning_1_1PointwiseParameter_html"><div class="ttname"><a href="structZuoPar_1_1MachineLearning_1_1PointwiseParameter.html">ZuoPar::MachineLearning::PointwiseParameter</a></div><div class="ttdef"><b>Definition:</b> pointwise_param.h:12</div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_adc20c897976e46ff17bf102e85ec6297"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#adc20c897976e46ff17bf102e85ec6297">ZuoPar::FeaturePointwiseParamMap::batchly_score</a></div><div class="ttdeci">void batchly_score(const _ScoreContextType &amp;ctx, const std::vector&lt; _ActionType &gt; &amp;actions, bool avg, boost::unordered_map&lt; _ActionType, floatval_t &gt; &amp;result)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:75</div></div>
+<div class="ttc" id="classZuoPar_1_1Feature_html_a8925577ba1da19db2803038faeb5590a"><div class="ttname"><a href="classZuoPar_1_1Feature.html#a8925577ba1da19db2803038faeb5590a">ZuoPar::Feature::replace_action</a></div><div class="ttdeci">void replace_action(const _ActionType &amp;act_)</div><div class="ttdef"><b>Definition:</b> feature.h:123</div></div>
 <div class="ttc" id="namespaceZuoPar_html_aa71e104c29f1d6a71b1623d4abe52e6a"><div class="ttname"><a href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">ZuoPar::floatval_t</a></div><div class="ttdeci">double floatval_t</div><div class="ttdef"><b>Definition:</b> settings.h:14</div></div>
+<div class="ttc" id="classZuoPar_1_1FeaturePointwiseParamMap_html_a5266c1b1c2630fcda24369b695cc9edb"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParamMap.html#a5266c1b1c2630fcda24369b695cc9edb">ZuoPar::FeaturePointwiseParamMap::FeaturePointwiseParamMap</a></div><div class="ttdeci">FeaturePointwiseParamMap(extractor_t _extractor)</div><div class="ttdef"><b>Definition:</b> feature_pointwise_param_map.h:37</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

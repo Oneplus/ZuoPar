@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>ZuoPar: A unofficial restruction for ZPar: ZuoPar::FeaturePointwiseParamMap&lt; _FeatureType, _ScoreContextType, _ActionType &gt; Class Template Reference</title>
+<title>ZuoPar: A unofficial restruction for ZPar: ZuoPar::FeaturePointwiseParamMap&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -91,7 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classZuoPar_1_1FeaturePointwiseParamMap-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">ZuoPar::FeaturePointwiseParamMap&lt; _FeatureType, _ScoreContextType, _ActionType &gt; Class Template Reference</div>  </div>
+<div class="title">ZuoPar::FeaturePointwiseParamMap&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -99,36 +99,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a36847c1ff34b932b69de543b507a1762"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a36847c1ff34b932b69de543b507a1762">FeaturePointwiseParamMap</a> (extractor_t _extractor)</td></tr>
-<tr class="separator:a36847c1ff34b932b69de543b507a1762"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a10fcdb06ece381f87d7b10e0bace6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a3a10fcdb06ece381f87d7b10e0bace6b">score</a> (const _ScoreContextType &amp;ctx, const _ActionType &amp;act, bool avg, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> default_return_value=0.)</td></tr>
-<tr class="separator:a3a10fcdb06ece381f87d7b10e0bace6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e7a385a5d7c40af40cfd47cbb67b489"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a0e7a385a5d7c40af40cfd47cbb67b489">update</a> (const _ScoreContextType &amp;ctx, const _ActionType &amp;act, int now, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> scale=1.)</td></tr>
-<tr class="separator:a0e7a385a5d7c40af40cfd47cbb67b489"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8260b4a5dbb3c280bf0fc7909e4bf59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ad8260b4a5dbb3c280bf0fc7909e4bf59">flush</a> (int now)</td></tr>
-<tr class="separator:ad8260b4a5dbb3c280bf0fc7909e4bf59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33dbd7ab3b90aa71861191121b1f5965"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a33dbd7ab3b90aa71861191121b1f5965">save</a> (boost::archive::text_oarchive &amp;oa)</td></tr>
-<tr class="separator:a33dbd7ab3b90aa71861191121b1f5965"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab44ff47cf63a6bb367fd0d7b70f93faa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ab44ff47cf63a6bb367fd0d7b70f93faa">load</a> (boost::archive::text_iarchive &amp;ia)</td></tr>
-<tr class="separator:ab44ff47cf63a6bb367fd0d7b70f93faa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5266c1b1c2630fcda24369b695cc9edb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a5266c1b1c2630fcda24369b695cc9edb">FeaturePointwiseParamMap</a> (extractor_t _extractor)</td></tr>
+<tr class="separator:a5266c1b1c2630fcda24369b695cc9edb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad28597dd6d7d814432972da7409fea93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#ad28597dd6d7d814432972da7409fea93">score</a> (const _ScoreContextType &amp;ctx, const _ActionType &amp;act, bool avg, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> default_return_value=0.)</td></tr>
+<tr class="separator:ad28597dd6d7d814432972da7409fea93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc20c897976e46ff17bf102e85ec6297"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#adc20c897976e46ff17bf102e85ec6297">batchly_score</a> (const _ScoreContextType &amp;ctx, const std::vector&lt; _ActionType &gt; &amp;actions, bool avg, boost::unordered_map&lt; _ActionType, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &gt; &amp;result)</td></tr>
+<tr class="separator:adc20c897976e46ff17bf102e85ec6297"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1715e617fec6be24e49d8eb1442137e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#af1715e617fec6be24e49d8eb1442137e">update</a> (const _ScoreContextType &amp;ctx, const _ActionType &amp;act, int now, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> scale=1.)</td></tr>
+<tr class="separator:af1715e617fec6be24e49d8eb1442137e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39cc200204e231df33316ece3e820453"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a39cc200204e231df33316ece3e820453">flush</a> (int now)</td></tr>
+<tr class="separator:a39cc200204e231df33316ece3e820453"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9561acbbfb590085f2681d352d78d0a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a9561acbbfb590085f2681d352d78d0a5">save</a> (boost::archive::text_oarchive &amp;oa)</td></tr>
+<tr class="separator:a9561acbbfb590085f2681d352d78d0a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09c5654fc2b41d4337454f13d1326982"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html#a09c5654fc2b41d4337454f13d1326982">load</a> (boost::archive::text_iarchive &amp;ia)</td></tr>
+<tr class="separator:a09c5654fc2b41d4337454f13d1326982"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class _FeatureType, class _ScoreContextType, class _ActionType&gt;<br/>
-class ZuoPar::FeaturePointwiseParamMap&lt; _FeatureType, _ScoreContextType, _ActionType &gt;</h3>
+<div class="textblock"><h3>template&lt;class _FeaturePrefixType, class _ScoreContextType, class _ActionType&gt;<br/>
+class ZuoPar::FeaturePointwiseParamMap&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;</h3>
 
 <p><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">FeaturePointwiseParamMap</a> is the class use to store the model parameters of the feature. One <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">FeaturePointwiseParamMap</a> maintains several Features. These features are extracted from the same feature template. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a36847c1ff34b932b69de543b507a1762"></a>
+<a class="anchor" id="a5266c1b1c2630fcda24369b695cc9edb"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt; </div>
+template&lt;class _FeaturePrefixType , class _ScoreContextType , class _ActionType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeatureType, _ScoreContextType, _ActionType &gt;::<a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">FeaturePointwiseParamMap</a> </td>
+          <td class="memname"><a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;::<a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">FeaturePointwiseParamMap</a> </td>
           <td>(</td>
           <td class="paramtype">extractor_t&#160;</td>
           <td class="paramname"><em>_extractor</em></td><td>)</td>
@@ -145,17 +147,66 @@ template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ad8260b4a5dbb3c280bf0fc7909e4bf59"></a>
+<a class="anchor" id="adc20c897976e46ff17bf102e85ec6297"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt; </div>
+template&lt;class _FeaturePrefixType , class _ScoreContextType , class _ActionType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeatureType, _ScoreContextType, _ActionType &gt;::flush </td>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;::batchly_score </td>
+          <td>(</td>
+          <td class="paramtype">const _ScoreContextType &amp;&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; _ActionType &gt; &amp;&#160;</td>
+          <td class="paramname"><em>actions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>avg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boost::unordered_map&lt; _ActionType, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get </p>
+
+</div>
+</div>
+<a class="anchor" id="a39cc200204e231df33316ece3e820453"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _FeaturePrefixType , class _ScoreContextType , class _ActionType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;::flush </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>now</em></td><td>)</td>
@@ -178,17 +229,17 @@ template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt
 
 </div>
 </div>
-<a class="anchor" id="ab44ff47cf63a6bb367fd0d7b70f93faa"></a>
+<a class="anchor" id="a09c5654fc2b41d4337454f13d1326982"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt; </div>
+template&lt;class _FeaturePrefixType , class _ScoreContextType , class _ActionType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeatureType, _ScoreContextType, _ActionType &gt;::load </td>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;::load </td>
           <td>(</td>
           <td class="paramtype">boost::archive::text_iarchive &amp;&#160;</td>
           <td class="paramname"><em>ia</em></td><td>)</td>
@@ -211,17 +262,17 @@ template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt
 
 </div>
 </div>
-<a class="anchor" id="a33dbd7ab3b90aa71861191121b1f5965"></a>
+<a class="anchor" id="a9561acbbfb590085f2681d352d78d0a5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt; </div>
+template&lt;class _FeaturePrefixType , class _ScoreContextType , class _ActionType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeatureType, _ScoreContextType, _ActionType &gt;::save </td>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;::save </td>
           <td>(</td>
           <td class="paramtype">boost::archive::text_oarchive &amp;&#160;</td>
           <td class="paramname"><em>oa</em></td><td>)</td>
@@ -244,17 +295,17 @@ template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt
 
 </div>
 </div>
-<a class="anchor" id="a3a10fcdb06ece381f87d7b10e0bace6b"></a>
+<a class="anchor" id="ad28597dd6d7d814432972da7409fea93"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt; </div>
+template&lt;class _FeaturePrefixType , class _ScoreContextType , class _ActionType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeatureType, _ScoreContextType, _ActionType &gt;::score </td>
+          <td class="memname"><a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;::score </td>
           <td>(</td>
           <td class="paramtype">const _ScoreContextType &amp;&#160;</td>
           <td class="paramname"><em>ctx</em>, </td>
@@ -303,17 +354,17 @@ template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt
 
 </div>
 </div>
-<a class="anchor" id="a0e7a385a5d7c40af40cfd47cbb67b489"></a>
+<a class="anchor" id="af1715e617fec6be24e49d8eb1442137e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class _FeatureType , class _ScoreContextType , class _ActionType &gt; </div>
+template&lt;class _FeaturePrefixType , class _ScoreContextType , class _ActionType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeatureType, _ScoreContextType, _ActionType &gt;::update </td>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParamMap.html">ZuoPar::FeaturePointwiseParamMap</a>&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;::update </td>
           <td>(</td>
           <td class="paramtype">const _ScoreContextType &amp;&#160;</td>
           <td class="paramname"><em>ctx</em>, </td>
