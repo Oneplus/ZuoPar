@@ -18,13 +18,11 @@ public:
    *  @param[in]  state   The State
    */
   ScoreContext(const State& state):
-    S0w(0), S0ldw(0), S0l2dw(0), S0rdw(0), S0r2dw(0),
-    S0p(0), S0ldp(0), S0l2dp(0), S0rdp(0), S0r2dp(0),
-    S0ldl(0), S0l2dl(0), S0rdl(0), S0r2dl(0),
+    S0w(0), S0ldw(0), S0l2dw(0), S0rdw(0), S0r2dw(0), S0ldl(0), S0l2dl(0),
+    S0p(0), S0ldp(0), S0l2dp(0), S0rdp(0), S0r2dp(0), S0rdl(0), S0r2dl(0),
     S0la(0), S0ra(0),
-    S1w(0), S1ldw(0), S1l2dw(0), S1rdw(0), S1r2dw(0),
-    S1p(0), S1ldp(0), S1l2dp(0), S1rdp(0), S1r2dp(0),
-    S1ldl(0), S1rdl(0), S1l2dl(0), S1r2dl(0),
+    S1w(0), S1ldw(0), S1l2dw(0), S1rdw(0), S1r2dw(0), S1ldl(0), S1l2dl(0),
+    S1p(0), S1ldp(0), S1l2dp(0), S1rdp(0), S1r2dp(0), S1rdl(0), S1r2dl(0),
     S1la(0), S1ra(0),
     DistS0S1(0),
     N0w(0), N1w(0),

@@ -52,12 +52,12 @@ Weight::Weight() {
   regist_unigram_feature( N1w );
   regist_unigram_feature( N1p );
   regist_bigram_feature( N1w, N1p );  // port "from single words" in Z&N (2011)
-  regist_trigram_feature( S0w, S0p, S1w );
-  regist_trigram_feature( S0w, S1w, S1p );
-  regist_trigram_feature( S0w, S0p, N0p );
-  regist_trigram_feature( S0p, S1w, S1p );
-  regist_bigram_feature( S0w, S1w );
-  regist_bigram_feature( S0p, S1p );
+  regist_trigram_feature( S1w, S1p, S0w );
+  regist_trigram_feature( S1w, S0w, S0p );
+  regist_trigram_feature( S1w, S1p, S0p );
+  regist_trigram_feature( S1p, S0w, S0p );
+  regist_bigram_feature( S1w, S0w );
+  regist_bigram_feature( S1p, S0p );
   regist_bigram_feature( S0p, N0p );  //  port "from word pairs" in Z&N (2011)
   regist_trigram_feature( S0p, N0p, N1p );
   regist_trigram_feature( S1p, S0p, N0p );
@@ -97,10 +97,17 @@ Weight::Weight() {
   regist_unigram_feature( S0r2dw );
   regist_unigram_feature( S0r2dp );
   regist_unigram_feature( S0r2dl );
+  regist_unigram_feature( S1l2dw );
+  regist_unigram_feature( S1l2dp );
+  regist_unigram_feature( S1l2dl );
+  regist_unigram_feature( S1r2dw );
+  regist_unigram_feature( S1r2dp );
+  regist_unigram_feature( S1r2dl );
   regist_trigram_feature( S0p, S0ldp, S0l2dp );
   regist_trigram_feature( S0p, S0rdp, S0r2dp );
   regist_trigram_feature( S1p, S1ldp, S1l2dp );
-  regist_trigram_feature( S1p, S1rdp, S1r2dp ); //  port the "third-order" in Z&N (2011)
+  regist_trigram_feature( S1p, S1rdp, S1r2dp );
+  regist_trigram_feature( S0p, N0p, N1p );  //  port the "third-order" in Z&N (2011)
   //regist_trigram_feature( S0p, S1p, S0r2dp );
   //regist_trigram_feature( S0p, S1p, S0l2dp );
   //regist_trigram_feature( S0p, S1p, S1r2dp );
