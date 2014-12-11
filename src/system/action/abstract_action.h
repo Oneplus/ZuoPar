@@ -14,15 +14,8 @@ namespace ZuoPar {
 
 class AbstractAction {
 public:
-  enum {
-    kNone = 0,  //! Placeholder for illegal action.
-    kShift,     //! The index of shift action.
-    kLeftArc,   //! The index of arc left action.
-    kRightArc   //! The index of arc right action.
-  };
-
   AbstractAction()
-    : action_name(kNone), deprel(0), seed(0) {}
+    : action_name(0), deprel(0), seed(0) {}
 
   /**
    * Constructor for action.
@@ -46,8 +39,8 @@ public:
   }
 
   bool operator == (const AbstractAction& a) const {
-    //return (a.action_name== action_name && a.deprel == deprel);
-    return (a.seed == seed);
+    return (a.action_name== action_name && a.deprel == deprel);
+    //return (a.seed == seed);
   }
 
   bool operator != (const AbstractAction& a) const {

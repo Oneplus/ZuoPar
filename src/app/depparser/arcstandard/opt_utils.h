@@ -17,16 +17,18 @@ namespace as = ZuoPar::DependencyParser::ArcStandard;
 bool parse_option(const po::variables_map& vm, as::Option& opts);
 
 /**
+ * Parse the learning options.
  *
- *
- *
+ *  @param[in]    vm    The variables map
+ *  @param[out]   opts  The options.
  */
 bool parse_learn_option(const po::variables_map& vm, as::LearnOption& opts);
 
 /**
+ * Parse the testing options.
  *
- *
- *
+ *  @param[in]    vm    The variables map
+ *  @param[out]   opts  The options.
  */
 bool parse_test_option(const po::variables_map& vm, as::TestOption& opts);
 

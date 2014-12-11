@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_MODEL_FEATURE_POINTWISE_PARAM_MAP_H__
-#define __ZUOPAR_MODEL_FEATURE_POINTWISE_PARAM_MAP_H__
+#ifndef __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_H__
+#define __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_H__
 
 #include "settings.h"
 #include "ml/pointwise_param.h"
@@ -14,27 +14,32 @@ namespace ZuoPar {
  * of the feature. One FeaturePointwiseParamMap maintains several Features.
  * These features are extracted from the same feature template.
  *
- *
- *
- *
+ * Map [ ActionFeature ] = Parameter
  */
-template <class _FeaturePrefixType,
+template <class _MetaFeatureType,
           class _ScoreContextType,
           class _ActionType>
-class FeaturePointwiseParamMap {
+class FeaturePointwiseParameterMap {
 private:
-  typedef Feature<_FeaturePrefixType, _ActionType> feature_t;
+  //! Define the feature type.
+  typedef Feature<_MetaFeatureType, _ActionType> feature_t;
   //! Define the parameter type.
   typedef MachineLearning::PointwiseParameter param_t;
   //! Define the mapping type.
   typedef boost::unordered_map<feature_t, param_t> map_t;
   //! Define the cache type.
-  typedef std::vector<_FeaturePrefixType> cache_t;
+  typedef std::vector<_MetaFeatureType> cache_t;
   //! Define the functor type.
   typedef std::function<void(const _ScoreContextType&, cache_t&)> extractor_t;
 
 public:
-  FeaturePointwiseParamMap(extractor_t _extractor): extractor(_extractor) {}
+  /*
+   * The constructor
+   *
+   *  @param[in]  extractor   The extraction functor.
+   */
+  FeaturePointwiseParameterMap(extractor_t _extractor)
+    : extractor(_extractor) {}
 
   /**
    * Get the score for the (context, action) pair
@@ -50,15 +55,12 @@ public:
       bool avg, floatval_t default_return_value = 0.) {
     cache.clear();
     extractor(ctx, cache);
-    //extractor(ctx, act);
     floatval_t ret = 0.;
     for (int i = 0; i < cache.size(); ++ i) {
       const feature_t& entry = feature_t(cache[i], act);
-      // _TRACE << "score " << (void *)this << ": score (try) " << entry;
 
       typename map_t::const_iterator itx = payload.find(entry);
       if (itx != payload.end()) {
-        // _TRACE << "score: score (hit) " << entry;
         if (avg) {
           ret += itx->second.w_sum;
         } else {
@@ -70,7 +72,13 @@ public:
   }
 
   /**
-   * Get
+   * Batchly calculate the scores.
+   *
+   *  @param[in]  ctx     The scoring context.
+   *  @param[in]  actions The actions.
+   *  @param[in]  avg     If avg is true return the averaged parameter, else
+   *                      return the non-averaged parameter.
+   *  @param[out] result  The return value.
    */
   void batchly_score(const _ScoreContextType& ctx,
       const std::vector<_ActionType>& actions,
@@ -90,7 +98,6 @@ public:
         if (itx == payload.end()) {
           continue;
         }
-        // _TRACE << "score: score (hit) " << entry;
         if (avg) {
           result[act] += itx->second.w_sum;
         } else {
@@ -150,16 +157,16 @@ public:
   }
 
 private:
-  //!
+  //! The mapping facility.
   map_t payload;
 
   //! Use to cache extracted features.
   cache_t cache;
 
-  //!
+  //! The feature extracting functor.
   extractor_t extractor;
 };
 
 } //  end for zuopar
 
-#endif  //  end for __ZUOPAR_MODEL_FEATURE_POINTWISE_PARAM_MAP_H__
+#endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_H__

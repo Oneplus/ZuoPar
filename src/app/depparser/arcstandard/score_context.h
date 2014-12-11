@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "types/common.h"
+#include "utils/math/fast_binned.h"
 #include "app/depparser/arcstandard/state.h"
 
 namespace ZuoPar {
@@ -16,14 +17,22 @@ public:
    *
    *  @param[in]  state   The State
    */
-  ScoreContext(const State& state) {
+  ScoreContext(const State& state):
+    S0w(0), S0ldw(0), S0l2dw(0), S0rdw(0), S0r2dw(0),
+    S0p(0), S0ldp(0), S0l2dp(0), S0rdp(0), S0r2dp(0),
+    S0ldl(0), S0l2dl(0), S0rdl(0), S0r2dl(0),
+    S0la(0), S0ra(0),
+    S1w(0), S1ldw(0), S1l2dw(0), S1rdw(0), S1r2dw(0),
+    S1p(0), S1ldp(0), S1l2dp(0), S1rdp(0), S1r2dp(0),
+    S1ldl(0), S1rdl(0), S1l2dl(0), S1r2dl(0),
+    S1la(0), S1ra(0),
+    DistS0S1(0),
+    N0w(0), N1w(0),
+    N0p(0), N1p(0) {
     const std::vector<form_t>& forms = state.ref->forms;
     const std::vector<postag_t>& postags = state.ref->postags;
 
     int S0 = state.top0;
-    S0w = S0ldw = S0l2dw = S0rdw = S0r2dw = 0;
-    S0p = S0ldp = S0l2dp = S0rdp = S0r2dp = 0;
-    S0ldl = S0rdl = S0l2dl = S0r2dl = 0;
     if (S0 >= 0) {
       S0w = forms[S0]; S0p = postags[S0];
       S0la = state.nr_left_children[S0]; S0ra = state.nr_right_children[S0];
@@ -50,9 +59,6 @@ public:
     }
 
     int S1 = state.top1;
-    S1w = S1ldw = S1l2dw = S1rdw = S1r2dw = 0;
-    S1p = S1ldp = S1l2dp = S1rdp = S1r2dp = 0;
-    S1ldl = S1rdl = S1l2dl = S1r2dl = 0;
     if (S1 >= 0) {
       S1w = forms[S1]; S1p = postags[S1];
       S1la = state.nr_left_children[S1]; S1ra = state.nr_right_children[S1];
@@ -78,18 +84,15 @@ public:
       }
     }
 
-    DistS0S1 = 0;
     if (S0 >= 0 && S1 >= 0) {
-      DistS0S1 = 0;
+      DistS0S1 = Math::binned_1_2_3_4_5_6_10[S0 - S1];
     }
 
-    N0w = N0p = 0;
     int N0 = (state.buffer < state.ref->size()) ? state.buffer: -1;
     if (N0 >= 0) {
       N0w = forms[N0]; N0p = postags[N0];
     }
 
-    N1w = N1p = 0;
     int N1 = (state.buffer+ 1 < state.ref->size())? state.buffer+ 1: -1;
     if (N1 >= 0) {
       N1w = forms[N1]; N1p = postags[N1];

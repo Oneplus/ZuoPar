@@ -249,13 +249,12 @@ protected:
   void score_possible_actions(const _StateType& source,
       const action_collection_t& actions,
       packed_score_t& scores) {
-    scores.clear();
+    for (typename packed_score_t::iterator itx = scores.begin();
+        itx != scores.end(); ++ itx) {
+      itx->second = 0;
+    }
     _ScoreContextType ctx(source);
     model->batchly_score(ctx, actions, use_avg, scores);
-    /*for (int i = 0; i < actions.size(); ++ i) {
-      const _ActionType& act = actions[i];
-      scores[act] = model->score(ctx, act, use_avg);
-    }*/
   }
 
   /**

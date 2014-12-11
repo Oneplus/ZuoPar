@@ -1,8 +1,8 @@
-#ifndef __ZUOPAR_MODEL_POINTWISE_MODEL_H__
-#define __ZUOPAR_MODEL_POINTWISE_MODEL_H__
+#ifndef __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
+#define __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
 
-#include "feature.h"
-#include "feature_pointwise_param_map.h"
+#include "model/meta_feature.h"
+#include "feature_param_map.h"
 #include <vector>
 #include <boost/unordered_map.hpp>
 
@@ -11,27 +11,29 @@ namespace ZuoPar {
 template <class _StateType,
           class _ScoreContextType,
           class _ActionType>
-class PointwiseModel {
+class FeaturePointwiseParameterCollection {
 public:
-
-  typedef UnigramFeaturePrefix  ufp_t;
-  typedef BigramFeaturePrefix   bfp_t;
-  typedef TrigramFeaturePrefix  tfp_t;
+  //!
+  typedef UnigramMetaFeature  ufp_t;
+  //!
+  typedef BigramMetaFeature   bfp_t;
+  //!
+  typedef TrigramMetaFeature  tfp_t;
   //! Instantiate the unigram score type
-  typedef Feature<UnigramFeaturePrefix, _ActionType> uf_t;
+  typedef Feature<UnigramMetaFeature, _ActionType> uf_t;
   //! Instantiate the bigram score type
-  typedef Feature<BigramFeaturePrefix, _ActionType>  bf_t;
+  typedef Feature<BigramMetaFeature, _ActionType>  bf_t;
   //! Instantiate the trigram score type
-  typedef Feature<TrigramFeaturePrefix, _ActionType> tf_t;
+  typedef Feature<TrigramMetaFeature, _ActionType> tf_t;
   //! Instantiate the unigram mapping
-  typedef FeaturePointwiseParamMap< ufp_t, _ScoreContextType, _ActionType > uf_map_t;
+  typedef FeaturePointwiseParameterMap< ufp_t, _ScoreContextType, _ActionType > uf_map_t;
   //! Instantiate the bigram mapping
-  typedef FeaturePointwiseParamMap< bfp_t, _ScoreContextType, _ActionType > bf_map_t;
+  typedef FeaturePointwiseParameterMap< bfp_t, _ScoreContextType, _ActionType > bf_map_t;
   //! Instantiate the trigram mapping
-  typedef FeaturePointwiseParamMap< tfp_t, _ScoreContextType, _ActionType > tf_map_t;
+  typedef FeaturePointwiseParameterMap< tfp_t, _ScoreContextType, _ActionType > tf_map_t;
 
 public:
-  PointwiseModel() {}
+  FeaturePointwiseParameterCollection() {}
 
   /**
    * Get score for the state.
@@ -200,6 +202,6 @@ protected:
   std::vector< tf_t > tfeat_cache;
 };
 
-}
+} //  end for zuopar
 
-#endif  //  end for __ZUOPAR_MODEL_MODEL_H__
+#endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
