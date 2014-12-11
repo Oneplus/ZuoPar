@@ -5,7 +5,16 @@
 #include "ml/pointwise_param.h"
 #include "model/feature.h"
 #include "utils/logging.h"
+#include <boost/unordered_map.hpp>
+#include <boost/functional/hash.hpp>
 #include "utils/serialization/unordered_map.h"
+
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+# include <sparsehash/dense_hash_map>
+# include "utils/serialization/dense_hash_map.h"
+#else
+# warning ("use boost unordered_map which is slow")
+#endif
 
 namespace ZuoPar {
 
@@ -26,7 +35,11 @@ private:
   //! Define the parameter type.
   typedef MachineLearning::PointwiseParameter param_t;
   //! Define the mapping type.
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+  typedef google::dense_hash_map<feature_t, param_t, boost::hash<feature_t> > map_t;
+#else
   typedef boost::unordered_map<feature_t, param_t> map_t;
+#endif
   //! Define the cache type.
   typedef std::vector<_MetaFeatureType> cache_t;
   //! Define the functor type.
@@ -39,7 +52,11 @@ public:
    *  @param[in]  extractor   The extraction functor.
    */
   FeaturePointwiseParameterMap(extractor_t _extractor)
-    : extractor(_extractor) {}
+    : extractor(_extractor) {
+#if defined(UNORDERED_MAP_IMPL) and (UNORDERED_MAP_IMPL == dense_hash_map)
+    payload.set_empty_key(feature_t());
+#endif  
+  }
 
   /**
    * Get the score for the (context, action) pair

@@ -1,7 +1,17 @@
 cmake_minimum_required (VERSION 2.8.0)
 project ("ZuoPar")
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
 find_package (Boost REQUIRED)
+find_package (sparsehash)
+
+if (SPARSEHASH_FOUND)
+    add_definitions (-DUNORDERED_MAP_IMPL=dense_hash_map)
+else()
+    add_definitions (-DUNORDERED_MAP_IMPL=boost_unordered_map)
+endif (SPARSEHASH_FOUND)
+
 add_definitions (-DBOOST_LOG_DYN_LINK)
 
 set (CMAKE_CXX_FLAGS "-std=c++11 -g")
