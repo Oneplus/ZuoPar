@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['instance_2eh',['instance.h',['../instance_8h.html',1,'']]]
+  ['immutable_5fsequence_2eh',['immutable_sequence.h',['../immutable__sequence_8h.html',1,'']]]
 ];

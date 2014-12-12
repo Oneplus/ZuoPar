@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['postag_5ft',['postag_t',['../namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb',1,'ZuoPar']]],
-  ['postagengine',['PostagEngine',['../namespaceZuoPar_1_1Engine.html#aaf72dd54f2518ab91ed21e2a3d81156e',1,'ZuoPar::Engine']]]
+  ['map_5ft',['map_t',['../classZuoPar_1_1StringFeaturePointwiseParameterCollection.html#af2560da7082043ad92b5c347cc12a9f3',1,'ZuoPar::StringFeaturePointwiseParameterCollection']]]
 ];

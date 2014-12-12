@@ -96,7 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="arcstandard_2state_8h_source.html">state.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="depparser_2arcstandard_2state_8h_source.html">state.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -158,6 +158,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a68dd9a7224016263ebfa33be4ca5c836"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#add15ec07d24d7bf36dabcffd01a219a9">deprel_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a68dd9a7224016263ebfa33be4ca5c836">deprels</a> [<a class="el" href="namespaceZuoPar.html#af0978f3e4d25ba6d79713ddf18452f95">kMaxNumberOfWords</a>]</td></tr>
 <tr class="memdesc:a68dd9a7224016263ebfa33be4ca5c836"><td class="mdescLeft">&#160;</td><td class="mdescRight">The dependency relation cached in state.  <a href="#a68dd9a7224016263ebfa33be4ca5c836">More...</a><br/></td></tr>
 <tr class="separator:a68dd9a7224016263ebfa33be4ca5c836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a129aa5ae5c5e5c5048351c3af2106128"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a129aa5ae5c5e5c5048351c3af2106128">left_label_set</a> [<a class="el" href="namespaceZuoPar.html#af0978f3e4d25ba6d79713ddf18452f95">kMaxNumberOfWords</a>]</td></tr>
+<tr class="separator:a129aa5ae5c5e5c5048351c3af2106128"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7d9b08b7cc895a5c4804c6f54406c6e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ad7d9b08b7cc895a5c4804c6f54406c6e">right_label_set</a> [<a class="el" href="namespaceZuoPar.html#af0978f3e4d25ba6d79713ddf18452f95">kMaxNumberOfWords</a>]</td></tr>
+<tr class="separator:ad7d9b08b7cc895a5c4804c6f54406c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b5a141163c9e24978693c5f32312053"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a9b5a141163c9e24978693c5f32312053">nr_left_children</a> [<a class="el" href="namespaceZuoPar.html#af0978f3e4d25ba6d79713ddf18452f95">kMaxNumberOfWords</a>]</td></tr>
 <tr class="memdesc:a9b5a141163c9e24978693c5f32312053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use to record the number of left children in current state.  <a href="#a9b5a141163c9e24978693c5f32312053">More...</a><br/></td></tr>
 <tr class="separator:a9b5a141163c9e24978693c5f32312053"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -465,6 +469,18 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a129aa5ae5c5e5c5048351c3af2106128"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ZuoPar::DependencyParser::ArcStandard::State::left_label_set[<a class="el" href="namespaceZuoPar.html#af0978f3e4d25ba6d79713ddf18452f95">kMaxNumberOfWords</a>]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="afd73dd13e6399dbcf7ae902dafb268a3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -549,6 +565,18 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad7d9b08b7cc895a5c4804c6f54406c6e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ZuoPar::DependencyParser::ArcStandard::State::right_label_set[<a class="el" href="namespaceZuoPar.html#af0978f3e4d25ba6d79713ddf18452f95">kMaxNumberOfWords</a>]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae4ddbf2ff7266a52f8872c8cc50ca752"></a>
 <div class="memitem">
 <div class="memproto">
@@ -620,7 +648,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/app/depparser/arcstandard/<a class="el" href="arcstandard_2state_8h_source.html">state.h</a></li>
+<li>src/app/depparser/arcstandard/<a class="el" href="depparser_2arcstandard_2state_8h_source.html">state.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

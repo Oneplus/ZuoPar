@@ -229,9 +229,109 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#ab8b1a9e4b4a32e9b2dac81dceed2e191">  202</a></span>&#160;  std::vector&lt; tf_t &gt; <a class="code" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#ab8b1a9e4b4a32e9b2dac81dceed2e191">tfeat_cache</a>;</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;};</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;} <span class="comment">//  end for zuopar</span></div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#abd47d247d9cf32f600d5c9dd220eed98">  205</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_U0(name) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="preprocessor">    std::vector&lt;ufp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="preprocessor">  cache.push_back( ufp_t(ctx.name) ); \</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00210"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a0e6e314072e85479038221a387f67b2a">  210</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_U1(name) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="preprocessor">    std::vector&lt;ufp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="preprocessor">  if (ctx.name) { \</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="preprocessor">    cache.push_back( ufp_t(ctx.name) ); \</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="preprocessor">  } \</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00217"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#ad90890b679f1bce1e7ab421fb260bf38">  217</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_B00(name1, name2) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="preprocessor">    std::vector&lt;bfp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="preprocessor">  cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_B10(name1, name2) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="preprocessor">    std::vector&lt;bfp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="preprocessor">  if (ctx.name1) { \</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="preprocessor">    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="preprocessor">  } \</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00229"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a4e6cd04b259fcfa722ab9775e255045b">  229</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_B10(name1, name2) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="preprocessor">    std::vector&lt;bfp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="preprocessor">  if (ctx.name1) { \</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="preprocessor">    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="preprocessor">  } \</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#aba605a9a9fb393b66ef88b6f2eb21dab">  236</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_B11(name1, name2) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="preprocessor">    std::vector&lt;bfp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="preprocessor">  if (ctx.name1 &amp;&amp; ctx.name2) { \</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="preprocessor">    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="preprocessor">  } \</span></div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00243"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a17f0ae192566fd581600af4108184045">  243</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_T000(name1, name2, name3) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="preprocessor">    std::vector&lt;tfp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="preprocessor">  cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00248"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a732bd24868cec6558203f85b587834fc">  248</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_T100(name1, name2, name3) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="preprocessor">    std::vector&lt;tfp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="preprocessor">  if (ctx.name1) { \</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="preprocessor">    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="preprocessor">  } \</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00255"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a90129aae59f982c8a13d554e4c0fd0e2">  255</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_T110(name1, name2, name3) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="preprocessor">    std::vector&lt;tfp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="preprocessor">  if (ctx.name1 &amp;&amp; ctx.name2) { \</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="preprocessor">    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="preprocessor">  } \</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00262"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a8b131e93f8c034913c003d4e70ac0d26">  262</a></span>&#160;<span class="preprocessor">#define ZUOPAR_EXTRACTOR_T111(name1, name2, name3) [](const ScoreContext&amp; ctx, \</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="preprocessor">    std::vector&lt;tfp_t&gt;&amp; cache) -&gt; void{ \</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="preprocessor">  if (ctx.name1 &amp;&amp; ctx.name2 &amp;&amp; ctx.name3) { \</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="preprocessor">    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="preprocessor">  } \</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00269"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a26f2806a894e8c5cc6177852e6a6ddaf">  269</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_U0(name) do { \</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="preprocessor">  ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U0(name) ) ); \</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00273"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#ae31d4ebd52ab60f4a5ef0110e5d7284b">  273</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_U1(name) do { \</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="preprocessor">  ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U1(name) ) ); \</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00277"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a3838d200b0a788e53edd31f9fda363eb">  277</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_B00(name1, name2) do { \</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="preprocessor">  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B00(name1, name2) ) ); \</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00281"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a85f70397bb28d938370190f285ed52f0">  281</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_B10(name1, name2) do { \</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="preprocessor">  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B10(name1, name2) ) ); \</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00285"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a684d035911035b86206cbac164d11f4f">  285</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_B11(name1, name2) do { \</span></div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="preprocessor">  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B11(name1, name2) ) ); \</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00289"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a5d19af91f8f9e84e2ae04eb92f462ce6">  289</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_T000(name1, name2, name3) do { \</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="preprocessor">  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T000(name1, name2, name3) ) ); \</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a384e8cc9fc5698d475f79ce3c5d0c6c8">  293</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_T100(name1, name2, name3) do { \</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="preprocessor">  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T100(name1, name2, name3) ) ); \</span></div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#a9a3f16b80ac7841d681d2a29182bdf8d">  297</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_T110(name1, name2, name3) do { \</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="preprocessor">  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T110(name1, name2, name3) ) ); \</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00301"></a><span class="lineno"><a class="line" href="feature__param__map__collection_8h.html#ac4dbbfa81de6f31257bdc83632fb2718">  301</a></span>&#160;<span class="preprocessor">#define ZUOPAR_FEATURE_MAP_REGIST_T111(name1, name2, name3) do { \</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="preprocessor">  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T111(name1, name2, name3) ) ); \</span></div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="preprocessor">} while (0);</span></div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;} <span class="comment">//  end for zuopar</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__</span></div>
 <div class="ttc" id="classZuoPar_1_1FeaturePointwiseParameterCollection_html_a1029fed773b434cc312c630312d9505d"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#a1029fed773b434cc312c630312d9505d">ZuoPar::FeaturePointwiseParameterCollection::bfeat_map_repo</a></div><div class="ttdeci">std::vector&lt; bf_map_t &gt; bfeat_map_repo</div><div class="ttdoc">The bigram score mapping repository. </div><div class="ttdef"><b>Definition:</b> feature_param_map_collection.h:193</div></div>
 <div class="ttc" id="classZuoPar_1_1FeaturePointwiseParameterCollection_html_a13e96c3fba111d34f9bc14a1347abb54"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#a13e96c3fba111d34f9bc14a1347abb54">ZuoPar::FeaturePointwiseParameterCollection::update</a></div><div class="ttdeci">void update(const _ScoreContextType &amp;ctx, const _ActionType &amp;act, int timestamp, floatval_t scale)</div><div class="ttdef"><b>Definition:</b> feature_param_map_collection.h:116</div></div>
 <div class="ttc" id="classZuoPar_1_1FeaturePointwiseParameterCollection_html_a3e967f642922685a702452e0d463a97a"><div class="ttname"><a href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#a3e967f642922685a702452e0d463a97a">ZuoPar::FeaturePointwiseParameterCollection::FeaturePointwiseParameterCollection</a></div><div class="ttdeci">FeaturePointwiseParameterCollection()</div><div class="ttdef"><b>Definition:</b> feature_param_map_collection.h:36</div></div>
