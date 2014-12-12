@@ -27,7 +27,7 @@ public:
     boost::hash_combine(seed, act_);
   }
 
-  void replace_action(const _ActionType& act_) {
+  inline void replace_action(const _ActionType& act_) {
     act = act_;
     seed = seed1;
     boost::hash_combine(seed, act);

@@ -1,18 +1,21 @@
-#ifndef __ZUOPAR_UTILS_IO_DATASET_H__
-#define __ZUOPAR_UTILS_IO_DATASET_H__
+#ifndef __ZUOPAR_UTILS_IO_DATASET_DEPENDENCY_H__
+#define __ZUOPAR_UTILS_IO_DATASET_DEPENDENCY_H__
 
 #include <iostream>
 #include <vector>
 #include "types/dependency.h"
+#include "utils/io/instance/dependency.h"
 #include "engine/token_alphabet.h"
-
-namespace eg = ZuoPar::Engine;
 
 namespace ZuoPar {
 namespace IO {
 
+namespace eg = ZuoPar::Engine;
+
 /**
- * Read plain dependency dataset
+ * Read dependency dataset. In each instance, one item per line. For each item,
+ * there are 4 column representing: form, postag, head, deprel. Instances are
+ * separated by newline.
  *
  *  @param[in]  is                The input stream.
  *  @param[out] dataset           The output dataset.
@@ -22,7 +25,7 @@ namespace IO {
  *  @param[in]  incremental       If incremental is true, insert the token into
  *                                the alphabet, otherwise not perform insertion.
  */
-void read_plain_dependency_dataset(
+void read_dependency_dataset(
     std::istream& is,
     std::vector<Dependency>& dataset,
     eg::TokenAlphabet& forms_alphabet,

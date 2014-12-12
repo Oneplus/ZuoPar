@@ -6,112 +6,87 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-#define _u(name) [](const ScoreContext& ctx, \
-    std::vector<ufp_t>& cache) -> void{ \
-  if (ctx.name) { \
-    cache.push_back( ufp_t(ctx.name) ); \
-  } \
-}
-
-#define _b(name1, name2) [](const ScoreContext& ctx, \
-    std::vector<bfp_t>& cache) -> void{ \
-  if (ctx.name1 && ctx.name2) { \
-    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
-  } \
-}
-
-#define _t(name1, name2, name3) [](const ScoreContext& ctx, \
-    std::vector<tfp_t>& cache) -> void{ \
-  if (ctx.name1 && ctx.name2 && ctx.name3) { \
-    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
-  } \
-}
-
-#define regist_unigram_feature(name) do { \
-  ufeat_map_repo.push_back( uf_map_t( _u(name) ) ); \
-} while (0);
-
-#define regist_bigram_feature(name1, name2) do { \
-  bfeat_map_repo.push_back( bf_map_t( _b(name1, name2) ) ); \
-} while (0);
-
-#define regist_trigram_feature(name1, name2, name3) do { \
-  tfeat_map_repo.push_back( tf_map_t( _t(name1, name2, name3) ) ); \
-} while (0);
-
 Weight::Weight() {
-  regist_unigram_feature( S0w );
-  regist_unigram_feature( S0p );
-  regist_bigram_feature( S0w, S0p );
-  regist_unigram_feature( S1w );
-  regist_unigram_feature( S1p );
-  regist_bigram_feature( S1w, S1p );
-  regist_unigram_feature( N0w );
-  regist_unigram_feature( N0p );
-  regist_bigram_feature( N0w, N0p );
-  regist_unigram_feature( N1w );
-  regist_unigram_feature( N1p );
-  regist_bigram_feature( N1w, N1p );  // port "from single words" in Z&N (2011)
-  regist_trigram_feature( S1w, S1p, S0w );
-  regist_trigram_feature( S1w, S0w, S0p );
-  regist_trigram_feature( S1w, S1p, S0p );
-  regist_trigram_feature( S1p, S0w, S0p );
-  regist_bigram_feature( S1w, S0w );
-  regist_bigram_feature( S1p, S0p );
-  regist_bigram_feature( S0p, N0p );  //  port "from word pairs" in Z&N (2011)
-  regist_trigram_feature( S0p, N0p, N1p );
-  regist_trigram_feature( S1p, S0p, N0p );
-  regist_trigram_feature( S0p, S0ldp, S1p );
-  regist_trigram_feature( S0p, S0rdp, S1p );
-  regist_trigram_feature( S0p, S1ldp, S1p );
-  regist_trigram_feature( S0p, S1rdp, S1p );  //  port the "from three words" in Z&N (2011)
-  regist_bigram_feature( S0w, DistS0S1 );
-  regist_bigram_feature( S0p, DistS0S1 );
-  regist_bigram_feature( S1w, DistS0S1 );
-  regist_bigram_feature( S1p, DistS0S1 );
-  regist_trigram_feature( S0w, S1w, DistS0S1 );
-  regist_trigram_feature( S0p, S1p, DistS0S1 ); //  port the "distance" in Z&N (2011)
-  regist_bigram_feature( S0w, S0la );
-  regist_bigram_feature( S0w, S0ra );
-  regist_bigram_feature( S0p, S0la );
-  regist_bigram_feature( S0p, S0ra );
-  regist_bigram_feature( S1w, S1la );
-  regist_bigram_feature( S1w, S1ra );
-  regist_bigram_feature( S1p, S1la );
-  regist_bigram_feature( S1p, S1ra ); //  port the "valency" in Z&N (2011)
-  regist_unigram_feature( S0ldw );
-  regist_unigram_feature( S0ldp );
-  regist_unigram_feature( S0ldl );
-  regist_unigram_feature( S0rdw );
-  regist_unigram_feature( S0rdp );
-  regist_unigram_feature( S0rdl );
-  regist_unigram_feature( S1ldw );
-  regist_unigram_feature( S1ldp );
-  regist_unigram_feature( S1ldl );
-  regist_unigram_feature( S1rdw );
-  regist_unigram_feature( S1rdp );
-  regist_unigram_feature( S1rdl );  // port the "unigram" in Z&N (2011)
-  regist_unigram_feature( S0l2dw );
-  regist_unigram_feature( S0l2dp );
-  regist_unigram_feature( S0l2dl );
-  regist_unigram_feature( S0r2dw );
-  regist_unigram_feature( S0r2dp );
-  regist_unigram_feature( S0r2dl );
-  regist_unigram_feature( S1l2dw );
-  regist_unigram_feature( S1l2dp );
-  regist_unigram_feature( S1l2dl );
-  regist_unigram_feature( S1r2dw );
-  regist_unigram_feature( S1r2dp );
-  regist_unigram_feature( S1r2dl );
-  regist_trigram_feature( S0p, S0ldp, S0l2dp );
-  regist_trigram_feature( S0p, S0rdp, S0r2dp );
-  regist_trigram_feature( S1p, S1ldp, S1l2dp );
-  regist_trigram_feature( S1p, S1rdp, S1r2dp );
-  regist_trigram_feature( S0p, N0p, N1p );  //  port the "third-order" in Z&N (2011)
-  //regist_trigram_feature( S0p, S1p, S0r2dp );
-  //regist_trigram_feature( S0p, S1p, S0l2dp );
-  //regist_trigram_feature( S0p, S1p, S1r2dp );
-  //regist_trigram_feature( S0p, S1p, S1l2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0w );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0p );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S0w, S0p );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1w );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1p );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S1w, S1p );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( N0w );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( N0w, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( N1w );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( N1p );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( N1w, N1p );  // port "from single words" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1w, S1p, S0w );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1w, S0w, S0p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1w, S1p, S0p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1p, S0w, S0p );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S1w, S0w );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S1p, S0p );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S0p, N0p );  //  port "from word pairs" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, N0p, N1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1p, S0p, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0ldp, S1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0rdp, S1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1ldp, S1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1rdp, S1p );  //  port the "from three words" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S0w, DistS0S1 );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S0p, DistS0S1 );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S1w, DistS0S1 );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S1p, DistS0S1 );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0w, S1w, DistS0S1 );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1p, DistS0S1 ); //  port the "distance" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0w, S0la );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0w, S0ra );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0p, S0la );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0p, S0ra );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1w, S1la );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1w, S1ra );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1p, S1la );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1p, S1ra ); //  port the "valency" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0ldw );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0ldp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0ldl );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0rdw );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0rdp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0rdl );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1ldw );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1ldp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1ldl );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1rdw );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1rdp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1rdl );  // port the "unigram" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0l2dw );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0l2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0l2dl );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0r2dw );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0r2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0r2dl );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1l2dw );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1l2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1l2dl );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1r2dw );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1r2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1r2dl );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0ldp, S0l2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0rdp, S0r2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1p, S1ldp, S1l2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1p, S1rdp, S1r2dp );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, N0p, N1p );  //  port the "third-order" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0w, S0lset );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0p, S0lset );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0w, S0rset );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0p, S0rset );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1w, S1lset );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1p, S1lset );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1w, S1rset );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1p, S1rset ); // port the "label-set" in Z&N (2011)
+  //ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1p, S0r2dp );
+  //ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1p, S0l2dp );
+  //ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1p, S1r2dp );
+  //ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1p, S1l2dp );
 }
 
 } //  end for namespace arcstandard

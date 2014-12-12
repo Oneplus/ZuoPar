@@ -3,7 +3,7 @@
 
 #include "types/common.h"
 #include "types/dependency.h"
-#include "app/depparser/settings.h"
+#include "app/settings.h"
 #include "app/depparser/arcstandard/action.h"
 
 namespace ZuoPar {
@@ -93,6 +93,12 @@ public:
 
   //! The dependency relation cached in state.
   deprel_t deprels[kMaxNumberOfWords];
+
+  //!
+  int left_label_set[kMaxNumberOfWords];
+
+  //!
+  int right_label_set[kMaxNumberOfWords];
 
   //! Use to record the number of left children in current state.
   int nr_left_children[kMaxNumberOfWords];

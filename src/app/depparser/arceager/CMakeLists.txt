@@ -13,8 +13,8 @@ add_executable (arceager_depparser
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
     ${SOURCE_DIR}/utils/io/stream.cc
-    ${SOURCE_DIR}/utils/io/dataset.cc
-    ${SOURCE_DIR}/utils/io/instance.cc
+    ${SOURCE_DIR}/utils/io/dataset/dependency.cc
+    ${SOURCE_DIR}/utils/io/instance/dependency.cc
     )
 
 target_link_libraries (arceager_depparser

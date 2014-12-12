@@ -28,6 +28,8 @@ State::copy(const State& source) {
   #define _COPY(name) memcpy((name), source.name, sizeof(name));
   _COPY(heads);
   _COPY(deprels);
+  _COPY(left_label_set);
+  _COPY(right_label_set);
   _COPY(left_most_child);
   _COPY(left_2nd_most_child);
   _COPY(right_most_child);
@@ -47,6 +49,8 @@ State::clear() {
   this->top0 = 0;
   memset(heads, -1, sizeof(heads));
   memset(deprels, 0, sizeof(deprels));
+  memset(left_label_set, 0, sizeof(left_label_set));
+  memset(right_label_set, 0, sizeof(right_label_set));
   memset(nr_left_children, 0, sizeof(nr_left_children));
   memset(nr_right_children, 0, sizeof(nr_right_children));
   memset(left_most_child, -1, sizeof(left_most_child));
@@ -97,7 +101,7 @@ State::reduce(const State& source) {
 
 bool
 State::left_arc(const State& source, deprel_t deprel) {
-  if (source.stack.size() <= 0 || source.heads[source.top0] != -1) {
+  if (source.stack.empty() || source.heads[source.top0] != -1) {
     return false;
   }
 
@@ -108,6 +112,7 @@ State::left_arc(const State& source, deprel_t deprel) {
 
   heads[m] = h;
   deprels[m] = deprel;
+  left_label_set[h] |= (1<< deprel);
 
   if (-1 == left_most_child[h]) {
     // TP0 is left-isolate node.
@@ -130,7 +135,7 @@ State::left_arc(const State& source, deprel_t deprel) {
 
 bool
 State::right_arc(const State& source, deprel_t deprel) {
-  if (source.stack.size() <= 0) {
+  if (source.stack.empty()) {
     return false;
   }
 
@@ -138,6 +143,7 @@ State::right_arc(const State& source, deprel_t deprel) {
   int h = top0; int m = buffer;
   heads[m] = h;
   deprels[m] = deprel;
+  right_label_set[h] |= (1<< deprel);
 
   stack.push_back(buffer);
   buffer ++;

@@ -35,6 +35,7 @@ public:
     S0hl(0),
     S0h2l(0),
     S0la(0), S0ra(0), N0la(0),
+    S0lset(0), S0rset(0), N0lset(0),
     DistS0N0(0) {
     const std::vector<form_t>& forms = state.ref->forms;
     const std::vector<postag_t>& postags = state.ref->postags;
@@ -44,6 +45,7 @@ public:
     if (S0 >= 0) {
       S0w = forms[S0]; S0p = postags[S0];
       S0la = state.nr_left_children[S0]; S0ra = state.nr_right_children[S0];
+      S0lset = state.left_label_set[S0]; S0rset = state.right_label_set[S0];
 
       int S0ld = state.left_most_child[S0];
       if (S0ld >= 0) {
@@ -70,6 +72,7 @@ public:
     if (N0 < len) {
       N0w = forms[N0]; N0p = postags[N0];
       N0la = state.nr_left_children[N0];
+      N0lset = state.left_label_set[N0];
 
       int N0ld = state.left_most_child[N0];
       if (N0ld >= 0) {
@@ -127,6 +130,7 @@ public:
   deprel_t      S0h2l;
 
   int           S0la,  S0ra,  N0la;
+  int           S0lset,S0rset,N0lset;
   int           DistS0N0;
 };
 

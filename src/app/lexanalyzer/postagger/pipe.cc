@@ -2,14 +2,14 @@
 #include <fstream>
 #include "utils/logging.h"
 #include "utils/io/stream.h"
-#include "utils/io/dataset/dependency.h"
-#include "utils/io/instance/dependency.h"
-#include "app/depparser/arcstandard/action_utils.h"
-#include "app/depparser/arcstandard/pipe.h"
+#include "utils/io/dataset/postag.h"
+#include "utils/io/instance/postag.h"
+#include "app/lexanalyzer/postagger/action_utils.h"
+#include "app/lexanalyzer/postagger/pipe.h"
 
 namespace ZuoPar {
-namespace DependencyParser {
-namespace ArcStandard {
+namespace LexicalAnalyzer {
+namespace Postagger {
 
 Pipe::Pipe(const LearnOption& opts)
   : mode(kPipeLearn), weight(0), decoder(0), learner(0) {
@@ -65,11 +65,6 @@ Pipe::load_model(const std::string& model_path) {
     return false;
   }
 
-  if (!deprels_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load deprels alphabet.";
-    return false;
-  }
-
   if (!weight->load(mfs)) {
     _WARN << "pipe: failed to load weight.";
     return false;
@@ -92,8 +87,7 @@ Pipe::run() {
     }
 
     _INFO << "report: loading dataset from reference file.";
-    ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, deprels_alphabet, true);
+    ioutils::read_postag_with_cache_dataset(ifs, dataset, postags_alphabet, '/', true);
     _INFO << "report: dataset is loaded from reference file.";
   } else {
     // not implemented.
@@ -103,15 +97,13 @@ Pipe::run() {
       _ERROR << "#: testing halt";
       return;
     }
-    ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, deprels_alphabet, true);
+    ioutils::read_postag_with_cache_dataset(ifs, dataset, postags_alphabet, '/', true);
   }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << forms_alphabet.size() << " forms(s) is detected.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
-  _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is detected.";
 
-  decoder = new Decoder(deprels_alphabet.size(), beam_size, weight);
+  decoder = new Decoder(postags_alphabet.size(), beam_size, weight);
 
   if (mode == kPipeLearn) {
     learner = new Learner(weight);
@@ -119,7 +111,7 @@ Pipe::run() {
   size_t N = dataset.size();
   std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
   for (size_t n = 0; n < N; ++ n) {
-    const Dependency& instance = dataset[n];
+    const PostagWithLiteralCache& instance = dataset[n];
     // calculate the oracle transition actions.
     std::vector<Action> actions;
     if (mode == kPipeLearn) {
@@ -135,16 +127,9 @@ Pipe::run() {
       learner->set_timestamp(n+ 1);
       learner->learn(result.first, result.second);
     } else {
-      Dependency output;
-      for (int i = 0; i < instance.size(); ++ i) {
-        output.push_back(instance.forms[i], instance.postags[i], 0, 0);
-      }
+      PostagWithLiteralCache output;
       build_output((*result.first), output);
-      ioutils::write_dependency_instance((*os),
-          output,
-          forms_alphabet,
-          postags_alphabet,
-          deprels_alphabet);
+      ioutils::write_postag_with_cache_instance((*os), output, postags_alphabet, '/');
     }
 
     if ((n+ 1)% display_interval == 0) {
@@ -163,7 +148,6 @@ Pipe::run() {
     } else {
       forms_alphabet.save(mfs);
       postags_alphabet.save(mfs);
-      deprels_alphabet.save(mfs);
       weight->save(mfs);
       _INFO << "pipe: model saved to " << model_path;
     }
@@ -171,22 +155,14 @@ Pipe::run() {
 }
 
 void
-Pipe::build_output(const State& source, Dependency& output) {
+Pipe::build_output(const State& source, PostagWithLiteralCache& output) {
   size_t len = source.ref->size();
-  if (output.heads.size() != len) {
-    output.heads.resize(len);
-  }
 
-  if (output.deprels.size() != len) {
-    output.deprels.resize(len);
-  }
-
+  output.forms.resize(len);
+  output.postags.resize(len);
   for (size_t i = 0; i < len; ++ i) {
-    output.heads[i] = source.heads[i];
-    output.deprels[i] = source.deprels[i];
-    if (output.heads[i] == -1) {
-      output.deprels[i] = deprels_alphabet.encode("ROOT");
-    }
+    output.forms[i] = source.ref->forms[i];
+    output.postags[i] = source.postags[i];
   }
 }
 

@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_SYSTEM_ACTION_ABSTRACT_ACTION_H__
-#define __ZUOPAR_SYSTEM_ACTION_ABSTRACT_ACTION_H__
+#ifndef __ZUOPAR_SYSTEM_ACTION_ABSTRACT_SIMPLE_ACTION_H__
+#define __ZUOPAR_SYSTEM_ACTION_ABSTRACT_SIMPLE_ACTION_H__
 
 #include <iostream>
 #include <boost/assert.hpp>
@@ -12,10 +12,9 @@
 
 namespace ZuoPar {
 
-class AbstractAction {
+class AbstractSimpleAction {
 public:
-  AbstractAction()
-    : action_name(0), deprel(0), seed(0) {}
+  AbstractSimpleAction(): action_name(0) {}
 
   /**
    * Constructor for action.
@@ -23,26 +22,18 @@ public:
    *  @param[in]  name  The name for the action.
    *  @param[in]  rel   The dependency relation.
    */
-  AbstractAction(int name, deprel_t rel)
-    : action_name(name),
-    deprel(rel) {
-    seed = 0;
-    boost::hash_combine(seed, name);
-    boost::hash_combine(seed, rel);
-  }
+  AbstractSimpleAction(int name) : action_name(name) {}
 
-  AbstractAction& operator = (const AbstractAction& a) {
-    seed = a.seed;
+  AbstractSimpleAction& operator = (const AbstractSimpleAction& a) {
     action_name = a.action_name;
-    deprel = a.deprel;
     return (*this);
   }
 
-  bool operator == (const AbstractAction& a) const {
-    return (a.action_name== action_name && a.deprel == deprel);
+  bool operator == (const AbstractSimpleAction& a) const {
+    return (a.action_name== action_name);
   }
 
-  bool operator != (const AbstractAction& a) const {
+  bool operator != (const AbstractSimpleAction& a) const {
     return !((*this) == a);
   }
 
@@ -52,23 +43,17 @@ public:
   //! For serialization
   template<class Archive>
     void serialize(Archive & ar, const unsigned int /* file_version */) {
-    ar & seed & action_name & deprel;
+    ar & action_name;
   }
 
   //! For boost hash map.
   friend std::size_t hash_value(const AbstractAction& a) {
-    return a.seed;
+    return a.action_name;
   }
 
 protected:
   //! The action name.
   int action_name;
-
-  //! The dependency relation.
-  deprel_t deprel;
-
-  //! The seed for hashing.
-  size_t seed;
 };
 
 } //  end for namespace zuopar

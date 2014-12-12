@@ -2,6 +2,8 @@
 #define __ZUOPAR_ML_PERCEPTRON_PARAM_H__
 
 #include "settings.h"
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 namespace ZuoPar {
 

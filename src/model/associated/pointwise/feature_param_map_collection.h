@@ -202,6 +202,106 @@ protected:
   std::vector< tf_t > tfeat_cache;
 };
 
+#define ZUOPAR_EXTRACTOR_U0(name) [](const ScoreContext& ctx, \
+    std::vector<ufp_t>& cache) -> void{ \
+  cache.push_back( ufp_t(ctx.name) ); \
+}
+
+#define ZUOPAR_EXTRACTOR_U1(name) [](const ScoreContext& ctx, \
+    std::vector<ufp_t>& cache) -> void{ \
+  if (ctx.name) { \
+    cache.push_back( ufp_t(ctx.name) ); \
+  } \
+}
+
+#define ZUOPAR_EXTRACTOR_B00(name1, name2) [](const ScoreContext& ctx, \
+    std::vector<bfp_t>& cache) -> void{ \
+  cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
+}
+
+#define ZUOPAR_EXTRACTOR_B10(name1, name2) [](const ScoreContext& ctx, \
+    std::vector<bfp_t>& cache) -> void{ \
+  if (ctx.name1) { \
+    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
+  } \
+}
+
+#define ZUOPAR_EXTRACTOR_B10(name1, name2) [](const ScoreContext& ctx, \
+    std::vector<bfp_t>& cache) -> void{ \
+  if (ctx.name1) { \
+    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
+  } \
+}
+
+#define ZUOPAR_EXTRACTOR_B11(name1, name2) [](const ScoreContext& ctx, \
+    std::vector<bfp_t>& cache) -> void{ \
+  if (ctx.name1 && ctx.name2) { \
+    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
+  } \
+}
+
+#define ZUOPAR_EXTRACTOR_T000(name1, name2, name3) [](const ScoreContext& ctx, \
+    std::vector<tfp_t>& cache) -> void{ \
+  cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
+}
+
+#define ZUOPAR_EXTRACTOR_T100(name1, name2, name3) [](const ScoreContext& ctx, \
+    std::vector<tfp_t>& cache) -> void{ \
+  if (ctx.name1) { \
+    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
+  } \
+}
+
+#define ZUOPAR_EXTRACTOR_T110(name1, name2, name3) [](const ScoreContext& ctx, \
+    std::vector<tfp_t>& cache) -> void{ \
+  if (ctx.name1 && ctx.name2) { \
+    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
+  } \
+}
+
+#define ZUOPAR_EXTRACTOR_T111(name1, name2, name3) [](const ScoreContext& ctx, \
+    std::vector<tfp_t>& cache) -> void{ \
+  if (ctx.name1 && ctx.name2 && ctx.name3) { \
+    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
+  } \
+}
+
+#define ZUOPAR_FEATURE_MAP_REGIST_U0(name) do { \
+  ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U0(name) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_U1(name) do { \
+  ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U1(name) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_B00(name1, name2) do { \
+  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B00(name1, name2) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_B10(name1, name2) do { \
+  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B10(name1, name2) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_B11(name1, name2) do { \
+  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B11(name1, name2) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_T000(name1, name2, name3) do { \
+  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T000(name1, name2, name3) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_T100(name1, name2, name3) do { \
+  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T100(name1, name2, name3) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_T110(name1, name2, name3) do { \
+  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T110(name1, name2, name3) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_T111(name1, name2, name3) do { \
+  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T111(name1, name2, name3) ) ); \
+} while (0);
+
 } //  end for zuopar
 
 #endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__

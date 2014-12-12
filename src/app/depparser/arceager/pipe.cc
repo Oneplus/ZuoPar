@@ -2,8 +2,8 @@
 #include <fstream>
 #include "utils/logging.h"
 #include "utils/io/stream.h"
-#include "utils/io/dataset.h"
-#include "utils/io/instance.h"
+#include "utils/io/dataset/dependency.h"
+#include "utils/io/instance/dependency.h"
 #include "app/depparser/arceager/action_utils.h"
 #include "app/depparser/arceager/pipe.h"
 
@@ -92,7 +92,7 @@ Pipe::run() {
     }
 
     _INFO << "report: loading dataset from reference file.";
-    ioutils::read_plain_dependency_dataset(ifs, dataset, forms_alphabet,
+    ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
         postags_alphabet, deprels_alphabet, true);
     _INFO << "report: dataset is loaded from reference file.";
   } else {
@@ -103,7 +103,7 @@ Pipe::run() {
       _ERROR << "#: testing halt";
       return;
     }
-    ioutils::read_plain_dependency_dataset(ifs, dataset, forms_alphabet,
+    ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
         postags_alphabet, deprels_alphabet, true);
   }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";

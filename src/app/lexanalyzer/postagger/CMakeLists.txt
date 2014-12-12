@@ -1,7 +1,5 @@
-add_executable (arcstandard_depparser
+add_executable (postagger
     main.cc
-    learn.cc
-    test.cc
     opt_utils.cc
     action.cc
     action_utils.cc
@@ -12,12 +10,12 @@ add_executable (arcstandard_depparser
     ${SOURCE_DIR}/types/dependency.cc
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
-    ${SOURCE_DIR}/utils/io/dataset/dependency.cc
-    ${SOURCE_DIR}/utils/io/instance/dependency.cc
+    ${SOURCE_DIR}/utils/io/dataset/postag.cc
+    ${SOURCE_DIR}/utils/io/instance/postag.cc
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (arcstandard_depparser
+target_link_libraries (postagger
     boost_program_options
     boost_log_setup
     boost_log
