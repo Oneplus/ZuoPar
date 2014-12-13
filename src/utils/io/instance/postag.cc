@@ -8,7 +8,7 @@
 namespace ZuoPar {
 namespace IO {
 
-void
+bool
 read_postag_instance(std::istream& is,
     Postag& output,
     eg::TokenAlphabet& forms_alphabet,
@@ -19,6 +19,7 @@ read_postag_instance(std::istream& is,
   std::string line;
   std::getline(is, line);
   algo::trim(line);
+  if (line.size() == 0) { return false; }
   std::vector<std::string> items;
   algo::split(items, line, boost::is_any_of("\t "), boost::token_compress_on);
 
@@ -33,12 +34,14 @@ read_postag_instance(std::istream& is,
         );
 
     postag_t postag = (incremental ?
-        postags_alphabet.insert(items[i].substr(p + 1, len - p - 1).c_str()) :
-        postags_alphabet.encode(items[i].substr(p + 1, len - p - 1).c_str())
+        postags_alphabet.insert(items[i].substr(p+ 1, len-p-1).c_str()) :
+        postags_alphabet.encode(items[i].substr(p+ 1, len-p-1).c_str())
         );
 
     output.push_back(form, postag);
   }
+
+  return true;
 }
 
 void
@@ -59,7 +62,7 @@ write_postag_instance(std::ostream& os,
   os << std::endl;
 }
 
-void
+bool
 read_postag_with_cache_instance(std::istream& is,
     PostagWithLiteralCache& output,
     eg::TokenAlphabet& postags_alphabet,
@@ -69,6 +72,7 @@ read_postag_with_cache_instance(std::istream& is,
   std::string line;
   std::getline(is, line);
   algo::trim(line);
+  if (line.size() == 0) { return false; }
   std::vector<std::string> items;
   algo::split(items, line, boost::is_any_of("\t "), boost::token_compress_on);
 
@@ -85,6 +89,8 @@ read_postag_with_cache_instance(std::istream& is,
     output.postags.push_back(postag);
     output.cache.push_back(items[i].substr(0, p));
   }
+
+  return true;
 }
 
 void
@@ -94,11 +100,9 @@ write_postag_with_cache_instance(std::ostream& os,
     char delimiter) {
   size_t sz = output.size();
   for (size_t i = 0; i < sz; ++ i) {
+    if (i > 0) { os << "\t"; }
     os << output.cache[i] << delimiter
       << postags_alphabet.decode(output.postags[i]);
-    if (i > 0) {
-      os << "\t";
-    }
   }
   os << std::endl;
 }

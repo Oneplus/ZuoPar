@@ -151,6 +151,11 @@ public:
    */
   bool save(std::ostream& os) {
     boost::archive::text_oarchive oa(os);
+    save(oa);
+    return true;
+  }
+
+  bool save(boost::archive::text_oarchive& oa) {
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
       ufeat_map_repo[i].save(oa);
     }
@@ -160,7 +165,6 @@ public:
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].save(oa);
     }
-    return true;
   }
 
   /**
@@ -172,6 +176,11 @@ public:
    */
   bool load(std::istream& is) {
     boost::archive::text_iarchive ia(is);
+    load(ia);
+    return true;
+  }
+
+  bool load(boost::archive::text_iarchive& ia) {
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
       ufeat_map_repo[i].load(ia);
     }
@@ -183,7 +192,6 @@ public:
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].load(ia);
     }
-    return true;
   }
 
 protected:

@@ -16,9 +16,10 @@ read_postag_dataset(
   dataset.clear();
   while (!is.eof()) {
     Postag postag;
-    read_postag_instance(is, postag, forms_alphabet, postags_alphabet,
-        delimiter, incremental);
-    dataset.push_back(postag);
+    if (read_postag_instance(is, postag, forms_alphabet,
+        postags_alphabet, delimiter, incremental)) {
+      dataset.push_back(postag);
+    }
   }
 }
 
@@ -33,8 +34,10 @@ read_postag_with_cache_dataset(
   dataset.clear();
   while (!is.eof()) {
     PostagWithLiteralCache postag;
-    read_postag_with_cache_instance(is, postag, postags_alphabet, delimiter, incremental);
-    dataset.push_back(postag);
+    if (read_postag_with_cache_instance(is, postag, postags_alphabet,
+          delimiter, incremental)) {
+      dataset.push_back(postag);
+    }
   }
 }
 

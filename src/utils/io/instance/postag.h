@@ -13,12 +13,14 @@ namespace eg = ZuoPar::Engine;
 /**
  * Read one segmentation instance from the input stream.
  *
- *  @param[in]  is                  The input stream.
- *  @param[out] output              The output stream.
- *  @param[in]  character_alphabet  /
- *  @param[in]  segmentation_tag_alphabet
+ *  @param[in]  is                The input stream.
+ *  @param[out] output            The output stream.
+ *  @param[in]  forms_alphabet    The alphabet of forms.
+ *  @param[in]  postags_alphabet  The alphabet of postags.
+ *  @return     bool              Return true on successfully load, otherwise
+ *                                false.
  */
-void read_postag_instance(std::istream& is,
+bool read_postag_instance(std::istream& is,
     Postag& output,
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
@@ -37,13 +39,18 @@ void write_postag_instance(std::ostream& os,
     const eg::TokenAlphabet& postags_alphabet,
     char delimiter = '/');
 
-
 /**
+ * Read one postag instance from the input stream.
  *
- *
- *
+ *  @param[in]  is                The input stream.
+ *  @param[out] output            The output stream.
+ *  @param[in]  postags_alphabet  The alphabet of postags.
+ *  @param[in]  delimiter         The delimiter between form and postag.
+ *  @param[in]  incremental
+ *  @return     bool              Return true on successfully load, otherwise
+ *                                false.
  */
-void read_postag_with_cache_instance(std::istream& is,
+bool read_postag_with_cache_instance(std::istream& is,
     PostagWithLiteralCache& output,
     eg::TokenAlphabet& postags_alphabet,
     char delimiter = '/',

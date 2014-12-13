@@ -55,10 +55,10 @@ Pipe::load_model(const std::string& model_path) {
     return false;
   }
 
-  if (!forms_alphabet.load(mfs)) {
+  /*if (!forms_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load forms alphabet.";
     return false;
-  }
+  }*/
 
   if (!postags_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load postags alphabet.";
@@ -97,10 +97,9 @@ Pipe::run() {
       _ERROR << "#: testing halt";
       return;
     }
-    ioutils::read_postag_with_cache_dataset(ifs, dataset, postags_alphabet, '/', true);
+    ioutils::read_postag_with_cache_dataset(ifs, dataset, postags_alphabet, '/', false);
   }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
-  _INFO << "report: " << forms_alphabet.size() << " forms(s) is detected.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
 
   decoder = new Decoder(postags_alphabet.size(), beam_size, weight);
@@ -118,7 +117,7 @@ Pipe::run() {
       ActionUtils::get_oracle_actions(instance, actions);
     }
 
-    int max_nr_actions = instance.size() * 2 - 1;
+    int max_nr_actions = instance.size();
     State init_state(&instance);
     Decoder::const_decode_result_t result = decoder->decode(init_state,
         actions, max_nr_actions);
@@ -146,7 +145,7 @@ Pipe::run() {
     if (!mfs.good()) {
       _WARN << "pipe: failed to save model.";
     } else {
-      forms_alphabet.save(mfs);
+      //forms_alphabet.save(mfs);
       postags_alphabet.save(mfs);
       weight->save(mfs);
       _INFO << "pipe: model saved to " << model_path;
@@ -158,10 +157,10 @@ void
 Pipe::build_output(const State& source, PostagWithLiteralCache& output) {
   size_t len = source.ref->size();
 
-  output.forms.resize(len);
+  output.cache.resize(len);
   output.postags.resize(len);
   for (size_t i = 0; i < len; ++ i) {
-    output.forms[i] = source.ref->forms[i];
+    output.cache[i] = source.ref->cache[i];
     output.postags[i] = source.postags[i];
   }
 }

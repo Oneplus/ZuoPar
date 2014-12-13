@@ -2,6 +2,7 @@
 #define __ZUOPAR_MODEL_STRING_STRING_FEATURE_MAP_COLLECTION_H__
 
 #include "model/associated/pointwise/feature_param_map.h"
+#include "model/associated/pointwise/feature_param_map_collection.h"
 #include <vector>
 #include <boost/unordered_map.hpp>
 
@@ -10,7 +11,10 @@ namespace ZuoPar {
 template <class _StateType,
           class _ScoreContextType,
           class _ActionType>
-class StringFeaturePointwiseParameterCollection {
+class StringFeaturePointwiseParameterCollection: \
+  public FeaturePointwiseParameterCollection<_StateType,
+                                             _ScoreContextType,
+                                             _ActionType> {
 public:
   //! Instantiate the unigram score type
   typedef Feature<std::string, _ActionType> feature_t;
@@ -30,7 +34,7 @@ public:
    */
   floatval_t score(const _StateType& state, const _ActionType& act, bool avg) {
     _ScoreContextType ctx(state);
-    return score(ctx, act, avg);
+    return (score(ctx, act, avg));
   }
 
   /**
@@ -47,6 +51,9 @@ public:
     for (int i = 0; i < repo.size(); ++ i) {
       ret += repo[i].score(ctx, act, avg, 0.);
     }
+    ret += FeaturePointwiseParameterCollection<_StateType,
+            _ScoreContextType,
+            _ActionType>::score(ctx, act, avg);
     return ret;
   }
 
@@ -58,6 +65,9 @@ public:
     for (int i = 0; i < repo.size(); ++ i) {
       repo[i].batchly_score(ctx, actions, avg, result);
     }
+    FeaturePointwiseParameterCollection<_StateType,
+      _ScoreContextType,
+      _ActionType>::batchly_score(ctx, actions, avg, result);
   }
 
   /**
@@ -87,6 +97,8 @@ public:
     for (int i = 0; i < repo.size(); ++ i) {
       repo[i].update(ctx, act, timestamp, scale);
     }
+    FeaturePointwiseParameterCollection<_StateType, _ScoreContextType,
+      _ActionType>::update(ctx, act, timestamp, scale);
   }
 
   /**
@@ -95,6 +107,8 @@ public:
     for (int i = 0; i < repo.size(); ++ i) {
       repo[i].flush(timestamp);
     }
+    FeaturePointwiseParameterCollection<_StateType, _ScoreContextType,
+      _ActionType>::flush(timestamp);
   }
 
   /**
@@ -109,6 +123,8 @@ public:
     for (int i = 0; i < repo.size(); ++ i) {
       repo[i].save(oa);
     }
+    FeaturePointwiseParameterCollection<_StateType, _ScoreContextType,
+      _ActionType>::save(oa);
     return true;
   }
 
@@ -124,7 +140,8 @@ public:
     for (int i = 0; i < repo.size(); ++ i) {
       repo[i].load(ia);
     }
-
+    FeaturePointwiseParameterCollection<_StateType, _ScoreContextType,
+      _ActionType>::load(ia);
     return true;
   }
 

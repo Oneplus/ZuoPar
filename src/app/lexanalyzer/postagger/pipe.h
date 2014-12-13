@@ -86,7 +86,7 @@ private:
   Decoder* decoder;
 
   //! The alphabets of forms.
-  eg::TokenAlphabet forms_alphabet;
+  //eg::TokenAlphabet forms_alphabet;
 
   //! The alphabets of postags.
   eg::TokenAlphabet postags_alphabet;

@@ -11,7 +11,7 @@ public:
   std::vector<form_t> forms;
   std::vector<postag_t> postags;
 
-  std::size_t size() const { return forms.size(); }
+  std::size_t size() const { return postags.size(); }
 
   void push_back(form_t form, postag_t postag) {
     forms.push_back(form);
