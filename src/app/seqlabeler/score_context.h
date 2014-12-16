@@ -19,10 +19,14 @@ public:
    *  @param[in]  state   The State
    */
   ScoreContext(const State& state)
-    : sequence_instance(state.ref) {
+    : instance(state.ref),
+    buffer(state.buffer) {
+    T_1= (state.buffer- 1 >= 0 ? state.tags[state.buffer- 1]: eg::TokenAlphabet::BEGIN);
   };
 
-  const SequenceInstance* sequence_instance;
+  int buffer;
+  tag_t T_1;
+  const SequenceInstance* instance;
 };
 
 } //  end for namespace sequencelabeler
