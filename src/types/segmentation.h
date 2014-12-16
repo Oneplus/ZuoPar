@@ -12,7 +12,7 @@ public:
   //! The characters.
   std::vector<character_t> chars;
   //! The bitags.
-  std::vector<bitag_t> tags;
+  std::vector<tag_t> tags;
 
   std::size_t size() const { return chars.size(); }
 };

@@ -19,7 +19,10 @@ typedef int postag_t;
 typedef int deprel_t;
 
 //!
-typedef int bitag_t;
+typedef int tag_t;
+
+//!
+typedef int attribute_t;
 
 typedef double floatval_t;
 
