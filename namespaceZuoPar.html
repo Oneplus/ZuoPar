@@ -105,6 +105,8 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceZuoPar_1_1Math"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1Math.html">Math</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceZuoPar_1_1SequenceLabeler"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html">SequenceLabeler</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceZuoPar_1_1Utility"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1Utility.html">Utility</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -146,6 +148,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Segmentation.html">Segmentation</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1SequenceItem.html">SequenceItem</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -166,8 +170,15 @@ Typedefs</h2></td></tr>
 <tr class="memitem:add15ec07d24d7bf36dabcffd01a219a9"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#add15ec07d24d7bf36dabcffd01a219a9">deprel_t</a></td></tr>
 <tr class="memdesc:add15ec07d24d7bf36dabcffd01a219a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The internal representation of dependency relation.  <a href="#add15ec07d24d7bf36dabcffd01a219a9">More...</a><br/></td></tr>
 <tr class="separator:add15ec07d24d7bf36dabcffd01a219a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d049b8ed58a434ac2cfb507587ea02e"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a4d049b8ed58a434ac2cfb507587ea02e">bitag_t</a></td></tr>
-<tr class="separator:a4d049b8ed58a434ac2cfb507587ea02e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aece63013822d0fe8e9fb63133c8a3251"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#aece63013822d0fe8e9fb63133c8a3251">tag_t</a></td></tr>
+<tr class="separator:aece63013822d0fe8e9fb63133c8a3251"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab52c303fb5cd41df6a9e55d1bf0be2e1"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#ab52c303fb5cd41df6a9e55d1bf0be2e1">attribute_t</a></td></tr>
+<tr class="separator:ab52c303fb5cd41df6a9e55d1bf0be2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c1434bff13e9de54ab240a3d544eaa3"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map<br class="typebreak"/>
+&lt; int, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">SparseVector</a></td></tr>
+<tr class="separator:a0c1434bff13e9de54ab240a3d544eaa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf09bc599b289f69a51bdac8fbd37e41"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; <a class="el" href="structZuoPar_1_1SequenceItem.html">SequenceItem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a></td></tr>
+<tr class="separator:acf09bc599b289f69a51bdac8fbd37e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -191,12 +202,12 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4d049b8ed58a434ac2cfb507587ea02e"></a>
+<a class="anchor" id="ab52c303fb5cd41df6a9e55d1bf0be2e1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef int <a class="el" href="namespaceZuoPar.html#a4d049b8ed58a434ac2cfb507587ea02e">ZuoPar::bitag_t</a></td>
+          <td class="memname">typedef int <a class="el" href="namespaceZuoPar.html#ab52c303fb5cd41df6a9e55d1bf0be2e1">ZuoPar::attribute_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -268,6 +279,42 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The internal representation of part-of-speech tag. </p>
+
+</div>
+</div>
+<a class="anchor" id="acf09bc599b289f69a51bdac8fbd37e41"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::vector&lt;<a class="el" href="structZuoPar_1_1SequenceItem.html">SequenceItem</a>&gt; <a class="el" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">ZuoPar::SequenceInstance</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0c1434bff13e9de54ab240a3d544eaa3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::unordered_map&lt;int, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>&gt; <a class="el" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">ZuoPar::SparseVector</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aece63013822d0fe8e9fb63133c8a3251"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int <a class="el" href="namespaceZuoPar.html#aece63013822d0fe8e9fb63133c8a3251">ZuoPar::tag_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

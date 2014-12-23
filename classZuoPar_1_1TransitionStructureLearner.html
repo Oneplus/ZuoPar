@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classZuoPar_1_1TransitionStructureLearner-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -97,10 +98,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><code>#include &lt;<a class="el" href="structure__learner_8h_source.html">structure_learner.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ace914673a3f3342a7cf01238fc22bccb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">LearningAlgorithm</a> { <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccba19e42ed9dfb59ef2169cb078fab263ec">kPassiveAgressive</a> = 0, 
+<a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccba9c1ec0e77e4b6d117fa5abc7accd2346">kAveragePerceptron</a>
+ }</td></tr>
+<tr class="separator:ace914673a3f3342a7cf01238fc22bccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac4055fd4eccb91cf7535b9a9ad9050d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ac4055fd4eccb91cf7535b9a9ad9050d9">TransitionStructureLearner</a> (_ModelType *m)</td></tr>
-<tr class="separator:ac4055fd4eccb91cf7535b9a9ad9050d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1587ce3683b577ae98bfdc1f3de485e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a1587ce3683b577ae98bfdc1f3de485e8">TransitionStructureLearner</a> (_ModelType *m, <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">LearningAlgorithm</a> algo=<a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccba9c1ec0e77e4b6d117fa5abc7accd2346">kAveragePerceptron</a>)</td></tr>
+<tr class="separator:a1587ce3683b577ae98bfdc1f3de485e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a860279d19b94304b4c32cb5e7110f802"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a860279d19b94304b4c32cb5e7110f802">set_timestamp</a> (int ts)</td></tr>
 <tr class="separator:a860279d19b94304b4c32cb5e7110f802"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee978d102b60f5d7f3a78a3d18f59495"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#aee978d102b60f5d7f3a78a3d18f59495">learn</a> (const _StateType *predict_state, const _StateType *correct_state)</td></tr>
@@ -108,8 +116,29 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aaca6fffe66800b48c2006f84d1fc515e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#aaca6fffe66800b48c2006f84d1fc515e">flush</a> ()</td></tr>
 <tr class="separator:aaca6fffe66800b48c2006f84d1fc515e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="ace914673a3f3342a7cf01238fc22bccb"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">ZuoPar::TransitionStructureLearner::LearningAlgorithm</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ace914673a3f3342a7cf01238fc22bccba19e42ed9dfb59ef2169cb078fab263ec"></a>kPassiveAgressive</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ace914673a3f3342a7cf01238fc22bccba9c1ec0e77e4b6d117fa5abc7accd2346"></a>kAveragePerceptron</em>&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ac4055fd4eccb91cf7535b9a9ad9050d9"></a>
+<a class="anchor" id="a1587ce3683b577ae98bfdc1f3de485e8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -122,8 +151,18 @@ template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
           <td class="memname"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::<a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner</a> </td>
           <td>(</td>
           <td class="paramtype">_ModelType *&#160;</td>
-          <td class="paramname"><em>m</em></td><td>)</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">LearningAlgorithm</a>&#160;</td>
+          <td class="paramname"><em>algo</em> = <code><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccba9c1ec0e77e4b6d117fa5abc7accd2346">kAveragePerceptron</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>

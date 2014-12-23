@@ -98,6 +98,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="feature__param__map__collection_8h_source.html">feature_param_map_collection.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for ZuoPar::FeaturePointwiseParameterCollection&lt; _StateType, _ScoreContextType, _ActionType &gt;:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classZuoPar_1_1FeaturePointwiseParameterCollection.png" usemap="#ZuoPar::FeaturePointwiseParameterCollection&lt; _StateType, _ScoreContextType, _ActionType &gt;_map" alt=""/>
+  <map id="ZuoPar::FeaturePointwiseParameterCollection&lt; _StateType, _ScoreContextType, _ActionType &gt;_map" name="ZuoPar::FeaturePointwiseParameterCollection&lt; _StateType, _ScoreContextType, _ActionType &gt;_map">
+<area href="classZuoPar_1_1StringFeaturePointwiseParameterCollection.html" alt="ZuoPar::StringFeaturePointwiseParameterCollection&lt; _StateType, _ScoreContextType, _ActionType &gt;" shape="rect" coords="0,56,592,80"/>
+</map>
+ </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -145,6 +154,8 @@ _ActionType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e967f642922685a702452e0d463a97a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#a3e967f642922685a702452e0d463a97a">FeaturePointwiseParameterCollection</a> ()</td></tr>
 <tr class="separator:a3e967f642922685a702452e0d463a97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9cdeab1797316ddca862fcf957cfdc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#ac9cdeab1797316ddca862fcf957cfdc7">vectorize</a> (const _StateType &amp;state, const _ActionType &amp;act, bool avg, <a class="el" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">SparseVector</a> *sparse_vector)</td></tr>
+<tr class="separator:ac9cdeab1797316ddca862fcf957cfdc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeff5adad16993d7073c83672065889ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#aeff5adad16993d7073c83672065889ef">score</a> (const _StateType &amp;state, const _ActionType &amp;act, bool avg)</td></tr>
 <tr class="separator:aeff5adad16993d7073c83672065889ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acba28d979587007f30b31701a0acc7cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#acba28d979587007f30b31701a0acc7cb">score</a> (const _ScoreContextType &amp;ctx, const _ActionType &amp;act, bool avg)</td></tr>
@@ -159,8 +170,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5aebac95b211be62bcdd7c68739845bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0c22a6e2bbf02bef4488c950c051527"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#ab0c22a6e2bbf02bef4488c950c051527">save</a> (std::ostream &amp;os)</td></tr>
 <tr class="separator:ab0c22a6e2bbf02bef4488c950c051527"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a708c4959d252746ab4fba47802b0c168"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#a708c4959d252746ab4fba47802b0c168">save</a> (boost::archive::text_oarchive &amp;oa)</td></tr>
+<tr class="separator:a708c4959d252746ab4fba47802b0c168"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c12c899faff48a4790a4974972debe4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#a8c12c899faff48a4790a4974972debe4">load</a> (std::istream &amp;is)</td></tr>
 <tr class="separator:a8c12c899faff48a4790a4974972debe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a414563f89d2444347b421df45f2ef74b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#a414563f89d2444347b421df45f2ef74b">load</a> (boost::archive::text_iarchive &amp;ia)</td></tr>
+<tr class="separator:a414563f89d2444347b421df45f2ef74b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -457,6 +472,32 @@ template&lt;class _StateType, class _ScoreContextType, class _ActionType&gt; </d
 
 </div>
 </div>
+<a class="anchor" id="a414563f89d2444347b421df45f2ef74b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _StateType, class _ScoreContextType, class _ActionType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html">ZuoPar::FeaturePointwiseParameterCollection</a>&lt; _StateType, _ScoreContextType, _ActionType &gt;::load </td>
+          <td>(</td>
+          <td class="paramtype">boost::archive::text_iarchive &amp;&#160;</td>
+          <td class="paramname"><em>ia</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ab0c22a6e2bbf02bef4488c950c051527"></a>
 <div class="memitem">
 <div class="memproto">
@@ -488,6 +529,32 @@ template&lt;class _StateType, class _ScoreContextType, class _ActionType&gt; </d
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool If successfully saved, return true; otherwise return false. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a708c4959d252746ab4fba47802b0c168"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _StateType, class _ScoreContextType, class _ActionType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html">ZuoPar::FeaturePointwiseParameterCollection</a>&lt; _StateType, _ScoreContextType, _ActionType &gt;::save </td>
+          <td>(</td>
+          <td class="paramtype">boost::archive::text_oarchive &amp;&#160;</td>
+          <td class="paramname"><em>oa</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -705,6 +772,64 @@ template&lt;class _StateType, class _ScoreContextType, class _ActionType&gt; </d
     <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">timestamp</td><td>The updated timestamp. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">scale</td><td>The updated scale. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ac9cdeab1797316ddca862fcf957cfdc7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _StateType, class _ScoreContextType, class _ActionType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html">ZuoPar::FeaturePointwiseParameterCollection</a>&lt; _StateType, _ScoreContextType, _ActionType &gt;::vectorize </td>
+          <td>(</td>
+          <td class="paramtype">const _StateType &amp;&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const _ActionType &amp;&#160;</td>
+          <td class="paramname"><em>act</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>avg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">SparseVector</a> *&#160;</td>
+          <td class="paramname"><em>sparse_vector</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Convert the pointwised feature collections into vector.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The score context </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">avg</td><td>Specify to use averaged parameter. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">sparse_vector</td><td>The sparse vector. </td></tr>
   </table>
   </dd>
 </dl>

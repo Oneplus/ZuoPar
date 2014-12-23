@@ -101,6 +101,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af2289726a59c70234a218b30d6252212"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html#af2289726a59c70234a218b30d6252212">FeaturePointwiseParameterMap</a> (extractor_t _extractor)</td></tr>
 <tr class="separator:af2289726a59c70234a218b30d6252212"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb42afe5a060795779c7da4b0845b6de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html#adb42afe5a060795779c7da4b0845b6de">vectorize</a> (const _ScoreContextType &amp;ctx, const _ActionType &amp;act, bool avg, int offset, <a class="el" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">SparseVector</a> *sparse_vector)</td></tr>
+<tr class="separator:adb42afe5a060795779c7da4b0845b6de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a869f95776511bd30bd7309327dcaec"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html#a7a869f95776511bd30bd7309327dcaec">size</a> () const </td></tr>
+<tr class="memdesc:a7a869f95776511bd30bd7309327dcaec"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the feature parameter map.  <a href="#a7a869f95776511bd30bd7309327dcaec">More...</a><br/></td></tr>
+<tr class="separator:a7a869f95776511bd30bd7309327dcaec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2af002801f7843bce3ea97e43ec870d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html#a2af002801f7843bce3ea97e43ec870d6">score</a> (const _ScoreContextType &amp;ctx, const _ActionType &amp;act, bool avg, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> default_return_value=0.)</td></tr>
 <tr class="separator:a2af002801f7843bce3ea97e43ec870d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b43422bc839c760f95e30feb53a3351"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html#a7b43422bc839c760f95e30feb53a3351">batchly_score</a> (const _ScoreContextType &amp;ctx, const std::vector&lt; _ActionType &gt; &amp;actions, bool avg, boost::unordered_map&lt; _ActionType, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &gt; &amp;result)</td></tr>
@@ -364,6 +369,33 @@ template&lt;class _MetaFeatureType , class _ScoreContextType , class _ActionType
 
 </div>
 </div>
+<a class="anchor" id="a7a869f95776511bd30bd7309327dcaec"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _MetaFeatureType , class _ScoreContextType , class _ActionType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html">ZuoPar::FeaturePointwiseParameterMap</a>&lt; _MetaFeatureType, _ScoreContextType, _ActionType &gt;::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The size of the feature parameter map. </p>
+
+</div>
+</div>
 <a class="anchor" id="a6d120e13828b0838606c7695dd511333"></a>
 <div class="memitem">
 <div class="memproto">
@@ -416,6 +448,71 @@ template&lt;class _MetaFeatureType , class _ScoreContextType , class _ActionType
     <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">now</td><td>The current timestamp. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">scale</td><td>The updated scale. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="adb42afe5a060795779c7da4b0845b6de"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _MetaFeatureType , class _ScoreContextType , class _ActionType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html">ZuoPar::FeaturePointwiseParameterMap</a>&lt; _MetaFeatureType, _ScoreContextType, _ActionType &gt;::vectorize </td>
+          <td>(</td>
+          <td class="paramtype">const _ScoreContextType &amp;&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const _ActionType &amp;&#160;</td>
+          <td class="paramname"><em>act</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>avg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">SparseVector</a> *&#160;</td>
+          <td class="paramname"><em>sparse_vector</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Convert the pointwised feature into vector.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The score context </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">avg</td><td>Specify to use averaged parameter. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>The offset for counting vector. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">sparse_vector</td><td>The sparse vector. </td></tr>
   </table>
   </dd>
 </dl>

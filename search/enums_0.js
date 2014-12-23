@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['special_5ftoken',['SPECIAL_TOKEN',['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5',1,'ZuoPar::Engine::TokenAlphabet']]]
+  ['learningalgorithm',['LearningAlgorithm',['../classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb',1,'ZuoPar::TransitionStructureLearner']]]
 ];
