@@ -21,6 +21,7 @@ Pipe::Pipe(const LearnOption& opts)
   this->model_path = opts.model_path;
   this->beam_size = opts.beam_size;
   this->display_interval = opts.display_interval;
+  this->algorithm = static_cast<Learner::LearningAlgorithm>(opts.algorithm);
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -107,7 +108,12 @@ Pipe::run() {
   decoder = new Decoder(tags_alphabet.size(), beam_size, weight);
 
   if (mode == kPipeLearn) {
-    learner = new Learner(weight);
+    learner = new Learner(weight, this->algorithm);
+    if (this->algorithm == Learner::kAveragePerceptron) {
+      _INFO << "report: training with averaged perceptron";
+    } else if (this->algorithm == Learner::kPassiveAgressive) {
+      _INFO << "report: training with passive aggressive";
+    }
   }
   size_t N = dataset.size();
   std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));

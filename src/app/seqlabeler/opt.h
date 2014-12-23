@@ -8,13 +8,13 @@ namespace SequenceLabeler {
 
 struct Option {
   std::string model_path; //! The path to the model file.
-  bool conll_format;      //! The input file is in CoNLL format.
   int beam_size;          //! The size of the beam.
   int display_interval;   //! The interval for displaying log.
 };
 
 struct LearnOption: public Option {
   std::string reference_path; //! The path to the reference file.
+  int algorithm;
 };
 
 struct TestOption: public Option {

@@ -1,6 +1,7 @@
 #ifndef __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
 #define __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
 
+#include "types/math/sparse_vector.h"
 #include "model/meta_feature.h"
 #include "feature_param_map.h"
 #include <vector>
@@ -34,6 +35,32 @@ public:
 
 public:
   FeaturePointwiseParameterCollection() {}
+
+  /**
+   * Convert the pointwised feature collections into vector.
+   *
+   *  @param[in]  ctx           The score context
+   *  @param[in]  act           The action
+   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[out] sparse_vector The sparse vector.
+   */
+  void vectorize(const _StateType& state, const _ActionType& act, bool avg,
+      SparseVector* sparse_vector) {
+    int global_id = 0;
+    _ScoreContextType ctx(state);
+    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
+      ufeat_map_repo[i].vectorize(ctx, act, avg, global_id, sparse_vector);
+      global_id += ufeat_map_repo[i].size();
+    }
+    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
+      bfeat_map_repo[i].vectorize(ctx, act, avg, global_id, sparse_vector);
+      global_id += ufeat_map_repo[i].size();
+    }
+    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
+      tfeat_map_repo[i].vectorize(ctx, act, avg, global_id, sparse_vector);
+      global_id += ufeat_map_repo[i].size();
+    }
+  }
 
   /**
    * Get score for the state.

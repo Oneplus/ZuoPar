@@ -2,6 +2,7 @@
 #define __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_H__
 
 #include "settings.h"
+#include "types/math/sparse_vector.h"
 #include "ml/pointwise_param.h"
 #include "model/feature.h"
 #include "utils/logging.h"
@@ -55,7 +56,43 @@ public:
     : extractor(_extractor) {
 #if defined(UNORDERED_MAP_IMPL) and (UNORDERED_MAP_IMPL == dense_hash_map)
     payload.set_empty_key(feature_t());
-#endif  
+#endif
+  }
+
+  /**
+   * Convert the pointwised feature into vector.
+   *
+   *  @param[in]  ctx           The score context
+   *  @param[in]  act           The action
+   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[in]  offset        The offset for counting vector.
+   *  @param[out] sparse_vector The sparse vector.
+   */
+  void vectorize(const _ScoreContextType& ctx, const _ActionType& act,
+      bool avg, int offset, SparseVector* sparse_vector) {
+    cache.clear();
+    extractor(ctx, cache);
+    for (int i = 0; i < cache.size(); ++ i) {
+      const feature_t& entry = feature_t(cache[i], act);
+      int id = offset;
+      for (typename map_t::const_iterator itx = payload.begin();
+          itx != payload.end();
+          ++ itx, ++ id) {
+        if (itx->first == entry) {
+          if (avg) {
+            (*sparse_vector)[id] += itx->second.w_sum;
+          } else {
+            (*sparse_vector)[id] += itx->second.w;
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  //! The size of the feature parameter map.
+  std::size_t size() const {
+    return payload.size();
   }
 
   /**

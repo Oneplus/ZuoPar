@@ -81,6 +81,9 @@ private:
   //! The parameter learner.
   Learner* learner;
 
+  //! The learning algorithm.
+  Learner::LearningAlgorithm algorithm;
+
   //! The pointer to the decoder.
   Decoder* decoder;
 

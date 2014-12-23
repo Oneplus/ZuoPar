@@ -5,6 +5,9 @@
 #include "app/seqlabeler/pipe.h"
 #include "app/seqlabeler/opt_utils.h"
 
+#define APP_NAME "sequence labeler"
+#define APP_EXEC "sequence_labeler"
+
 /**
  * Perform the learning process of ZuoPar::arcstandard dependency parser.
  *
@@ -24,6 +27,7 @@ int learn(int argc, char** argv) {
   optparser.add_options()
     ("help,h", "Show help information.")
     ("model,m", po::value<std::string>(), "The path to the model.")
+    ("algorithm,a", po::value<std::string>(), "The learning algorithm.")
     ("reference,r", po::value<std::string>(), "The path to the reference file.")
     ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")

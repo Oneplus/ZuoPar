@@ -21,12 +21,6 @@ bool parse_option(const po::variables_map& vm, seq::Option& opts) {
     opts.display_interval = vm["display"].as<int>();
   }
 
-  opts.conll_format = false;
-  if (vm.count("conll")) {
-    BOOST_LOG_TRIVIAL(info) << "use CoNLL format input and output.";
-    opts.conll_format = true;
-  }
-
   opts.beam_size = 64;
   if (vm.count("beam")) {
     BOOST_LOG_TRIVIAL(info) << "reset beam size to " << vm["beam"].as<int>();
@@ -46,6 +40,14 @@ bool parse_learn_option(const po::variables_map& vm, seq::LearnOption& opts) {
   } else {
     opts.reference_path = vm["reference"].as<std::string>();
   }
+
+  opts.algorithm = 0;
+  if (vm.count("algorithm")) {
+    if (vm["algorithm"].as<std::string>() == "pa") {
+      opts.algorithm = 1;
+    }
+  }
+
 
   return true;
 }
