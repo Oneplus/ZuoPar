@@ -122,7 +122,7 @@ private:
       score += model->score((*correct_state_chain[i]), correct_action, false);
       score -= model->score((*predict_state_chain[i]), predict_action, false);
       model->vectorize2((*correct_state_chain[i]), correct_action, 1., &correct_vector);
-      model->vectorize2((*predict_state_chain[i]), predict_action, -1, &predict_vector);
+      model->vectorize2((*predict_state_chain[i]), predict_action, 1., &predict_vector);
     }
 
     for (SparseVector2::const_iterator i = correct_vector.begin();
@@ -130,7 +130,7 @@ private:
       SparseVector2::const_iterator j = predict_vector.find(i->first);
       if (j == predict_vector.end()) {
         //Trick.
-        norm += std::fabs(i->second);
+        norm += i->second;
       } else {
         if (std::fabs(i->second - j->second) > 1e-8) {
           norm += std::fabs(i->second - j->second);
@@ -141,7 +141,7 @@ private:
         i != predict_vector.end(); ++ i) {
       SparseVector2::const_iterator j = correct_vector.find(i->first);
       if (j == correct_vector.end()) {
-        norm += std::fabs(i->second);
+        norm += i->second;
       }
     }
 
@@ -152,6 +152,8 @@ private:
     } else {
       step = (error - score) /norm;
     }
+
+    BOOST_ASSERT_MSG(!std::isnan(step), "NaN step is asserted.");
 
     for (int i = last; i > 0; -- i) {
       const _ActionType& predict_action = predict_state_chain[i- 1]->last_action;
