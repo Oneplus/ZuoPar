@@ -130,7 +130,7 @@ private:
       SparseVector2::const_iterator j = predict_vector.find(i->first);
       if (j == predict_vector.end()) {
         //Trick.
-        norm += i->second;
+        norm += std::fabs(i->second);
       } else {
         if (std::fabs(i->second - j->second) > 1e-8) {
           norm += std::fabs(i->second - j->second);
@@ -141,7 +141,7 @@ private:
         i != predict_vector.end(); ++ i) {
       SparseVector2::const_iterator j = correct_vector.find(i->first);
       if (j == correct_vector.end()) {
-        norm += i->second;
+        norm += std::fabs(i->second);
       }
     }
 

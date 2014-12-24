@@ -2,13 +2,14 @@
 #define __ZUOPAR_ENGINE_TOKEN_ALPHABET_H__
 
 #include <iostream>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/singleton.hpp>
 #include "alphabet.h"
+#include "utils/serialization/unordered_map.h"
 
 namespace ZuoPar {
 
@@ -73,7 +74,7 @@ public:
 
 private:
   //! Define the mapping type.
-  typedef boost::unordered_map<std::string, int> map_t;
+  typedef std::unordered_map<std::string, int> map_t;
   //! The serialization entry.
   friend class boost::serialization::access;
   //! The index to name payload.

@@ -28,6 +28,7 @@ int learn(int argc, char** argv) {
     ("help,h", "Show help information.")
     ("model,m", po::value<std::string>(), "The path to the model.")
     ("algorithm,a", po::value<std::string>(), "The learning algorithm.")
+    ("no-early,e", "Specify the early update strategy.")
     ("reference,r", po::value<std::string>(), "The path to the reference file.")
     ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")

@@ -1,5 +1,6 @@
 #include "engine/token_alphabet.h"
 #include "utils/serialization/unordered_map.h"
+#include <boost/serialization/vector.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 

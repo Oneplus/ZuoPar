@@ -7,7 +7,7 @@ namespace ArcEager {
 
 Decoder::Decoder(int nr, int beam_size, Weight* weight)
   : nr_deprels(nr),
-  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, weight) {
+  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, true, weight) {
 }
 
 void

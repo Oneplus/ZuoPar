@@ -80,9 +80,10 @@ private:
 
   //! The parameter learner.
   Learner* learner;
-
   //! The learning algorithm.
   Learner::LearningAlgorithm algorithm;
+  //! The early update flag.
+  bool early_update;
 
   //! The pointer to the decoder.
   Decoder* decoder;

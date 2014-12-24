@@ -41,14 +41,17 @@ bool parse_learn_option(const po::variables_map& vm, seq::LearnOption& opts) {
     opts.reference_path = vm["reference"].as<std::string>();
   }
 
-  opts.algorithm = 0;
+  opts.algorithm = "ap";
   if (vm.count("algorithm")) {
     if (vm["algorithm"].as<std::string>() == "pa") {
-      opts.algorithm = 1;
+      opts.algorithm = "pa";
     }
   }
 
-
+  opts.early_update = true;
+  if (vm.count("no-early")) {
+    opts.early_update = false;
+  }
   return true;
 }
 

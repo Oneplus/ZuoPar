@@ -21,9 +21,10 @@ public:
    *
    *  @param[in]  nr        The number of dependency relations.
    *  @param[in]  beam_size The size of beam.
+   *  @param[in]  early_update
    *  @param[in]  weight    The pointer to the weight.
    */
-  Decoder(int nr, int beam_size, Weight* weight);
+  Decoder(int nr, int beam_size, bool early_update, Weight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,

@@ -35,8 +35,9 @@ public:
    * Perform the shift action from source state.
    *
    *  @param[in]  source  The source state.
+   *  @param[in]  tag     The tag.
    */
-  bool shift(const State& source, tag_t postag);
+  bool shift(const State& source, tag_t tag);
 
   //! If the state reach the terminating state.
   bool terminated() const;

@@ -4,9 +4,9 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-Decoder::Decoder(int nr, int beam_size, Weight* weight)
+Decoder::Decoder(int nr, int beam_size, bool early_update, Weight* weight)
   : nr_tags(nr),
-  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, weight) {
+  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, early_update, weight) {
 }
 
 void

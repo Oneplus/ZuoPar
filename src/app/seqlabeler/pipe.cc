@@ -13,15 +13,18 @@ namespace SequenceLabeler {
 Pipe::Pipe(const LearnOption& opts)
   : mode(kPipeLearn), weight(0), decoder(0), learner(0) {
   _INFO << "::LEARN:: mode is actived.";
-  _INFO << "report: model file is " << opts.model_path;
-  _INFO << "report: reference file is " << opts.reference_path;
-  _INFO << "report: beam size is " << opts.beam_size;
 
   this->reference_path = opts.reference_path;
   this->model_path = opts.model_path;
   this->beam_size = opts.beam_size;
   this->display_interval = opts.display_interval;
-  this->algorithm = static_cast<Learner::LearningAlgorithm>(opts.algorithm);
+  this->algorithm = Learner::kAveragePerceptron;
+  if (opts.algorithm == "pa") {
+    this->algorithm = Learner::LearningAlgorithm::kPassiveAgressive;
+  }
+  this->early_update = opts.early_update;
+
+  _INFO << "report: model file is " << opts.model_path;
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -61,7 +64,7 @@ Pipe::load_model(const std::string& model_path) {
   }
 
   if (!tags_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load postags alphabet.";
+    _WARN << "pipe: failed to load tags alphabet.";
     return false;
   }
 
@@ -79,13 +82,18 @@ Pipe::run() {
 
   dataset.clear();
   if (mode == kPipeLearn) {
+    _INFO << "report: beam size = " << this->beam_size;
+    _INFO << "report: early update = " << (this->early_update ? "true": "false");
+    _INFO << "report: learning algorithm = " << (
+        this->algorithm == Learner::kAveragePerceptron ?
+        "averaged perceptron": "passive aggressive");
+
     std::ifstream ifs(reference_path.c_str());
     if (!ifs.good()) {
       _ERROR << "#: failed to open reference file.";
       _ERROR << "#: training halt";
       return;
     }
-
     _INFO << "report: loading dataset from reference file.";
     ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
         tags_alphabet, true);
@@ -102,18 +110,13 @@ Pipe::run() {
         tags_alphabet, false);
   }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
-  _INFO << "report: " << attributes_alphabet.size() << " attribute (s) is detected.";
-  _INFO << "report: " << tags_alphabet.size() << " postag(s) is detected.";
+  _INFO << "report: " << attributes_alphabet.size() << " attribute(s) is detected.";
+  _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
 
-  decoder = new Decoder(tags_alphabet.size(), beam_size, weight);
+  decoder = new Decoder(tags_alphabet.size(), beam_size, early_update, weight);
 
   if (mode == kPipeLearn) {
     learner = new Learner(weight, this->algorithm);
-    if (this->algorithm == Learner::kAveragePerceptron) {
-      _INFO << "report: training with averaged perceptron";
-    } else if (this->algorithm == Learner::kPassiveAgressive) {
-      _INFO << "report: training with passive aggressive";
-    }
   }
   size_t N = dataset.size();
   std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
