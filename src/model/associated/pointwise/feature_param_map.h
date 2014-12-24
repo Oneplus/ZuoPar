@@ -65,12 +65,11 @@ public:
    *
    *  @param[in]  ctx           The score context
    *  @param[in]  act           The action
-   *  @param[in]  avg           Specify to use averaged parameter.
    *  @param[in]  offset        The offset for counting vector.
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize(const _ScoreContextType& ctx, const _ActionType& act,
-      bool avg, int offset, SparseVector* sparse_vector) {
+      floatval_t scale, int offset, SparseVector* sparse_vector) {
     cache.clear();
     extractor(ctx, cache);
     for (int i = 0; i < cache.size(); ++ i) {
@@ -80,11 +79,7 @@ public:
           itx != payload.end();
           ++ itx, ++ id) {
         if (itx->first == entry) {
-          if (avg) {
-            (*sparse_vector)[id] += itx->second.w_sum;
-          } else {
-            (*sparse_vector)[id] += itx->second.w;
-          }
+          (*sparse_vector)[id] += scale;
           break;
         }
       }
@@ -97,12 +92,12 @@ public:
    *
    *  @param[in]  ctx           The score context
    *  @param[in]  act           The action
-   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[in]  scale         Specify to use averaged parameter.
    *  @param[in]  offset        The offset for counting vector.
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize2(const _ScoreContextType& ctx, const _ActionType& act,
-      bool avg, int gid, SparseVector2* sparse_vector) {
+      floatval_t scale, int gid, SparseVector2* sparse_vector) {
     cache.clear();
     extractor(ctx, cache);
     for (int i = 0; i < cache.size(); ++ i) {
@@ -114,11 +109,7 @@ public:
 
       const std::pair<int, std::size_t>& key =
         std::make_pair(gid, boost::hash_value<feature_t>(entry));
-      if (avg) {
-        (*sparse_vector)[key] += itx->second.w_sum;
-      } else {
-        (*sparse_vector)[key] += itx->second.w;
-      }
+      (*sparse_vector)[key] += scale;
     }
   }
 

@@ -98,6 +98,16 @@ private:
     }
   }
 
+  /**
+   * Train the parameters with passive aggressive algorithm. According to 
+   * K. Crammer et. al (2006), the one-best MIRA (also named passive aggressive)
+   * has close form solution on derivation.
+   *
+   * w_t+1 = w_t + \tau_t * x_t, where \tau_t = l_t / || x_t ||^2
+   *
+   * For the learning guided search problem, we set the number of wrongly actions
+   * and ther score as loss l_t
+   */
   void learn_passive_aggressive(int last) {
     double error = last; //
     double score = 0.;
@@ -109,28 +119,29 @@ private:
     for (int i = last; i > 0; -- i) {
       const _ActionType& predict_action = predict_state_chain[i- 1]->last_action;
       const _ActionType& correct_action = correct_state_chain[i- 1]->last_action;
-      model->vectorize2((*correct_state_chain[i]), correct_action, false, &correct_vector);
-      model->vectorize2((*predict_state_chain[i]), predict_action, false, &predict_vector);
+      score += model->score((*correct_state_chain[i]), correct_action, false);
+      score -= model->score((*predict_state_chain[i]), predict_action, false);
+      model->vectorize2((*correct_state_chain[i]), correct_action, 1., &correct_vector);
+      model->vectorize2((*predict_state_chain[i]), predict_action, -1, &predict_vector);
     }
 
     for (SparseVector2::const_iterator i = correct_vector.begin();
         i != correct_vector.end(); ++ i) {
-      score += i->second;
       SparseVector2::const_iterator j = predict_vector.find(i->first);
       if (j == predict_vector.end()) {
-        norm += 1;
+        //Trick.
+        norm += i->second;
       } else {
         if (std::fabs(i->second - j->second) > 1e-8) {
-          norm += 1;
+          norm += std::fabs(i->second - j->second);
         }
       }
     }
     for (SparseVector2::const_iterator i = predict_vector.begin();
         i != predict_vector.end(); ++ i) {
-      score -= i->second;
       SparseVector2::const_iterator j = correct_vector.find(i->first);
-      if (j == predict_vector.end()) {
-        norm += 1;
+      if (j == correct_vector.end()) {
+        norm += i->second;
       }
     }
 

@@ -45,20 +45,20 @@ public:
    *  @param[in]  avg           Specify to use averaged parameter.
    *  @param[out] sparse_vector The sparse vector.
    */
-  void vectorize(const _StateType& state, const _ActionType& act, bool avg,
+  void vectorize(const _StateType& state, const _ActionType& act, floatval_t scale,
       SparseVector* sparse_vector) {
     int global_id = 0;
     _ScoreContextType ctx(state);
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
-      ufeat_map_repo[i].vectorize(ctx, act, avg, global_id, sparse_vector);
+      ufeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
       global_id += ufeat_map_repo[i].size();
     }
     for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
-      bfeat_map_repo[i].vectorize(ctx, act, avg, global_id, sparse_vector);
+      bfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
       global_id += ufeat_map_repo[i].size();
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
-      tfeat_map_repo[i].vectorize(ctx, act, avg, global_id, sparse_vector);
+      tfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
       global_id += ufeat_map_repo[i].size();
     }
   }
@@ -71,18 +71,18 @@ public:
    *  @param[in]  avg           Specify to use averaged parameter.
    *  @param[out] sparse_vector The version 2 sparse vector.
    */
-  void vectorize2(const _StateType& state, const _ActionType& act, bool avg,
+  void vectorize2(const _StateType& state, const _ActionType& act, floatval_t scale,
       SparseVector2* sparse_vector) {
     int global_id = 0;
     _ScoreContextType ctx(state);
     for (int i = 0; i < ufeat_map_repo.size(); ++ i, ++ global_id) {
-      ufeat_map_repo[i].vectorize2(ctx, act, avg, global_id, sparse_vector);
+      ufeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
     }
     for (int i = 0; i < bfeat_map_repo.size(); ++ i, ++ global_id) {
-      bfeat_map_repo[i].vectorize2(ctx, act, avg, global_id, sparse_vector);
+      bfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i, ++ global_id) {
-      tfeat_map_repo[i].vectorize2(ctx, act, avg, global_id, sparse_vector);
+      tfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
     }
   }
 
