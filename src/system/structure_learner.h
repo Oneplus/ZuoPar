@@ -2,6 +2,7 @@
 #define __ZUOPAR_SYSTEM_STRUCTURE_LEARNER_H__
 
 #include <vector>
+#include <cmath>
 #include "utils/logging.h"
 
 namespace ZuoPar {
@@ -17,17 +18,28 @@ public:
   };
 
 public:
-  TransitionStructureLearner(_ModelType* m, LearningAlgorithm algo= kAveragePerceptron)
+  /**
+   * The initializer of transition structure learner
+   *
+   *  @param[in]  m     The model
+   *  @param[in]  algo  The learning algorithm.
+   */
+  TransitionStructureLearner(_ModelType* m,
+      LearningAlgorithm algo= kAveragePerceptron)
     : model(m),
     algorithm(algo) {
   }
 
+  /**
+   * Set time stamp to the learner.
+   *
+   *  @param[in]  ts    The timestamp
+   */
   void set_timestamp(int ts) {
     timestamp = ts;
   }
 
-  void learn(const _StateType* predict_state,
-      const _StateType* correct_state) {
+  void learn(const _StateType* predict_state, const _StateType* correct_state) {
     if (predict_state == correct_state) {
       return;
     }
@@ -91,35 +103,38 @@ private:
     double score = 0.;
     double norm = 0.;
 
-    SparseVector correct_vector;
-    SparseVector predict_vector;
+    SparseVector2 correct_vector;
+    SparseVector2 predict_vector;
 
     for (int i = last; i > 0; -- i) {
       const _ActionType& predict_action = predict_state_chain[i- 1]->last_action;
       const _ActionType& correct_action = correct_state_chain[i- 1]->last_action;
-      model->vectorize((*correct_state_chain[i]), correct_action, false, &correct_vector);
-      model->vectorize((*predict_state_chain[i]), predict_action, false, &predict_vector);
+      model->vectorize2((*correct_state_chain[i]), correct_action, false, &correct_vector);
+      model->vectorize2((*predict_state_chain[i]), predict_action, false, &predict_vector);
     }
 
-    for (SparseVector::const_iterator i = correct_vector.begin();
+    for (SparseVector2::const_iterator i = correct_vector.begin();
         i != correct_vector.end(); ++ i) {
       score += i->second;
-      SparseVector::const_iterator j = predict_vector.find(i->first);
+      SparseVector2::const_iterator j = predict_vector.find(i->first);
       if (j == predict_vector.end()) {
-        norm += (i->second * i->second);
+        norm += 1;
       } else {
-        norm += (i->second - j->second) * (i->second - j->second);
+        if (std::fabs(i->second - j->second) > 1e-8) {
+          norm += 1;
+        }
       }
     }
-    for (SparseVector::const_iterator i = predict_vector.begin();
+    for (SparseVector2::const_iterator i = predict_vector.begin();
         i != predict_vector.end(); ++ i) {
       score -= i->second;
-      SparseVector::const_iterator j = correct_vector.find(i->first);
+      SparseVector2::const_iterator j = correct_vector.find(i->first);
       if (j == predict_vector.end()) {
-        norm += (i->second* i->second);
+        norm += 1;
       }
     }
 
+    _TRACE << "learn: norm = " << norm;
     double step = 0.;
     if (norm < 1e-8) {
       step = 0;

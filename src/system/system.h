@@ -4,7 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <boost/tuple/tuple.hpp>
 #include "settings.h"
 #include "utils/logging.h"
 
@@ -34,7 +35,8 @@ private:
   typedef std::vector<int> lattice_size_list_t;
 
   //! Define the mapping between action and it's packed score.
-  typedef boost::unordered_map<_ActionType, floatval_t> packed_score_t;
+  typedef std::unordered_map<_ActionType,
+          floatval_t, boost::hash<_ActionType> > packed_score_t;
 
   //! Define the (source.state, action, score) tuple.
   typedef boost::tuples::tuple<const _StateType*, _ActionType, floatval_t> scored_transition_t;
@@ -47,46 +49,47 @@ private:
 private:
   //! The pointer to the model, used to score the certain transition.
   _ModelType* model;
-
   //! The header of each row in lattice.
   lattice_head_list_t lattice_heads;
-
   //! The size of each row in lattice.
   lattice_size_list_t lattice_size;
-
   //! The size of the beam.
   int beam_size;
-
   //! Use to specify if use averaged parameter.
   bool use_avg;
+  //! Use to specify if use early update strategy.
+  bool early_update;
 
   //!
   _StateType* dummy_state;
 protected:
-  //!
+  //! The cached possible actions.
   action_collection_t possible_actions;
 
-  //!
+  //! The cached packed score.
   packed_score_t packed_scores;
 
-  //!
+  //! The k-best candidate transitions.
   scored_transition_t* candidate_transitions;
 public:
   /**
+   * The allocator for transition system.
    *
-   *
-   *
+   *  @param[in]  _beam_size  The beam size.
+   *  @parma[in]  _model      The model pointer.
    */
   TransitionSystem(
       int _beam_size,
+      bool _early_update,
       _ModelType* _model)
     : beam_size(_beam_size),
+    early_update(_early_update),
     use_avg(false),
     model(_model) {
     candidate_transitions = new scored_transition_t[beam_size];
-    dummy_state = new _StateType;
   }
 
+  //! The deallocator
   ~TransitionSystem() {
     for (size_t i = 0; i < lattice_heads.size(); ++ i) {
       if (lattice_heads[i]) {
@@ -96,7 +99,6 @@ public:
     }
 
     delete []candidate_transitions;
-    delete dummy_state;
   }
 
   /**
@@ -105,6 +107,7 @@ public:
    *  @param[in]  initial_state   The initial state.
    *  @param[in]  gold_actions    The gold actions.
    *  @param[in]  max_nr_actions  The maximum number of transition actions.
+   *  @param[in]  early_update    The early update strategy.
    *  @return     decode_result_t The first element in decode result is the
    *                              terminal state of the search result. The
    *                              second element (optional) is the terminal
@@ -133,7 +136,7 @@ public:
 
     int step = 1;
     for (step = 1; step <= max_nr_actions; ++ step) {
-      _TRACE << "sys: round " << step;
+      //_TRACE << "sys: round " << step;
 
       row = allocate_lattice(step);
       lattice_size.push_back(0);
@@ -152,21 +155,19 @@ public:
         }
       }
 
-      _TRACE << "sys: nr extended states(current beam size) =" << current_beam_size;
+      //_TRACE << "sys: nr extended states(current beam size) =" << current_beam_size;
       for (int i = 0; i < current_beam_size; ++ i) {
         const scored_transition_t& trans = candidate_transitions[i];
-        transit((*trans.template get<0>()),
-            trans.template get<1>(),
-            trans.template get<2>(),
+        transit((*trans.template get<0>()), trans.template get<1>(), trans.template get<2>(),
             (row+ i));
       }
 
-      for (int i = 0; i < current_beam_size; ++ i) {
+      /*for (int i = 0; i < current_beam_size; ++ i) {
         _StateType* now= row + i;
         _TRACE << "sys: [" << i << "] " << (void *)(now->previous)
           << "->" << (void *)(now) << " by " << now->last_action
           << " =" << now->score;
-      }
+      }*/
 
       if (gold_actions.size() != 0) {
         // Perform training and early update.
@@ -174,16 +175,20 @@ public:
             gold_actions[step- 1], correct_state,
             row, row + current_beam_size);
 
-        _TRACE << "sys: next_correct_state=" << (void *)next_correct_state;
+        //_TRACE << "sys: next_correct_state=" << (void *)next_correct_state;
         if (NULL == next_correct_state) {
-          _TRACE << "sys: error at step =" << step;
+          //_TRACE << "sys: error at step =" << step;
           const _StateType* best_target = search_best_state(
               row, row + current_beam_size);
+          _StateType* dummy_state = row+ beam_size;
           transit((*correct_state), gold_actions[step- 1], 0, dummy_state);
+          correct_state = dummy_state;
 
-          _TRACE << "sys: " << (void *)dummy_state->previous << "->"
-            << (void *)dummy_state << " by " << dummy_state->last_action;
-          return const_decode_result_t(best_target, dummy_state);
+          //_TRACE << "sys: " << (void *)dummy_state->previous << "->"
+          //  << (void *)dummy_state << " by " << dummy_state->last_action;
+          if (early_update) {
+            return const_decode_result_t(best_target, dummy_state);
+          }
         } else {
           correct_state = next_correct_state;
         }
@@ -203,7 +208,8 @@ private:
     if (index >= lattice_heads.size()) {
       for (size_t i = lattice_heads.size(); i <= index; ++ i) {
         lattice_heads.push_back(NULL);
-        lattice_heads.back() = new _StateType[beam_size];
+        // Allocate one more space to the dummy state.
+        lattice_heads.back() = new _StateType[beam_size+ 1];
       }
     }
     return lattice_heads.at(index);

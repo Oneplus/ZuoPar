@@ -6,7 +6,7 @@
 #include "ml/pointwise_param.h"
 #include "model/feature.h"
 #include "utils/logging.h"
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <boost/functional/hash.hpp>
 #include "utils/serialization/unordered_map.h"
 
@@ -39,15 +39,16 @@ private:
 #if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
   typedef google::dense_hash_map<feature_t, param_t, boost::hash<feature_t> > map_t;
 #else
-  typedef boost::unordered_map<feature_t, param_t> map_t;
+  typedef std::unordered_map<feature_t, param_t, boost::hash<feature_t> > map_t;
 #endif
   //! Define the cache type.
   typedef std::vector<_MetaFeatureType> cache_t;
   //! Define the functor type.
   typedef std::function<void(const _ScoreContextType&, cache_t&)> extractor_t;
-
+  //! Define the packed score type.
+  typedef std::unordered_map<_ActionType, floatval_t, boost::hash<_ActionType> > packed_score_t;
 public:
-  /*
+  /**
    * The constructor
    *
    *  @param[in]  extractor   The extraction functor.
@@ -86,6 +87,37 @@ public:
           }
           break;
         }
+      }
+    }
+  }
+
+  /**
+   * Convert the pointwised feature into sparse vector2 (a faster version of
+   * representing sparse vector).
+   *
+   *  @param[in]  ctx           The score context
+   *  @param[in]  act           The action
+   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[in]  offset        The offset for counting vector.
+   *  @param[out] sparse_vector The sparse vector.
+   */
+  void vectorize2(const _ScoreContextType& ctx, const _ActionType& act,
+      bool avg, int gid, SparseVector2* sparse_vector) {
+    cache.clear();
+    extractor(ctx, cache);
+    for (int i = 0; i < cache.size(); ++ i) {
+      const feature_t& entry = feature_t(cache[i], act);
+      typename map_t::const_iterator itx = payload.find(entry);
+      if (itx == payload.end()) {
+        continue;
+      }
+
+      const std::pair<int, std::size_t>& key =
+        std::make_pair(gid, boost::hash_value<feature_t>(entry));
+      if (avg) {
+        (*sparse_vector)[key] += itx->second.w_sum;
+      } else {
+        (*sparse_vector)[key] += itx->second.w;
       }
     }
   }
@@ -137,7 +169,7 @@ public:
   void batchly_score(const _ScoreContextType& ctx,
       const std::vector<_ActionType>& actions,
       bool avg,
-      boost::unordered_map<_ActionType, floatval_t>& result) {
+      packed_score_t& result) {
     cache.clear();
     extractor(ctx, cache);
     for (int i = 0; i < cache.size(); ++ i) {

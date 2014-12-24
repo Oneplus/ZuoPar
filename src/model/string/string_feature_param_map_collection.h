@@ -4,7 +4,7 @@
 #include "model/associated/pointwise/feature_param_map.h"
 #include "model/associated/pointwise/feature_param_map_collection.h"
 #include <vector>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace ZuoPar {
 
@@ -20,7 +20,8 @@ public:
   typedef Feature<std::string, _ActionType> feature_t;
   //! Instantiate the unigram mapping
   typedef FeaturePointwiseParameterMap< std::string, _ScoreContextType, _ActionType > map_t;
-
+  //! Define the packed score type.
+  typedef std::unordered_map<_ActionType, floatval_t, boost::hash<_ActionType> > packed_score_t;
 public:
   StringFeaturePointwiseParameterCollection() {}
 
@@ -61,7 +62,7 @@ public:
   void batchly_score(const _ScoreContextType& ctx,
       const std::vector<_ActionType>& actions,
       bool avg,
-      boost::unordered_map<_ActionType, floatval_t>& result) {
+      packed_score_t& result) {
     for (int i = 0; i < repo.size(); ++ i) {
       repo[i].batchly_score(ctx, actions, avg, result);
     }

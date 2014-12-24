@@ -32,7 +32,8 @@ public:
   typedef FeaturePointwiseParameterMap< bfp_t, _ScoreContextType, _ActionType > bf_map_t;
   //! Instantiate the trigram mapping
   typedef FeaturePointwiseParameterMap< tfp_t, _ScoreContextType, _ActionType > tf_map_t;
-
+  //! Define the packed score type.
+  typedef std::unordered_map<_ActionType, floatval_t, boost::hash<_ActionType> > packed_score_t;
 public:
   FeaturePointwiseParameterCollection() {}
 
@@ -59,6 +60,29 @@ public:
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].vectorize(ctx, act, avg, global_id, sparse_vector);
       global_id += ufeat_map_repo[i].size();
+    }
+  }
+
+  /**
+   * Convert the pointwised feature collections into vector.
+   *
+   *  @param[in]  ctx           The score context
+   *  @param[in]  act           The action
+   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[out] sparse_vector The version 2 sparse vector.
+   */
+  void vectorize2(const _StateType& state, const _ActionType& act, bool avg,
+      SparseVector2* sparse_vector) {
+    int global_id = 0;
+    _ScoreContextType ctx(state);
+    for (int i = 0; i < ufeat_map_repo.size(); ++ i, ++ global_id) {
+      ufeat_map_repo[i].vectorize2(ctx, act, avg, global_id, sparse_vector);
+    }
+    for (int i = 0; i < bfeat_map_repo.size(); ++ i, ++ global_id) {
+      bfeat_map_repo[i].vectorize2(ctx, act, avg, global_id, sparse_vector);
+    }
+    for (int i = 0; i < tfeat_map_repo.size(); ++ i, ++ global_id) {
+      tfeat_map_repo[i].vectorize2(ctx, act, avg, global_id, sparse_vector);
     }
   }
 
@@ -104,7 +128,7 @@ public:
   void batchly_score(const _ScoreContextType& ctx,
       const std::vector<_ActionType>& actions,
       bool avg,
-      boost::unordered_map<_ActionType, floatval_t>& result) {
+      packed_score_t& result) {
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
       ufeat_map_repo[i].batchly_score(ctx, actions, avg, result);
     }

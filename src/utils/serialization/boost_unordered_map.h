@@ -17,7 +17,7 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 
 #include <boost/config.hpp>
 
@@ -32,27 +32,27 @@ namespace serialization {
   template<class Archive, class Type, class Key, class Hash, class Compare, class Allocator >
     inline void save(
         Archive & ar,
-        const std::unordered_map<Key, Type, Hash, Compare, Allocator> &t,
+        const boost::unordered_map<Key, Type, Hash, Compare, Allocator> &t,
         const unsigned int /* file_version */
         ){
       boost::serialization::stl::save_collection<
         Archive,
-      std::unordered_map<Key, Type, Hash, Compare, Allocator>
+      boost::unordered_map<Key, Type, Hash, Compare, Allocator>
         >(ar, t);
     }
 
   template<class Archive, class Type, class Key, class Hash, class Compare, class Allocator >
     inline void load(
         Archive & ar,
-        std::unordered_map<Key, Type, Hash, Compare, Allocator> &t,
+        boost::unordered_map<Key, Type, Hash, Compare, Allocator> &t,
         const unsigned int /* file_version */
         ){
       boost::serialization::stl::load_collection<
         Archive,
-      std::unordered_map<Key, Type, Hash, Compare, Allocator>,
+      boost::unordered_map<Key, Type, Hash, Compare, Allocator>,
       boost::serialization::stl::archive_input_map<
-        Archive, std::unordered_map<Key, Type, Hash, Compare, Allocator> >,
-      boost::serialization::stl::no_reserve_imp<std::unordered_map<
+        Archive, boost::unordered_map<Key, Type, Hash, Compare, Allocator> >,
+      boost::serialization::stl::no_reserve_imp<boost::unordered_map<
         Key, Type, Hash, Compare, Allocator>
         >
         >(ar, t);
@@ -63,7 +63,7 @@ namespace serialization {
   template<class Archive, class Type, class Key, class Hash, class Compare, class Allocator >
     inline void serialize(
         Archive & ar,
-        std::unordered_map<Key, Type, Hash, Compare, Allocator> &t,
+        boost::unordered_map<Key, Type, Hash, Compare, Allocator> &t,
         const unsigned int file_version
         ){
       boost::serialization::split_free(ar, t, file_version);
