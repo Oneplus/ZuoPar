@@ -49,7 +49,7 @@ public:
    *  @param[out] output  The output dependency parse.
    */
   void build_output(const State& source, SequenceInstance& output);
-private:
+protected:
   //! The supported modes.
   enum PipeMode { kPipeLearn, kPipeTest };
 
@@ -80,8 +80,10 @@ private:
 
   //! The parameter learner.
   Learner* learner;
+
   //! The learning algorithm.
   Learner::LearningAlgorithm algorithm;
+
   //! The early update flag.
   bool early_update;
 

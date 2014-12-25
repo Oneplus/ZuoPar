@@ -12,7 +12,7 @@ namespace SequenceLabeler {
 
 Pipe::Pipe(const LearnOption& opts)
   : mode(kPipeLearn), weight(0), decoder(0), learner(0) {
-  _INFO << "::LEARN:: mode is actived.";
+  _INFO << "::LEARN:: mode is activated.";
 
   this->reference_path = opts.reference_path;
   this->model_path = opts.model_path;

@@ -27,10 +27,20 @@ public:
     boost::hash_combine(seed, act_);
   }
 
-  inline void replace_action(const _ActionType& act_) {
+  void replace_action(const _ActionType& act_) {
     act = act_;
     seed = seed1;
     boost::hash_combine(seed, act);
+  }
+
+  void set(const _MetaFeatureType& meta_,
+      const _ActionType& act_) {
+    meta = meta_;
+    act = act_;
+    seed = 0;
+    boost::hash_combine(seed, meta_);
+    seed1 = seed;
+    boost::hash_combine(seed, act_);
   }
 
   //! The equal operator.

@@ -82,7 +82,7 @@ private:
   int feat0, feat1, feat2;
 public:
   TrigramMetaFeature() { }
-  TrigramMetaFeature(int f0, int f1, int f2) {
+  TrigramMetaFeature(int f0, int f1, int f2): feat0(f0), feat1(f1), feat2(f2) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
     boost::hash_combine(seed, f2);

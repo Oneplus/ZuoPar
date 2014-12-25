@@ -8,14 +8,13 @@
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/singleton.hpp>
-#include "alphabet.h"
 #include "utils/serialization/unordered_map.h"
 
 namespace ZuoPar {
 
 namespace Engine {
 
-class TokenAlphabet: public Alphabet {
+class TokenAlphabet {
 //! Tokenalphabet is the class used to store bidirection relations on string->int
 //! int->string.
 public:

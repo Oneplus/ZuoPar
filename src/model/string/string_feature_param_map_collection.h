@@ -1,6 +1,7 @@
 #ifndef __ZUOPAR_MODEL_STRING_STRING_FEATURE_MAP_COLLECTION_H__
 #define __ZUOPAR_MODEL_STRING_STRING_FEATURE_MAP_COLLECTION_H__
 
+#include "types/internal/packed_scores.h"
 #include "model/associated/pointwise/feature_param_map.h"
 #include "model/associated/pointwise/feature_param_map_collection.h"
 #include <vector>
@@ -21,7 +22,7 @@ public:
   //! Instantiate the unigram mapping
   typedef FeaturePointwiseParameterMap< std::string, _ScoreContextType, _ActionType > map_t;
   //! Define the packed score type.
-  typedef std::unordered_map<_ActionType, floatval_t, boost::hash<_ActionType> > packed_score_t;
+  typedef PackedScores<_ActionType> packed_score_t;
 public:
   StringFeaturePointwiseParameterCollection() {}
 

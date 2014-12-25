@@ -1,11 +1,11 @@
 #ifndef __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
 #define __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
 
+#include "types/internal/packed_scores.h"
 #include "types/math/sparse_vector.h"
 #include "model/meta_feature.h"
 #include "feature_param_map.h"
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace ZuoPar {
 
@@ -33,7 +33,7 @@ public:
   //! Instantiate the trigram mapping
   typedef FeaturePointwiseParameterMap< tfp_t, _ScoreContextType, _ActionType > tf_map_t;
   //! Define the packed score type.
-  typedef std::unordered_map<_ActionType, floatval_t, boost::hash<_ActionType> > packed_score_t;
+  typedef PackedScores<_ActionType> packed_score_t;
 public:
   FeaturePointwiseParameterCollection() {}
 

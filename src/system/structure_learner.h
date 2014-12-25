@@ -7,9 +7,11 @@
 
 namespace ZuoPar {
 
-template <class _ActionType,
-          class _StateType,
-          class _ModelType>
+template <
+  class _ActionType,
+  class _StateType,
+  class _ModelType
+>
 class TransitionStructureLearner {
 public:
   enum LearningAlgorithm{
@@ -55,15 +57,6 @@ public:
     }
 
     BOOST_ASSERT(predict_state_chain.size() == correct_state_chain.size());
-    for (int i = predict_state_chain.size() - 1; i >= 0; -- i) {
-      _TRACE << "learn: from " << predict_state_chain[i] << " by "
-        << predict_state_chain[i]->last_action;
-    }
-
-    for (int i = correct_state_chain.size() - 1; i >= 0; -- i) {
-      _TRACE << "learn: from " << correct_state_chain[i] << " by "
-        << correct_state_chain[i]->last_action;
-    }
 
     int i;
     for (i = predict_state_chain.size()- 1; i >= 0; -- i) {
@@ -72,11 +65,7 @@ public:
       }
     }
 
-    if (algorithm == kAveragePerceptron) {
-      learn_average_perceptron(i+ 1);
-    } else if (algorithm == kPassiveAgressive) {
-      learn_passive_aggressive(i+ 1);
-    }
+    execute(i+ 1);
   }
 
   void flush() {
@@ -84,6 +73,14 @@ public:
   }
 private:
   int timestamp;
+
+  void execute(int last) {
+    if (algorithm == kAveragePerceptron) {
+      learn_average_perceptron(last);
+    } else if (algorithm == kPassiveAgressive) {
+      learn_passive_aggressive(last);
+    }
+  }
 
   void learn_average_perceptron(int last) {
      for (int i = last; i > 0; -- i) {

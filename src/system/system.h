@@ -8,13 +8,16 @@
 #include <boost/tuple/tuple.hpp>
 #include "settings.h"
 #include "utils/logging.h"
+#include "types/internal/packed_scores.h"
 
 namespace ZuoPar {
 
-template <class _ActionType,
-          class _StateType,
-          class _ScoreContextType,
-          class _ModelType>
+template <
+  class _ActionType,
+  class _StateType,
+  class _ScoreContextType,
+  class _ModelType
+>
 class TransitionSystem {
 public:
   //! Define the type of const decode result.
@@ -35,8 +38,7 @@ private:
   typedef std::vector<int> lattice_size_list_t;
 
   //! Define the mapping between action and it's packed score.
-  typedef std::unordered_map<_ActionType,
-          floatval_t, boost::hash<_ActionType> > packed_score_t;
+  typedef PackedScores<_ActionType> packed_score_t;
 
   //! Define the (source.state, action, score) tuple.
   typedef boost::tuples::tuple<const _StateType*, _ActionType, floatval_t> scored_transition_t;
