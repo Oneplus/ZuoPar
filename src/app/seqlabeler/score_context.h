@@ -24,7 +24,7 @@ public:
     T_1= (state.buffer- 1 >= 0 ? state.tags[state.buffer- 1]: eg::TokenAlphabet::BEGIN);
   };
 
-  int buffer;
+  const int& buffer;
   tag_t T_1;
   const SequenceInstance* instance;
 };

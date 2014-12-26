@@ -123,7 +123,7 @@ public:
     _TRACE << "sys: beam size equals " << beam_size;
     _TRACE << "sys: gold action is ";
     for (int i = 0; i < gold_actions.size(); ++ i) {
-      _TRACE << "sys: - " << gold_actions[i];
+      _TRACE << "sys: - [" << i << "] " << gold_actions[i];
     }
     use_avg = (gold_actions.size() == 0);
     _StateType* row = allocate_lattice(0);
@@ -138,7 +138,7 @@ public:
 
     int step = 1;
     for (step = 1; step <= max_nr_actions; ++ step) {
-      //_TRACE << "sys: round " << step;
+      _TRACE << "sys: round " << step;
 
       row = allocate_lattice(step);
       lattice_size.push_back(0);
@@ -189,6 +189,7 @@ public:
           //_TRACE << "sys: " << (void *)dummy_state->previous << "->"
           //  << (void *)dummy_state << " by " << dummy_state->last_action;
           if (early_update) {
+            _TRACE << "sys: decode is done (cond 1).";
             return const_decode_result_t(best_target, dummy_state);
           }
         } else {
@@ -197,6 +198,7 @@ public:
       }
     }
     const _StateType* best_target = search_best_state(row, row + lattice_size[step- 1]);
+    _TRACE << "sys: decode is done (cond 2).";
     return const_decode_result_t(best_target, correct_state);
   }
 

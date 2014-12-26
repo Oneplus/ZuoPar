@@ -5,8 +5,8 @@ namespace ZuoPar {
 namespace SequenceLabeler {
 
 Action
-ActionFactory::make_shift(const tag_t& tag) {
-  return Action(Action::kShift, tag);
+ActionFactory::make(const tag_t& tag) {
+  return Action(tag);
 }
 
 } //  end for namespace sequencelabeler

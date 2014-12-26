@@ -9,29 +9,52 @@
 
 namespace ZuoPar {
 
-template <class _StateType,
-          class _ScoreContextType,
-          class _ActionType>
+template <
+  class _StateType,
+  class _ScoreContextType,
+  class _ActionType
+>
 class FeaturePointwiseParameterCollection {
 public:
-  //!
+  //! The unigram feature type
   typedef UnigramMetaFeature  ufp_t;
-  //!
+
+  //! The bigram feature type
   typedef BigramMetaFeature   bfp_t;
-  //!
+
+  //! The trigram feature type
   typedef TrigramMetaFeature  tfp_t;
+
   //! Instantiate the unigram score type
   typedef Feature<UnigramMetaFeature, _ActionType> uf_t;
+
   //! Instantiate the bigram score type
   typedef Feature<BigramMetaFeature, _ActionType>  bf_t;
+ 
   //! Instantiate the trigram score type
   typedef Feature<TrigramMetaFeature, _ActionType> tf_t;
+
   //! Instantiate the unigram mapping
-  typedef FeaturePointwiseParameterMap< ufp_t, _ScoreContextType, _ActionType > uf_map_t;
+  typedef FeaturePointwiseParameterMap<
+    ufp_t,
+    _ScoreContextType,
+    _ActionType
+  > uf_map_t;
+
   //! Instantiate the bigram mapping
-  typedef FeaturePointwiseParameterMap< bfp_t, _ScoreContextType, _ActionType > bf_map_t;
+  typedef FeaturePointwiseParameterMap<
+    bfp_t,
+    _ScoreContextType,
+    _ActionType
+  > bf_map_t;
+
   //! Instantiate the trigram mapping
-  typedef FeaturePointwiseParameterMap< tfp_t, _ScoreContextType, _ActionType > tf_map_t;
+  typedef FeaturePointwiseParameterMap<
+    tfp_t,
+    _ScoreContextType,
+    _ActionType
+  > tf_map_t;
+
   //! Define the packed score type.
   typedef PackedScores<_ActionType> packed_score_t;
 public:

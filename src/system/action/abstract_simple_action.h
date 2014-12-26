@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <boost/assert.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -47,7 +46,7 @@ public:
   }
 
   //! For boost hash map.
-  friend std::size_t hash_value(const AbstractAction& a) {
+  friend std::size_t hash_value(const AbstractSimpleAction& a) {
     return a.action_name;
   }
 

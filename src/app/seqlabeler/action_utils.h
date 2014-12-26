@@ -19,14 +19,7 @@ public:
   static void get_oracle_actions(const SequenceInstance& instance,
       std::vector<Action>& actions);
 
-  /**
-   * Judge if the input action is a shift action.
-   *
-   *  @param[in]  act   The action.
-   *  @return     bool  Return true on the action being a shift action, otherwise
-   *                    false.
-   */
-  static bool is_shift(const Action& act, tag_t& tag);
+  static tag_t tag(const Action& act);
 };
 
 } //  end for lexicalanalyzer

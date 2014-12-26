@@ -1,7 +1,8 @@
 #include "app/seqlabeler/opt_utils.h"
 #include "utils/logging.h"
 
-bool parse_option(const po::variables_map& vm, seq::Option& opts) {
+bool
+parse_option(const po::variables_map& vm, seq::Option& opts) {
   namespace utils = ZuoPar::Utility;
   utils::init_boost_log(vm.count("verbose"));
 
@@ -29,7 +30,8 @@ bool parse_option(const po::variables_map& vm, seq::Option& opts) {
   return true;
 }
 
-bool parse_learn_option(const po::variables_map& vm, seq::LearnOption& opts) {
+bool
+parse_learn_option(const po::variables_map& vm, seq::LearnOption& opts) {
   if (!parse_option(vm, opts)) {
     return false;
   }
@@ -55,7 +57,27 @@ bool parse_learn_option(const po::variables_map& vm, seq::LearnOption& opts) {
   return true;
 }
 
-bool parse_test_option(const po::variables_map& vm, seq::TestOption& opts) {
+bool
+parse_multi_learn_option(const po::variables_map& vm, seq::MultiLearnOption& opts) {
+  if (!parse_learn_option(vm, static_cast<seq::LearnOption&>(opts))) {
+    return false;
+  }
+
+  opts.batch_size = 16;
+  if (vm.count("batch")) {
+    opts.batch_size = vm["batch"].as<int>();
+  }
+
+  opts.num_threads = 10;
+  if (vm.count("threads")) {
+    opts.num_threads = vm["threads"].as<int>();
+  }
+  return true;
+}
+
+
+bool
+parse_test_option(const po::variables_map& vm, seq::TestOption& opts) {
   if (!parse_option(vm, opts)) {
     return false;
   }

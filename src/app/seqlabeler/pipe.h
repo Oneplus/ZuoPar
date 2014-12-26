@@ -34,6 +34,9 @@ public:
    */
   void run();
 
+protected:
+  bool setup();
+
   /**
    * Load model from the specified path.
    *
@@ -49,6 +52,7 @@ public:
    *  @param[out] output  The output dependency parse.
    */
   void build_output(const State& source, SequenceInstance& output);
+
 protected:
   //! The supported modes.
   enum PipeMode { kPipeLearn, kPipeTest };

@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <boost/assert.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -24,9 +23,7 @@ public:
    *  @param[in]  rel   The dependency relation.
    */
   AbstractAction(int name, deprel_t rel)
-    : action_name(name),
-    deprel(rel) {
-    seed = 0;
+    : action_name(name), deprel(rel), seed(0) {
     boost::hash_combine(seed, name);
     boost::hash_combine(seed, rel);
   }
@@ -39,7 +36,7 @@ public:
   }
 
   bool operator == (const AbstractAction& a) const {
-    return (a.action_name== action_name && a.deprel == deprel);
+    return (a.action_name == action_name && a.deprel == deprel);
   }
 
   bool operator != (const AbstractAction& a) const {
@@ -68,7 +65,7 @@ protected:
   deprel_t deprel;
 
   //! The seed for hashing.
-  size_t seed;
+  std::size_t seed;
 };
 
 } //  end for namespace zuopar

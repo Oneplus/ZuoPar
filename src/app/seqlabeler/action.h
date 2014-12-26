@@ -9,38 +9,23 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/singleton.hpp>
 #include "types/common.h"
-#include "system/action/abstract_action.h"
+#include "system/action/abstract_simple_action.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-class Action: public AbstractAction {
+class Action: public AbstractSimpleAction {
 public:
-  enum {
-    kShift,     //! The index of shift action.
-  };
+  Action(): AbstractSimpleAction() {}
 
-  Action() : AbstractAction() {}
-
-  /**
-   * Constructor for action.
-   *
-   *  @param[in]  name  The name for the action.
-   *  @param[in]  rel   The dependency relation.
-   */
-  Action(int name, postag_t postag) : AbstractAction(name, postag) {}
+  Action(tag_t tag): AbstractSimpleAction(tag) {}
 
   //! Overload the ostream function.
   friend std::ostream& operator<<(std::ostream& os, const Action& act) {
-    if (act.action_name == kShift) {
-      os << "SH~" << act.deprel;
-    } else {
-      BOOST_ASSERT_MSG(false, "unknown actions.");
-    }
+    os << "TAG~" << act.action_name;
     return os;
   }
 
-  //! For is_shift, is_left_arc, is_right_arc;
   friend class ActionUtils;
 };
 
@@ -51,7 +36,7 @@ public:
    *
    *  @return Action  A shift action.
    */
-  static Action make_shift(const postag_t& postag);
+  static Action make(const tag_t& tag);
 };
 
 } //  end for namespace sequencelabeler

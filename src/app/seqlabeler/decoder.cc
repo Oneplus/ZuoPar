@@ -14,20 +14,15 @@ Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-    actions.push_back(ActionFactory::make_shift(p));
+    actions.push_back(ActionFactory::make(p));
   }
 }
 
 void
 Decoder::transit(const State& source, const Action& act, const floatval_t& score,
     State* target) {
-  tag_t tag;
-  if (ActionUtils::is_shift(act, tag)) {
-    target->shift(source, tag);
-  } else {
-    _ERROR << "unknown transition";
-    exit(1);
-  }
+  tag_t tag = ActionUtils::tag(act);
+  target->tag(source, tag);
   target->score = score;
 }
 

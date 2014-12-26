@@ -30,7 +30,8 @@ private:
 public:
   UnigramMetaFeature() { }
   UnigramMetaFeature(int f) : feat(f) {
-    boost::hash_combine(seed, f);
+    seed = f;
+    //boost::hash_combine(seed, f);
   }
 
   //! The equal operator.

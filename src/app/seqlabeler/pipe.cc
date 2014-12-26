@@ -76,8 +76,8 @@ Pipe::load_model(const std::string& model_path) {
   return true;
 }
 
-void
-Pipe::run() {
+bool
+Pipe::setup() {
   namespace ioutils = ZuoPar::IO;
 
   dataset.clear();
@@ -92,7 +92,7 @@ Pipe::run() {
     if (!ifs.good()) {
       _ERROR << "#: failed to open reference file.";
       _ERROR << "#: training halt";
-      return;
+      return false;
     }
     _INFO << "report: loading dataset from reference file.";
     ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
@@ -104,7 +104,7 @@ Pipe::run() {
     if (!ifs.good()) {
       _ERROR << "#: failed to open input file.";
       _ERROR << "#: testing halt";
-      return;
+      return false;
     }
     ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
         tags_alphabet, false);
@@ -112,6 +112,16 @@ Pipe::run() {
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << attributes_alphabet.size() << " attribute(s) is detected.";
   _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
+
+  return true;
+}
+
+void
+Pipe::run() {
+  namespace ioutils = ZuoPar::IO;
+  if (!setup()) {
+    return;
+  }
 
   decoder = new Decoder(tags_alphabet.size(), beam_size, early_update, weight);
 

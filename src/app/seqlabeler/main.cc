@@ -3,11 +3,11 @@
 #include "opt.h"
 #include "utils/logging.h"
 #include "app/seqlabeler/pipe.h"
+#include "app/seqlabeler/multi_pipe.h"
 #include "app/seqlabeler/opt_utils.h"
 
 #define APP_NAME "sequence labeler"
 #define APP_EXEC "sequence_labeler"
-
 
 int multi_learn(int argc, char** argv) {
   namespace seq = ZuoPar::SequenceLabeler;
@@ -29,6 +29,22 @@ int multi_learn(int argc, char** argv) {
     ("verbose,v", "Logging every detail.")
   ;
 
+  if (argc == 1) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, optparser), vm);
+
+  seq::MultiLearnOption opts;
+  if (!parse_multi_learn_option(vm, opts)) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+
+  seq::MultiPipe pipe(opts);
+  pipe.run();
   return 0;
 }
 

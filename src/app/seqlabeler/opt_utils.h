@@ -25,6 +25,14 @@ bool parse_option(const po::variables_map& vm, seq::Option& opts);
 bool parse_learn_option(const po::variables_map& vm, seq::LearnOption& opts);
 
 /**
+ * Parse the learning options.
+ *
+ *  @param[in]    vm    The variables map
+ *  @param[out]   opts  The options.
+ */
+bool parse_multi_learn_option(const po::variables_map& vm, seq::MultiLearnOption& opts);
+
+/**
  * Parse the testing options.
  *
  *  @param[in]    vm    The variables map

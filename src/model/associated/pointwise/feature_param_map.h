@@ -27,9 +27,11 @@ namespace ZuoPar {
  *
  * Map [ ActionFeature ] = Parameter
  */
-template <class _MetaFeatureType,
-          class _ScoreContextType,
-          class _ActionType>
+template <
+  class _MetaFeatureType,
+  class _ScoreContextType,
+  class _ActionType
+>
 class FeaturePointwiseParameterMap {
 private:
   //! Define the feature type.
@@ -81,11 +83,11 @@ public:
    */
   void vectorize(const _ScoreContextType& ctx, const _ActionType& act,
       floatval_t scale, int offset, SparseVector* sparse_vector) {
-    cache.clear();
+    //! Use to cache extracted features.
+    cache_t cache;
     extractor(ctx, cache);
     for (int i = 0; i < cache.size(); ++ i) {
       const feature_t& entry = feature_t(cache[i], act);
-      //entry.set(cache[i], act);
       int id = offset;
       for (typename map_t::const_iterator itx = payload.begin();
           itx != payload.end();
@@ -110,11 +112,10 @@ public:
    */
   void vectorize2(const _ScoreContextType& ctx, const _ActionType& act,
       floatval_t scale, int gid, SparseVector2* sparse_vector) {
-    cache.clear();
+    cache_t cache;
     extractor(ctx, cache);
     for (int i = 0; i < cache.size(); ++ i) {
       const feature_t& entry = feature_t(cache[i], act);
-      //entry.set(cache[i], act);
       typename map_t::const_iterator itx = payload.find(entry);
       if (itx == payload.end()) {
         continue;
@@ -143,12 +144,11 @@ public:
    */
   floatval_t score(const _ScoreContextType& ctx, const _ActionType& act,
       bool avg, floatval_t default_return_value = 0.) {
-    cache.clear();
+    cache_t cache;
     extractor(ctx, cache);
     floatval_t ret = 0.;
     for (int i = 0; i < cache.size(); ++ i) {
       const feature_t& entry = feature_t(cache[i], act);
-      //entry.set(cache[i], act);
 
       typename map_t::const_iterator itx = payload.find(entry);
       if (itx != payload.end()) {
@@ -175,11 +175,10 @@ public:
       const std::vector<_ActionType>& actions,
       bool avg,
       packed_score_t& result) {
-    cache.clear();
+    cache_t cache;
     extractor(ctx, cache);
     for (int i = 0; i < cache.size(); ++ i) {
       feature_t entry(cache[i], actions[0]);
-      //entry.set(cache[i], actions[0]);
       for (int j = 0; j < actions.size(); ++ j) {
         const _ActionType& act= actions[j];
         if (j > 0) {
@@ -209,11 +208,10 @@ public:
    */
   void update(const _ScoreContextType& ctx, const _ActionType& act,
       int now, floatval_t scale = 1.) {
-    cache.clear();
+    cache_t cache;
     extractor(ctx, cache);
     for (int i = 0; i < cache.size(); ++ i) {
       const feature_t& entry = feature_t(cache[i], act);
-      //entry.set(cache[i], act);
       param_t& param = payload[entry];
       param.add(now, scale);
     }
@@ -253,14 +251,8 @@ private:
   //! The mapping facility.
   map_t payload;
 
-  //! Use to cache extracted features.
-  cache_t cache;
-
   //! The feature extracting functor.
   extractor_t extractor;
-
-  //!
-  //feature_t entry;
 };
 
 } //  end for zuopar

@@ -6,6 +6,7 @@ add_executable (sequence_labeler
     state.cc
     decoder.cc
     pipe.cc
+    multi_pipe.cc
     weight.cc
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc

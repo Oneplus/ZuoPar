@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cmath>
+#include "types/math/sparse_vector.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
@@ -71,7 +72,8 @@ public:
   void flush() {
     model->flush(timestamp);
   }
-private:
+
+protected:
   int timestamp;
 
   void execute(int last) {
