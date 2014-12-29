@@ -140,7 +140,7 @@ int test(int argc, char** argv) {
 int main(int argc, char** argv) {
   std::string usage = "ZuoPar::arceager dependency parser.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: arceager_depparser [learn|test] [options]";
+  usage += "Usage: arceager_depparser [learn|multi-learn|test] [options]";
 
   if (argc == 1) {
     std::cerr << usage << std::endl;

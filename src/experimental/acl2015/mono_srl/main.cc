@@ -1,14 +1,15 @@
 #include <iostream>
 #include <cstring>  // strcmp
-#include <boost/program_options.hpp>
 #include "utils/logging.h"
-#include "app/depparser/arcstandard/opt.h"
-#include "app/depparser/arcstandard/opt_utils.h"
-#include "app/depparser/arcstandard/pipe.h"
+#include "experimental/acl2015/mono_srl/opt.h"
+#include "experimental/acl2015/mono_srl/opt_utils.h"
+#include "experimental/acl2015/mono_srl/pipe.h"
 
-namespace fe = ZuoPar::FrontEnd;
-namespace as = ZuoPar::DependencyParser::ArcStandard;
+#define __EXPERIMENT_NAME__ "acl2015(mono SRL)"
+
 namespace po = boost::program_options;
+namespace fe = ZuoPar::FrontEnd;
+namespace mono = ZuoPar::Experimental::ACL2015::MonoSRL;
 
 int multi_learn(int argc, char** argv) {
   std::string usage = "Multi-threaded training component of ZuoPar::sequence labeler.\n";
@@ -43,11 +44,10 @@ int multi_learn(int argc, char** argv) {
     return 1;
   }
 
-  as::MultiPipe pipe(opts);
-  pipe.run();
+  //mono::MultiPipe pipe(opts);
+  //pipe.run();
   return 0;
 }
-
 
 /**
  * Perform the learning process of ZuoPar::arcstandard dependency parser.
@@ -57,19 +57,20 @@ int multi_learn(int argc, char** argv) {
  *  @return     int   The status of running learning.
  */
 int learn(int argc, char** argv) {
-  std::string usage = "Training component of ZuoPar::arcstandard dependency parser.\n";
+
+  std::string usage = "Training component of ZuoPar::acl2015(semantic role labeler).\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: arcstandard_depparser learn [options]\n";
+  usage += "Usage: acl2015 learn [options]\n";
   usage += "OPTIONS";
 
   po::options_description optparser(usage);
   optparser.add_options()
     ("help,h", "Show help information.")
     ("model,m", po::value<std::string>(), "The path to the model.")
+    ("algorithm,a", po::value<std::string>(), "The learning algorithm.")
     ("reference,r", po::value<std::string>(), "The path to the reference file.")
     ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")
-    ("conll,c", "Specified the input in CoNLL format.")
     ("verbose,v", "Logging every detail.")
   ;
 
@@ -87,7 +88,7 @@ int learn(int argc, char** argv) {
     return 1;
   }
 
-  as::Pipe pipe(opts);
+  mono::Pipe pipe(opts);
   pipe.run();
   return 0;
 }
@@ -100,10 +101,9 @@ int learn(int argc, char** argv) {
  *  @return     int   The status of running test.
  */
 int test(int argc, char** argv) {
-
-  std::string usage = "Testing component of ZuoPar::arcstandard dependency parser.\n";
+  std::string usage = "Testing component of ZuoPar::acl2015(semantic role labeler).\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: arcstandard_depparser test [options]\n";
+  usage += "Usage: sequence_labeler test [options]\n";
   usage += "OPTIONS";
 
   po::options_description optparser(usage);
@@ -114,7 +114,6 @@ int test(int argc, char** argv) {
     ("output,o", po::value<std::string>(), "The path to the output file.")
     ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")
-    ("conll,c", "Specified the input in CoNLL format.")
     ("verbose,v", "Logging every detail.")
   ;
 
@@ -131,16 +130,16 @@ int test(int argc, char** argv) {
     std::cerr << optparser << std::endl;
     return 1;
   }
-  as::Pipe pipe(opts);
+  mono::Pipe pipe(opts);
   pipe.run();
 
   return 0;
 }
 
 int main(int argc, char** argv) {
-  std::string usage = "ZuoPar::arcstandard dependency parser.\n";
+  std::string usage = "ZuoPar::sequence labeler.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: arcstandard_depparser [learn|multi-learn|test] [options]";
+  usage += "Usage: sequence_labeler [learn|multi-learn|test] [options]";
 
   if (argc == 1) {
     std::cerr << usage << std::endl;
