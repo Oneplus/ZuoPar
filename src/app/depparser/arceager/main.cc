@@ -10,6 +10,45 @@ namespace fe = ZuoPar::FrontEnd;
 namespace ae = ZuoPar::DependencyParser::ArcEager;
 namespace po = boost::program_options;
 
+int multi_learn(int argc, char** argv) {
+  std::string usage = "Multi-threaded training component of ZuoPar::sequence labeler.\n";
+  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
+  usage += "Usage: sequence_labeler multi-learn [options]\n";
+  usage += "OPTIONS";
+  po::options_description optparser(usage);
+  optparser.add_options()
+    ("help,h", "Show help information.")
+    ("model,m", po::value<std::string>(), "The path to the model.")
+    ("algorithm,a", po::value<std::string>(), "The learning algorithm.")
+    ("no-early,e", "Specify the early update strategy.")
+    ("batch,c", po::value<int>(), "The size for batch.")
+    ("threads,t", po::value<int>(), "The number of threads.")
+    ("reference,r", po::value<std::string>(), "The path to the reference file.")
+    ("display,d", po::value<int>(), "The display interval.")
+    ("beam,b", po::value<int>(), "The size for beam.")
+    ("verbose,v", "Logging every detail.")
+  ;
+
+  if (argc == 1) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, optparser), vm);
+
+  fe::MultiLearnOption opts;
+  if (!parse_multi_learn_option(vm, opts)) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+
+  ae::MultiPipe pipe(opts);
+  pipe.run();
+  return 0;
+}
+
+
 /**
  * Perform the learning process of ZuoPar::arceager dependency parser.
  *
@@ -108,6 +147,8 @@ int main(int argc, char** argv) {
     return 1;
   } else if (strcmp(argv[1], "learn") == 0) {
     learn(argc- 1, argv+ 1);
+  } else if (strcmp(argv[1], "multi-learn") == 0) {
+    multi_learn(argc- 1, argv+ 1);
   } else if (strcmp(argv[1], "test") == 0) {
     test(argc- 1, argv+ 1);
   } else {

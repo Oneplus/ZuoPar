@@ -15,12 +15,6 @@ template <
 >
 class TransitionStructureLearner {
 public:
-  enum LearningAlgorithm{
-    kPassiveAgressive = 0,
-    kAveragePerceptron
-  };
-
-public:
   /**
    * The initializer of transition structure learner
    *

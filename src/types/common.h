@@ -26,6 +26,11 @@ typedef int attribute_t;
 
 typedef double floatval_t;
 
-}
+enum LearningAlgorithm {
+  kPassiveAgressive = 0,
+  kAveragePerceptron
+};
+
+} //  namespace zuopar
 
 #endif  //  end for __ZUOPAR_TYPES_COMMON_H__

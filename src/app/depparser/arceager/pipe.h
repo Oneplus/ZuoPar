@@ -2,6 +2,7 @@
 #define __ZUOPAR_APP_DEPPARSER_ARCEAGER_PIPE_H__
 
 #include "app/depparser/pipe.h"
+#include "app/depparser/multi_pipe.h"
 #include "app/depparser/arceager/action.h"
 #include "app/depparser/arceager/action_utils.h"
 #include "app/depparser/arceager/state.h"
@@ -13,7 +14,11 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcEager {
 
-typedef BasicPipe<Action, ActionUtils, State, Weight, Decoder, Learner> Pipe;
+typedef CommonDependencyPipe<
+  Action, ActionUtils, State, Weight, Decoder, Learner> Pipe;
+
+typedef CommonDependencyMultiPipe<
+  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner> MultiPipe;
 
 } //  end for namespace arceager
 } //  end for namespace dependencyparser

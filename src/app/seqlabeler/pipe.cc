@@ -14,20 +14,7 @@ namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
 
 Pipe::Pipe(const fe::LearnOption& opts)
-  : mode(kPipeLearn), weight(0), decoder(0), learner(0) {
-  _INFO << "::LEARN:: mode is activated.";
-
-  this->reference_path = opts.reference_path;
-  this->model_path = opts.model_path;
-  this->beam_size = opts.beam_size;
-  this->display_interval = opts.display_interval;
-  this->algorithm = Learner::kAveragePerceptron;
-  if (opts.algorithm == "pa") {
-    this->algorithm = Learner::LearningAlgorithm::kPassiveAgressive;
-  }
-  this->early_update = opts.early_update;
-
-  _INFO << "report: model file is " << opts.model_path;
+  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -36,14 +23,7 @@ Pipe::Pipe(const fe::LearnOption& opts)
 }
 
 Pipe::Pipe(const fe::TestOption& opts)
-  : mode(kPipeTest), weight(0), decoder(0), learner(0) {
-  BOOST_LOG_TRIVIAL(info) << "::TEST:: mode is actived.";
-  this->model_path = opts.model_path;
-  this->input_path = opts.input_path;
-  this->output_path = opts.output_path;
-  this->beam_size = opts.beam_size;
-  this->display_interval = opts.display_interval;
-  _INFO << "report: model file is " << opts.model_path;
+  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -85,12 +65,6 @@ Pipe::setup() {
 
   dataset.clear();
   if (mode == kPipeLearn) {
-    _INFO << "report: beam size = " << this->beam_size;
-    _INFO << "report: early update = " << (this->early_update ? "true": "false");
-    _INFO << "report: learning algorithm = " << (
-        this->algorithm == Learner::kAveragePerceptron ?
-        "averaged perceptron": "passive aggressive");
-
     std::ifstream ifs(reference_path.c_str());
     if (!ifs.good()) {
       _ERROR << "#: failed to open reference file.";
