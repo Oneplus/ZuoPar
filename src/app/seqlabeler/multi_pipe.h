@@ -3,13 +3,15 @@
 
 #include <boost/thread/mutex.hpp>
 #include <boost/lockfree/queue.hpp>
-#include "app/seqlabeler/opt.h"
+#include "frontend/common_opt.h"
 #include "app/seqlabeler/pipe.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
 
 namespace eg = ZuoPar::Engine;
+namespace fe = ZuoPar::FrontEnd;
+
 class MultiPipe: public Pipe {
 public:
   /**
@@ -17,7 +19,7 @@ public:
    *
    *  @param[in]  opts  The learning options.
    */
-  MultiPipe(const MultiLearnOption& opts);
+  MultiPipe(const fe::MultiLearnOption& opts);
 
   //!
   void run();

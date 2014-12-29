@@ -11,7 +11,6 @@
 #include "utils/serialization/unordered_map.h"
 
 namespace ZuoPar {
-
 namespace Engine {
 
 class TokenAlphabet {
@@ -94,7 +93,6 @@ private:
 
 
 } //  end for namespace Engine
-
 } //  end for namespace ZuoPar
 
 #endif    //  end for __ZUOPAR_ENGINE_TOKEN_ALPHABET_H__

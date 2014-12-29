@@ -9,8 +9,11 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-MultiPipe::MultiPipe(const MultiLearnOption& opts)
-  : minibatch_learner(0), Pipe(static_cast<LearnOption>(opts)) {
+namespace eg = ZuoPar::Engine;
+namespace fe = ZuoPar::FrontEnd;
+
+MultiPipe::MultiPipe(const fe::MultiLearnOption& opts)
+  : minibatch_learner(0), Pipe(static_cast<fe::LearnOption>(opts)) {
   _INFO << "::MULTI-LEARN:: mode is activated.";
   this->batch_size = opts.batch_size;
   this->num_threads = opts.num_threads;

@@ -27,11 +27,14 @@ bool read_postag_instance(std::istream& is,
     char delimiter = '/',
     bool incremental = true);
 
-
 /**
+ * Write one postag instance to the output stream.
  *
- *
- *
+ *  @param[out] os                The output stream
+ *  @param[in]  output            The instance.
+ *  @param[in]  forms_alphabet    The alphabet for forms
+ *  @param[in]  postags_alphabet  The alphabet for postags
+ *  @param[in]  delimiter         The delimiter
  */
 void write_postag_instance(std::ostream& os,
     const Postag& output,
@@ -57,9 +60,12 @@ bool read_postag_with_cache_instance(std::istream& is,
     bool incremental = true);
 
 /**
+ * Write one postag with lexical cache instance to the output stream.
  *
- *
- *
+ *  @param[out] os                The output stream
+ *  @param[in]  output            The instance.
+ *  @param[in]  postags_alphabet  The alphabet for postags
+ *  @param[in]  delimiter         The delimiter
  */
 void write_postag_with_cache_instance(std::ostream& os,
     const PostagWithLiteralCache& output,

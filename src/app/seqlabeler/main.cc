@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>  // strcmp
-#include "opt.h"
 #include "utils/logging.h"
+#include "app/seqlabeler/opt.h"
 #include "app/seqlabeler/pipe.h"
 #include "app/seqlabeler/multi_pipe.h"
 #include "app/seqlabeler/opt_utils.h"
@@ -9,8 +9,11 @@
 #define APP_NAME "sequence labeler"
 #define APP_EXEC "sequence_labeler"
 
+namespace po = boost::program_options;
+namespace seq = ZuoPar::SequenceLabeler;
+namespace fe = ZuoPar::FrontEnd;
+
 int multi_learn(int argc, char** argv) {
-  namespace seq = ZuoPar::SequenceLabeler;
   std::string usage = "Multi-threaded training component of ZuoPar::sequence labeler.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: sequence_labeler multi-learn [options]\n";
@@ -37,7 +40,7 @@ int multi_learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  seq::MultiLearnOption opts;
+  fe::MultiLearnOption opts;
   if (!parse_multi_learn_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
@@ -56,8 +59,6 @@ int multi_learn(int argc, char** argv) {
  *  @return     int   The status of running learning.
  */
 int learn(int argc, char** argv) {
-  namespace seq = ZuoPar::SequenceLabeler;
-
   std::string usage = "Training component of ZuoPar::sequence labeler.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: sequence_labeler learn [options]\n";
@@ -83,7 +84,7 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  seq::LearnOption opts;
+  fe::LearnOption opts;
   if (!parse_learn_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
@@ -102,8 +103,6 @@ int learn(int argc, char** argv) {
  *  @return     int   The status of running test.
  */
 int test(int argc, char** argv) {
-  namespace seq = ZuoPar::SequenceLabeler;
-
   std::string usage = "Testing component of ZuoPar::sequence labeler.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: sequence_labeler test [options]\n";
@@ -128,7 +127,7 @@ int test(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  seq::TestOption opts;
+  fe::TestOption opts;
   if (!parse_test_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;

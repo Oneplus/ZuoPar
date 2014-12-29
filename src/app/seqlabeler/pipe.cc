@@ -10,7 +10,10 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-Pipe::Pipe(const LearnOption& opts)
+namespace eg = ZuoPar::Engine;
+namespace fe = ZuoPar::FrontEnd;
+
+Pipe::Pipe(const fe::LearnOption& opts)
   : mode(kPipeLearn), weight(0), decoder(0), learner(0) {
   _INFO << "::LEARN:: mode is activated.";
 
@@ -32,7 +35,7 @@ Pipe::Pipe(const LearnOption& opts)
   }
 }
 
-Pipe::Pipe(const TestOption& opts)
+Pipe::Pipe(const fe::TestOption& opts)
   : mode(kPipeTest), weight(0), decoder(0), learner(0) {
   BOOST_LOG_TRIVIAL(info) << "::TEST:: mode is actived.";
   this->model_path = opts.model_path;

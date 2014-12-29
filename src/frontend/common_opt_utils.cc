@@ -1,7 +1,11 @@
-#include "app/depparser/arceager/opt_utils.h"
+#include "frontend/common_opt_utils.h"
 #include "utils/logging.h"
 
-bool parse_option(const po::variables_map& vm, ae::Option& opts) {
+namespace ZuoPar {
+namespace FrontEnd {
+
+bool
+parse_option(const po::variables_map& vm, Option& opts) {
   namespace utils = ZuoPar::Utility;
   utils::init_boost_log(vm.count("verbose"));
 
@@ -21,12 +25,6 @@ bool parse_option(const po::variables_map& vm, ae::Option& opts) {
     opts.display_interval = vm["display"].as<int>();
   }
 
-  opts.conll_format = false;
-  if (vm.count("conll")) {
-    BOOST_LOG_TRIVIAL(info) << "use CoNLL format input and output.";
-    opts.conll_format = true;
-  }
-
   opts.beam_size = 64;
   if (vm.count("beam")) {
     BOOST_LOG_TRIVIAL(info) << "reset beam size to " << vm["beam"].as<int>();
@@ -35,7 +33,8 @@ bool parse_option(const po::variables_map& vm, ae::Option& opts) {
   return true;
 }
 
-bool parse_learn_option(const po::variables_map& vm, ae::LearnOption& opts) {
+bool
+parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   if (!parse_option(vm, opts)) {
     return false;
   }
@@ -47,10 +46,41 @@ bool parse_learn_option(const po::variables_map& vm, ae::LearnOption& opts) {
     opts.reference_path = vm["reference"].as<std::string>();
   }
 
+  opts.algorithm = "ap";
+  if (vm.count("algorithm")) {
+    if (vm["algorithm"].as<std::string>() == "pa") {
+      opts.algorithm = "pa";
+    }
+  }
+
+  opts.early_update = true;
+  if (vm.count("no-early")) {
+    opts.early_update = false;
+  }
   return true;
 }
 
-bool parse_test_option(const po::variables_map& vm, ae::TestOption& opts) {
+bool
+parse_multi_learn_option(const po::variables_map& vm, MultiLearnOption& opts) {
+  if (!parse_learn_option(vm, static_cast<LearnOption&>(opts))) {
+    return false;
+  }
+
+  opts.batch_size = 16;
+  if (vm.count("batch")) {
+    opts.batch_size = vm["batch"].as<int>();
+  }
+
+  opts.num_threads = 10;
+  if (vm.count("threads")) {
+    opts.num_threads = vm["threads"].as<int>();
+  }
+  return true;
+}
+
+
+bool
+parse_test_option(const po::variables_map& vm, TestOption& opts) {
   if (!parse_option(vm, opts)) {
     return false;
   }
@@ -71,3 +101,5 @@ bool parse_test_option(const po::variables_map& vm, ae::TestOption& opts) {
   return true;
 }
 
+} //  namespace frontend
+} //  namespace zuopar

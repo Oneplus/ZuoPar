@@ -12,6 +12,7 @@ namespace ZuoPar {
 namespace SequenceLabeler {
 
 namespace eg = ZuoPar::Engine;
+namespace fe = ZuoPar::FrontEnd;
 
 class Pipe {
 public:
@@ -20,14 +21,14 @@ public:
    *
    *  @param[in]  opts  The learning options.
    */
-  Pipe(const LearnOption& opts);
+  Pipe(const fe::LearnOption& opts);
 
   /**
    * The testing mode constructor.
    *
    *  @param[in]  opts  The testing options.
    */
-  Pipe(const TestOption& opts);
+  Pipe(const fe::TestOption& opts);
 
   /**
    * Perform learning or testing according to the configuration.
