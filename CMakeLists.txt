@@ -18,7 +18,12 @@ set (CMAKE_CXX_FLAGS "-std=c++11 -g")
 set (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set (SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
-include_directories (${Boost_INCLUDE_DIRS} ${SOURCE_DIR})
+if (SPARSEHASH_FOUND)
+    include_directories (${Boost_INCLUDE_DIRS} ${SPARSEHASH_INCLUDE_DIR} ${SOURCE_DIR})
+else ()
+    include_directories (${Boost_LIBRARY_DIRS} ${SOURCE_DIR})
+endif (SPARSEHASH_FOUND)
+
 link_directories (${Boost_LIBRARY_DIRS})
 
 add_subdirectory (src)
