@@ -30,6 +30,7 @@ void read_semchunks_dataset(
     std::vector<SemanticChunks>& dataset,
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
+    eg::TokenAlphabet& senses_alphabet,
     eg::TokenAlphabet& chunks_alphabet,
     bool incremental = true);
 

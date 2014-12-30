@@ -104,7 +104,7 @@ private:
     Decoder* decoder = get_decoder();
     const Dependency* data;
     while (queue.pop(data)) {
-      int max_nr_actions = data->size();
+      int max_nr_actions = data->size()* 2- 1;
       //_TRACE << "nr actions: " << max_nr_actions;
       State init_state(data);
       std::vector<Action> actions;

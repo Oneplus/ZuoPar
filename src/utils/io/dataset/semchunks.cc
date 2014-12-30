@@ -14,6 +14,7 @@ read_semchunks_dataset(
     std::vector<SemanticChunks>& dataset,
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
+    eg::TokenAlphabet& senses_alphabet,
     eg::TokenAlphabet& chunks_alphabet,
     bool incremental
     ) {
@@ -30,8 +31,8 @@ read_semchunks_dataset(
   while (instance != eos) {
     std::istringstream iss(*instance);
     SemanticChunks semchunks;
-    read_semchunks_instance(iss, semchunks, forms_alphabet,
-        postags_alphabet, chunks_alphabet, incremental);
+    read_semchunks_instance(iss, semchunks, forms_alphabet, postags_alphabet,
+        senses_alphabet, chunks_alphabet, incremental);
     dataset.push_back(semchunks);
     instance ++;
   }

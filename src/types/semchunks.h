@@ -7,6 +7,9 @@
 
 namespace ZuoPar {
 
+const int kSemanticChunkBeginTag = 10000000;
+const int kSemanticChunkInterTag = 20000000;
+
 class SemanticChunks {
 public:
   typedef std::pair<
@@ -19,6 +22,9 @@ public:
 
   //! the postags of the semantic chunks
   std::vector<postag_t> postags;
+
+  //! the senses of the semantic chunks
+  std::vector<tag_t> senses;
 
   //! the semantic chunks
   std::vector<predicate_t> semchunks;
@@ -36,19 +42,24 @@ class MonoSemanticChunks {
 public:
   MonoSemanticChunks(const std::vector<form_t>& forms_,
       const std::vector<postag_t>& postags_,
+      const std::vector<tag_t>& senses_,
       const SemanticChunks::predicate_t& predicate_)
     : forms(forms_),
     postags(postags_),
+    senses(senses_),
     predicate(predicate_) {
   }
 
-  //!
-  const std::vector<form_t>&          forms;
+  //! The forms
+  const std::vector<form_t>& forms;
 
-  //!
-  const std::vector<postag_t>&        postags;
+  //! The postags
+  const std::vector<postag_t>& postags;
 
-  //!
+  //! The senses
+  const std::vector<tag_t>& senses;
+
+  //! The mono predicate
   const SemanticChunks::predicate_t&  predicate;
 
   std::size_t size() const {

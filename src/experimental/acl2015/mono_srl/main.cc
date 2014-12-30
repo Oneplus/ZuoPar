@@ -112,6 +112,7 @@ int test(int argc, char** argv) {
     ("model,m", po::value<std::string>(), "The path to the model.")
     ("input,i", po::value<std::string>(), "The path to the input file.")
     ("output,o", po::value<std::string>(), "The path to the output file.")
+    ("format,f", po::value<std::string>(), "The output format.")
     ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")
     ("verbose,v", "Logging every detail.")
@@ -125,8 +126,8 @@ int test(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  fe::TestOption opts;
-  if (!parse_test_option(vm, opts)) {
+  mono::TestOption opts;
+  if (!mono::parse_test_option_ext(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }

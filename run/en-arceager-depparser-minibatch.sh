@@ -31,7 +31,8 @@ for i in `seq 1 20`; do
         -t 12 \
         -r ${TRAIN}
 
-    tar zcvf ${MODEL_PREFIX}.${i}.tgz ${MODEL_PREFIX}
+    cp ${MODEL_PREFIX} ${MODEL_PREFIX}.${i}
+    bzip2 ${MODEL_PREFIX}.${i}
 
     ${EXE} test \
         -m ${MODEL_PREFIX} \

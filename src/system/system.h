@@ -120,7 +120,6 @@ public:
       int max_nr_actions) {
     _TRACE << "sys: decoding on " << (void *)initial_state.ref
       << " with " << initial_state.ref->size() << " forms.";
-    _TRACE << "sys: beam size equals " << beam_size;
     _TRACE << "sys: gold action is ";
     for (int i = 0; i < gold_actions.size(); ++ i) {
       _TRACE << "sys: - [" << i << "] " << gold_actions[i];

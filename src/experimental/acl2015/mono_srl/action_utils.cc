@@ -33,12 +33,14 @@ void ActionUtils::get_oracle_actions(const MonoSemanticChunks& instance,
   const std::vector<tag_t> tags = instance.predicate.second;
   for (int i = 0; i < instance.size(); ++ i) {
     tag_t tag = tags[i];
-    if (tag / 1000000 == 0) {
+    if (tag == 0) {
       actions.push_back(ActionFactory::make_O());
-    } else if (tag / 1000000 == 1) {
-      actions.push_back(ActionFactory::make_B(tag % 1000000));
-    } else if (tag / 1000000 == 2) {
-      actions.push_back(ActionFactory::make_I(tag % 1000000));
+    } else if (tag > kSemanticChunkBeginTag && tag < kSemanticChunkInterTag) {
+      actions.push_back(ActionFactory::make_B(tag - kSemanticChunkBeginTag));
+    } else if (tag > kSemanticChunkInterTag) {
+      actions.push_back(ActionFactory::make_I(tag - kSemanticChunkInterTag));
+    } else {
+      BOOST_ASSERT_MSG(false, "illegal tag!");
     }
   }
 }

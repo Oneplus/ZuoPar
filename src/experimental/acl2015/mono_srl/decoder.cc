@@ -1,14 +1,17 @@
 #include "experimental/acl2015/mono_srl/decoder.h"
 #include "experimental/acl2015/mono_srl/action.h"
 #include "experimental/acl2015/mono_srl/action_utils.h"
+#include "utils/logging.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
 namespace MonoSRL {
 
-Decoder::Decoder(int nr, int beam_size, bool early_update, Weight* weight)
+Decoder::Decoder(int nr, tag_t p, int beam_size, bool early_update,
+    Weight* weight)
   : nr_tags(nr),
+  predicate_tag(p),
   TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, early_update, weight) {
 }
 
@@ -17,26 +20,41 @@ Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   int buffer = source.buffer;
-  if (buffer == 0) {
-    actions.push_back(ActionFactory::make_O());
-
-    for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-      actions.push_back(ActionFactory::make_B(p));
-    }
+  if (buffer == source.ref->predicate.first) {
+    actions.push_back(ActionFactory::make_B(predicate_tag));
   } else {
-    actions.push_back(ActionFactory::make_O());
-    for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-      actions.push_back(ActionFactory::make_B(p));
-    }
-
-    tag_t tag;
-    if (ActionUtils::is_B(source.last_action, tag)) {
-      actions.push_back(ActionFactory::make_I(tag));
-    } else if (ActionUtils::is_I(source.last_action, tag)) {
-      actions.push_back(ActionFactory::make_I(tag));
-    } else {
+    if (buffer == 0) {
+      actions.push_back(ActionFactory::make_O());
       for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-        actions.push_back(ActionFactory::make_I(p));
+        if (p == predicate_tag) { continue; }
+        actions.push_back(ActionFactory::make_B(p));
+      }
+    } else {
+      tag_t tag;
+      if (ActionUtils::is_B(source.last_action, tag)) {
+        actions.push_back(ActionFactory::make_O());
+        if (tag != predicate_tag) {
+          actions.push_back(ActionFactory::make_I(tag));
+        }
+        for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
+          if (p == predicate_tag) { continue; }
+          actions.push_back(ActionFactory::make_B(p));
+        }
+      } else if (ActionUtils::is_I(source.last_action, tag)) {
+        actions.push_back(ActionFactory::make_O());
+        actions.push_back(ActionFactory::make_I(tag));
+        for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
+          if (p == predicate_tag) { continue; }
+          actions.push_back(ActionFactory::make_B(p));
+        }
+      } else if (ActionUtils::is_O(source.last_action)) {
+        actions.push_back(ActionFactory::make_O());
+        for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
+          if (p == predicate_tag) { continue; }
+          actions.push_back(ActionFactory::make_B(p));
+        }
+      } else {
+        BOOST_ASSERT_MSG(false, "unknown action.");
       }
     }
   }

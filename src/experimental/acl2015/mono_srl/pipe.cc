@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "utils/logging.h"
 #include "utils/io/stream.h"
 #include "utils/io/dataset/semchunks.h"
@@ -24,8 +25,14 @@ Pipe::Pipe(const fe::LearnOption& opts)
   }
 }
 
-Pipe::Pipe(const fe::TestOption& opts)
-  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
+Pipe::Pipe(const TestOption& opts)
+  : weight(0), decoder(0), learner(0),
+  fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
+  if (opts.output_format == "semchunks") {
+    output_format = kSemanticChunks;
+  } else {
+    output_format = kCoNLL2005;
+  }
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -50,6 +57,11 @@ Pipe::load_model(const std::string& model_path) {
 
   if (!postags_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load postags alphabet.";
+    return false;
+  }
+
+  if (!senses_alphabet.load(mfs)) {
+    _WARN << "pie: failed to load senses alphabet.";
     return false;
   }
 
@@ -80,7 +92,7 @@ Pipe::setup() {
     }
     _INFO << "report: loading dataset from reference file.";
     ioutils::read_semchunks_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, tags_alphabet, true);
+        postags_alphabet, senses_alphabet, tags_alphabet, true);
     _INFO << "report: dataset is loaded from reference file.";
   } else {
     // not implemented.
@@ -91,11 +103,12 @@ Pipe::setup() {
       return false;
     }
     ioutils::read_semchunks_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, tags_alphabet, true);
+        postags_alphabet, senses_alphabet, tags_alphabet, true);
   }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << forms_alphabet.size() << " form(s) is detected.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
+  _INFO << "report: " << senses_alphabet.size() << " sense(s) is detected.";
   _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
 
   return true;
@@ -108,7 +121,8 @@ Pipe::run() {
     return;
   }
 
-  decoder = new Decoder(tags_alphabet.size(), beam_size, early_update, weight);
+  decoder = new Decoder(tags_alphabet.size(), tags_alphabet.encode("V"),
+      beam_size, early_update, weight);
 
   if (mode == kPipeLearn) {
     learner = new Learner(weight, this->algorithm);
@@ -119,10 +133,17 @@ Pipe::run() {
   for (size_t n = 0; n < N; ++ n) {
     const SemanticChunks& instance = dataset[n];
     SemanticChunks output;
+    output.forms = instance.forms;
+    output.postags = instance.postags;
+    output.senses = instance.senses;
+
+    //ioutils::write_semchunks_instance(std::cout, instance, forms_alphabet,
+    //    postags_alphabet, senses_alphabet, tags_alphabet);
 
     for (size_t i = 0; i < instance.nr_predicates(); ++ i, ++ m) {
       MonoSemanticChunks mono_semchunks(instance.forms,
           instance.postags,
+          instance.senses,
           instance.semchunks[i]);
 
       // calculate the oracle transition actions.
@@ -142,12 +163,21 @@ Pipe::run() {
       } else {
         build_output((*result.first), output);
       }
-      if ((n+ 1)% display_interval == 0) {
-        _INFO << "pipe: processed #" << (n+ 1) << " instances.";
+    }
+
+    if ((n+ 1)% display_interval == 0) {
+      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
+    }
+
+    if (mode != kPipeLearn) {
+      if (output_format == kSemanticChunks) {
+        ioutils::write_semchunks_instance((*os), output, forms_alphabet,
+            postags_alphabet, senses_alphabet, tags_alphabet);
+      } else {
+        ioutils::write_props_instance((*os), output, forms_alphabet,
+            postags_alphabet, senses_alphabet, tags_alphabet);
       }
     }
-    ioutils::write_semchunks_instance((*os), output, forms_alphabet,
-        postags_alphabet, tags_alphabet);
   }
   _INFO << "pipe: processed #" << N << " instances.";
 
@@ -161,6 +191,7 @@ Pipe::run() {
     } else {
       forms_alphabet.save(mfs);
       postags_alphabet.save(mfs);
+      senses_alphabet.save(mfs);
       tags_alphabet.save(mfs);
       weight->save(mfs);
       _INFO << "pipe: model saved to " << model_path;
@@ -170,6 +201,22 @@ Pipe::run() {
 
 void
 Pipe::build_output(const State& source, SemanticChunks& output) {
+  SemanticChunks::predicate_t predicate;
+  predicate.first = source.ref->predicate.first;
+  for (const State* p = &source; p->previous; p = p->previous) {
+    tag_t tag;
+
+    if (ActionUtils::is_O(p->last_action)) {
+      predicate.second.push_back(0);
+    } else if (ActionUtils::is_B(p->last_action, tag)) {
+      predicate.second.push_back(kSemanticChunkBeginTag+ tag);
+    } else if (ActionUtils::is_I(p->last_action, tag)) {
+      predicate.second.push_back(kSemanticChunkInterTag+ tag);
+    }
+
+  }
+  std::reverse(predicate.second.begin(), predicate.second.end());
+  output.semchunks.push_back(predicate);
 }
 
 } //  namespace monosrl

@@ -31,7 +31,7 @@ public:
    *
    *  @param[in]  opts  The testing options.
    */
-  Pipe(const fe::TestOption& opts);
+  Pipe(const TestOption& opts);
 
   /**
    * Perform learning or testing according to the configuration.
@@ -58,6 +58,13 @@ protected:
   void build_output(const State& source, SemanticChunks& output);
 
 protected:
+  enum OutputFormat {
+    kSemanticChunks,
+    kCoNLL2005
+  };
+
+  OutputFormat output_format;
+
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.
   Weight* weight;
@@ -73,6 +80,9 @@ protected:
 
   //! The alphabet of postags.
   eg::TokenAlphabet postags_alphabet;
+
+  //! The alphabet of senses.
+  eg::TokenAlphabet senses_alphabet;
 
   //! The alphabet of semantic chunks.
   eg::TokenAlphabet tags_alphabet;

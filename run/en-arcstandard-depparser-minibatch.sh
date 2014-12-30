@@ -1,8 +1,8 @@
 #!/bin/bash
 ROOT=`pwd`
 TRAIN=${ROOT}/data/dependency/en/train.tab
-DEVEL=${ROOT}/data/dependency/en/devr.tab
-TEST=${ROOT}/data/dependency/en/testr.tab
+DEVEL=${ROOT}/data/dependency/en/devi.tab
+TEST=${ROOT}/data/dependency/en/testi.tab
 
 DEVEL_ANS=${ROOT}/data/dependency/en/devr.tab
 TEST_ANS=${ROOT}/data/dependency/en/testr.tab
@@ -26,8 +26,9 @@ cp ${ROOT}/bin/arcstandard_depparser ${EXE}
 rm ${MODEL_PREFIX}.*
 
 for i in `seq 1 20`; do
-    ${EXE} learn \
+    ${EXE} multi-learn \
         -m ${MODEL_PREFIX} \
+        -t 12 \
         -r ${TRAIN}
 
     cp ${MODEL_PREFIX} ${MODEL_PREFIX}.${i}
@@ -42,6 +43,11 @@ for i in `seq 1 20`; do
         -m ${MODEL_PREFIX} \
         -i ${TEST} \
         -o ${OUTPUT_DIR}/test.${i}
+
+    ${ROOT}/scripts/dependency/simplified2conll.py \
+        ${OUTPUT_DIR}/devel.${i} > ${OUTPUT_DIR}/devel.conll.${i}
+    ${ROOT}/scripts/dependency/simplified2conll.py \
+        ${OUTPUT_DIR}/test.${i} > ${OUTPUT_DIR}/test.conll.${i}
 
     ${ROOT}/scripts/dependency/eval.py ${DEVEL_ANS} ${OUTPUT_DIR}/devel.${i}
     ${ROOT}/scripts/dependency/eval.py ${TEST_ANS}  ${OUTPUT_DIR}/test.${i}

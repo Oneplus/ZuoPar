@@ -31,7 +31,7 @@ public:
    *  @param[in]  beam_size The size of beam.
    *  @param[in]  weight    The pointer to the weight.
    */
-  Decoder(int nr, int beam_size, bool early_update, Weight* weight);
+  Decoder(int nr, tag_t tag, int beam_size, bool early_update, Weight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,
@@ -42,7 +42,10 @@ public:
       State* target);
 
 private:
+  //! number of tags
   int nr_tags;
+  //! the predicate tag
+  tag_t predicate_tag;
 };
 
 } //  namespace monosrl
