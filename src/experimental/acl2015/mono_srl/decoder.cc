@@ -54,7 +54,7 @@ Decoder::get_possible_actions(const State& source,
           actions.push_back(ActionFactory::make_B(p));
         }
       } else {
-        BOOST_ASSERT_MSG(false, "unknown action.");
+        BOOST_ASSERT_MSG(false, "unknown transition");
       }
     }
   }
@@ -71,8 +71,7 @@ Decoder::transit(const State& source, const Action& act, const floatval_t& score
   } else if (ActionUtils::is_I(act, tag)) {
     target->I(source, tag);
   } else {
-    _ERROR << "unknown transition";
-    exit(1);
+    BOOST_ASSERT_MSG(false, "unknown transition");
   }
   target->score = score;
 }

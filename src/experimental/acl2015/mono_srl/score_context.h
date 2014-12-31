@@ -6,6 +6,7 @@
 #include "types/semchunks.h"
 #include "engine/token_alphabet.h"
 #include "experimental/acl2015/mono_srl/state.h"
+#include "experimental/acl2015/mono_srl/action_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -24,7 +25,7 @@ public:
   ScoreContext(const State& state)
     : w_2(0), w_1(0), w0(0), w1(0), w2(0),
     p_2(0), p_1(0), p0(0), p1(0), p2(0), w_pred(0),
-    p_pred(0), p_pred_1(0), p_pred1(0) {
+    p_pred(0), p_pred_1(0), p_pred1(0), vc_pred(0) {
     const MonoSemanticChunks* ref = state.ref;
     const std::vector<form_t>& forms = ref->forms;
     const std::vector<postag_t>& postags= ref->postags;
@@ -32,6 +33,17 @@ public:
 
     int j = state.buffer;
     int M = ref->size();
+
+    tag_t tag;
+    if (NULL == state.previous) {
+      t_1 = 0;
+    } else if (ActionUtils::is_O(state.last_action)) {
+      t_1 = kSemanticChunkOuterTag;
+    } else if (ActionUtils::is_B(state.last_action, tag)) {
+      t_1 = kSemanticChunkBeginTag+ tag;
+    } else if (ActionUtils::is_I(state.last_action, tag)) {
+      t_1 = kSemanticChunkInterTag+ tag;
+    }
 
     if (j- 2 >= 0) {
       w_2 = forms[j- 2];
@@ -83,6 +95,7 @@ public:
   form_t    w_pred;
   postag_t  p_pred, p_pred_1, p_pred1;
   tag_t     vc_pred;
+  tag_t     t_1;
   int position;
   int dist;
 };

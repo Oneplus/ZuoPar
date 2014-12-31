@@ -56,7 +56,7 @@ read_semchunks_instance(std::istream& is,
     for (int j = 0; j < M; ++ j) {
       tag_t tag;
       if (mat[j][i] == "O") {
-        tag = 0;
+        tag = kSemanticChunkOuterTag;
       } else {
         BOOST_ASSERT_MSG(mat[j][i][1] == '-',
             "There should be a conjunction between boundary tag and chunk tag");
@@ -111,7 +111,7 @@ write_semchunks_instance(std::ostream& os,
   for (int j = 0; j < output.nr_predicates(); ++ j) {
     const SemanticChunks::predicate_t& predicate = output.semchunks[j];
     for (int i = 0; i < predicate.second.size(); ++ i) {
-      if (predicate.second[i] == 0) {
+      if (predicate.second[i] == kSemanticChunkOuterTag) {
         mat[i][j+ 4] = "O";
       } else if (predicate.second[i] >= kSemanticChunkBeginTag
           && predicate.second[i] < kSemanticChunkInterTag) {

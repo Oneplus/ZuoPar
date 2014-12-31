@@ -19,6 +19,7 @@ namespace MonoSRL {
 class Action: public AbstractAction {
 public:
   enum {
+    kNone,
     kO, //! The index of O action.
     kB, //! The index of B action.
     kI, //! The index of I action.
@@ -36,7 +37,9 @@ public:
 
   //! Overload the ostream function.
   friend std::ostream& operator<<(std::ostream& os, const Action& act) {
-    if (act.action_name == kO) {
+    if (act.action_name == kNone) {
+      os << "NONE";
+    } else if (act.action_name == kO) {
       os << "O";
     } else if (act.action_name == kB) {
       os << "B~" << act.deprel;

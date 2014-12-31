@@ -43,6 +43,7 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_T111( position, p0, w_pred );
   ZUOPAR_FEATURE_MAP_REGIST_B11( position, vc_pred );
   ZUOPAR_FEATURE_MAP_REGIST_T111( position, p0, vc_pred );
+  ZUOPAR_FEATURE_MAP_REGIST_U0( t_1 );
 }
 
 } //  namespace monosrl

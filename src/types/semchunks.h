@@ -7,6 +7,7 @@
 
 namespace ZuoPar {
 
+const int kSemanticChunkOuterTag = 1;
 const int kSemanticChunkBeginTag = 10000000;
 const int kSemanticChunkInterTag = 20000000;
 

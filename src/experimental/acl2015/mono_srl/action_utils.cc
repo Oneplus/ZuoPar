@@ -33,7 +33,7 @@ void ActionUtils::get_oracle_actions(const MonoSemanticChunks& instance,
   const std::vector<tag_t> tags = instance.predicate.second;
   for (int i = 0; i < instance.size(); ++ i) {
     tag_t tag = tags[i];
-    if (tag == 0) {
+    if (tag == kSemanticChunkOuterTag) {
       actions.push_back(ActionFactory::make_O());
     } else if (tag > kSemanticChunkBeginTag && tag < kSemanticChunkInterTag) {
       actions.push_back(ActionFactory::make_B(tag - kSemanticChunkBeginTag));
