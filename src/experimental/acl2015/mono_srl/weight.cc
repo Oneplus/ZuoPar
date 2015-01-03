@@ -30,6 +30,7 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_U1( p_pred );
   ZUOPAR_FEATURE_MAP_REGIST_U1( p_pred_1 );
   ZUOPAR_FEATURE_MAP_REGIST_U1( p_pred1 );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( vc_pred );
   ZUOPAR_FEATURE_MAP_REGIST_U1( position );
   ZUOPAR_FEATURE_MAP_REGIST_U1( dist );
   ZUOPAR_FEATURE_MAP_REGIST_B11( w0, w_pred );
@@ -37,12 +38,12 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_B11( position, w0 );
   ZUOPAR_FEATURE_MAP_REGIST_T111( position, w0, w_pred );
   ZUOPAR_FEATURE_MAP_REGIST_B11( position, vc_pred );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( position, w0, vc_pred );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( position, w_pred, vc_pred );
   ZUOPAR_FEATURE_MAP_REGIST_B11( position, p_pred );
   ZUOPAR_FEATURE_MAP_REGIST_B11( position, p0 );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( position, p0, w_pred );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( position, p0, p_pred );
   ZUOPAR_FEATURE_MAP_REGIST_B11( position, vc_pred );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( position, p0, vc_pred );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( position, p_pred, vc_pred );
   ZUOPAR_FEATURE_MAP_REGIST_U0( t_1 );
 }
 

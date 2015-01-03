@@ -28,12 +28,13 @@ cp ${ROOT}/bin/sequence_labeler ${EXE}
 
 rm ${MODEL_PREFIX}.*
 
-for i in `seq 1 50`; do
+for i in `seq 1 300`; do
     ${EXE} learn \
         -m ${MODEL_PREFIX} \
         -r ${TRAIN}
 
-    tar zcvf ${MODEL_PREFIX}.${i}.tgz ${MODEL_PREFIX}
+    cp ${MODEL_PREFIX} ${MODEL_PREFIX}.${i}
+    bzip2 ${MODEL_PREFIX}.${i}
 
     ${EXE} test \
         -m ${MODEL_PREFIX} \

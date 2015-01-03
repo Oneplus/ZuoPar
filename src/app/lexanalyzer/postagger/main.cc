@@ -2,8 +2,17 @@
 #include <cstring>  // strcmp
 #include "opt.h"
 #include "utils/logging.h"
+#include "app/lexanalyzer/postagger/opt.h"
 #include "app/lexanalyzer/postagger/pipe.h"
 #include "app/lexanalyzer/postagger/opt_utils.h"
+
+namespace po = boost::program_options;
+namespace tagger = ZuoPar::LexicalAnalyzer::Postagger;
+namespace fe = ZuoPar::FrontEnd;
+
+int multi_learn(int argc, char** argv) {
+  std::cerr << "Not implemented." << std::endl;
+}
 
 /**
  * Perform the learning process of ZuoPar::arcstandard dependency parser.
@@ -13,8 +22,6 @@
  *  @return     int   The status of running learning.
  */
 int learn(int argc, char** argv) {
-  namespace tagger = ZuoPar::LexicalAnalyzer::Postagger;
-
   std::string usage = "Training component of ZuoPar::transition-based postagger.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: postagger learn [options]\n";
@@ -38,7 +45,7 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  tagger::LearnOption opts;
+  fe::LearnOption opts;
   if (!parse_learn_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
@@ -57,8 +64,6 @@ int learn(int argc, char** argv) {
  *  @return     int   The status of running test.
  */
 int test(int argc, char** argv) {
-  namespace tagger = ZuoPar::LexicalAnalyzer::Postagger;
-
   std::string usage = "Testing component of ZuoPar::transition-based postagger.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: postagger test [options]\n";
@@ -83,7 +88,7 @@ int test(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  tagger::TestOption opts;
+  fe::TestOption opts;
   if (!parse_test_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
@@ -94,23 +99,5 @@ int test(int argc, char** argv) {
   return 0;
 }
 
-int main(int argc, char** argv) {
-  std::string usage = "ZuoPar::transition-based postagger.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: postagger [learn|test] [options]";
-
-  if (argc == 1) {
-    std::cerr << usage << std::endl;
-    return 1;
-  } else if (strcmp(argv[1], "learn") == 0) {
-    learn(argc- 1, argv+ 1);
-  } else if (strcmp(argv[1], "test") == 0) {
-    test(argc- 1, argv+ 1);
-  } else {
-    std::cerr << "Unknown mode: " << argv[1] << std::endl;
-    std::cerr << usage << std::endl;
-    return 1;
-  }
-
-  return 0;
-}
+#include "frontend/template/main.h"
+MAIN("transition-based postagger.", "postagger")

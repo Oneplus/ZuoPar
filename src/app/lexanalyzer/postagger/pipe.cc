@@ -11,17 +11,10 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
 
-Pipe::Pipe(const LearnOption& opts)
-  : mode(kPipeLearn), weight(0), decoder(0), learner(0) {
-  _INFO << "::LEARN:: mode is actived.";
-  _INFO << "report: model file is " << opts.model_path;
-  _INFO << "report: reference file is " << opts.reference_path;
-  _INFO << "report: beam size is " << opts.beam_size;
+namespace fe = ZuoPar::FrontEnd;
 
-  this->reference_path = opts.reference_path;
-  this->model_path = opts.model_path;
-  this->beam_size = opts.beam_size;
-  this->display_interval = opts.display_interval;
+Pipe::Pipe(const fe::LearnOption& opts)
+  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -29,15 +22,8 @@ Pipe::Pipe(const LearnOption& opts)
   }
 }
 
-Pipe::Pipe(const TestOption& opts)
-  : mode(kPipeTest), weight(0), decoder(0), learner(0) {
-  BOOST_LOG_TRIVIAL(info) << "::TEST:: mode is actived.";
-  this->model_path = opts.model_path;
-  this->input_path = opts.input_path;
-  this->output_path = opts.output_path;
-  this->beam_size = opts.beam_size;
-  this->display_interval = opts.display_interval;
-  _INFO << "report: model file is " << opts.model_path;
+Pipe::Pipe(const fe::TestOption& opts)
+  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -54,11 +40,6 @@ Pipe::load_model(const std::string& model_path) {
     _WARN << "pipe: model doesn't exists.";
     return false;
   }
-
-  /*if (!forms_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load forms alphabet.";
-    return false;
-  }*/
 
   if (!postags_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load postags alphabet.";

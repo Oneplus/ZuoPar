@@ -137,25 +137,5 @@ int test(int argc, char** argv) {
   return 0;
 }
 
-int main(int argc, char** argv) {
-  std::string usage = "ZuoPar::arceager dependency parser.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: arceager_depparser [learn|multi-learn|test] [options]";
-
-  if (argc == 1) {
-    std::cerr << usage << std::endl;
-    return 1;
-  } else if (strcmp(argv[1], "learn") == 0) {
-    learn(argc- 1, argv+ 1);
-  } else if (strcmp(argv[1], "multi-learn") == 0) {
-    multi_learn(argc- 1, argv+ 1);
-  } else if (strcmp(argv[1], "test") == 0) {
-    test(argc- 1, argv+ 1);
-  } else {
-    std::cerr << "Unknown mode: " << argv[1] << std::endl;
-    std::cerr << usage << std::endl;
-    return 1;
-  }
-
-  return 0;
-}
+#include "frontend/template/main.h"
+MAIN("arceager dependency parser.", "arceager_depparser")

@@ -3,6 +3,7 @@
 
 #include "types/postag.h"
 #include "engine/token_alphabet.h"
+#include "frontend/common_pipe_cfg.h"
 #include "app/lexanalyzer/postagger/opt.h"
 #include "app/lexanalyzer/postagger/weight.h"
 #include "app/lexanalyzer/postagger/decoder.h"
@@ -13,22 +14,23 @@ namespace LexicalAnalyzer {
 namespace Postagger {
 
 namespace eg = ZuoPar::Engine;
+namespace fe = ZuoPar::FrontEnd;
 
-class Pipe {
+class Pipe: public fe::CommonPipeConfigure {
 public:
   /**
    * The learning mode constructor.
    *
    *  @param[in]  opts  The learning options.
    */
-  Pipe(const LearnOption& opts);
+  Pipe(const fe::LearnOption& opts);
 
   /**
    * The testing mode constructor.
    *
    *  @param[in]  opts  The testing options.
    */
-  Pipe(const TestOption& opts);
+  Pipe(const fe::TestOption& opts);
 
   /**
    * Perform learning or testing according to the configuration.
@@ -51,30 +53,6 @@ public:
    */
   void build_output(const State& source, PostagWithLiteralCache& output);
 private:
-  //! The supported modes.
-  enum PipeMode { kPipeLearn, kPipeTest };
-
-  //! Use to specify if perform training.
-  PipeMode mode;
-
-  //! The path to the reference file.
-  std::string reference_path;
-
-  //! The path to the model file.
-  std::string model_path;
-
-  //!
-  std::string input_path;
-
-  //!
-  std::string output_path;
-
-  //! The size of the beam.
-  int beam_size;
-
-  //! The display.
-  int display_interval;
-
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.
   Weight* weight;
