@@ -20,11 +20,13 @@ public:
    * The decoder constructor.
    *
    *  @param[in]  nr        The number of dependency relations.
+   *  @param[in]  trans     The transition.
    *  @param[in]  beam_size The size of beam.
    *  @param[in]  early_update
    *  @param[in]  weight    The pointer to the weight.
    */
-  Decoder(int nr, int beam_size, bool early_update, Weight* weight);
+  Decoder(int nr, const std::vector< std::vector<bool> >& trans_,
+      int beam_size, bool early_update, Weight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,
@@ -36,6 +38,7 @@ public:
 
 private:
   int nr_tags;
+  const std::vector< std::vector<bool> >& trans;
 };
 
 } //  end for namespace lexicalanalyzer

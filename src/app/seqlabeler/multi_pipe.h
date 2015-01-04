@@ -19,7 +19,7 @@ public:
    *
    *  @param[in]  opts  The learning options.
    */
-  MultiPipe(const fe::MultiLearnOption& opts);
+  MultiPipe(const MultiLearnOption& opts);
 
   //!
   void run();

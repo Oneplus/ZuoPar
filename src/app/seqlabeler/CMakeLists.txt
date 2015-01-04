@@ -1,5 +1,6 @@
 add_executable (sequence_labeler
     main.cc
+    opt_utils.cc
     action.cc
     action_utils.cc
     state.cc

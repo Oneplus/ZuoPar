@@ -6,6 +6,10 @@
 #include "utils/io/instance/sequence_instance.h"
 #include "app/seqlabeler/action_utils.h"
 #include "app/seqlabeler/pipe.h"
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <boost/algorithm/string/regex.hpp>
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -13,8 +17,11 @@ namespace SequenceLabeler {
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
 
-Pipe::Pipe(const fe::LearnOption& opts)
-  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
+Pipe::Pipe(const LearnOption& opts)
+  : weight(0), decoder(0), learner(0),
+  fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
+  constrain_path = opts.constrain_path;
+  _INFO << "report: constrain path: " << constrain_path;
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -22,8 +29,11 @@ Pipe::Pipe(const fe::LearnOption& opts)
   }
 }
 
-Pipe::Pipe(const fe::TestOption& opts)
-  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
+Pipe::Pipe(const TestOption& opts)
+  : weight(0), decoder(0), learner(0),
+  fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
+  constrain_path = opts.constrain_path;
+  _INFO << "report: constrain path: " << constrain_path;
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -57,6 +67,49 @@ Pipe::load_model(const std::string& model_path) {
   }
 
   return true;
+}
+
+void
+Pipe::load_constrain() {
+  namespace algo = boost::algorithm;
+
+  std::size_t T = tags_alphabet.size();
+  trans.resize(T);
+  for (std::size_t i = 0; i < T; ++ i) {
+    trans[i].resize(T, false);
+  }
+  for (std::size_t i = 0; i < T; ++ i) {
+    trans[1][i] = true;
+  }
+
+  std::ifstream ifs(constrain_path.c_str());
+  _INFO << "report: load constrain from " << constrain_path;
+  if (!ifs.good()) {
+    for (std::size_t i = 0; i < T; ++ i) {
+      for (std::size_t j = 0; j < T; ++ j) { trans[i][j] = true; }
+    }
+  } else {
+    std::string line;
+    int nr_constraints = 0;
+    while (std::getline(ifs, line)) {
+      std::vector<std::string> items;
+      algo::trim(line);
+      if (line.size() == 0) { continue; }
+      algo::split_regex(items, line, boost::regex("-->"));
+      BOOST_ASSERT(2 == items.size());
+
+      algo::trim(items[0]);
+      algo::trim(items[1]);
+      tag_t source = tags_alphabet.encode(items[0].c_str());
+      tag_t target = tags_alphabet.encode(items[1].c_str());
+      if (source > 0 && target > 0) {
+        //_INFO << items[0] << " " << items[1];
+        trans[source][target] = true;
+        nr_constraints += 1;
+      }
+    }
+    _INFO << "report: number of constrain is: " << nr_constraints;
+  }
 }
 
 bool
@@ -100,7 +153,9 @@ Pipe::run() {
     return;
   }
 
-  decoder = new Decoder(tags_alphabet.size(), beam_size, early_update, weight);
+  load_constrain();
+
+  decoder = new Decoder(tags_alphabet.size(), trans, beam_size, early_update, weight);
 
   if (mode == kPipeLearn) {
     learner = new Learner(weight, this->algorithm);

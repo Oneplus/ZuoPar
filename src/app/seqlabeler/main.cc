@@ -2,12 +2,9 @@
 #include <cstring>  // strcmp
 #include "utils/logging.h"
 #include "app/seqlabeler/opt.h"
+#include "app/seqlabeler/opt_utils.h"
 #include "app/seqlabeler/pipe.h"
 #include "app/seqlabeler/multi_pipe.h"
-#include "app/seqlabeler/opt_utils.h"
-
-#define APP_NAME "sequence labeler"
-#define APP_EXEC "sequence_labeler"
 
 namespace po = boost::program_options;
 namespace seq = ZuoPar::SequenceLabeler;
@@ -26,6 +23,7 @@ int multi_learn(int argc, char** argv) {
     ("no-early,e", "Specify the early update strategy.")
     ("batch,c", po::value<int>(), "The size for batch.")
     ("threads,t", po::value<int>(), "The number of threads.")
+    ("constrain,n", po::value<std::string>(), "The constrain file.")
     ("reference,r", po::value<std::string>(), "The path to the reference file.")
     ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")
@@ -40,8 +38,8 @@ int multi_learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  fe::MultiLearnOption opts;
-  if (!parse_multi_learn_option(vm, opts)) {
+  seq::MultiLearnOption opts;
+  if (!seq::parse_multi_learn_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }
@@ -71,6 +69,7 @@ int learn(int argc, char** argv) {
     ("algorithm,a", po::value<std::string>(), "The learning algorithm.")
     ("no-early,e", "Specify the early update strategy.")
     ("reference,r", po::value<std::string>(), "The path to the reference file.")
+    ("constrain,n", po::value<std::string>(), "The constrain file.")
     ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")
     ("verbose,v", "Logging every detail.")
@@ -84,8 +83,8 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  fe::LearnOption opts;
-  if (!parse_learn_option(vm, opts)) {
+  seq::LearnOption opts;
+  if (!seq::parse_learn_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }
@@ -114,6 +113,7 @@ int test(int argc, char** argv) {
     ("model,m", po::value<std::string>(), "The path to the model.")
     ("input,i", po::value<std::string>(), "The path to the input file.")
     ("output,o", po::value<std::string>(), "The path to the output file.")
+    ("constrain,n", po::value<std::string>(), "The constrain file.")
     ("display,d", po::value<int>(), "The display interval.")
     ("beam,b", po::value<int>(), "The size for beam.")
     ("verbose,v", "Logging every detail.")
@@ -127,8 +127,8 @@ int test(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  fe::TestOption opts;
-  if (!parse_test_option(vm, opts)) {
+  seq::TestOption opts;
+  if (!seq::parse_test_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }

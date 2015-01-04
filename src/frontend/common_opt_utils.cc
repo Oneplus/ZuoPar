@@ -14,7 +14,7 @@ parse_option(const po::variables_map& vm, Option& opts) {
   }
 
   if (!vm.count("model")) {
-    BOOST_LOG_TRIVIAL(error) << "model path must be specified [-m].";
+    _ERROR << "model path must be specified [-m].";
     return false;
   } else {
     opts.model_path = vm["model"].as<std::string>();
@@ -27,7 +27,7 @@ parse_option(const po::variables_map& vm, Option& opts) {
 
   opts.beam_size = 64;
   if (vm.count("beam")) {
-    BOOST_LOG_TRIVIAL(info) << "reset beam size to " << vm["beam"].as<int>();
+    _INFO << "reset beam size to " << vm["beam"].as<int>();
     opts.beam_size = vm["beam"].as<int>();
   }
   return true;
@@ -40,7 +40,7 @@ parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   }
 
   if (!vm.count("reference")) {
-    BOOST_LOG_TRIVIAL(error) << "reference file must be specified [-r].";
+    _ERROR << "reference file must be specified [-r].";
     return false;
   } else {
     opts.reference_path = vm["reference"].as<std::string>();
@@ -86,7 +86,7 @@ parse_test_option(const po::variables_map& vm, TestOption& opts) {
   }
 
   if (!vm.count("input")) {
-    BOOST_LOG_TRIVIAL(error) << "input file must be specified [-i].";
+    _ERROR << "input file must be specified [-i].";
     return false;
   } else {
     opts.input_path = vm["input"].as<std::string>();
@@ -94,7 +94,7 @@ parse_test_option(const po::variables_map& vm, TestOption& opts) {
 
   opts.output_path = "";
   if (!vm.count("output")) {
-    BOOST_LOG_TRIVIAL(info) << "output path not specified, use stdout instead.";
+    _INFO << "output path not specified, use stdout instead.";
   } else {
     opts.output_path = vm["output"].as<std::string>();
   }

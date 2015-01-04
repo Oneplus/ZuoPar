@@ -4,8 +4,10 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-Decoder::Decoder(int nr, int beam_size, bool early_update, Weight* weight)
+Decoder::Decoder(int nr, const std::vector< std::vector<bool> >& trans_,
+    int beam_size, bool early_update, Weight* weight)
   : nr_tags(nr),
+  trans(trans_),
   TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, early_update, weight) {
 }
 
@@ -13,8 +15,13 @@ void
 Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
+  tag_t s = 1;
+  if (source.previous != NULL) { s = ActionUtils::tag(source.last_action); }
   for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-    actions.push_back(ActionFactory::make(p));
+    if (trans[s][p]) {
+      _TRACE << "decoder: legal transition: " << s << " -> " << p;
+      actions.push_back(ActionFactory::make(p));
+    }
   }
 }
 

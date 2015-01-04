@@ -12,11 +12,13 @@ namespace SequenceLabeler {
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
 
-MultiPipe::MultiPipe(const fe::MultiLearnOption& opts)
-  : minibatch_learner(0), Pipe(static_cast<fe::LearnOption>(opts)) {
+MultiPipe::MultiPipe(const MultiLearnOption& opts)
+  : minibatch_learner(0),
+  Pipe(static_cast<const LearnOption&>(opts)) {
   _INFO << "::MULTI-LEARN:: mode is activated.";
   this->batch_size = opts.batch_size;
   this->num_threads = opts.num_threads;
+  this->constrain_path = opts.constrain_path;
 }
 
 void
@@ -24,12 +26,15 @@ MultiPipe::run() {
   if (!setup()) {
     return;
   }
+
+  load_constrain();
+
   _INFO << "report: batch size = " << batch_size;
   _INFO << "report: number of threads = " << num_threads;
 
   decoder_pool.resize(num_threads);
   for (int i = 0; i < num_threads; ++ i) {
-    decoder_pool[i] = new Decoder(tags_alphabet.size(),
+    decoder_pool[i] = new Decoder(tags_alphabet.size(), trans,
         beam_size, early_update, weight);
   }
 

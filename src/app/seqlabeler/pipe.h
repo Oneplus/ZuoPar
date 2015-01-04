@@ -22,14 +22,14 @@ public:
    *
    *  @param[in]  opts  The learning options.
    */
-  Pipe(const fe::LearnOption& opts);
+  Pipe(const LearnOption& opts);
 
   /**
    * The testing mode constructor.
    *
    *  @param[in]  opts  The testing options.
    */
-  Pipe(const fe::TestOption& opts);
+  Pipe(const TestOption& opts);
 
   /**
    * Perform learning or testing according to the configuration.
@@ -38,6 +38,8 @@ public:
 
 protected:
   bool setup();
+
+  void load_constrain();
 
   /**
    * Load model from the specified path.
@@ -56,6 +58,12 @@ protected:
   void build_output(const State& source, SequenceInstance& output);
 
 protected:
+  //! The path to the constrain file.
+  std::string constrain_path;
+
+  //!
+  std::vector< std::vector<bool> > trans;
+
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.
   Weight* weight;
