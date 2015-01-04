@@ -103,22 +103,13 @@ Inheritance diagram for ZuoPar::SequenceLabeler::Decoder:</div>
   <img src="classZuoPar_1_1SequenceLabeler_1_1Decoder.png" usemap="#ZuoPar::SequenceLabeler::Decoder_map" alt=""/>
   <map id="ZuoPar::SequenceLabeler::Decoder_map" name="ZuoPar::SequenceLabeler::Decoder_map">
 <area href="classZuoPar_1_1TransitionSystem.html" alt="ZuoPar::TransitionSystem&lt; Action, State, ScoreContext, Weight &gt;" shape="rect" coords="0,0,385,24"/>
-<area href="classZuoPar_1_1TransitionSystem.html" alt="ZuoPar::TransitionSystem&lt; Action, State, ScoreContext, Weight &gt;" shape="rect" coords="395,0,780,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa769f294fa6f333d443d412a9768474f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html#aa769f294fa6f333d443d412a9768474f">Decoder</a> (int nr, int beam_size, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> *weight)</td></tr>
-<tr class="separator:aa769f294fa6f333d443d412a9768474f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b15234368fe1616a6749f828c35fdc2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html#a3b15234368fe1616a6749f828c35fdc2">get_possible_actions</a> (const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a> &amp;source, std::vector&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &gt; &amp;actions)</td></tr>
-<tr class="memdesc:a3b15234368fe1616a6749f828c35fdc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement arc standard get possible actions.  <a href="#a3b15234368fe1616a6749f828c35fdc2">More...</a><br/></td></tr>
-<tr class="separator:a3b15234368fe1616a6749f828c35fdc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9245a90dc1740da2320d24a66105a172"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html#a9245a90dc1740da2320d24a66105a172">transit</a> (const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a> &amp;source, const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &amp;act, const <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &amp;score, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a> *target)</td></tr>
-<tr class="memdesc:a9245a90dc1740da2320d24a66105a172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement arc standard transition.  <a href="#a9245a90dc1740da2320d24a66105a172">More...</a><br/></td></tr>
-<tr class="separator:a9245a90dc1740da2320d24a66105a172"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa769f294fa6f333d443d412a9768474f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html#aa769f294fa6f333d443d412a9768474f">Decoder</a> (int nr, int beam_size, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> *weight)</td></tr>
-<tr class="separator:aa769f294fa6f333d443d412a9768474f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67584af3d22cbbe39c7a5a19b6d032f7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html#a67584af3d22cbbe39c7a5a19b6d032f7">Decoder</a> (int nr, const std::vector&lt; std::vector&lt; bool &gt; &gt; &amp;trans_, int beam_size, bool early_update, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> *weight)</td></tr>
+<tr class="separator:a67584af3d22cbbe39c7a5a19b6d032f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b15234368fe1616a6749f828c35fdc2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html#a3b15234368fe1616a6749f828c35fdc2">get_possible_actions</a> (const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a> &amp;source, std::vector&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &gt; &amp;actions)</td></tr>
 <tr class="memdesc:a3b15234368fe1616a6749f828c35fdc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement arc standard get possible actions.  <a href="#a3b15234368fe1616a6749f828c35fdc2">More...</a><br/></td></tr>
 <tr class="separator:a3b15234368fe1616a6749f828c35fdc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,9 +117,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9245a90dc1740da2320d24a66105a172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement arc standard transition.  <a href="#a9245a90dc1740da2320d24a66105a172">More...</a><br/></td></tr>
 <tr class="separator:a9245a90dc1740da2320d24a66105a172"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classZuoPar_1_1TransitionSystem"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classZuoPar_1_1TransitionSystem')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem&lt; Action, State, ScoreContext, Weight &gt;</a></td></tr>
-<tr class="memitem:adcfee49801806e4ee659d1d9af15e9cd inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#adcfee49801806e4ee659d1d9af15e9cd">TransitionSystem</a> (int _beam_size, Weight *_model)</td></tr>
-<tr class="separator:adcfee49801806e4ee659d1d9af15e9cd inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed9867d13aafc262ded99272d59f1169 inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aed9867d13aafc262ded99272d59f1169">TransitionSystem</a> (int _beam_size, bool _early_update, Weight *_model)</td></tr>
+<tr class="separator:aed9867d13aafc262ded99272d59f1169 inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bd3a5dd2dda304fdaa7e833acdb39b5 inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a8bd3a5dd2dda304fdaa7e833acdb39b5">~TransitionSystem</a> ()</td></tr>
+<tr class="memdesc:a8bd3a5dd2dda304fdaa7e833acdb39b5 inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="mdescLeft">&#160;</td><td class="mdescRight">The deallocator.  <a href="#a8bd3a5dd2dda304fdaa7e833acdb39b5">More...</a><br/></td></tr>
 <tr class="separator:a8bd3a5dd2dda304fdaa7e833acdb39b5 inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d5f3e5ee4e859a27b18454031c9a30e inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a49210d68b396fd948558582f40020452">const_decode_result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a8d5f3e5ee4e859a27b18454031c9a30e">decode</a> (const State &amp;initial_state, const <a class="el" href="classZuoPar_1_1TransitionSystem.html#aa4ee26d60518801008ae70519588f6a9">action_sequence_t</a> &amp;gold_actions, int max_nr_actions)</td></tr>
 <tr class="separator:a8d5f3e5ee4e859a27b18454031c9a30e inherit pub_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,7 +146,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a575c95ea6b0bd081a73b07987873f295 inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44f8e3bae4f7259c2ff7def1645a178c inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a44f8e3bae4f7259c2ff7def1645a178c">score_possible_actions</a> (const State &amp;source)</td></tr>
 <tr class="separator:a44f8e3bae4f7259c2ff7def1645a178c inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0303e98711a65148a8a70d03227fedbb inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a0303e98711a65148a8a70d03227fedbb">score_possible_actions</a> (const State &amp;source, const action_collection_t &amp;actions, packed_score_t &amp;scores)</td></tr>
+<tr class="memitem:a0303e98711a65148a8a70d03227fedbb inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a0303e98711a65148a8a70d03227fedbb">score_possible_actions</a> (const State &amp;source, const action_collection_t &amp;actions, <a class="el" href="structZuoPar_1_1PackedScores.html">packed_score_t</a> &amp;scores)</td></tr>
 <tr class="separator:a0303e98711a65148a8a70d03227fedbb inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef63cab77a21ce798662e041720bf10d inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aef63cab77a21ce798662e041720bf10d">extend_candidate_transition</a> (const scored_transition_t &amp;trans, int current_beam_size)</td></tr>
 <tr class="separator:aef63cab77a21ce798662e041720bf10d inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,14 +158,17 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a64aa3ee363ade7298354b38964004b57 inherit pro_methods_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classZuoPar_1_1TransitionSystem"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classZuoPar_1_1TransitionSystem')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem&lt; Action, State, ScoreContext, Weight &gt;</a></td></tr>
 <tr class="memitem:aa30cd26038bf14d305c4ebb6f2f475a1 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">action_collection_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aa30cd26038bf14d305c4ebb6f2f475a1">possible_actions</a></td></tr>
+<tr class="memdesc:aa30cd26038bf14d305c4ebb6f2f475a1 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cached possible actions.  <a href="#aa30cd26038bf14d305c4ebb6f2f475a1">More...</a><br/></td></tr>
 <tr class="separator:aa30cd26038bf14d305c4ebb6f2f475a1 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0158457bcd2cb6e6160d50fca9335e40 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">packed_score_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a0158457bcd2cb6e6160d50fca9335e40">packed_scores</a></td></tr>
+<tr class="memitem:a0158457bcd2cb6e6160d50fca9335e40 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZuoPar_1_1PackedScores.html">packed_score_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a0158457bcd2cb6e6160d50fca9335e40">packed_scores</a></td></tr>
+<tr class="memdesc:a0158457bcd2cb6e6160d50fca9335e40 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cached packed score.  <a href="#a0158457bcd2cb6e6160d50fca9335e40">More...</a><br/></td></tr>
 <tr class="separator:a0158457bcd2cb6e6160d50fca9335e40 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebf5b0422e7c5da386d27f46fd4455d9 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="memItemLeft" align="right" valign="top">scored_transition_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aebf5b0422e7c5da386d27f46fd4455d9">candidate_transitions</a></td></tr>
+<tr class="memdesc:aebf5b0422e7c5da386d27f46fd4455d9 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="mdescLeft">&#160;</td><td class="mdescRight">The k-best candidate transitions.  <a href="#aebf5b0422e7c5da386d27f46fd4455d9">More...</a><br/></td></tr>
 <tr class="separator:aebf5b0422e7c5da386d27f46fd4455d9 inherit pro_attribs_classZuoPar_1_1TransitionSystem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa769f294fa6f333d443d412a9768474f"></a>
+<a class="anchor" id="a67584af3d22cbbe39c7a5a19b6d032f7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -186,8 +181,20 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; bool &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>trans_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>beam_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>early_update</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -206,48 +213,9 @@ Additional Inherited Members</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nr</td><td>The number of dependency relations. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">trans</td><td>The transition. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">beam_size</td><td>The size of beam. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">weight</td><td>The pointer to the weight. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="aa769f294fa6f333d443d412a9768474f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ZuoPar::SequenceLabeler::Decoder::Decoder </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>nr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>beam_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> *&#160;</td>
-          <td class="paramname"><em>weight</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>The decoder constructor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nr</td><td>The number of dependency relations. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">beam_size</td><td>The size of beam. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">early_update</td><td></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">weight</td><td>The pointer to the weight. </td></tr>
   </table>
   </dd>
@@ -281,74 +249,6 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implement arc standard get possible actions. </p>
-
-</div>
-</div>
-<a class="anchor" id="a3b15234368fe1616a6749f828c35fdc2"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ZuoPar::SequenceLabeler::Decoder::get_possible_actions </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a> &amp;&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>actions</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Implement arc standard get possible actions. </p>
-
-</div>
-</div>
-<a class="anchor" id="a9245a90dc1740da2320d24a66105a172"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ZuoPar::SequenceLabeler::Decoder::transit </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a> &amp;&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &amp;&#160;</td>
-          <td class="paramname"><em>act</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &amp;&#160;</td>
-          <td class="paramname"><em>score</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a> *&#160;</td>
-          <td class="paramname"><em>target</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Implement arc standard transition. </p>
 
 </div>
 </div>

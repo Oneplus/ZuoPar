@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['special_5ftoken',['SPECIAL_TOKEN',['../classZuoPar_1_1Engine_1_1TokenAlphabet.html#af80cede7fd4c0a186c743a20cb97f7c5',1,'ZuoPar::Engine::TokenAlphabet']]]
+  ['outputformat',['OutputFormat',['../classZuoPar_1_1Experimental_1_1ACL2015_1_1MonoSRL_1_1Pipe.html#a46e2a0c1603c3c50c6f07bf311c92a6c',1,'ZuoPar::Experimental::ACL2015::MonoSRL::Pipe']]]
 ];

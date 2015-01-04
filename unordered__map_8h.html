@@ -86,39 +86,58 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">unordered_map.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;boost/unordered_map.hpp&gt;</code><br/>
-<code>#include &lt;boost/config.hpp&gt;</code><br/>
+<div class="textblock"><code>#include &lt;boost/config.hpp&gt;</code><br/>
+<code>#include &lt;unordered_map&gt;</code><br/>
 <code>#include &lt;boost/serialization/utility.hpp&gt;</code><br/>
-<code>#include &lt;boost/serialization/collections_save_imp.hpp&gt;</code><br/>
-<code>#include &lt;boost/serialization/collections_load_imp.hpp&gt;</code><br/>
 <code>#include &lt;boost/serialization/split_free.hpp&gt;</code><br/>
+<code>#include &quot;<a class="el" href="unordered__collections__save__imp_8hpp_source.html">unordered_collections_save_imp.hpp</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="unordered__collections__load__imp_8hpp_source.html">unordered_collections_load_imp.hpp</a>&quot;</code><br/>
 </div>
 <p><a href="unordered__map_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboost_1_1serialization_1_1stl_1_1archive__input__unordered__map.html">boost::serialization::stl::archive_input_unordered_map&lt; Archive, Container &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboost_1_1serialization_1_1stl_1_1archive__input__unordered__multimap.html">boost::serialization::stl::archive_input_unordered_multimap&lt; Archive, Container &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceboost"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost.html">boost</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceboost_1_1serialization"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html">boost::serialization</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceboost_1_1serialization_1_1stl"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization_1_1stl.html">boost::serialization::stl</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a04a81556a5eda4b2ee2aea89fa8bacab"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Type , class Key , class Hash , class Compare , class Allocator &gt; </td></tr>
-<tr class="memitem:a04a81556a5eda4b2ee2aea89fa8bacab"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a04a81556a5eda4b2ee2aea89fa8bacab">boost::serialization::save</a> (Archive &amp;ar, const boost::unordered_map&lt; Key, Type, Hash, Compare, Allocator &gt; &amp;t, const unsigned int)</td></tr>
-<tr class="separator:a04a81556a5eda4b2ee2aea89fa8bacab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d4be56406f8947db1a1accf28c7e046"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Type , class Key , class Hash , class Compare , class Allocator &gt; </td></tr>
-<tr class="memitem:a8d4be56406f8947db1a1accf28c7e046"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a8d4be56406f8947db1a1accf28c7e046">boost::serialization::load</a> (Archive &amp;ar, boost::unordered_map&lt; Key, Type, Hash, Compare, Allocator &gt; &amp;t, const unsigned int)</td></tr>
-<tr class="separator:a8d4be56406f8947db1a1accf28c7e046"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38423d04b011754810c08d6e599f4789"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Type , class Key , class Hash , class Compare , class Allocator &gt; </td></tr>
-<tr class="memitem:a38423d04b011754810c08d6e599f4789"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a38423d04b011754810c08d6e599f4789">boost::serialization::serialize</a> (Archive &amp;ar, boost::unordered_map&lt; Key, Type, Hash, Compare, Allocator &gt; &amp;t, const unsigned int file_version)</td></tr>
-<tr class="separator:a38423d04b011754810c08d6e599f4789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a409ce0792ae85ceb5ad817d69466d81b"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Key , class HashFcn , class EqualKey , class Allocator &gt; </td></tr>
+<tr class="memitem:a409ce0792ae85ceb5ad817d69466d81b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a409ce0792ae85ceb5ad817d69466d81b">boost::serialization::save</a> (Archive &amp;ar, const std::unordered_map&lt; Key, HashFcn, EqualKey, Allocator &gt; &amp;t, const unsigned int)</td></tr>
+<tr class="separator:a409ce0792ae85ceb5ad817d69466d81b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca292c5ee8f4e56a4a8e75991f1a9372"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Key , class HashFcn , class EqualKey , class Allocator &gt; </td></tr>
+<tr class="memitem:aca292c5ee8f4e56a4a8e75991f1a9372"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#aca292c5ee8f4e56a4a8e75991f1a9372">boost::serialization::load</a> (Archive &amp;ar, std::unordered_map&lt; Key, HashFcn, EqualKey, Allocator &gt; &amp;t, const unsigned int)</td></tr>
+<tr class="separator:aca292c5ee8f4e56a4a8e75991f1a9372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ee54e8826903a8b64f52b6dbb7b7876"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Key , class HashFcn , class EqualKey , class Allocator &gt; </td></tr>
+<tr class="memitem:a3ee54e8826903a8b64f52b6dbb7b7876"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a3ee54e8826903a8b64f52b6dbb7b7876">boost::serialization::serialize</a> (Archive &amp;ar, std::unordered_map&lt; Key, HashFcn, EqualKey, Allocator &gt; &amp;t, const unsigned int file_version)</td></tr>
+<tr class="separator:a3ee54e8826903a8b64f52b6dbb7b7876"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83ce6e63fc94a0641673a3e138a458e3"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Key , class HashFcn , class EqualKey , class Allocator &gt; </td></tr>
+<tr class="memitem:a83ce6e63fc94a0641673a3e138a458e3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a83ce6e63fc94a0641673a3e138a458e3">boost::serialization::save</a> (Archive &amp;ar, const std::unordered_multimap&lt; Key, HashFcn, EqualKey, Allocator &gt; &amp;t, const unsigned int)</td></tr>
+<tr class="separator:a83ce6e63fc94a0641673a3e138a458e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1de2f1d0622c7aa7c326697cb496002"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Key , class HashFcn , class EqualKey , class Allocator &gt; </td></tr>
+<tr class="memitem:ab1de2f1d0622c7aa7c326697cb496002"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#ab1de2f1d0622c7aa7c326697cb496002">boost::serialization::load</a> (Archive &amp;ar, std::unordered_multimap&lt; Key, HashFcn, EqualKey, Allocator &gt; &amp;t, const unsigned int)</td></tr>
+<tr class="separator:ab1de2f1d0622c7aa7c326697cb496002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c4bedb99136dfc78f7624364b092614"><td class="memTemplParams" colspan="2">template&lt;class Archive , class Key , class HashFcn , class EqualKey , class Allocator &gt; </td></tr>
+<tr class="memitem:a8c4bedb99136dfc78f7624364b092614"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboost_1_1serialization.html#a8c4bedb99136dfc78f7624364b092614">boost::serialization::serialize</a> (Archive &amp;ar, std::unordered_multimap&lt; Key, HashFcn, EqualKey, Allocator &gt; &amp;t, const unsigned int file_version)</td></tr>
+<tr class="separator:a8c4bedb99136dfc78f7624364b092614"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_func_i.html#index_i"><span>i</span></a></li>
       <li><a href="functions_func_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_func_m.html#index_m"><span>m</span></a></li>
+      <li><a href="functions_func_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_func_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_func_p.html#index_p"><span>p</span></a></li>
       <li><a href="functions_func_r.html#index_r"><span>r</span></a></li>
@@ -127,6 +128,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classZuoPar_1_1FeaturePrefixActionPointwiseParamMap.html#ac8df981bcdad71bba61e5fe9259493ed">ZuoPar::FeaturePrefixActionPointwiseParamMap&lt; _FeaturePrefixType, _ScoreContextType, _ActionType &gt;</a>
 , <a class="el" href="classZuoPar_1_1StringFeaturePointwiseParameterCollection.html#af0792f1ff2b5ac13b3efbce05b5e4a77">ZuoPar::StringFeaturePointwiseParameterCollection&lt; _StateType, _ScoreContextType, _ActionType &gt;</a>
 </li>
+<li>save_model()
+: <a class="el" href="classZuoPar_1_1DependencyParser_1_1CommonDependencyPipe.html#aa193f52103d83777ef9b08edb106f01c">ZuoPar::DependencyParser::CommonDependencyPipe&lt; Action, ActionUtils, State, Weight, Decoder, Learner &gt;</a>
+</li>
 <li>score()
 : <a class="el" href="classZuoPar_1_1FeaturePointwiseParameterCollection.html#aeff5adad16993d7073c83672065889ef">ZuoPar::FeaturePointwiseParameterCollection&lt; _StateType, _ScoreContextType, _ActionType &gt;</a>
 , <a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html#a2af002801f7843bce3ea97e43ec870d6">ZuoPar::FeaturePointwiseParameterMap&lt; _MetaFeatureType, _ScoreContextType, _ActionType &gt;</a>
@@ -139,6 +143,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>ScoreContext()
 : <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcEager_1_1ScoreContext.html#ac58bfabb0828fbe7bf39d17a1086b7e7">ZuoPar::DependencyParser::ArcEager::ScoreContext</a>
 , <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ScoreContext.html#a31b8f90fd0fc2f792445360fdaf6505e">ZuoPar::DependencyParser::ArcStandard::ScoreContext</a>
+, <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MonoSRL_1_1ScoreContext.html#a893ace84f71dd6702f9638c9435950e4">ZuoPar::Experimental::ACL2015::MonoSRL::ScoreContext</a>
 , <a class="el" href="classZuoPar_1_1LexicalAnalyzer_1_1Postagger_1_1ScoreContext.html#ab90c4f4276d8418c89faa5e5ba2d0131">ZuoPar::LexicalAnalyzer::Postagger::ScoreContext</a>
 , <a class="el" href="classZuoPar_1_1LexicalAnalyzer_1_1WordSegmentor_1_1ScoreContext.html#afed8bd46a533c7489564024e6dd99500">ZuoPar::LexicalAnalyzer::WordSegmentor::ScoreContext</a>
 , <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1ScoreContext.html#a751803382a5c2eb2cf5ad4a0280bb296">ZuoPar::SequenceLabeler::ScoreContext</a>
@@ -161,29 +166,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classZuoPar_1_1TrigramMetaFeature.html#affce86729d1e90f4b7b4dad498f43e46">ZuoPar::TrigramMetaFeature</a>
 , <a class="el" href="classZuoPar_1_1UnigramMetaFeature.html#ae81645c866f5f1908c5b3e1cb60e917d">ZuoPar::UnigramMetaFeature</a>
 </li>
+<li>set()
+: <a class="el" href="classZuoPar_1_1Feature.html#a7a18ad48c9205a30abd0edfded0f52dd">ZuoPar::Feature&lt; _MetaFeatureType, _ActionType &gt;</a>
+</li>
 <li>set_timestamp()
 : <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a860279d19b94304b4c32cb5e7110f802">ZuoPar::TransitionStructureLearner&lt; _ActionType, _StateType, _ModelType &gt;</a>
+</li>
+<li>setup()
+: <a class="el" href="classZuoPar_1_1DependencyParser_1_1CommonDependencyPipe.html#a37f4005e12646097586082139ea8dbdf">ZuoPar::DependencyParser::CommonDependencyPipe&lt; Action, ActionUtils, State, Weight, Decoder, Learner &gt;</a>
+, <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MonoSRL_1_1Pipe.html#a77807b8967deae3717a43630699ad947">ZuoPar::Experimental::ACL2015::MonoSRL::Pipe</a>
+, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6cab23abe7a78d63623f3ac6fc9adb82">ZuoPar::SequenceLabeler::Pipe</a>
 </li>
 <li>shift()
 : <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcEager_1_1State.html#ac0bcd603e65f1b4cda55a4aa5236be9e">ZuoPar::DependencyParser::ArcEager::State</a>
 , <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ae97bed9a8a8de78b151c5ee6e47c9718">ZuoPar::DependencyParser::ArcStandard::State</a>
 , <a class="el" href="classZuoPar_1_1LexicalAnalyzer_1_1Postagger_1_1State.html#a530b93e306803e9b7c39752eb99aaa9c">ZuoPar::LexicalAnalyzer::Postagger::State</a>
-, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html#a7c0724bf6567701965e87428bcd03408">ZuoPar::SequenceLabeler::State</a>
 </li>
 <li>size()
 : <a class="el" href="classZuoPar_1_1Dependency.html#a89d56981bda0b5e4cfedcf258b801258">ZuoPar::Dependency</a>
 , <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html#ae365ff050f4827e3e9c015c75a7688c7">ZuoPar::Engine::TokenAlphabet</a>
 , <a class="el" href="classZuoPar_1_1FeaturePointwiseParameterMap.html#a7a869f95776511bd30bd7309327dcaec">ZuoPar::FeaturePointwiseParameterMap&lt; _MetaFeatureType, _ScoreContextType, _ActionType &gt;</a>
+, <a class="el" href="classZuoPar_1_1MonoSemanticChunks.html#a44c713aa71cf577406208ee1b0d59d5c">ZuoPar::MonoSemanticChunks</a>
 , <a class="el" href="classZuoPar_1_1Postag.html#aa2a0c551aa02ff2b45df2edc9b0b99d2">ZuoPar::Postag</a>
 , <a class="el" href="classZuoPar_1_1Segmentation.html#ab4ba51bda209a9e42e76588c05d13067">ZuoPar::Segmentation</a>
+, <a class="el" href="classZuoPar_1_1SemanticChunks.html#a07fa2e49207e5465ddeebc9639a3758d">ZuoPar::SemanticChunks</a>
 </li>
 <li>stack_size()
 : <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcEager_1_1State.html#ad61b52c7642d0a668c0278e2686b765f">ZuoPar::DependencyParser::ArcEager::State</a>
 , <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ad7a982ae2f41a967896a8ebd4b7ca42a">ZuoPar::DependencyParser::ArcStandard::State</a>
 </li>
 <li>State()
-: <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcEager_1_1State.html#a16083fbeae62c88fbd35b1e7ebb1d6fa">ZuoPar::DependencyParser::ArcEager::State</a>
-, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#adebbae3388d5a040713da5e1a62050cf">ZuoPar::DependencyParser::ArcStandard::State</a>
+: <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcEager_1_1State.html#af4952192cb47d226e0fd502b4848cd35">ZuoPar::DependencyParser::ArcEager::State</a>
+, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ac0f79ece0af54aea6bc6d05d6dec7858">ZuoPar::DependencyParser::ArcStandard::State</a>
+, <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MonoSRL_1_1State.html#a3b10ee3ed45f260b4b2c634f488bcdb0">ZuoPar::Experimental::ACL2015::MonoSRL::State</a>
 , <a class="el" href="classZuoPar_1_1LexicalAnalyzer_1_1Postagger_1_1State.html#abc59b5832f37483f3c57efd25443037e">ZuoPar::LexicalAnalyzer::Postagger::State</a>
 , <a class="el" href="classZuoPar_1_1LexicalAnalyzer_1_1WordSegmentor_1_1State.html#a5fbc46c6a887fe21ec29eae64238a887">ZuoPar::LexicalAnalyzer::WordSegmentor::State</a>
 , <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html#aa6f99a480ab8e80f8b3758564dbece96">ZuoPar::SequenceLabeler::State</a>

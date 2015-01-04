@@ -102,6 +102,8 @@ Functions</h2></td></tr>
 <tr class="separator:ae4f6d9cd05c472347922f557bb24186f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7292cd6d570241b3257209ba9029722a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a7292cd6d570241b3257209ba9029722a">read_segmentation_dataset</a> (std::istream &amp;is, std::vector&lt; <a class="el" href="classZuoPar_1_1Segmentation.html">Segmentation</a> &gt; &amp;dataset, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;character_alphabet, bool incremental=true)</td></tr>
 <tr class="separator:a7292cd6d570241b3257209ba9029722a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a790a73b2d0e8d002d4769b09dbcd0d58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a790a73b2d0e8d002d4769b09dbcd0d58">read_semchunks_dataset</a> (std::istream &amp;is, std::vector&lt; <a class="el" href="classZuoPar_1_1SemanticChunks.html">SemanticChunks</a> &gt; &amp;dataset, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;senses_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;chunks_alphabet, bool incremental=true)</td></tr>
+<tr class="separator:a790a73b2d0e8d002d4769b09dbcd0d58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a648d824a40ec2ca57e2b91b05762c66c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a648d824a40ec2ca57e2b91b05762c66c">read_sequence_instance_dataset</a> (std::istream &amp;is, std::vector&lt; <a class="el" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a> &gt; &amp;dataset, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;attributes_alphabets, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;tags_alphabet, bool incremental=true)</td></tr>
 <tr class="separator:a648d824a40ec2ca57e2b91b05762c66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4c814b896890a5d80763ca550e6f24a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#ad4c814b896890a5d80763ca550e6f24a">read_dependency_instance</a> (std::istream &amp;is, <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a> &amp;output, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet, bool incremental=true)</td></tr>
@@ -120,6 +122,12 @@ Functions</h2></td></tr>
 <tr class="separator:ac6bd94d93e6674bd051f47576309913e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61d519b65ac4ea555bca2f9de733192b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a61d519b65ac4ea555bca2f9de733192b">write_segmentation_instance</a> (std::ostream &amp;os, const <a class="el" href="classZuoPar_1_1Segmentation.html">Segmentation</a> &amp;output, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;character_alphabet)</td></tr>
 <tr class="separator:a61d519b65ac4ea555bca2f9de733192b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae647b16c4522cee8cddfd584a53f1395"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#ae647b16c4522cee8cddfd584a53f1395">read_semchunks_instance</a> (std::istream &amp;is, <a class="el" href="classZuoPar_1_1SemanticChunks.html">SemanticChunks</a> &amp;output, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;senses_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;chunks_alphabet, bool incremental=true)</td></tr>
+<tr class="separator:ae647b16c4522cee8cddfd584a53f1395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8234c5a08648153c2d13d2ffaff8235f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a8234c5a08648153c2d13d2ffaff8235f">write_semchunks_instance</a> (std::ostream &amp;os, const <a class="el" href="classZuoPar_1_1SemanticChunks.html">SemanticChunks</a> &amp;output, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;senses_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;chunks_alphabet)</td></tr>
+<tr class="separator:a8234c5a08648153c2d13d2ffaff8235f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f5c535b386c1749aecf3159b587919f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a8f5c535b386c1749aecf3159b587919f">write_props_instance</a> (std::ostream &amp;os, const <a class="el" href="classZuoPar_1_1SemanticChunks.html">SemanticChunks</a> &amp;output, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;senses_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;chunks_alphabet)</td></tr>
+<tr class="separator:a8f5c535b386c1749aecf3159b587919f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ba7c0e4ac03e35da258b527092ee3ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a2ba7c0e4ac03e35da258b527092ee3ea">read_sequence_instance</a> (std::istream &amp;is, <a class="el" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a> &amp;output, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;attributes_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;tags_alphabet, bool incremental=true)</td></tr>
 <tr class="separator:a2ba7c0e4ac03e35da258b527092ee3ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cc907c216fc79fb6e22c561ba5d6df2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a1cc907c216fc79fb6e22c561ba5d6df2">write_sequence_instance</a> (std::ostream &amp;os, const <a class="el" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a> &amp;output, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;attributes_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;tags_alphabet)</td></tr>
@@ -371,6 +379,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Read one dependency instance from the input stream.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">is</td><td>The input stream </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>The output dependency parse tree </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forms_alphabet</td><td>The alphabet for forms </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">deprels_alphabet</td><td>The alphabet for dependency relation </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">incremental</td><td>Use to specify if add new key entry to the alphabet. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -703,6 +723,142 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a790a73b2d0e8d002d4769b09dbcd0d58"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ZuoPar::IO::read_semchunks_dataset </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>is</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; SemanticChunks &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dataset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>forms_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>postags_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>senses_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunks_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>incremental</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Read dependency dataset. In each instance, one item per line. For each item, there are 4 column representing: form, postag, head, deprel. Instances are separated by newline.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">is</td><td>The input stream. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dataset</td><td>The output dataset. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">forms_alphabet</td><td>The alphabet for forms. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">deprels_alphabet</td><td>The alphabet for dependency relations. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">incremental</td><td>If incremental is true, insert the token into the alphabet, otherwise not perform insertion. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ae647b16c4522cee8cddfd584a53f1395"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ZuoPar::IO::read_semchunks_instance </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>is</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SemanticChunks &amp;&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>forms_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>postags_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>senses_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunks_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>incremental</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Read one semantic chunk instance from the input stream.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">is</td><td>The input stream </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>The output dependency parse tree </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forms_alphabet</td><td>The alphabet for forms </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">deprels_alphabet</td><td>The alphabet for dependency relation </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">incremental</td><td>Use to specify if add new key entry to the alphabet. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a2ba7c0e4ac03e35da258b527092ee3ea"></a>
 <div class="memitem">
 <div class="memproto">
@@ -855,6 +1011,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Write one dependency instance to the output stream.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">os</td><td>The output stream </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output</td><td>The instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forms_alphabet</td><td>The alphabet for forms </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">deprels_alphabet</td><td>The alphabet for dependency relation </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -899,6 +1066,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Write one postag instance to the output stream.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">os</td><td>The output stream </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output</td><td>The instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forms_alphabet</td><td>The alphabet for forms </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delimiter</td><td>The delimiter </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -937,6 +1115,77 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Write one postag with lexical cache instance to the output stream.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">os</td><td>The output stream </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output</td><td>The instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delimiter</td><td>The delimiter </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a8f5c535b386c1749aecf3159b587919f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ZuoPar::IO::write_props_instance </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const SemanticChunks &amp;&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>forms_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>postags_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>senses_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunks_alphabet</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Write one dependency instance to the output stream.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">os</td><td>The output stream </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output</td><td>The instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forms_alphabet</td><td>The alphabet for forms </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">deprels_alphabet</td><td>The alphabet for dependency relation </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -969,6 +1218,67 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8234c5a08648153c2d13d2ffaff8235f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ZuoPar::IO::write_semchunks_instance </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const SemanticChunks &amp;&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>forms_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>postags_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>senses_alphabet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;&#160;</td>
+          <td class="paramname"><em>chunks_alphabet</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Write one dependency instance to the output stream.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">os</td><td>The output stream </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output</td><td>The instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forms_alphabet</td><td>The alphabet for forms </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">postags_alphabet</td><td>The alphabet for postags </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">deprels_alphabet</td><td>The alphabet for dependency relation </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

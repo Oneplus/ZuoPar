@@ -93,7 +93,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="common_8h_source.html">types/common.h</a>&quot;</code><br/>
+<code>#include &lt;iostream&gt;</code><br/>
 <code>#include &lt;unordered_map&gt;</code><br/>
+<code>#include &lt;boost/functional/hash.hpp&gt;</code><br/>
 </div>
 <p><a href="sparse__vector_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -106,7 +108,14 @@ Namespaces</h2></td></tr>
 Typedefs</h2></td></tr>
 <tr class="memitem:a0c1434bff13e9de54ab240a3d544eaa3"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map<br class="typebreak"/>
 &lt; int, floatval_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">ZuoPar::SparseVector</a></td></tr>
+<tr class="memdesc:a0c1434bff13e9de54ab240a3d544eaa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The most basic sparse vector.  <a href="#a0c1434bff13e9de54ab240a3d544eaa3">More...</a><br/></td></tr>
 <tr class="separator:a0c1434bff13e9de54ab240a3d544eaa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89908557b6e9c9587c4263d77130b4ac"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map<br class="typebreak"/>
+&lt; std::pair&lt; int, std::size_t &gt;<br class="typebreak"/>
+, floatval_t, boost::hash<br class="typebreak"/>
+&lt; std::pair&lt; int, std::size_t &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a89908557b6e9c9587c4263d77130b4ac">ZuoPar::SparseVector2</a></td></tr>
+<tr class="memdesc:a89908557b6e9c9587c4263d77130b4ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">The version two sparse vector, with indexed for faster compute.  <a href="#a89908557b6e9c9587c4263d77130b4ac">More...</a><br/></td></tr>
+<tr class="separator:a89908557b6e9c9587c4263d77130b4ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

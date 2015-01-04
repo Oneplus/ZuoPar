@@ -93,27 +93,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_LEARNER_H__</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="structure__learner_8h.html">system/structure_learner.h</a>&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2depparser_2arcstandard_2action_8h.html">app/depparser/arcstandard/action.h</a>&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2depparser_2arcstandard_2state_8h.html">app/depparser/arcstandard/state.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2depparser_2arcstandard_2weight_8h.html">app/depparser/arcstandard/weight.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>DependencyParser {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>ArcStandard {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">   13</a></span>&#160;<span class="keyword">typedef</span> <a class="code" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner&lt;Action, State, Weight&gt;</a> <a class="code" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">Learner</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;} <span class="comment">//  end for arcstandard</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;} <span class="comment">//  end for dependencyparser</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;} <span class="comment">//  end for zuopar</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_LEARNER_H__</span></div>
-<div class="ttc" id="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard_html_a5a1255fe6a02f05d8920dde9f685d10c"><div class="ttname"><a href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">ZuoPar::DependencyParser::ArcStandard::Learner</a></div><div class="ttdeci">TransitionStructureLearner&lt; Action, State, Weight &gt; Learner</div><div class="ttdef"><b>Definition:</b> learner.h:13</div></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="structure__learner__minibatch_8h.html">system/structure_learner_minibatch.h</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2depparser_2arcstandard_2action_8h.html">app/depparser/arcstandard/action.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2depparser_2arcstandard_2state_8h.html">app/depparser/arcstandard/state.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2depparser_2arcstandard_2weight_8h.html">app/depparser/arcstandard/weight.h</a>&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>DependencyParser {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>ArcStandard {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">   14</a></span>&#160;<span class="keyword">typedef</span> <a class="code" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner&lt;Action, State, Weight&gt;</a> <a class="code" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">Learner</a>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a41a4cc3c519aa3e117eb0ca6a7c2d16c">   15</a></span>&#160;<span class="keyword">typedef</span> <a class="code" href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html">TransitionStructureLearnerMiniBatch&lt;Action, State, Weight&gt;</a> <a class="code" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a41a4cc3c519aa3e117eb0ca6a7c2d16c">MinibatchLearner</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;} <span class="comment">//  end for arcstandard</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;} <span class="comment">//  end for dependencyparser</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;} <span class="comment">//  end for zuopar</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_LEARNER_H__</span></div>
+<div class="ttc" id="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard_html_a5a1255fe6a02f05d8920dde9f685d10c"><div class="ttname"><a href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">ZuoPar::DependencyParser::ArcStandard::Learner</a></div><div class="ttdeci">TransitionStructureLearner&lt; Action, State, Weight &gt; Learner</div><div class="ttdef"><b>Definition:</b> learner.h:14</div></div>
+<div class="ttc" id="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard_html_a41a4cc3c519aa3e117eb0ca6a7c2d16c"><div class="ttname"><a href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a41a4cc3c519aa3e117eb0ca6a7c2d16c">ZuoPar::DependencyParser::ArcStandard::MinibatchLearner</a></div><div class="ttdeci">TransitionStructureLearnerMiniBatch&lt; Action, State, Weight &gt; MinibatchLearner</div><div class="ttdef"><b>Definition:</b> learner.h:15</div></div>
 <div class="ttc" id="structure__learner_8h_html"><div class="ttname"><a href="structure__learner_8h.html">structure_learner.h</a></div></div>
+<div class="ttc" id="classZuoPar_1_1TransitionStructureLearnerMiniBatch_html"><div class="ttname"><a href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html">ZuoPar::TransitionStructureLearnerMiniBatch</a></div><div class="ttdef"><b>Definition:</b> structure_learner_minibatch.h:16</div></div>
 <div class="ttc" id="app_2depparser_2arcstandard_2action_8h_html"><div class="ttname"><a href="app_2depparser_2arcstandard_2action_8h.html">action.h</a></div></div>
 <div class="ttc" id="app_2depparser_2arcstandard_2state_8h_html"><div class="ttname"><a href="app_2depparser_2arcstandard_2state_8h.html">state.h</a></div></div>
 <div class="ttc" id="app_2depparser_2arcstandard_2weight_8h_html"><div class="ttname"><a href="app_2depparser_2arcstandard_2weight_8h.html">weight.h</a></div></div>
-<div class="ttc" id="classZuoPar_1_1TransitionStructureLearner_html"><div class="ttname"><a href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a></div><div class="ttdef"><b>Definition:</b> structure_learner.h:12</div></div>
+<div class="ttc" id="classZuoPar_1_1TransitionStructureLearner_html"><div class="ttname"><a href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a></div><div class="ttdef"><b>Definition:</b> structure_learner.h:16</div></div>
+<div class="ttc" id="structure__learner__minibatch_8h_html"><div class="ttname"><a href="structure__learner__minibatch_8h.html">structure_learner_minibatch.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

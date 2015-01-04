@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['forms',['forms',['../classZuoPar_1_1Dependency.html#a1609583bee6c47f42febd780b55adbfb',1,'ZuoPar::Dependency::forms()'],['../classZuoPar_1_1Postag.html#a4832295472a04f71b0a3425cb90828ca',1,'ZuoPar::Postag::forms()']]]
+  ['early_5fupdate',['early_update',['../structZuoPar_1_1FrontEnd_1_1LearnOption.html#a442e697c0b21ff4d0654b6597089c7d9',1,'ZuoPar::FrontEnd::LearnOption::early_update()'],['../classZuoPar_1_1FrontEnd_1_1CommonPipeConfigure.html#a353e66a26fc0de0e6cda9fa7254bb29b',1,'ZuoPar::FrontEnd::CommonPipeConfigure::early_update()']]]
 ];

@@ -94,84 +94,90 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="types_2sequence__instance_8h.html">types/sequence_instance.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="token__alphabet_8h.html">engine/token_alphabet.h</a>&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2seqlabeler_2opt_8h.html">app/seqlabeler/opt.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2seqlabeler_2weight_8h.html">app/seqlabeler/weight.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2seqlabeler_2decoder_8h.html">app/seqlabeler/decoder.h</a>&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2seqlabeler_2learner_8h.html">app/seqlabeler/learner.h</a>&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>SequenceLabeler {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span>eg = ZuoPar::Engine;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html">Pipe</a> {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a310e267c89c9780f59fcb78b0f5c747e">Pipe</a>(<span class="keyword">const</span> <a class="code" href="structZuoPar_1_1SequenceLabeler_1_1LearnOption.html">LearnOption</a>&amp; opts);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a310e267c89c9780f59fcb78b0f5c747e">Pipe</a>(<span class="keyword">const</span> <a class="code" href="structZuoPar_1_1SequenceLabeler_1_1TestOption.html">TestOption</a>&amp; opts);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a7b6caa341ae6f40b2dcbab2ada42a4ca">run</a>();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6f07814e0715d6a282e45f98a4055508">load_model</a>(<span class="keyword">const</span> std::string&amp; model_path);</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="common__pipe__cfg_8h.html">frontend/common_pipe_cfg.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2seqlabeler_2opt_8h.html">app/seqlabeler/opt.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2seqlabeler_2weight_8h.html">app/seqlabeler/weight.h</a>&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2seqlabeler_2decoder_8h.html">app/seqlabeler/decoder.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="app_2seqlabeler_2learner_8h.html">app/seqlabeler/learner.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>SequenceLabeler {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span>eg = ZuoPar::Engine;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span>fe = ZuoPar::FrontEnd;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html">Pipe</a>: <span class="keyword">public</span> <a class="code" href="classZuoPar_1_1FrontEnd_1_1CommonPipeConfigure.html">fe::CommonPipeConfigure</a> {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a310e267c89c9780f59fcb78b0f5c747e">Pipe</a>(<span class="keyword">const</span> <a class="code" href="structZuoPar_1_1SequenceLabeler_1_1LearnOption.html">LearnOption</a>&amp; opts);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a310e267c89c9780f59fcb78b0f5c747e">Pipe</a>(<span class="keyword">const</span> <a class="code" href="structZuoPar_1_1SequenceLabeler_1_1TestOption.html">TestOption</a>&amp; opts);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a7b6caa341ae6f40b2dcbab2ada42a4ca">run</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6cab23abe7a78d63623f3ac6fc9adb82">setup</a>();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a21d00009caf42143ef3bfc01e52a8ade">load_constrain</a>();</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#ad5a069467ee72a3a9c36bf442b9cd4f6">build_output</a>(<span class="keyword">const</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>&amp; source, <a class="code" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a>&amp; output);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <span class="keyword">enum</span> PipeMode { kPipeLearn, kPipeTest };</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  PipeMode mode;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  std::string reference_path;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  std::string model_path;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  std::string input_path;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  std::string output_path;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6f07814e0715d6a282e45f98a4055508">load_model</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="classZuoPar_1_1FrontEnd_1_1CommonPipeConfigure.html#a98312a12eb7d4694cf859209a06a6118">model_path</a>);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#ad5a069467ee72a3a9c36bf442b9cd4f6">build_output</a>(<span class="keyword">const</span> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>&amp; source, <a class="code" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a>&amp; output);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a45f94e378bf104aaa13b7e17999fefc1">   62</a></span>&#160;  std::string <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a45f94e378bf104aaa13b7e17999fefc1">constrain_path</a>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#afb6b183105c06473936fc76e6a5053e0">   65</a></span>&#160;  std::vector&lt; std::vector&lt;bool&gt; &gt; <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#afb6b183105c06473936fc76e6a5053e0">trans</a>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6dd2020f57f3a101f56a38f80a0f97b2">   69</a></span>&#160;  <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>* <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6dd2020f57f3a101f56a38f80a0f97b2">weight</a>;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keywordtype">int</span> beam_size;</div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a44063300ac96d042e5963d90ff40509a">   72</a></span>&#160;  <a class="code" href="classZuoPar_1_1TransitionStructureLearner.html">Learner</a>* <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a44063300ac96d042e5963d90ff40509a">learner</a>;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keywordtype">int</span> display_interval;</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#ac25e57ad73285d15b085dfc5fede874e">   75</a></span>&#160;  <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html">Decoder</a>* <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#ac25e57ad73285d15b085dfc5fede874e">decoder</a>;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>* weight;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <a class="code" href="classZuoPar_1_1TransitionStructureLearner.html">Learner</a>* learner;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <a class="code" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">Learner::LearningAlgorithm</a> algorithm;</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a17af6cc6bba68d63800df273cb72cd52">   78</a></span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a17af6cc6bba68d63800df273cb72cd52">attributes_alphabet</a>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6c023a3fbcdc0efcb1e80fc2da25a0c8">   81</a></span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6c023a3fbcdc0efcb1e80fc2da25a0c8">tags_alphabet</a>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#aadf147e1a01992a76a5e3240189f6b3d">   84</a></span>&#160;  std::vector&lt;SequenceInstance&gt; <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#aadf147e1a01992a76a5e3240189f6b3d">dataset</a>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;};</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <a class="code" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html">Decoder</a>* decoder;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> attributes_alphabet;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> tags_alphabet;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  std::vector&lt;SequenceInstance&gt; dataset;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;};</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;} <span class="comment">//  end for namespace sequencelabeler</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_PIPE_H__</span></div>
-<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:17</div></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;} <span class="comment">//  end for namespace sequencelabeler</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_PIPE_H__</span></div>
+<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:16</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a6c023a3fbcdc0efcb1e80fc2da25a0c8"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6c023a3fbcdc0efcb1e80fc2da25a0c8">ZuoPar::SequenceLabeler::Pipe::tags_alphabet</a></div><div class="ttdeci">eg::TokenAlphabet tags_alphabet</div><div class="ttdoc">The alphabets of postags. </div><div class="ttdef"><b>Definition:</b> pipe.h:81</div></div>
 <div class="ttc" id="app_2seqlabeler_2learner_8h_html"><div class="ttname"><a href="app_2seqlabeler_2learner_8h.html">learner.h</a></div></div>
 <div class="ttc" id="token__alphabet_8h_html"><div class="ttname"><a href="token__alphabet_8h.html">token_alphabet.h</a></div></div>
-<div class="ttc" id="structZuoPar_1_1SequenceLabeler_1_1TestOption_html"><div class="ttname"><a href="structZuoPar_1_1SequenceLabeler_1_1TestOption.html">ZuoPar::SequenceLabeler::TestOption</a></div><div class="ttdef"><b>Definition:</b> opt.h:20</div></div>
+<div class="ttc" id="structZuoPar_1_1SequenceLabeler_1_1TestOption_html"><div class="ttname"><a href="structZuoPar_1_1SequenceLabeler_1_1TestOption.html">ZuoPar::SequenceLabeler::TestOption</a></div><div class="ttdef"><b>Definition:</b> opt.h:24</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a44063300ac96d042e5963d90ff40509a"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a44063300ac96d042e5963d90ff40509a">ZuoPar::SequenceLabeler::Pipe::learner</a></div><div class="ttdeci">Learner * learner</div><div class="ttdoc">The parameter learner. </div><div class="ttdef"><b>Definition:</b> pipe.h:72</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_aadf147e1a01992a76a5e3240189f6b3d"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#aadf147e1a01992a76a5e3240189f6b3d">ZuoPar::SequenceLabeler::Pipe::dataset</a></div><div class="ttdeci">std::vector&lt; SequenceInstance &gt; dataset</div><div class="ttdoc">The dataset. </div><div class="ttdef"><b>Definition:</b> pipe.h:84</div></div>
 <div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1State_html"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1State.html">ZuoPar::SequenceLabeler::State</a></div><div class="ttdef"><b>Definition:</b> state.h:12</div></div>
 <div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_ad5a069467ee72a3a9c36bf442b9cd4f6"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#ad5a069467ee72a3a9c36bf442b9cd4f6">ZuoPar::SequenceLabeler::Pipe::build_output</a></div><div class="ttdeci">void build_output(const State &amp;source, SequenceInstance &amp;output)</div></div>
 <div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Weight_html"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">ZuoPar::SequenceLabeler::Weight</a></div><div class="ttdef"><b>Definition:</b> weight.h:13</div></div>
-<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html">ZuoPar::SequenceLabeler::Pipe</a></div><div class="ttdef"><b>Definition:</b> pipe.h:16</div></div>
-<div class="ttc" id="classZuoPar_1_1TransitionStructureLearner_html_ace914673a3f3342a7cf01238fc22bccb"><div class="ttname"><a href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">ZuoPar::TransitionStructureLearner::LearningAlgorithm</a></div><div class="ttdeci">LearningAlgorithm</div><div class="ttdef"><b>Definition:</b> structure_learner.h:14</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a21d00009caf42143ef3bfc01e52a8ade"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a21d00009caf42143ef3bfc01e52a8ade">ZuoPar::SequenceLabeler::Pipe::load_constrain</a></div><div class="ttdeci">void load_constrain()</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html">ZuoPar::SequenceLabeler::Pipe</a></div><div class="ttdef"><b>Definition:</b> pipe.h:18</div></div>
 <div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a7b6caa341ae6f40b2dcbab2ada42a4ca"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a7b6caa341ae6f40b2dcbab2ada42a4ca">ZuoPar::SequenceLabeler::Pipe::run</a></div><div class="ttdeci">void run()</div></div>
+<div class="ttc" id="common__pipe__cfg_8h_html"><div class="ttname"><a href="common__pipe__cfg_8h.html">common_pipe_cfg.h</a></div></div>
 <div class="ttc" id="namespaceZuoPar_html_acf09bc599b289f69a51bdac8fbd37e41"><div class="ttname"><a href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">ZuoPar::SequenceInstance</a></div><div class="ttdeci">std::vector&lt; SequenceItem &gt; SequenceInstance</div><div class="ttdef"><b>Definition:</b> sequence_instance.h:14</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a17af6cc6bba68d63800df273cb72cd52"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a17af6cc6bba68d63800df273cb72cd52">ZuoPar::SequenceLabeler::Pipe::attributes_alphabet</a></div><div class="ttdeci">eg::TokenAlphabet attributes_alphabet</div><div class="ttdoc">The alphabets of attributes. </div><div class="ttdef"><b>Definition:</b> pipe.h:78</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_ac25e57ad73285d15b085dfc5fede874e"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#ac25e57ad73285d15b085dfc5fede874e">ZuoPar::SequenceLabeler::Pipe::decoder</a></div><div class="ttdeci">Decoder * decoder</div><div class="ttdoc">The pointer to the decoder. </div><div class="ttdef"><b>Definition:</b> pipe.h:75</div></div>
 <div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a310e267c89c9780f59fcb78b0f5c747e"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a310e267c89c9780f59fcb78b0f5c747e">ZuoPar::SequenceLabeler::Pipe::Pipe</a></div><div class="ttdeci">Pipe(const LearnOption &amp;opts)</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a6cab23abe7a78d63623f3ac6fc9adb82"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6cab23abe7a78d63623f3ac6fc9adb82">ZuoPar::SequenceLabeler::Pipe::setup</a></div><div class="ttdeci">bool setup()</div></div>
 <div class="ttc" id="app_2seqlabeler_2opt_8h_html"><div class="ttname"><a href="app_2seqlabeler_2opt_8h.html">opt.h</a></div></div>
 <div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a6f07814e0715d6a282e45f98a4055508"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6f07814e0715d6a282e45f98a4055508">ZuoPar::SequenceLabeler::Pipe::load_model</a></div><div class="ttdeci">bool load_model(const std::string &amp;model_path)</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a45f94e378bf104aaa13b7e17999fefc1"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a45f94e378bf104aaa13b7e17999fefc1">ZuoPar::SequenceLabeler::Pipe::constrain_path</a></div><div class="ttdeci">std::string constrain_path</div><div class="ttdoc">The path to the constrain file. </div><div class="ttdef"><b>Definition:</b> pipe.h:62</div></div>
 <div class="ttc" id="types_2sequence__instance_8h_html"><div class="ttname"><a href="types_2sequence__instance_8h.html">sequence_instance.h</a></div></div>
-<div class="ttc" id="classZuoPar_1_1TransitionStructureLearner_html"><div class="ttname"><a href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a></div><div class="ttdef"><b>Definition:</b> structure_learner.h:12</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_a6dd2020f57f3a101f56a38f80a0f97b2"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a6dd2020f57f3a101f56a38f80a0f97b2">ZuoPar::SequenceLabeler::Pipe::weight</a></div><div class="ttdeci">Weight * weight</div><div class="ttdef"><b>Definition:</b> pipe.h:69</div></div>
+<div class="ttc" id="classZuoPar_1_1FrontEnd_1_1CommonPipeConfigure_html"><div class="ttname"><a href="classZuoPar_1_1FrontEnd_1_1CommonPipeConfigure.html">ZuoPar::FrontEnd::CommonPipeConfigure</a></div><div class="ttdef"><b>Definition:</b> common_pipe_cfg.h:10</div></div>
+<div class="ttc" id="classZuoPar_1_1FrontEnd_1_1CommonPipeConfigure_html_a98312a12eb7d4694cf859209a06a6118"><div class="ttname"><a href="classZuoPar_1_1FrontEnd_1_1CommonPipeConfigure.html#a98312a12eb7d4694cf859209a06a6118">ZuoPar::FrontEnd::CommonPipeConfigure::model_path</a></div><div class="ttdeci">std::string model_path</div><div class="ttdoc">The path to the model file. </div><div class="ttdef"><b>Definition:</b> common_pipe_cfg.h:63</div></div>
+<div class="ttc" id="classZuoPar_1_1TransitionStructureLearner_html"><div class="ttname"><a href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a></div><div class="ttdef"><b>Definition:</b> structure_learner.h:16</div></div>
 <div class="ttc" id="app_2seqlabeler_2decoder_8h_html"><div class="ttname"><a href="app_2seqlabeler_2decoder_8h.html">decoder.h</a></div></div>
-<div class="ttc" id="structZuoPar_1_1SequenceLabeler_1_1LearnOption_html"><div class="ttname"><a href="structZuoPar_1_1SequenceLabeler_1_1LearnOption.html">ZuoPar::SequenceLabeler::LearnOption</a></div><div class="ttdef"><b>Definition:</b> opt.h:15</div></div>
+<div class="ttc" id="structZuoPar_1_1SequenceLabeler_1_1LearnOption_html"><div class="ttname"><a href="structZuoPar_1_1SequenceLabeler_1_1LearnOption.html">ZuoPar::SequenceLabeler::LearnOption</a></div><div class="ttdef"><b>Definition:</b> opt.h:17</div></div>
 <div class="ttc" id="app_2seqlabeler_2weight_8h_html"><div class="ttname"><a href="app_2seqlabeler_2weight_8h.html">weight.h</a></div></div>
 <div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Decoder_html"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html">ZuoPar::SequenceLabeler::Decoder</a></div><div class="ttdef"><b>Definition:</b> decoder.h:17</div></div>
+<div class="ttc" id="classZuoPar_1_1SequenceLabeler_1_1Pipe_html_afb6b183105c06473936fc76e6a5053e0"><div class="ttname"><a href="classZuoPar_1_1SequenceLabeler_1_1Pipe.html#afb6b183105c06473936fc76e6a5053e0">ZuoPar::SequenceLabeler::Pipe::trans</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; bool &gt; &gt; trans</div><div class="ttdef"><b>Definition:</b> pipe.h:65</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

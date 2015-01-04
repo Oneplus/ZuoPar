@@ -108,29 +108,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">char</span> delimiter = <span class="charliteral">&#39;/&#39;</span>,</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a3a89c6cf25ded3c527516a57135985e7">write_postag_instance</a>(std::ostream&amp; os,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">const</span> Postag&amp; output,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">char</span> delimiter = <span class="charliteral">&#39;/&#39;</span>);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a38cc113147a2efd63f6adf73e9cfc0fe">read_postag_with_cache_instance</a>(std::istream&amp; is,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    PostagWithLiteralCache&amp; output,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">char</span> delimiter = <span class="charliteral">&#39;/&#39;</span>,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#ae113354a20b6062fc6607fe7fdd56743">write_postag_with_cache_instance</a>(std::ostream&amp; os,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">const</span> PostagWithLiteralCache&amp; output,</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">char</span> delimiter = <span class="charliteral">&#39;/&#39;</span>);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;} <span class="comment">//  end for namespace io</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_INSTANCE_POSTAG_H__</span></div>
-<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:17</div></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a3a89c6cf25ded3c527516a57135985e7">write_postag_instance</a>(std::ostream&amp; os,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">const</span> Postag&amp; output,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">char</span> delimiter = <span class="charliteral">&#39;/&#39;</span>);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a38cc113147a2efd63f6adf73e9cfc0fe">read_postag_with_cache_instance</a>(std::istream&amp; is,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    PostagWithLiteralCache&amp; output,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">char</span> delimiter = <span class="charliteral">&#39;/&#39;</span>,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#ae113354a20b6062fc6607fe7fdd56743">write_postag_with_cache_instance</a>(std::ostream&amp; os,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">const</span> PostagWithLiteralCache&amp; output,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">char</span> delimiter = <span class="charliteral">&#39;/&#39;</span>);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;} <span class="comment">//  end for namespace io</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_INSTANCE_POSTAG_H__</span></div>
+<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:16</div></div>
 <div class="ttc" id="token__alphabet_8h_html"><div class="ttname"><a href="token__alphabet_8h.html">token_alphabet.h</a></div></div>
 <div class="ttc" id="namespaceZuoPar_1_1IO_html_abce742a191991ad1fc4107c7e5360f00"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#abce742a191991ad1fc4107c7e5360f00">ZuoPar::IO::read_postag_instance</a></div><div class="ttdeci">bool read_postag_instance(std::istream &amp;is, Postag &amp;output, eg::TokenAlphabet &amp;forms_alphabet, eg::TokenAlphabet &amp;postags_alphabet, char delimiter= '/', bool incremental=true)</div></div>
 <div class="ttc" id="namespaceZuoPar_1_1IO_html_ae113354a20b6062fc6607fe7fdd56743"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#ae113354a20b6062fc6607fe7fdd56743">ZuoPar::IO::write_postag_with_cache_instance</a></div><div class="ttdeci">void write_postag_with_cache_instance(std::ostream &amp;os, const PostagWithLiteralCache &amp;output, const eg::TokenAlphabet &amp;postags_alphabet, char delimiter= '/')</div></div>

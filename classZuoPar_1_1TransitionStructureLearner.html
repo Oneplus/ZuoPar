@@ -88,8 +88,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classZuoPar_1_1TransitionStructureLearner-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ZuoPar::TransitionStructureLearner&lt; _ActionType, _StateType, _ModelType &gt; Class Template Reference</div>  </div>
@@ -97,17 +98,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="structure__learner_8h_source.html">structure_learner.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for ZuoPar::TransitionStructureLearner&lt; _ActionType, _StateType, _ModelType &gt;:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classZuoPar_1_1TransitionStructureLearner.png" usemap="#ZuoPar::TransitionStructureLearner&lt; _ActionType, _StateType, _ModelType &gt;_map" alt=""/>
+  <map id="ZuoPar::TransitionStructureLearner&lt; _ActionType, _StateType, _ModelType &gt;_map" name="ZuoPar::TransitionStructureLearner&lt; _ActionType, _StateType, _ModelType &gt;_map">
+<area href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html" alt="ZuoPar::TransitionStructureLearnerMiniBatch&lt; _ActionType, _StateType, _ModelType &gt;" shape="rect" coords="0,56,515,80"/>
+</map>
+ </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:ace914673a3f3342a7cf01238fc22bccb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">LearningAlgorithm</a> { <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccba19e42ed9dfb59ef2169cb078fab263ec">kPassiveAgressive</a> = 0, 
-<a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccba9c1ec0e77e4b6d117fa5abc7accd2346">kAveragePerceptron</a>
- }</td></tr>
-<tr class="separator:ace914673a3f3342a7cf01238fc22bccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1587ce3683b577ae98bfdc1f3de485e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a1587ce3683b577ae98bfdc1f3de485e8">TransitionStructureLearner</a> (_ModelType *m, <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">LearningAlgorithm</a> algo=<a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccba9c1ec0e77e4b6d117fa5abc7accd2346">kAveragePerceptron</a>)</td></tr>
+<tr class="memitem:a1587ce3683b577ae98bfdc1f3de485e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a1587ce3683b577ae98bfdc1f3de485e8">TransitionStructureLearner</a> (_ModelType *m, <a class="el" href="namespaceZuoPar.html#a32cd2ca4376bb4190fae89f43405b393">LearningAlgorithm</a> algo=<a class="el" href="namespaceZuoPar.html#a32cd2ca4376bb4190fae89f43405b393ae5219d237cb55b5ffb188db42275077f">kAveragePerceptron</a>)</td></tr>
 <tr class="separator:a1587ce3683b577ae98bfdc1f3de485e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a860279d19b94304b4c32cb5e7110f802"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a860279d19b94304b4c32cb5e7110f802">set_timestamp</a> (int ts)</td></tr>
 <tr class="separator:a860279d19b94304b4c32cb5e7110f802"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,28 +118,29 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aee978d102b60f5d7f3a78a3d18f59495"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaca6fffe66800b48c2006f84d1fc515e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#aaca6fffe66800b48c2006f84d1fc515e">flush</a> ()</td></tr>
 <tr class="separator:aaca6fffe66800b48c2006f84d1fc515e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a02a07113e903ba9bf0284ff912a3e53f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a02a07113e903ba9bf0284ff912a3e53f">execute</a> (int last)</td></tr>
+<tr class="separator:a02a07113e903ba9bf0284ff912a3e53f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e15223599601289a7b88e6d24631969"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a2e15223599601289a7b88e6d24631969">learn_average_perceptron</a> (int last)</td></tr>
+<tr class="separator:a2e15223599601289a7b88e6d24631969"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1800b1cac05e31870b0c7d7191299722"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a1800b1cac05e31870b0c7d7191299722">learn_passive_aggressive</a> (int last)</td></tr>
+<tr class="separator:a1800b1cac05e31870b0c7d7191299722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:aa1e7d4d337da5ee637ef735457423f8a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#aa1e7d4d337da5ee637ef735457423f8a">timestamp</a></td></tr>
+<tr class="separator:aa1e7d4d337da5ee637ef735457423f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a351e715256be90aeaca3bf224faa16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#a32cd2ca4376bb4190fae89f43405b393">LearningAlgorithm</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a0a351e715256be90aeaca3bf224faa16">algorithm</a></td></tr>
+<tr class="separator:a0a351e715256be90aeaca3bf224faa16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c6113848aa8f5814bc6c9bcbc703484"><td class="memItemLeft" align="right" valign="top">_ModelType *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a9c6113848aa8f5814bc6c9bcbc703484">model</a></td></tr>
+<tr class="separator:a9c6113848aa8f5814bc6c9bcbc703484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7818a9d620f881090906db4b7172bb89"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const _StateType * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a7818a9d620f881090906db4b7172bb89">predict_state_chain</a></td></tr>
+<tr class="separator:a7818a9d620f881090906db4b7172bb89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e3597f4d00e795dce59fd1067c90819"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const _StateType * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#a8e3597f4d00e795dce59fd1067c90819">correct_state_chain</a></td></tr>
+<tr class="separator:a8e3597f4d00e795dce59fd1067c90819"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
-<a class="anchor" id="ace914673a3f3342a7cf01238fc22bccb"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">ZuoPar::TransitionStructureLearner::LearningAlgorithm</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ace914673a3f3342a7cf01238fc22bccba19e42ed9dfb59ef2169cb078fab263ec"></a>kPassiveAgressive</em>&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ace914673a3f3342a7cf01238fc22bccba9c1ec0e77e4b6d117fa5abc7accd2346"></a>kAveragePerceptron</em>&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
-
-</div>
-</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a1587ce3683b577ae98bfdc1f3de485e8"></a>
 <div class="memitem">
@@ -156,8 +160,8 @@ template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb">LearningAlgorithm</a>&#160;</td>
-          <td class="paramname"><em>algo</em> = <code><a class="el" href="classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccba9c1ec0e77e4b6d117fa5abc7accd2346">kAveragePerceptron</a></code>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#a32cd2ca4376bb4190fae89f43405b393">LearningAlgorithm</a>&#160;</td>
+          <td class="paramname"><em>algo</em> = <code><a class="el" href="namespaceZuoPar.html#a32cd2ca4376bb4190fae89f43405b393ae5219d237cb55b5ffb188db42275077f">kAveragePerceptron</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -171,10 +175,44 @@ template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>The initializer of transition structure learner</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>The model </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">algo</td><td>The learning algorithm. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a02a07113e903ba9bf0284ff912a3e53f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::execute </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>last</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aaca6fffe66800b48c2006f84d1fc515e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -236,6 +274,61 @@ template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a2e15223599601289a7b88e6d24631969"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::learn_average_perceptron </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>last</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1800b1cac05e31870b0c7d7191299722"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::learn_passive_aggressive </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>last</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Train the parameters with passive aggressive algorithm. According to K. Crammer et. al (2006), the one-best MIRA (also named passive aggressive) has close form solution on derivation.</p>
+<p>w_t+1 = w_t +  * x_t, where  = l_t / || x_t ||^2</p>
+<p>For the learning guided search problem, we set the number of wrongly actions and ther score as loss l_t </p>
+
+</div>
+</div>
 <a class="anchor" id="a860279d19b94304b4c32cb5e7110f802"></a>
 <div class="memitem">
 <div class="memproto">
@@ -256,6 +349,124 @@ template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set time stamp to the learner.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ts</td><td>The timestamp </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a0a351e715256be90aeaca3bf224faa16"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceZuoPar.html#a32cd2ca4376bb4190fae89f43405b393">LearningAlgorithm</a> <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::algorithm</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8e3597f4d00e795dce59fd1067c90819"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;const _StateType *&gt; <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::correct_state_chain</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9c6113848aa8f5814bc6c9bcbc703484"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">_ModelType* <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::model</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7818a9d620f881090906db4b7172bb89"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;const _StateType *&gt; <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::predict_state_chain</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa1e7d4d337da5ee637ef735457423f8a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType , class _StateType , class _ModelType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">ZuoPar::TransitionStructureLearner</a>&lt; _ActionType, _StateType, _ModelType &gt;::timestamp</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

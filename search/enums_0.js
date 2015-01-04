@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['learningalgorithm',['LearningAlgorithm',['../classZuoPar_1_1TransitionStructureLearner.html#ace914673a3f3342a7cf01238fc22bccb',1,'ZuoPar::TransitionStructureLearner']]]
+  ['learningalgorithm',['LearningAlgorithm',['../namespaceZuoPar.html#a32cd2ca4376bb4190fae89f43405b393',1,'ZuoPar']]]
 ];

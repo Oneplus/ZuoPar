@@ -85,130 +85,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">opt_utils.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="app_2depparser_2arceager_2opt_8h_source.html">opt.h</a>&quot;</code><br/>
-<code>#include &lt;boost/program_options.hpp&gt;</code><br/>
-<code>#include &lt;boost/log/trivial.hpp&gt;</code><br/>
+<div class="textblock"><code>#include &quot;<a class="el" href="common__opt__utils_8h_source.html">frontend/common_opt_utils.h</a>&quot;</code><br/>
 </div>
 <p><a href="app_2depparser_2arceager_2opt__utils_8h_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ad32ab9efdc2de85df81d741ee9632d50"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="app_2depparser_2arceager_2opt__utils_8h.html#ad32ab9efdc2de85df81d741ee9632d50">parse_option</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcEager_1_1Option.html">ae::Option</a> &amp;opts)</td></tr>
-<tr class="separator:ad32ab9efdc2de85df81d741ee9632d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a221b6a7fd7667eb1b51d5f9d3695f2cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="app_2depparser_2arceager_2opt__utils_8h.html#a221b6a7fd7667eb1b51d5f9d3695f2cc">parse_learn_option</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcEager_1_1LearnOption.html">ae::LearnOption</a> &amp;opts)</td></tr>
-<tr class="separator:a221b6a7fd7667eb1b51d5f9d3695f2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a734937fd2d129505346de312fee152c0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="app_2depparser_2arceager_2opt__utils_8h.html#a734937fd2d129505346de312fee152c0">parse_test_option</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcEager_1_1TestOption.html">ae::TestOption</a> &amp;opts)</td></tr>
-<tr class="separator:a734937fd2d129505346de312fee152c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a221b6a7fd7667eb1b51d5f9d3695f2cc"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool parse_learn_option </td>
-          <td>(</td>
-          <td class="paramtype">const po::variables_map &amp;&#160;</td>
-          <td class="paramname"><em>vm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcEager_1_1LearnOption.html">ae::LearnOption</a> &amp;&#160;</td>
-          <td class="paramname"><em>opts</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Parse the learning options.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">vm</td><td>The variables map </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">opts</td><td>The options. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="ad32ab9efdc2de85df81d741ee9632d50"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool parse_option </td>
-          <td>(</td>
-          <td class="paramtype">const po::variables_map &amp;&#160;</td>
-          <td class="paramname"><em>vm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcEager_1_1Option.html">ae::Option</a> &amp;&#160;</td>
-          <td class="paramname"><em>opts</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Parse commonly shared options.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">vm</td><td>The variables map </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">opts</td><td>The options. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a734937fd2d129505346de312fee152c0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool parse_test_option </td>
-          <td>(</td>
-          <td class="paramtype">const po::variables_map &amp;&#160;</td>
-          <td class="paramname"><em>vm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcEager_1_1TestOption.html">ae::TestOption</a> &amp;&#160;</td>
-          <td class="paramname"><em>opts</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Parse the testing options.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">vm</td><td>The variables map </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">opts</td><td>The options. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

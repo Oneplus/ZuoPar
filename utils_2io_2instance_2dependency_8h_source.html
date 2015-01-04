@@ -103,25 +103,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>eg = ZuoPar::Engine;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#ad4c814b896890a5d80763ca550e6f24a">read_dependency_instance</a>(std::istream&amp; is,</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    Dependency&amp; output,</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; deprels_alphabet,</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#abe69892a055d39b8ed9459c0e3c8aefa">write_dependency_instance</a>(std::ostream&amp; os,</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">const</span> Dependency&amp; output,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; deprels_alphabet);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;} <span class="comment">//  end for namespace io</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_INSTANCE_DEPENDENCY_H__</span></div>
-<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:17</div></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#ad4c814b896890a5d80763ca550e6f24a">read_dependency_instance</a>(std::istream&amp; is,</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    Dependency&amp; output,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; deprels_alphabet,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#abe69892a055d39b8ed9459c0e3c8aefa">write_dependency_instance</a>(std::ostream&amp; os,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">const</span> Dependency&amp; output,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; deprels_alphabet);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <span class="comment">//  end for namespace io</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_INSTANCE_DEPENDENCY_H__</span></div>
+<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:16</div></div>
 <div class="ttc" id="namespaceZuoPar_1_1IO_html_ad4c814b896890a5d80763ca550e6f24a"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#ad4c814b896890a5d80763ca550e6f24a">ZuoPar::IO::read_dependency_instance</a></div><div class="ttdeci">void read_dependency_instance(std::istream &amp;is, Dependency &amp;output, eg::TokenAlphabet &amp;forms_alphabet, eg::TokenAlphabet &amp;postags_alphabet, eg::TokenAlphabet &amp;deprels_alphabet, bool incremental=true)</div></div>
 <div class="ttc" id="namespaceZuoPar_1_1IO_html_abe69892a055d39b8ed9459c0e3c8aefa"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#abe69892a055d39b8ed9459c0e3c8aefa">ZuoPar::IO::write_dependency_instance</a></div><div class="ttdeci">void write_dependency_instance(std::ostream &amp;os, const Dependency &amp;output, const eg::TokenAlphabet &amp;forms_alphabet, const eg::TokenAlphabet &amp;postags_alphabet, const eg::TokenAlphabet &amp;deprels_alphabet)</div></div>
 <div class="ttc" id="token__alphabet_8h_html"><div class="ttname"><a href="token__alphabet_8h.html">token_alphabet.h</a></div></div>

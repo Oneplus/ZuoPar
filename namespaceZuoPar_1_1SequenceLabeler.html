@@ -87,7 +87,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">ZuoPar::SequenceLabeler Namespace Reference</div>  </div>
 </div><!--header-->
@@ -103,9 +104,13 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html">Decoder</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1SequenceLabeler_1_1Option.html">Option</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1MultiPipe.html">MultiPipe</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1SequenceLabeler_1_1ConstrainOption.html">ConstrainOption</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1SequenceLabeler_1_1LearnOption.html">LearnOption</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1SequenceLabeler_1_1MultiLearnOption.html">MultiLearnOption</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1SequenceLabeler_1_1TestOption.html">TestOption</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,18 +125,150 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a75ebe1445c6ca8836f952d515ead709d"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<tr class="memitem:ad16b42d81888fd5f639f9795013b5424"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
 <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner</a><br class="typebreak"/>
-&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a75ebe1445c6ca8836f952d515ead709d">Learner</a></td></tr>
-<tr class="separator:a75ebe1445c6ca8836f952d515ead709d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#ad16b42d81888fd5f639f9795013b5424">Learner</a></td></tr>
+<tr class="separator:ad16b42d81888fd5f639f9795013b5424"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58eb0f992170c649216c53c106bffb10"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html">TransitionStructureLearnerMiniBatch</a><br class="typebreak"/>
+&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a58eb0f992170c649216c53c106bffb10">MinibatchLearner</a></td></tr>
+<tr class="separator:a58eb0f992170c649216c53c106bffb10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a7844fd25bfd6ee5e939a30b948bdf455"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a7844fd25bfd6ee5e939a30b948bdf455">parse_constrain</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1SequenceLabeler_1_1ConstrainOption.html">ConstrainOption</a> &amp;opts)</td></tr>
+<tr class="separator:a7844fd25bfd6ee5e939a30b948bdf455"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22bff6de97f81d9658bb5707ee42304a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a22bff6de97f81d9658bb5707ee42304a">parse_learn_option</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1SequenceLabeler_1_1LearnOption.html">LearnOption</a> &amp;opts)</td></tr>
+<tr class="separator:a22bff6de97f81d9658bb5707ee42304a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98c7ac15db3fb8e20402f3cd19bfa0c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a98c7ac15db3fb8e20402f3cd19bfa0c3">parse_multi_learn_option</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1SequenceLabeler_1_1MultiLearnOption.html">MultiLearnOption</a> &amp;opts)</td></tr>
+<tr class="separator:a98c7ac15db3fb8e20402f3cd19bfa0c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54f291988c806612a0438cba7011e1fc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a54f291988c806612a0438cba7011e1fc">parse_test_option</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1SequenceLabeler_1_1TestOption.html">TestOption</a> &amp;opts)</td></tr>
+<tr class="separator:a54f291988c806612a0438cba7011e1fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="a75ebe1445c6ca8836f952d515ead709d"></a>
+<a class="anchor" id="ad16b42d81888fd5f639f9795013b5424"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner</a>&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> &gt; <a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a75ebe1445c6ca8836f952d515ead709d">ZuoPar::SequenceLabeler::Learner</a></td>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner</a>&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>&gt; <a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#ad16b42d81888fd5f639f9795013b5424">ZuoPar::SequenceLabeler::Learner</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a58eb0f992170c649216c53c106bffb10"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html">TransitionStructureLearnerMiniBatch</a>&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>&gt; <a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a58eb0f992170c649216c53c106bffb10">ZuoPar::SequenceLabeler::MinibatchLearner</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a7844fd25bfd6ee5e939a30b948bdf455"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ZuoPar::SequenceLabeler::parse_constrain </td>
+          <td>(</td>
+          <td class="paramtype">const po::variables_map &amp;&#160;</td>
+          <td class="paramname"><em>vm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ConstrainOption &amp;&#160;</td>
+          <td class="paramname"><em>opts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a22bff6de97f81d9658bb5707ee42304a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ZuoPar::SequenceLabeler::parse_learn_option </td>
+          <td>(</td>
+          <td class="paramtype">const po::variables_map &amp;&#160;</td>
+          <td class="paramname"><em>vm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LearnOption &amp;&#160;</td>
+          <td class="paramname"><em>opts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a98c7ac15db3fb8e20402f3cd19bfa0c3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ZuoPar::SequenceLabeler::parse_multi_learn_option </td>
+          <td>(</td>
+          <td class="paramtype">const po::variables_map &amp;&#160;</td>
+          <td class="paramname"><em>vm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MultiLearnOption &amp;&#160;</td>
+          <td class="paramname"><em>opts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a54f291988c806612a0438cba7011e1fc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ZuoPar::SequenceLabeler::parse_test_option </td>
+          <td>(</td>
+          <td class="paramtype">const po::variables_map &amp;&#160;</td>
+          <td class="paramname"><em>vm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TestOption &amp;&#160;</td>
+          <td class="paramname"><em>opts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

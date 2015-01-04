@@ -101,12 +101,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a7c6bf0587afc1162ff9437cfa12ee27b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1ActionUtils.html#a7c6bf0587afc1162ff9437cfa12ee27b">get_oracle_actions</a> (const <a class="el" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a> &amp;instance, std::vector&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &gt; &amp;actions)</td></tr>
 <tr class="separator:a7c6bf0587afc1162ff9437cfa12ee27b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa514155db0259a4282f75661fb53fa66"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1ActionUtils.html#aa514155db0259a4282f75661fb53fa66">is_shift</a> (const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &amp;act, <a class="el" href="namespaceZuoPar.html#aece63013822d0fe8e9fb63133c8a3251">tag_t</a> &amp;tag)</td></tr>
-<tr class="separator:aa514155db0259a4282f75661fb53fa66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c6bf0587afc1162ff9437cfa12ee27b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1ActionUtils.html#a7c6bf0587afc1162ff9437cfa12ee27b">get_oracle_actions</a> (const <a class="el" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a> &amp;instance, std::vector&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &gt; &amp;actions)</td></tr>
-<tr class="separator:a7c6bf0587afc1162ff9437cfa12ee27b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa514155db0259a4282f75661fb53fa66"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1ActionUtils.html#aa514155db0259a4282f75661fb53fa66">is_shift</a> (const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &amp;act, <a class="el" href="namespaceZuoPar.html#aece63013822d0fe8e9fb63133c8a3251">tag_t</a> &amp;tag)</td></tr>
-<tr class="separator:aa514155db0259a4282f75661fb53fa66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39f50a5af1399fedeb2018b44c7f11c1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceZuoPar.html#aece63013822d0fe8e9fb63133c8a3251">tag_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1ActionUtils.html#a39f50a5af1399fedeb2018b44c7f11c1">tag</a> (const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &amp;act)</td></tr>
+<tr class="separator:a39f50a5af1399fedeb2018b44c7f11c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a7c6bf0587afc1162ff9437cfa12ee27b"></a>
@@ -151,7 +147,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7c6bf0587afc1162ff9437cfa12ee27b"></a>
+<a class="anchor" id="a39f50a5af1399fedeb2018b44c7f11c1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -159,63 +155,11 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void ZuoPar::SequenceLabeler::ActionUtils::get_oracle_actions </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceZuoPar.html#acf09bc599b289f69a51bdac8fbd37e41">SequenceInstance</a> &amp;&#160;</td>
-          <td class="paramname"><em>instance</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>actions</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Calculate the orcale action sequence in the arcstandard transition system.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>The input reference instance. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">actions</td><td>The oracle transition sequence. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="aa514155db0259a4282f75661fb53fa66"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool ZuoPar::SequenceLabeler::ActionUtils::is_shift </td>
+          <td class="memname">static <a class="el" href="namespaceZuoPar.html#aece63013822d0fe8e9fb63133c8a3251">tag_t</a> ZuoPar::SequenceLabeler::ActionUtils::tag </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &amp;&#160;</td>
-          <td class="paramname"><em>act</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>act</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#aece63013822d0fe8e9fb63133c8a3251">tag_t</a> &amp;&#160;</td>
-          <td class="paramname"><em>tag</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -224,56 +168,6 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Judge if the input action is a shift action.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>bool Return true on the action being a shift action, otherwise false. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aa514155db0259a4282f75661fb53fa66"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool ZuoPar::SequenceLabeler::ActionUtils::is_shift </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a> &amp;&#160;</td>
-          <td class="paramname"><em>act</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#aece63013822d0fe8e9fb63133c8a3251">tag_t</a> &amp;&#160;</td>
-          <td class="paramname"><em>tag</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Judge if the input action is a shift action.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">act</td><td>The action. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>bool Return true on the action being a shift action, otherwise false. </dd></dl>
 
 </div>
 </div>
