@@ -37,8 +37,6 @@ public:
       return;
     }
 
-    _TRACE << "!";
-
     std::vector<const _StateType*> predict_states;
     std::vector<const _StateType*> correct_states;
     for (const _StateType* p = predict_state; p; p = p->previous) {
@@ -81,8 +79,6 @@ public:
       }
 
       this->execute(this->predict_state_chain.size() - 1);
-      //! Increase the timestamp.
-      ++ this->timestamp;
     }
   }
 private:

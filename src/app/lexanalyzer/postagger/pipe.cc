@@ -121,6 +121,7 @@ Pipe::run() {
   if (mode == kPipeLearn) {
     learner->set_timestamp(N);
     learner->flush();
+    _INFO << "pipe: nr errors: " << learner->errors();
 
     std::ofstream mfs(model_path);
     if (!mfs.good()) {

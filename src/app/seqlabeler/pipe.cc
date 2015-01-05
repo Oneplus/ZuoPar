@@ -69,6 +69,22 @@ Pipe::load_model(const std::string& model_path) {
   return true;
 }
 
+bool
+Pipe::save_model(const std::string& model_path) {
+  std::ofstream mfs(model_path);
+  if (!mfs.good()) {
+    _WARN << "pipe: failed to save model.";
+    return false;
+  } else {
+    attributes_alphabet.save(mfs);
+    tags_alphabet.save(mfs);
+    weight->save(mfs);
+    _INFO << "pipe: model saved to " << model_path;
+  }
+
+  return true;
+}
+
 void
 Pipe::load_constrain() {
   namespace algo = boost::algorithm;
@@ -193,16 +209,9 @@ Pipe::run() {
   if (mode == kPipeLearn) {
     learner->set_timestamp(N);
     learner->flush();
+    _INFO << "pipe: nr errors: " << learner->errors();
 
-    std::ofstream mfs(model_path);
-    if (!mfs.good()) {
-      _WARN << "pipe: failed to save model.";
-    } else {
-      attributes_alphabet.save(mfs);
-      tags_alphabet.save(mfs);
-      weight->save(mfs);
-      _INFO << "pipe: model saved to " << model_path;
-    }
+    save_model(model_path);
   }
 }
 

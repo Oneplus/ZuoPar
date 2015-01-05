@@ -138,6 +138,7 @@ public:
     if (mode == kPipeLearn) {
       learner->set_timestamp(N);
       learner->flush();
+      _INFO << "pipe: nr errors: " << learner->errors();
       save_model(model_path);
     }
   }

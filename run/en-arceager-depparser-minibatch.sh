@@ -29,6 +29,7 @@ for i in `seq 1 20`; do
     ${EXE} multi-learn \
         -m ${MODEL_PREFIX} \
         -t 12 \
+        -d 100 \
         -r ${TRAIN}
 
     cp ${MODEL_PREFIX} ${MODEL_PREFIX}.${i}

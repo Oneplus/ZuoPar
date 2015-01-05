@@ -87,15 +87,18 @@ public:
               MinibatchLearner>::decode, this));
       }
       decoder_threads.join_all();
-      minibatch_learner->set_timestamp(start+ 1);
+      minibatch_learner->set_timestamp(batch_id+ 1);
       minibatch_learner->learn();
       minibatch_learner->clear();
-      _INFO << "pipe: finish learning batch#" << batch_id;
+      if ((batch_id+ 1) % this->display_interval == 0) {
+        _INFO << "pipe: finish learning batch#" << batch_id + 1;
+      }
     }
 
-    minibatch_learner->set_timestamp(N);
+    _INFO << "pipe: learn " << nr_batches << " batches";
+    minibatch_learner->set_timestamp(nr_batches);
     minibatch_learner->flush();
-
+    _INFO << "pipe: nr errors: " << minibatch_learner->errors();
     this->save_model(this->model_path);
   }
 private:

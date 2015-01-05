@@ -24,6 +24,7 @@ public:
   TransitionStructureLearner(_ModelType* m,
       LearningAlgorithm algo= kAveragePerceptron)
     : model(m),
+    nr_errors(0),
     algorithm(algo) {
   }
 
@@ -67,10 +68,15 @@ public:
     model->flush(timestamp);
   }
 
+  int errors() {
+    return nr_errors;
+  }
 protected:
   int timestamp;
+  int nr_errors;
 
   void execute(int last) {
+    ++ nr_errors;
     if (algorithm == kAveragePerceptron) {
       learn_average_perceptron(last);
     } else if (algorithm == kPassiveAgressive) {

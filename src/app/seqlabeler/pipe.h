@@ -48,6 +48,8 @@ protected:
    */
   bool load_model(const std::string& model_path);
 
+  bool save_model(const std::string& model_path);
+
   /**
    * Build the dependency output for the state chain which ends with the source
    * state.

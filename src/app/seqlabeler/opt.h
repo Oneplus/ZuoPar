@@ -16,7 +16,10 @@ struct ConstrainOption {
 
 struct LearnOption: public fe::LearnOption, public ConstrainOption {};
 
-struct MultiLearnOption: public LearnOption, public fe::MultiLearnOption {};
+struct MultiLearnOption: public LearnOption {
+  int batch_size;
+  int num_threads;
+};
 
 struct TestOption: public fe::TestOption, public ConstrainOption {};
 

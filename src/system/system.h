@@ -62,8 +62,6 @@ private:
   //! Use to specify if use early update strategy.
   bool early_update;
 
-  //!
-  _StateType* dummy_state;
 protected:
   //! The cached possible actions.
   action_collection_t possible_actions;

@@ -57,25 +57,21 @@ MultiPipe::run() {
     }
     decoder_threads.join_all();
 
-    minibatch_learner->set_timestamp(start+ 1);
+    minibatch_learner->set_timestamp(batch_id+ 1);
     minibatch_learner->learn();
     minibatch_learner->clear();
 
-    _INFO << "pipe: finish learning batch#" << batch_id;
+    if ((batch_id+ 1) % display_interval == 0) {
+      _INFO << "pipe: finish learning batch#" << batch_id + 1;
+    }
   }
 
-  minibatch_learner->set_timestamp(N);
+  _INFO << "pipe: learn " << nr_batches << " batches.";
+  minibatch_learner->set_timestamp(nr_batches);
   minibatch_learner->flush();
+  _INFO << "pipe: nr errors: " << minibatch_learner->errors();
 
-  std::ofstream mfs(model_path);
-  if (!mfs.good()) {
-    _WARN << "pipe: failed to save model.";
-  } else {
-    attributes_alphabet.save(mfs);
-    tags_alphabet.save(mfs);
-    weight->save(mfs);
-    _INFO << "pipe: model saved to " << model_path;
-  }
+  save_model(model_path);
 }
 
 void
