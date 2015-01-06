@@ -8,7 +8,7 @@ CONSTRAIN=${ROOT}/data/semchunk/ch/trans
 DEVEL_PROPS=${ROOT}/data/semchunk/ch/devel.answer.props
 TEST_PROPS=${ROOT}/data/semchunk/ch/test.answer.props
 
-SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-semchunk-ch-minibatch
+SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-semchunk-ch-umax-aap-b64-c16-n1
 WORKSPACE=${ROOT}/workspace/${SIG}
 
 MODEL_DIR=${WORKSPACE}/model
@@ -28,9 +28,10 @@ rm ${MODEL_PREFIX}.*
 
 for i in `seq 1 100`; do
     ${EXE} multi-learn \
+        -u max \
         -m ${MODEL_PREFIX} \
         -n ${CONSTRAIN} \
-        -t 10 \
+        -t 12 \
         -r ${TRAIN}
 
     cp ${MODEL_PREFIX} ${MODEL_PREFIX}.${i}

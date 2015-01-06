@@ -8,7 +8,7 @@ CONSTRAIN=${ROOT}/data/semchunk/en/trans
 DEVEL_PROPS=${ROOT}/data/semchunk/en/devel.answer.props
 TEST_PROPS=${ROOT}/data/semchunk/en/test.answer.props
 
-SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-semchunk-en-minibatch
+SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-semchunk-en-umax-aap-b64-c01-n1
 WORKSPACE=${ROOT}/workspace/${SIG}
 
 MODEL_DIR=${WORKSPACE}/model
@@ -26,11 +26,11 @@ cp ${ROOT}/bin/sequence_labeler ${EXE}
 
 rm ${MODEL_PREFIX}.*
 
-for i in `seq 1 100`; do
-    ${EXE} multi-learn \
+for i in `seq 1 60`; do
+    ${EXE} learn \
+        -u max \
         -n ${CONSTRAIN} \
         -m ${MODEL_PREFIX} \
-        -t 12 \
         -r ${TRAIN}
 
     cp ${MODEL_PREFIX} ${MODEL_PREFIX}.${i}

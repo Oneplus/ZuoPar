@@ -1,14 +1,14 @@
 #!/bin/bash
 ROOT=`pwd`
-TRAIN=${ROOT}/data/semchunk/ch/train.semchunk.crfsuite.txt
-DEVEL=${ROOT}/data/semchunk/ch/devel.semchunk.crfsuite.txt
-TEST=${ROOT}/data/semchunk/ch/test.semchunk.crfsuite.txt
-CONSTRAIN=${ROOT}/data/semchunk/ch/trans
+TRAIN=${ROOT}/data/semchunk/en/train.semchunk.crfsuite.txt
+DEVEL=${ROOT}/data/semchunk/en/devel.semchunk.crfsuite.txt
+TEST=${ROOT}/data/semchunk/en/test.semchunk.crfsuite.txt
+CONSTRAIN=${ROOT}/data/semchunk/en/trans
 
-DEVEL_PROPS=${ROOT}/data/semchunk/ch/devel.answer.props
-TEST_PROPS=${ROOT}/data/semchunk/ch/test.answer.props
+DEVEL_PROPS=${ROOT}/data/semchunk/en/devel.answer.props
+TEST_PROPS=${ROOT}/data/semchunk/en/test.answer.props
 
-SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-semchunk-ch
+SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-semchunk-en-umax-aap-b64-c01-n0
 WORKSPACE=${ROOT}/workspace/${SIG}
 
 MODEL_DIR=${WORKSPACE}/model
@@ -28,7 +28,7 @@ rm ${MODEL_PREFIX}.*
 
 for i in `seq 1 60`; do
     ${EXE} learn \
-        -n ${CONSTRAIN} \
+        -u max \
         -m ${MODEL_PREFIX} \
         -r ${TRAIN}
 
@@ -36,13 +36,11 @@ for i in `seq 1 60`; do
     bzip2 ${MODEL_PREFIX}.${i}
 
     ${EXE} test \
-        -n ${CONSTRAIN} \
         -m ${MODEL_PREFIX} \
         -i ${DEVEL} \
         -o ${OUTPUT_DIR}/devel.${i}
 
     ${EXE} test \
-        -n ${CONSTRAIN} \
         -m ${MODEL_PREFIX} \
         -i ${TEST} \
         -o ${OUTPUT_DIR}/test.${i}
@@ -50,6 +48,7 @@ for i in `seq 1 60`; do
     TMP=/tmp/`date +%M%H%S | base64`
     ${ROOT}/scripts/semchunk/semchunk_to_props2.py ${OUTPUT_DIR}/devel.${i} > ${TMP}
     awk '{print $1}' ${DEVEL_PROPS} | paste -d "\t" - ${TMP} | sed 's/^\t$//g' > ${OUTPUT_DIR}/devel.${i}.props
+
 
     ${ROOT}/scripts/semchunk/semchunk_to_props2.py ${OUTPUT_DIR}/test.${i} > ${TMP}
     awk '{print $1}' ${TEST_PROPS} | paste -d "\t" - ${TMP} | sed 's/^\t$//g' > ${OUTPUT_DIR}/test.${i}.props

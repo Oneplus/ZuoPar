@@ -8,7 +8,7 @@ CONSTRAIN=${ROOT}/data/semchunk/en/trans
 DEVEL_PROPS=${ROOT}/data/semchunk/en/devel.answer.props
 TEST_PROPS=${ROOT}/data/semchunk/en/test.answer.props
 
-SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-semchunk-en
+SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-semchunk-en-uearly-aap-b64-c01-n0
 WORKSPACE=${ROOT}/workspace/${SIG}
 
 MODEL_DIR=${WORKSPACE}/model
@@ -28,7 +28,6 @@ rm ${MODEL_PREFIX}.*
 
 for i in `seq 1 60`; do
     ${EXE} learn \
-        -n ${CONSTRAIN} \
         -m ${MODEL_PREFIX} \
         -r ${TRAIN}
 
@@ -36,13 +35,11 @@ for i in `seq 1 60`; do
     bzip2 ${MODEL_PREFIX}.${i}
 
     ${EXE} test \
-        -n ${CONSTRAIN} \
         -m ${MODEL_PREFIX} \
         -i ${DEVEL} \
         -o ${OUTPUT_DIR}/devel.${i}
 
     ${EXE} test \
-        -n ${CONSTRAIN} \
         -m ${MODEL_PREFIX} \
         -i ${TEST} \
         -o ${OUTPUT_DIR}/test.${i}
