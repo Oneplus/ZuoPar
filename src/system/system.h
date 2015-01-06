@@ -196,7 +196,8 @@ public:
 
         if (update_strategy == kMaxViolation) {
           floatval_t mdiff = best_target->score - correct_state->score;
-          if (max_violate_predite_state == NULL || max_violate_diff < mdiff) {
+          if (max_violate_predite_state == NULL || max_violate_diff <= mdiff) {
+            _TRACE << "sys: violate update " << mdiff;
             max_violate_diff = mdiff;
             max_violate_predite_state = best_target;
             max_violate_correct_state = correct_state;
