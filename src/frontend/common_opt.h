@@ -15,7 +15,7 @@ struct Option {
 struct LearnOption: public Option {
   std::string reference_path; //! The path to the reference file.
   std::string algorithm;      //! The algorithm.
-  bool early_update;
+  std::string update_strategy;//! The update strategy.
 };
 
 struct MultiLearnOption: public LearnOption {

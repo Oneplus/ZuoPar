@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <boost/tuple/tuple.hpp>
 #include "settings.h"
+#include "system/options.h"
 #include "utils/logging.h"
 #include "types/internal/packed_scores.h"
 
@@ -22,8 +23,10 @@ class TransitionSystem {
 public:
   //! Define the type of const decode result.
   typedef std::pair<const _StateType*, const _StateType*> const_decode_result_t;
+
   //! Define the type of regular decode result.
   typedef std::pair<_StateType*, _StateType*> decode_result_t;
+
   //! Define a sequence of actions.
   typedef std::vector<_ActionType> action_sequence_t;
 
@@ -51,16 +54,21 @@ private:
 private:
   //! The pointer to the model, used to score the certain transition.
   _ModelType* model;
+
   //! The header of each row in lattice.
   lattice_head_list_t lattice_heads;
+
   //! The size of each row in lattice.
   lattice_size_list_t lattice_size;
+
   //! The size of the beam.
   int beam_size;
+
   //! Use to specify if use averaged parameter.
   bool use_avg;
+
   //! Use to specify if use early update strategy.
-  bool early_update;
+  UpdateStrategy update_strategy;
 
 protected:
   //! The cached possible actions.
@@ -75,17 +83,18 @@ public:
   /**
    * The allocator for transition system.
    *
-   *  @param[in]  _beam_size  The beam size.
-   *  @parma[in]  _model      The model pointer.
+   *  @param[in]  _beam_size    The beam size.
+   *  @param[in]  _early_update Use to specify if perform early update.
+   *  @parma[in]  _model        The model pointer.
    */
   TransitionSystem(
-      int _beam_size,
-      bool _early_update,
-      _ModelType* _model)
-    : beam_size(_beam_size),
-    early_update(_early_update),
+      int beam_size_,
+      UpdateStrategy update_strategy_,
+      _ModelType* model_)
+    : beam_size(beam_size_),
+    update_strategy(update_strategy_),
     use_avg(false),
-    model(_model) {
+    model(model_) {
     candidate_transitions = new scored_transition_t[beam_size];
   }
 
@@ -107,7 +116,6 @@ public:
    *  @param[in]  initial_state   The initial state.
    *  @param[in]  gold_actions    The gold actions.
    *  @param[in]  max_nr_actions  The maximum number of transition actions.
-   *  @param[in]  early_update    The early update strategy.
    *  @return     decode_result_t The first element in decode result is the
    *                              terminal state of the search result. The
    *                              second element (optional) is the terminal
@@ -116,12 +124,10 @@ public:
   const_decode_result_t decode(const _StateType& initial_state,
       const action_sequence_t& gold_actions,
       int max_nr_actions) {
-    _TRACE << "sys: decoding on " << (void *)initial_state.ref
-      << " with " << initial_state.ref->size() << " forms.";
-    _TRACE << "sys: gold action is ";
-    for (int i = 0; i < gold_actions.size(); ++ i) {
-      _TRACE << "sys: - [" << i << "] " << gold_actions[i];
-    }
+    floatval_t max_violate_diff = 0;
+    const _StateType* max_violate_predite_state = NULL;
+    const _StateType* max_violate_correct_state = NULL;
+
     use_avg = (gold_actions.size() == 0);
     _StateType* row = allocate_lattice(0);
     const _StateType* correct_state = NULL;
@@ -135,7 +141,7 @@ public:
 
     int step = 1;
     for (step = 1; step <= max_nr_actions; ++ step) {
-      _TRACE << "sys: round " << step;
+      //_TRACE << "sys: round " << step;
 
       row = allocate_lattice(step);
       lattice_size.push_back(0);
@@ -154,19 +160,11 @@ public:
         }
       }
 
-      //_TRACE << "sys: nr extended states(current beam size) =" << current_beam_size;
       for (int i = 0; i < current_beam_size; ++ i) {
         const scored_transition_t& trans = candidate_transitions[i];
         transit((*trans.template get<0>()), trans.template get<1>(), trans.template get<2>(),
             (row+ i));
       }
-
-      /*for (int i = 0; i < current_beam_size; ++ i) {
-        _StateType* now= row + i;
-        _TRACE << "sys: [" << i << "] " << (void *)(now->previous)
-          << "->" << (void *)(now) << " by " << now->last_action
-          << " =" << now->score;
-      }*/
 
       if (gold_actions.size() != 0) {
         // Perform training and early update.
@@ -174,29 +172,46 @@ public:
             gold_actions[step- 1], correct_state,
             row, row + current_beam_size);
 
-        //_TRACE << "sys: next_correct_state=" << (void *)next_correct_state;
+        const _StateType* best_target = search_best_state(
+            row, row + current_beam_size);
+
+        bool dropout = false;
+
         if (NULL == next_correct_state) {
           //_TRACE << "sys: error at step =" << step;
-          const _StateType* best_target = search_best_state(
-              row, row + current_beam_size);
           _StateType* dummy_state = row+ beam_size;
-          transit((*correct_state), gold_actions[step- 1], 0, dummy_state);
+          _ScoreContextType ctx(*correct_state);
+          transit((*correct_state), gold_actions[step- 1],
+              model->score(ctx, gold_actions[step- 1], use_avg), dummy_state);
           correct_state = dummy_state;
-
-          //_TRACE << "sys: " << (void *)dummy_state->previous << "->"
-          //  << (void *)dummy_state << " by " << dummy_state->last_action;
-          if (early_update) {
-            _TRACE << "sys: decode is done (cond 1).";
-            return const_decode_result_t(best_target, dummy_state);
-          }
+          dropout = true;
         } else {
           correct_state = next_correct_state;
         }
+
+        if (dropout && update_strategy == kEarlyUpdate) {
+          _TRACE << "sys: decode is done (cond: early update).";
+          return const_decode_result_t(best_target, correct_state);
+        }
+
+        if (update_strategy == kMaxViolation) {
+          floatval_t mdiff = best_target->score - correct_state->score;
+          if (max_violate_predite_state == NULL || max_violate_diff < mdiff) {
+            max_violate_diff = mdiff;
+            max_violate_predite_state = best_target;
+            max_violate_correct_state = correct_state;
+          }
+        }
       }
     }
-    const _StateType* best_target = search_best_state(row, row + lattice_size[step- 1]);
+
     _TRACE << "sys: decode is done (cond 2).";
-    return const_decode_result_t(best_target, correct_state);
+    if (update_strategy == kMaxViolation) {
+      return const_decode_result_t(max_violate_predite_state, max_violate_correct_state);
+    } else {
+      const _StateType* best_target = search_best_state(row, row + lattice_size[step- 1]);
+      return const_decode_result_t(best_target, correct_state);
+    }
   }
 
 private:

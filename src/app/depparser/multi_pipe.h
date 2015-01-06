@@ -59,7 +59,7 @@ public:
       decoder_pool[i] = new Decoder(
           this->deprels_alphabet.size(),
           this->beam_size,
-          this->early_update,
+          this->update_strategy,
           this->weight);
     }
 

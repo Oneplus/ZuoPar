@@ -3,8 +3,9 @@
 
 #include <vector>
 #include <cmath>
-#include "types/math/sparse_vector.h"
 #include "utils/logging.h"
+#include "types/math/sparse_vector.h"
+#include "system/options.h"
 
 namespace ZuoPar {
 

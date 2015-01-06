@@ -10,6 +10,30 @@ namespace FrontEnd {
 namespace po = boost::program_options;
 
 /**
+ * Build commonly used learn option parser.
+ *
+ *  @param[in]  usage   The usage.
+ *  @return     parser  The option parser
+ */
+po::options_description build_learn_optparser(const std::string& usage);
+
+/**
+ * Build commonly used multi learn option parser.
+ *
+ *  @param[in]  usage   The usage.
+ *  @return     parser  The option parser
+ */
+po::options_description build_multi_learn_optparser(const std::string& usage);
+
+/**
+ * Build commonly used test option parser.
+ *
+ *  @param[in]  usage   The usage.
+ *  @return     parser  The option parser
+ */
+po::options_description build_test_optparser(const std::string& usage);
+
+/**
  * Parse commonly shared options.
  *
  *  @param[in]    vm    The variables map

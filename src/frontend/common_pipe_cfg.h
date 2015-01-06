@@ -2,6 +2,7 @@
 #define __ZUOPAR_FRONTENT_COMMON_PIPE_CFG_H__
 
 #include "types/common.h"
+#include "system/options.h"
 #include "frontend/common_opt.h"
 
 namespace ZuoPar {
@@ -20,17 +21,38 @@ public:
     this->model_path = opts.model_path;
     this->beam_size = opts.beam_size;
     this->display_interval = opts.display_interval;
-    this->early_update = opts.early_update;
+
+    this->update_strategy = UpdateStrategy::kEarlyUpdate;
+    if (opts.update_strategy == "naive") {
+      this->update_strategy = UpdateStrategy::kNaive;
+    } else if (opts.update_strategy == "max") {
+      this->update_strategy = UpdateStrategy::kMaxViolation;
+    }
+
     this->algorithm = LearningAlgorithm::kAveragePerceptron;
     if (opts.algorithm == "pa") {
       this->algorithm = LearningAlgorithm::kPassiveAgressive;
     }
-    _INFO << "::LEARN:: mode is actived.";
+
+    _INFO << "LEARN:: mode is actived.";
     _INFO << "report: beam size = " << this->beam_size;
-    _INFO << "report: early update = " << (this->early_update ? "true": "false");
-    _INFO << "report: learning algorithm = " << (
-        this->algorithm == LearningAlgorithm::kAveragePerceptron ?
-        "averaged perceptron": "passive aggressive");
+
+    switch (this->update_strategy) {
+      case UpdateStrategy::kNaive:
+        _INFO << "report: update strategy = naive"; break;
+      case UpdateStrategy::kEarlyUpdate:
+        _INFO << "report: update strategy = early update"; break;
+      case UpdateStrategy::kMaxViolation:
+        _INFO << "report: update strategy = max violation"; break;
+    }
+
+    switch (this->algorithm) {
+      case LearningAlgorithm::kAveragePerceptron:
+        _INFO << "report: learning algorithm = averaged perceptron"; break;
+      case LearningAlgorithm::kPassiveAgressive:
+        _INFO << "report: learning algorithm = passive aggressive"; break;
+    }
+
     _INFO << "report: model file is " << opts.model_path;
     _INFO << "report: reference file is " << opts.reference_path;
   }
@@ -44,7 +66,7 @@ public:
     this->beam_size = opts.beam_size;
     this->display_interval = opts.display_interval;
 
-    _INFO << "::TEST:: mode is actived.";
+    _INFO << "TEST:: mode is actived.";
     _INFO << "report: beam size = " << opts.beam_size;
     _INFO << "report: model file is " << opts.model_path;
   }
@@ -55,6 +77,9 @@ protected:
 
   //! Use to specify the learning algorithm
   LearningAlgorithm algorithm;
+
+   //! Use to specify perform early update strategy during learning.
+  UpdateStrategy update_strategy;
 
   //! The path to the reference file.
   std::string reference_path;
@@ -67,9 +92,6 @@ protected:
 
   //! The path to the output file.
   std::string output_path;
-
-  //! Use to specify perform early update strategy during learning.
-  bool early_update;
 
   //! The size of the beam.
   int beam_size;

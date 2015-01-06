@@ -7,7 +7,7 @@ TEST=${ROOT}/data/dependency/en/testi.tab
 DEVEL_ANS=${ROOT}/data/dependency/en/devr.tab
 TEST_ANS=${ROOT}/data/dependency/en/testr.tab
 
-SIG=`date '+%Y-%m-%d-%H%M%S'`-en-arceager-depparser
+SIG=`date '+%Y-%m-%d-%H%M%S'`-depparser-arceager-umax-aap-b64-c01
 WORKSPACE=${ROOT}/workspace/${SIG}
 
 MODEL_DIR=${WORKSPACE}/model
@@ -27,6 +27,7 @@ rm ${MODEL_PREFIX}.*
 
 for i in `seq 1 20`; do
     ${EXE} learn \
+        -u max \
         -m ${MODEL_PREFIX} \
         -r ${TRAIN}
 

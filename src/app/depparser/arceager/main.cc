@@ -15,19 +15,7 @@ int multi_learn(int argc, char** argv) {
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: sequence_labeler multi-learn [options]\n";
   usage += "OPTIONS";
-  po::options_description optparser(usage);
-  optparser.add_options()
-    ("help,h", "Show help information.")
-    ("model,m", po::value<std::string>(), "The path to the model.")
-    ("algorithm,a", po::value<std::string>(), "The learning algorithm.")
-    ("no-early,e", "Specify the early update strategy.")
-    ("batch,c", po::value<int>(), "The size for batch.")
-    ("threads,t", po::value<int>(), "The number of threads.")
-    ("reference,r", po::value<std::string>(), "The path to the reference file.")
-    ("display,d", po::value<int>(), "The display interval.")
-    ("beam,b", po::value<int>(), "The size for beam.")
-    ("verbose,v", "Logging every detail.")
-  ;
+  po::options_description optparser = fe::build_multi_learn_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -63,16 +51,7 @@ int learn(int argc, char** argv) {
   usage += "Usage: arceager_depparser learn [options]\n";
   usage += "OPTIONS";
 
-  po::options_description optparser(usage);
-  optparser.add_options()
-    ("help,h", "Show help information.")
-    ("model,m", po::value<std::string>(), "The path to the model.")
-    ("reference,r", po::value<std::string>(), "The path to the reference file.")
-    ("display,d", po::value<int>(), "The display interval.")
-    ("beam,b", po::value<int>(), "The size for beam.")
-    ("conll,c", "Specified the input in CoNLL format.")
-    ("verbose,v", "Logging every detail.")
-  ;
+  po::options_description optparser = fe::build_learn_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -106,17 +85,7 @@ int test(int argc, char** argv) {
   usage += "Usage: arceager_depparser test [options]\n";
   usage += "OPTIONS";
 
-  po::options_description optparser(usage);
-  optparser.add_options()
-    ("help,h", "Show help information.")
-    ("model,m", po::value<std::string>(), "The path to the model.")
-    ("input,i", po::value<std::string>(), "The path to the input file.")
-    ("output,o", po::value<std::string>(), "The path to the output file.")
-    ("display,d", po::value<int>(), "The display interval.")
-    ("beam,b", po::value<int>(), "The size for beam.")
-    ("conll,c", "Specified the input in CoNLL format.")
-    ("verbose,v", "Logging every detail.")
-  ;
+  po::options_description optparser = fe::build_test_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;

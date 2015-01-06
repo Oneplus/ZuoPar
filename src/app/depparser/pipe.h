@@ -96,7 +96,7 @@ public:
     if (!setup()) {
       return;
     }
-    decoder = new Decoder(deprels_alphabet.size(), beam_size, early_update, weight);
+    decoder = new Decoder(deprels_alphabet.size(), beam_size, update_strategy, weight);
 
     if (mode == kPipeLearn) {
       learner = new Learner(weight);

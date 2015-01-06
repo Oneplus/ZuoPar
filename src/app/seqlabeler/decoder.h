@@ -26,7 +26,7 @@ public:
    *  @param[in]  weight    The pointer to the weight.
    */
   Decoder(int nr, const std::vector< std::vector<bool> >& trans_,
-      int beam_size, bool early_update, Weight* weight);
+      int beam_size, UpdateStrategy strategy, Weight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,
@@ -41,8 +41,8 @@ private:
   const std::vector< std::vector<bool> >& trans;
 };
 
-} //  end for namespace lexicalanalyzer
-} //  end for namespace zuopar
+} //  namespace sequencelabeler
+} //  namespace zuopar
 
 
-#endif  //  end for __ZUOPAR_APP_LEXANALYZER_POSTAGGER_DECODER_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_DECODER_H__

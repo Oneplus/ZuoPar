@@ -171,7 +171,7 @@ Pipe::run() {
 
   load_constrain();
 
-  decoder = new Decoder(tags_alphabet.size(), trans, beam_size, early_update, weight);
+  decoder = new Decoder(tags_alphabet.size(), trans, beam_size, update_strategy, weight);
 
   if (mode == kPipeLearn) {
     learner = new Learner(weight, this->algorithm);

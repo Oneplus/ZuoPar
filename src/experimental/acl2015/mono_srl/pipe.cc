@@ -122,7 +122,7 @@ Pipe::run() {
   }
 
   decoder = new Decoder(tags_alphabet.size(), tags_alphabet.encode("V"),
-      beam_size, early_update, weight);
+      beam_size, update_strategy, weight);
 
   if (mode == kPipeLearn) {
     learner = new Learner(weight, this->algorithm);

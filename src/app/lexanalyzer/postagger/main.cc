@@ -27,15 +27,7 @@ int learn(int argc, char** argv) {
   usage += "Usage: postagger learn [options]\n";
   usage += "OPTIONS";
 
-  po::options_description optparser(usage);
-  optparser.add_options()
-    ("help,h", "Show help information.")
-    ("model,m", po::value<std::string>(), "The path to the model.")
-    ("reference,r", po::value<std::string>(), "The path to the reference file.")
-    ("display,d", po::value<int>(), "The display interval.")
-    ("beam,b", po::value<int>(), "The size for beam.")
-    ("verbose,v", "Logging every detail.")
-  ;
+  po::options_description optparser = fe::build_learn_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -69,16 +61,7 @@ int test(int argc, char** argv) {
   usage += "Usage: postagger test [options]\n";
   usage += "OPTIONS";
 
-  po::options_description optparser(usage);
-  optparser.add_options()
-    ("help,h", "Show help information.")
-    ("model,m", po::value<std::string>(), "The path to the model.")
-    ("input,i", po::value<std::string>(), "The path to the input file.")
-    ("output,o", po::value<std::string>(), "The path to the output file.")
-    ("display,d", po::value<int>(), "The display interval.")
-    ("beam,b", po::value<int>(), "The size for beam.")
-    ("verbose,v", "Logging every detail.")
-  ;
+  po::options_description optparser = fe::build_test_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -100,4 +83,4 @@ int test(int argc, char** argv) {
 }
 
 #include "frontend/template/main.h"
-MAIN("transition-based postagger.", "postagger")
+MAIN("Transition-based postagger.", "postagger")

@@ -5,9 +5,9 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcEager {
 
-Decoder::Decoder(int nr, int beam_size, bool early_update, Weight* weight)
+Decoder::Decoder(int nr, int beam_size, UpdateStrategy strategy, Weight* weight)
   : nr_deprels(nr),
-  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, early_update, weight) {
+  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, strategy, weight) {
 }
 
 void
