@@ -39,15 +39,22 @@ MultiPipe::run() {
   }
 
   minibatch_learner = new MinibatchLearner(weight);
-
   std::size_t N = dataset.size();
+
+  std::vector<int> ranks;
+  for (size_t i = 0; i < N; ++ i) { ranks.push_back(i); }
+  while (shuffle --) {
+    // To avoid fake shuffling.
+    std::random_shuffle(ranks.begin(), ranks.end());
+  }
+
   int nr_batches = (N % batch_size == 0? N / batch_size: N/batch_size+ 1);
   for (std::size_t batch_id = 0; batch_id < nr_batches; ++ batch_id) {
     //! Producer
     std::size_t start = batch_id* batch_size;
     std::size_t end = std::min(N, (batch_id+ 1) * batch_size);
     for (std::size_t n = start; n < end; ++ n) {
-      queue.push(&dataset[n]);
+      queue.push(&dataset[ranks[n]]);
     }
 
     boost::thread_group decoder_threads;
