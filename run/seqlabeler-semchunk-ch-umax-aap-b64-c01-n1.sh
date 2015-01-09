@@ -28,6 +28,7 @@ rm ${MODEL_PREFIX}.*
 
 for i in `seq 1 60`; do
     ${EXE} learn \
+        -u max \
         -n ${CONSTRAIN} \
         -m ${MODEL_PREFIX} \
         -r ${TRAIN}
