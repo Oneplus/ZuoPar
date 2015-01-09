@@ -63,6 +63,9 @@ protected:
   //! The path to the constrain file.
   std::string constrain_path;
 
+  //! Use to specified if shuffle the instances.
+  std::size_t shuffle;
+
   //!
   std::vector< std::vector<bool> > trans;
 

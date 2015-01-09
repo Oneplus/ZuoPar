@@ -1,4 +1,5 @@
 #include "app/seqlabeler/opt_utils.h"
+#include "utils/logging.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -19,6 +20,17 @@ parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   if (!fe::parse_learn_option(vm, static_cast<fe::LearnOption&>(opts))) {
     return false;
   }
+
+  opts.shuffle = 0;
+  if (vm.count("shuffle")) {
+    opts.shuffle = vm["shuffle"].as<int>();
+    if (opts.shuffle <= 0) {
+      _WARN << "parse opt: illegal shuffle flag :" << vm["shuffle"].as<int>()
+        << " not shuffling.";
+      opts.shuffle = 0;
+    }
+  }
+
   return parse_constrain_option(vm, static_cast<ConstrainOption&>(opts));
 }
 

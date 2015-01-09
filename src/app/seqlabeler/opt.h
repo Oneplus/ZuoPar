@@ -14,7 +14,9 @@ struct ConstrainOption {
   std::string constrain_path;
 };
 
-struct LearnOption: public fe::LearnOption, public ConstrainOption {};
+struct LearnOption: public fe::LearnOption, public ConstrainOption {
+  std::size_t shuffle;
+};
 
 struct MultiLearnOption: public LearnOption {
   int batch_size;
