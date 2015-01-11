@@ -1,6 +1,7 @@
 #ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_PIPE_H__
 #define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_PIPE_H__
 
+#include <unordered_map>
 #include "types/semchunks.h"
 #include "frontend/common_pipe_cfg.h"
 #include "engine/token_alphabet.h"
@@ -24,7 +25,7 @@ public:
    *
    *  @param[in]  opts  The learning options.
    */
-  Pipe(const fe::LearnOption& opts);
+  Pipe(const LearnOption& opts);
 
   /**
    * The testing mode constructor.
@@ -57,6 +58,13 @@ protected:
    */
   void build_output(const State& source, SemanticChunks& output);
 
+  /**
+   *
+   *
+   *
+   */
+  bool load_verb_class();
+
 protected:
   enum OutputFormat {
     kSemanticChunks,
@@ -64,6 +72,12 @@ protected:
   };
 
   OutputFormat output_format;
+
+  //! The path to the verb class dictionary.
+  std::string verb_class_path;
+
+  //!
+  std::unordered_map<form_t, int> verb_classes;
 
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.

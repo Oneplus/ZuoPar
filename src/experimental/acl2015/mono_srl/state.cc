@@ -7,18 +7,20 @@ namespace ACL2015 {
 namespace MonoSRL {
 
 State::State()
-  : ref(0) {
+  : ref(0), paths(0), verb_class(0) {
   clear();
 }
 
-State::State(const MonoSemanticChunks* r)
-  : ref(r) {
+State::State(const MonoSemanticChunks* r, const Paths* p, int vc)
+  : ref(r), paths(p), verb_class(vc) {
   clear();
 }
 
 void
 State::copy(const State& source) {
   this->ref = source.ref;
+  this->paths = source.paths;
+  this->verb_class = source.verb_class;
   this->score = source.score;
   this->previous = source.previous;
   this->buffer = source.buffer;

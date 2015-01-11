@@ -2,7 +2,7 @@
 #define __ZUOPAR_APP_LEXANALYZER_POSTAGGER_MODEL_H__
 
 #include "types/common.h"
-#include "model/string/string_feature_param_map_collection.h"
+#include "model/associated/string_feature_param_map_collection.h"
 #include "app/lexanalyzer/postagger/action.h"
 #include "app/lexanalyzer/postagger/state.h"
 #include "app/lexanalyzer/postagger/score_context.h"
@@ -11,7 +11,7 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
 
-class Weight: public StringFeaturePointwiseParameterCollection<State,
+class Weight: public StringFeatureParameterCollection<State,
   ScoreContext, Action> {
 public:
   //! The weight constructor.

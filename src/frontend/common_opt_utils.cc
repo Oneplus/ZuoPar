@@ -16,6 +16,9 @@ build_learn_optparser(const std::string& usage) {
     ("display,d",   po::value<int>(),         "The display interval [default=1000].")
     ("model,m",     po::value<std::string>(), "The path to the model.")
     ("reference,r", po::value<std::string>(), "The path to the reference file.")
+    ("shuffle,s",   po::value<int>(),         "The flag for shuffling instance.\n"
+                                              " 0  - not shuffle instance [default].\n"
+                                              " >0 - perform s time shuffle (to avoid fake shuffling.)")
     ("update,u",    po::value<std::string>(), "Specify the early update strategy.\n"
                                               " naive - no update\n"
                                               " early - early update (Collins 04) [default]\n"
@@ -40,6 +43,9 @@ build_multi_learn_optparser(const std::string& usage) {
     ("model,m",     po::value<std::string>(), "The path to the model.")
     ("threads,t",   po::value<int>(),         "The number of threads [default=10].")
     ("reference,r", po::value<std::string>(), "The path to the reference file.")
+    ("shuffle,s",   po::value<int>(),         "The flag for shuffling instance.\n"
+                                              " 0  - not shuffle instance [default].\n"
+                                              " >0 - perform s time shuffle (to avoid fake shuffling.)")
     ("update,u",    po::value<std::string>(), "Specify the early update strategy.\n"
                                               " naive - no update\n"
                                               " early - early update (Collins 04) [default]\n"
@@ -130,6 +136,11 @@ parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
       _WARN << "parse opt: unknown update strategy \""
             << vm["update"].as<std::string>() << "\".";
     }
+  }
+
+  opts.shuffle_times = 0;
+  if (vm.count("shuffle")) {
+    opts.shuffle_times = vm["shuffle"].as<int>();
   }
   return true;
 }

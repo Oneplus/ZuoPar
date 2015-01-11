@@ -12,7 +12,7 @@ namespace fe = ZuoPar::FrontEnd;
 namespace mono = ZuoPar::Experimental::ACL2015::MonoSRL;
 
 int multi_learn(int argc, char** argv) {
-  std::string usage = "Multi-threaded training component of ZuoPar::sequence labeler.\n";
+  /*std::string usage = "Multi-threaded training component of ZuoPar::sequence labeler.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: sequence_labeler multi-learn [options]\n";
   usage += "OPTIONS";
@@ -28,14 +28,14 @@ int multi_learn(int argc, char** argv) {
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
   fe::MultiLearnOption opts;
-  if (!parse_multi_learn_option(vm, opts)) {
+  if (!parse_multi_learn_option_ext(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }
 
   //mono::MultiPipe pipe(opts);
   //pipe.run();
-  return 0;
+  return 0;*/
 }
 
 /**
@@ -53,6 +53,7 @@ int learn(int argc, char** argv) {
   usage += "OPTIONS";
 
   po::options_description optparser = fe::build_learn_optparser(usage);
+  optparser.add_options()("verb-class", po::value<std::string>(), "The path to the verb class.");
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -62,8 +63,8 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  fe::LearnOption opts;
-  if (!parse_learn_option(vm, opts)) {
+  mono::LearnOption opts;
+  if (!mono::parse_learn_option_ext(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }
@@ -87,6 +88,7 @@ int test(int argc, char** argv) {
   usage += "OPTIONS";
 
   po::options_description optparser = fe::build_test_optparser(usage);
+  optparser.add_options()("verb-class", po::value<std::string>(), "The path to the verb class.");
   optparser.add_options()("format,f", po::value<std::string>(), "The output format.");
 
   if (argc == 1) {

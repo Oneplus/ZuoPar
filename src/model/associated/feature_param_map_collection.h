@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
-#define __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
+#ifndef __ZUOPAR_MODEL_ASSOCIATED_FEATURE_PARAM_MAP_COLLECTION_H__
+#define __ZUOPAR_MODEL_ASSOCIATED_FEATURE_PARAM_MAP_COLLECTION_H__
 
 #include "types/internal/packed_scores.h"
 #include "types/math/sparse_vector.h"
@@ -14,7 +14,7 @@ template <
   class _ScoreContextType,
   class _ActionType
 >
-class FeaturePointwiseParameterCollection {
+class FeatureParameterCollection {
 public:
   //! The unigram feature type
   typedef UnigramMetaFeature  ufp_t;
@@ -35,21 +35,21 @@ public:
   typedef Feature<TrigramMetaFeature, _ActionType> tf_t;
 
   //! Instantiate the unigram mapping
-  typedef FeaturePointwiseParameterMap<
+  typedef FeatureParameterMap<
     ufp_t,
     _ScoreContextType,
     _ActionType
   > uf_map_t;
 
   //! Instantiate the bigram mapping
-  typedef FeaturePointwiseParameterMap<
+  typedef FeatureParameterMap<
     bfp_t,
     _ScoreContextType,
     _ActionType
   > bf_map_t;
 
   //! Instantiate the trigram mapping
-  typedef FeaturePointwiseParameterMap<
+  typedef FeatureParameterMap<
     tfp_t,
     _ScoreContextType,
     _ActionType
@@ -58,7 +58,7 @@ public:
   //! Define the packed score type.
   typedef PackedScores<_ActionType> packed_score_t;
 public:
-  FeaturePointwiseParameterCollection() {}
+  FeatureParameterCollection() {}
 
   /**
    * Convert the pointwised feature collections into vector.
@@ -386,4 +386,4 @@ protected:
 
 } //  end for zuopar
 
-#endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_COLLECTION_H__
+#endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_FEATURE_PARAM_MAP_COLLECTION_H__

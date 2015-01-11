@@ -25,7 +25,8 @@ public:
   ScoreContext(const State& state)
     : w_2(0), w_1(0), w0(0), w1(0), w2(0),
     p_2(0), p_1(0), p0(0), p1(0), p2(0), w_pred(0),
-    p_pred(0), p_pred_1(0), p_pred1(0), vc_pred(0) {
+    p_pred(0), p_pred_1(0), p_pred1(0), vc_pred(0),
+    path(state.paths->payload[state.buffer]) {
     const MonoSemanticChunks* ref = state.ref;
     const std::vector<form_t>& forms = ref->forms;
     const std::vector<postag_t>& postags= ref->postags;
@@ -82,7 +83,8 @@ public:
 
     w_pred = forms[ref->predicate.first];
     p_pred = postags[ref->predicate.first];
-    vc_pred = senses[ref->predicate.first];
+    //vc_pred = senses[ref->predicate.first];
+    vc_pred  = state.verb_class;
     p_pred_1 = (ref->predicate.first - 1 >= 0 ? postags[ref->predicate.first- 1]: 1);
     p_pred1 = (ref->predicate.first+ 1 < M ? postags[ref->predicate.first+ 1]: 2);
 
@@ -98,6 +100,7 @@ public:
   tag_t     t_1;
   int position;
   int dist;
+  const std::string& path;
 };
 
 } //  namespace monosrl

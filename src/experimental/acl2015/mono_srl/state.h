@@ -3,6 +3,7 @@
 
 #include "types/common.h"
 #include "types/semchunks.h"
+#include "experimental/acl2015/mono_srl/paths.h"
 #include "experimental/acl2015/mono_srl/action.h"
 
 namespace ZuoPar {
@@ -20,7 +21,7 @@ public:
    *
    *  @param[in]  r   The pointer to the dependency state.
    */
-  State(const MonoSemanticChunks* r);
+  State(const MonoSemanticChunks* r, const Paths* p, int verb_class);
 
   /**
    * This method is needed by @class TransitionSystem.
@@ -57,6 +58,11 @@ public:
 
   //! The pointer to the previous state.
   const State* previous;
+
+  //! The path.
+  const Paths* paths;
+
+  int verb_class;
 
   //! The pointer to the dependency tree.
   const MonoSemanticChunks* ref;

@@ -2,7 +2,7 @@
 #define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_WEIGHT_H__
 
 #include "types/common.h"
-#include "model/associated/pointwise/feature_param_map_collection.h"
+#include "model/associated/string_feature_param_map_collection.h"
 #include "experimental/acl2015/mono_srl/action.h"
 #include "experimental/acl2015/mono_srl/state.h"
 #include "experimental/acl2015/mono_srl/score_context.h"
@@ -13,7 +13,7 @@ namespace ACL2015 {
 namespace MonoSRL {
 
 class Weight
-: public FeaturePointwiseParameterCollection<
+: public StringFeatureParameterCollection<
   State,
   ScoreContext,
   Action

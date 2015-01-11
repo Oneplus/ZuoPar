@@ -2,29 +2,32 @@
 #define __ZUOPAR_MODEL_STRING_STRING_FEATURE_MAP_COLLECTION_H__
 
 #include "types/internal/packed_scores.h"
-#include "model/associated/pointwise/feature_param_map.h"
-#include "model/associated/pointwise/feature_param_map_collection.h"
+#include "model/associated/feature_param_map.h"
+#include "model/associated/feature_param_map_collection.h"
 #include <vector>
-#include <unordered_map>
 
 namespace ZuoPar {
 
-template <class _StateType,
-          class _ScoreContextType,
-          class _ActionType>
-class StringFeaturePointwiseParameterCollection: \
-  public FeaturePointwiseParameterCollection<_StateType,
-                                             _ScoreContextType,
-                                             _ActionType> {
+template <
+  class _StateType,
+  class _ScoreContextType,
+  class _ActionType
+>
+class StringFeatureParameterCollection
+: public FeatureParameterCollection<
+  _StateType,
+  _ScoreContextType,
+  _ActionType
+> {
 public:
   //! Instantiate the unigram score type
   typedef Feature<std::string, _ActionType> feature_t;
   //! Instantiate the unigram mapping
-  typedef FeaturePointwiseParameterMap< std::string, _ScoreContextType, _ActionType > map_t;
+  typedef FeatureParameterMap< std::string, _ScoreContextType, _ActionType > map_t;
   //! Define the packed score type.
   typedef PackedScores<_ActionType> packed_score_t;
 public:
-  StringFeaturePointwiseParameterCollection() {}
+  StringFeatureParameterCollection() {}
 
   /**
    * Get score for the state.
@@ -50,10 +53,10 @@ public:
    */
   floatval_t score(const _ScoreContextType& ctx, const _ActionType& act, bool avg) {
     floatval_t ret = 0;
-    for (int i = 0; i < repo.size(); ++ i) {
-      ret += repo[i].score(ctx, act, avg, 0.);
+    for (std::size_t i = 0; i < sfeat_map_repo.size(); ++ i) {
+      ret += sfeat_map_repo[i].score(ctx, act, avg, 0.);
     }
-    ret += FeaturePointwiseParameterCollection<_StateType,
+    ret += FeatureParameterCollection<_StateType,
             _ScoreContextType,
             _ActionType>::score(ctx, act, avg);
     return ret;
@@ -64,10 +67,10 @@ public:
       const std::vector<_ActionType>& actions,
       bool avg,
       packed_score_t& result) {
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].batchly_score(ctx, actions, avg, result);
+    for (std::size_t i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
     }
-    FeaturePointwiseParameterCollection<_StateType,
+    FeatureParameterCollection<_StateType,
       _ScoreContextType,
       _ActionType>::batchly_score(ctx, actions, avg, result);
   }
@@ -96,20 +99,20 @@ public:
    */
   void update(const _ScoreContextType& ctx, const _ActionType& act, int timestamp,
       floatval_t scale) {
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].update(ctx, act, timestamp, scale);
+    for (std::size_t i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].update(ctx, act, timestamp, scale);
     }
-    FeaturePointwiseParameterCollection<_StateType, _ScoreContextType,
+    FeatureParameterCollection<_StateType, _ScoreContextType,
       _ActionType>::update(ctx, act, timestamp, scale);
   }
 
   /**
    */
   void flush(int timestamp) {
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].flush(timestamp);
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].flush(timestamp);
     }
-    FeaturePointwiseParameterCollection<_StateType, _ScoreContextType,
+    FeatureParameterCollection<_StateType, _ScoreContextType,
       _ActionType>::flush(timestamp);
   }
 
@@ -122,10 +125,10 @@ public:
    */
   bool save(std::ostream& os) {
     boost::archive::text_oarchive oa(os);
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].save(oa);
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].save(oa);
     }
-    FeaturePointwiseParameterCollection<_StateType, _ScoreContextType,
+    FeatureParameterCollection<_StateType, _ScoreContextType,
       _ActionType>::save(oa);
     return true;
   }
@@ -139,17 +142,17 @@ public:
    */
   bool load(std::istream& is) {
     boost::archive::text_iarchive ia(is);
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].load(ia);
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].load(ia);
     }
-    FeaturePointwiseParameterCollection<_StateType, _ScoreContextType,
+    FeatureParameterCollection<_StateType, _ScoreContextType,
       _ActionType>::load(ia);
     return true;
   }
 
 protected:
   //! The unigram score mapping repository.
-  std::vector< map_t > repo;
+  std::vector< map_t > sfeat_map_repo;
 };
 
 } //  end for zuopar

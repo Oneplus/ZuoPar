@@ -21,6 +21,7 @@ public:
     this->model_path = opts.model_path;
     this->beam_size = opts.beam_size;
     this->display_interval = opts.display_interval;
+    this->shuffle_times = opts.shuffle_times;
 
     this->update_strategy = UpdateStrategy::kEarlyUpdate;
     if (opts.update_strategy == "naive") {
@@ -36,6 +37,7 @@ public:
 
     _INFO << "LEARN:: mode is actived.";
     _INFO << "report: beam size = " << this->beam_size;
+    _INFO << "report: shuffle times = " << this->shuffle_times;
 
     switch (this->update_strategy) {
       case UpdateStrategy::kNaive:
@@ -59,7 +61,7 @@ public:
 
   //! The common pipe constructor on testing mode.
   CommonPipeConfigure(const TestOption& opts)
-    : mode(kPipeTest) {
+    : mode(kPipeTest), shuffle_times(0) {
     this->model_path = opts.model_path;
     this->input_path = opts.input_path;
     this->output_path = opts.output_path;
@@ -92,6 +94,9 @@ protected:
 
   //! The path to the output file.
   std::string output_path;
+
+  //! The shuffle times
+  int shuffle_times;
 
   //! The size of the beam.
   int beam_size;

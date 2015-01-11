@@ -45,6 +45,11 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_B11( position, vc_pred );
   ZUOPAR_FEATURE_MAP_REGIST_T111( position, p_pred, vc_pred );
   ZUOPAR_FEATURE_MAP_REGIST_U0( t_1 );
+  sfeat_map_repo.push_back( map_t(
+        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
+        cache.push_back( ctx.path ); }
+        )
+      );
 }
 
 } //  namespace monosrl

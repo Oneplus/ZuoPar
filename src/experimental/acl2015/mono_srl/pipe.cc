@@ -1,6 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <boost/assert.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include "utils/logging.h"
 #include "utils/io/stream.h"
 #include "utils/io/dataset/semchunks.h"
@@ -16,8 +20,9 @@ namespace MonoSRL {
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
 
-Pipe::Pipe(const fe::LearnOption& opts)
+Pipe::Pipe(const LearnOption& opts)
   : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
+  verb_class_path = opts.verb_class_path;
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -28,6 +33,7 @@ Pipe::Pipe(const fe::LearnOption& opts)
 Pipe::Pipe(const TestOption& opts)
   : weight(0), decoder(0), learner(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
+  verb_class_path = opts.verb_class_path;
   if (opts.output_format == "semchunks") {
     output_format = kSemanticChunks;
   } else {
@@ -61,7 +67,7 @@ Pipe::load_model(const std::string& model_path) {
   }
 
   if (!senses_alphabet.load(mfs)) {
-    _WARN << "pie: failed to load senses alphabet.";
+    _WARN << "pipe: failed to load senses alphabet.";
     return false;
   }
 
@@ -75,6 +81,52 @@ Pipe::load_model(const std::string& model_path) {
     return false;
   }
 
+  return true;
+}
+
+bool
+Pipe::load_verb_class() {
+  namespace algo = boost::algorithm;
+
+  _INFO << "report: load verb class from " << verb_class_path;
+  std::ifstream ifs(verb_class_path.c_str());
+  if (!ifs.good()) {
+    _ERROR << "#: failed to load verb class dictionary.";
+    return false;
+  }
+
+  std::string line;
+  while (std::getline(ifs, line)) {
+    std::vector<std::string> tokens;
+    algo::trim(line);
+    if (line.size() == 0) {
+      continue;
+    }
+    algo::split(tokens, line, boost::is_any_of("\t "),
+        boost::token_compress_on);
+
+    BOOST_ASSERT_MSG(tokens.size() == 2, "not in \"key value\" format.");
+
+    form_t predicate = forms_alphabet.encode(tokens[0].c_str());
+    std::string value = tokens[1];
+    //_DEBUG << value;
+    algo::trim(value);
+    // Encode the verb class
+    algo::split(tokens, value, boost::is_any_of("C"), boost::token_compress_on);
+    int val = 0;
+    for (std::size_t i = 0; i < tokens.size(); ++ i) {
+      if (tokens[i].size() == 0) {
+        continue;
+      }
+      //_DEBUG << tokens[i];
+      val += boost::lexical_cast<int>(tokens[i].c_str());
+      val *= 10;
+    }
+
+    verb_classes[predicate] = val;
+  }
+
+  _INFO << "report: loaded " << verb_classes.size() << " verb classes";
   return true;
 }
 
@@ -111,6 +163,8 @@ Pipe::setup() {
   _INFO << "report: " << senses_alphabet.size() << " sense(s) is detected.";
   _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
 
+  load_verb_class();
+
   return true;
 }
 
@@ -130,21 +184,27 @@ Pipe::run() {
   size_t N = dataset.size();
   size_t m = 1;
   std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
+
+  std::vector<std::size_t> ranks;
+  for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
+  while (shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
+
   for (size_t n = 0; n < N; ++ n) {
-    const SemanticChunks& instance = dataset[n];
+    const SemanticChunks& instance = dataset[ranks[n]];
     SemanticChunks output;
     output.forms = instance.forms;
     output.postags = instance.postags;
     output.senses = instance.senses;
-
-    //ioutils::write_semchunks_instance(std::cout, instance, forms_alphabet,
-    //    postags_alphabet, senses_alphabet, tags_alphabet);
 
     for (size_t i = 0; i < instance.nr_predicates(); ++ i, ++ m) {
       MonoSemanticChunks mono_semchunks(instance.forms,
           instance.postags,
           instance.senses,
           instance.semchunks[i]);
+
+      Paths paths(mono_semchunks);
+
+      int verb_class = verb_classes[instance.forms[instance.semchunks[i].first]];
 
       // calculate the oracle transition actions.
       std::vector<Action> actions;
@@ -153,7 +213,7 @@ Pipe::run() {
       }
 
       int max_nr_actions = instance.size();
-      State init_state(&mono_semchunks);
+      State init_state(&mono_semchunks, &paths, verb_class);
       Decoder::const_decode_result_t result = decoder->decode(init_state,
           actions, max_nr_actions);
 

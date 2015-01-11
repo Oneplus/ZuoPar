@@ -43,7 +43,7 @@ MultiPipe::run() {
 
   std::vector<int> ranks;
   for (size_t i = 0; i < N; ++ i) { ranks.push_back(i); }
-  while (shuffle --) {
+  while (shuffle_times --) {
     // To avoid fake shuffling.
     std::random_shuffle(ranks.begin(), ranks.end());
   }

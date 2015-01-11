@@ -17,7 +17,6 @@ int multi_learn(int argc, char** argv) {
   usage += "OPTIONS";
   po::options_description optparser = fe::build_multi_learn_optparser(usage);
   optparser.add_options()("constrain,n", po::value<std::string>(), "The constrain file.");
-  optparser.add_options()("shuffle,s", po::value<int>(), "The shuffling flags.");
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -53,7 +52,6 @@ int learn(int argc, char** argv) {
 
   po::options_description optparser = fe::build_learn_optparser(usage);
   optparser.add_options()("constrain,n", po::value<std::string>(), "The constrain file.");
-  optparser.add_options()("shuffle,s", po::value<int>(), "The shuffling flags.");
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;

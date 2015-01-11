@@ -16,6 +16,7 @@ struct LearnOption: public Option {
   std::string reference_path; //! The path to the reference file.
   std::string algorithm;      //! The algorithm.
   std::string update_strategy;//! The update strategy.
+  int shuffle_times;          //! The flag for shuffling instance
 };
 
 struct MultiLearnOption: public LearnOption {

@@ -1,5 +1,6 @@
 add_executable (mono_srl
     main.cc
+    paths.cc
     opt_utils.cc
     pipe.cc
     action.cc

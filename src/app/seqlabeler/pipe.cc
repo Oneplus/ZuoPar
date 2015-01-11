@@ -24,9 +24,6 @@ Pipe::Pipe(const LearnOption& opts)
   constrain_path = opts.constrain_path;
   _INFO << "report: constrain path: " << constrain_path;
 
-  shuffle = opts.shuffle;
-  _INFO << "report: shuffle flag = " << shuffle;
-
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
   } else {
@@ -35,7 +32,7 @@ Pipe::Pipe(const LearnOption& opts)
 }
 
 Pipe::Pipe(const TestOption& opts)
-  : weight(0), decoder(0), learner(0), shuffle(0),
+  : weight(0), decoder(0), learner(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
   constrain_path = opts.constrain_path;
   _INFO << "report: constrain path: " << constrain_path;
@@ -187,7 +184,7 @@ Pipe::run() {
   std::vector<int> ranks;
   for (size_t i = 0; i < N; ++ i) { ranks.push_back(i); }
 
-  while (shuffle --) {
+  while (shuffle_times --) {
     // To avoid fake shuffling.
     std::random_shuffle(ranks.begin(), ranks.end());
   }

@@ -2,7 +2,7 @@
 #define __ZUOPAR_APP_SEQUENCE_LABELER_MODEL_H__
 
 #include "types/common.h"
-#include "model/associated/pointwise/feature_param_map_collection.h"
+#include "model/associated/feature_param_map_collection.h"
 #include "app/seqlabeler/action.h"
 #include "app/seqlabeler/state.h"
 #include "app/seqlabeler/score_context.h"
@@ -10,7 +10,7 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-class Weight: public FeaturePointwiseParameterCollection<State,
+class Weight: public FeatureParameterCollection<State,
   ScoreContext, Action> {
 public:
   //! The weight constructor.

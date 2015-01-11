@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_H__
-#define __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_H__
+#ifndef __ZUOPAR_MODEL_ASSOCIATED_FEATURE_PARAM_MAP_H__
+#define __ZUOPAR_MODEL_ASSOCIATED_FEATURE_PARAM_MAP_H__
 
 #include "settings.h"
 #include "types/math/sparse_vector.h"
@@ -32,7 +32,7 @@ template <
   class _ScoreContextType,
   class _ActionType
 >
-class FeaturePointwiseParameterMap {
+class FeatureParameterMap {
 private:
   //! Define the feature type.
   typedef Feature<_MetaFeatureType, _ActionType> feature_t;
@@ -66,7 +66,7 @@ public:
    *
    *  @param[in]  extractor   The extraction functor.
    */
-  FeaturePointwiseParameterMap(extractor_t _extractor)
+  FeatureParameterMap(extractor_t _extractor)
     : extractor(_extractor) {
 #if defined(UNORDERED_MAP_IMPL) and (UNORDERED_MAP_IMPL == dense_hash_map)
     payload.set_empty_key(feature_t());
@@ -255,6 +255,6 @@ private:
   extractor_t extractor;
 };
 
-} //  end for zuopar
+} //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_POINTWISE_FEATURE_PARAM_MAP_H__
+#endif  //  end for __ZUOPAR_MODEL_ASSOCIATED_FEATURE_PARAM_MAP_H__

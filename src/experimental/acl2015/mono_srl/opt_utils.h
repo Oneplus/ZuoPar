@@ -12,6 +12,8 @@ namespace MonoSRL {
 
 namespace po = boost::program_options;
 
+bool parse_learn_option_ext(const po::variables_map& vm, LearnOption& opts);
+
 bool parse_test_option_ext(const po::variables_map& vm, TestOption& opts);
 
 } //  namespace monosrl
