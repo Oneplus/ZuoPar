@@ -1,10 +1,10 @@
 #include <cstring>
-#include "experimental/acl2015/mono_srl/state.h"
+#include "experimental/acl2015/mono_predicate_srl/state.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 State::State()
   : ref(0), paths(0), verb_class(0) {

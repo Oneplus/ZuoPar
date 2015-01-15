@@ -1,11 +1,11 @@
 #include <boost/assert.hpp>
-#include "experimental/acl2015/mono_srl/action.h"
-#include "experimental/acl2015/mono_srl/action_utils.h"
+#include "experimental/acl2015/mono_predicate_srl/action.h"
+#include "experimental/acl2015/mono_predicate_srl/action_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 bool ActionUtils::is_O(const Action& act) {
   return (act.action_name == Action::kO);
@@ -45,7 +45,7 @@ void ActionUtils::get_oracle_actions(const MonoSemanticChunks& instance,
   }
 }
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar

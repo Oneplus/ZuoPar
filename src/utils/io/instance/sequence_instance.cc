@@ -40,6 +40,8 @@ read_sequence_instance(std::istream& is,
 
     output.push_back(sequence_item);
   }
+
+  return true;
 }
 
 void

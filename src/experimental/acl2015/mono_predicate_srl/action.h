@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_ACTION_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_ACTION_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ACTION_H__
+#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ACTION_H__
 
 #include <iostream>
 #include <boost/assert.hpp>
@@ -14,7 +14,7 @@
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 class Action: public AbstractAction {
 public:
@@ -67,9 +67,9 @@ public:
   static Action make_I(const tag_t& tag);
 };
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_ACTION_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ACTION_H__

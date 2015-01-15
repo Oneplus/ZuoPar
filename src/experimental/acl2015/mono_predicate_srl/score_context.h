@@ -1,17 +1,17 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_SCORE_CONTEXT_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_SCORE_CONTEXT_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_SCORE_CONTEXT_H__
+#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_SCORE_CONTEXT_H__
 
 #include <vector>
 #include "types/common.h"
 #include "types/semchunks.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/mono_srl/state.h"
-#include "experimental/acl2015/mono_srl/action_utils.h"
+#include "experimental/acl2015/mono_predicate_srl/state.h"
+#include "experimental/acl2015/mono_predicate_srl/action_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
 
@@ -85,7 +85,7 @@ public:
     p_pred = postags[ref->predicate.first];
     //vc_pred = senses[ref->predicate.first];
     vc_pred  = state.verb_class;
-    p_pred_1 = (ref->predicate.first - 1 >= 0 ? postags[ref->predicate.first- 1]: 1);
+    p_pred_1 = (ref->predicate.first >= 1 ? postags[ref->predicate.first- 1]: 1);
     p_pred1 = (ref->predicate.first+ 1 < M ? postags[ref->predicate.first+ 1]: 2);
 
     position = j < ref->predicate.first ? 1: 0;
@@ -103,9 +103,9 @@ public:
   const std::string& path;
 };
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_SCORE_CONTEXT_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_SCORE_CONTEXT_H__

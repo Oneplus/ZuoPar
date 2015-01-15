@@ -9,13 +9,13 @@
 #include "utils/io/stream.h"
 #include "utils/io/dataset/semchunks.h"
 #include "utils/io/instance/semchunks.h"
-#include "experimental/acl2015/mono_srl/action_utils.h"
-#include "experimental/acl2015/mono_srl/pipe.h"
+#include "experimental/acl2015/mono_predicate_srl/action_utils.h"
+#include "experimental/acl2015/mono_predicate_srl/pipe.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
@@ -79,6 +79,24 @@ Pipe::load_model(const std::string& model_path) {
   if (!weight->load(mfs)) {
     _WARN << "pipe: failed to load weight.";
     return false;
+  }
+
+  return true;
+}
+
+bool
+Pipe::save_model(const std::string& model_path) {
+  std::ofstream mfs(model_path);
+  if (!mfs.good()) {
+    _WARN << "pipe: failed to save model.";
+    return false;
+  } else {
+    forms_alphabet.save(mfs);
+    postags_alphabet.save(mfs);
+    senses_alphabet.save(mfs);
+    tags_alphabet.save(mfs);
+    weight->save(mfs);
+    _INFO << "pipe: model saved to " << model_path;
   }
 
   return true;
@@ -244,18 +262,8 @@ Pipe::run() {
   if (mode == kPipeLearn) {
     learner->set_timestamp(m);
     learner->flush();
-
-    std::ofstream mfs(model_path);
-    if (!mfs.good()) {
-      _WARN << "pipe: failed to save model.";
-    } else {
-      forms_alphabet.save(mfs);
-      postags_alphabet.save(mfs);
-      senses_alphabet.save(mfs);
-      tags_alphabet.save(mfs);
-      weight->save(mfs);
-      _INFO << "pipe: model saved to " << model_path;
-    }
+    _INFO << "pipe: nr errors: " << learner->errors();
+    save_model(model_path);
   }
 }
 
@@ -279,7 +287,7 @@ Pipe::build_output(const State& source, SemanticChunks& output) {
   output.semchunks.push_back(predicate);
 }
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace sequencelabeler
 } //  namespace zuopar

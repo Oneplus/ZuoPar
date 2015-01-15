@@ -1,15 +1,13 @@
 #include <iostream>
 #include <cstring>  // strcmp
 #include "utils/logging.h"
-#include "experimental/acl2015/mono_srl/opt.h"
-#include "experimental/acl2015/mono_srl/opt_utils.h"
-#include "experimental/acl2015/mono_srl/pipe.h"
-
-#define __EXPERIMENT_NAME__ "acl2015(mono SRL)"
+#include "experimental/acl2015/mono_predicate_srl/opt.h"
+#include "experimental/acl2015/mono_predicate_srl/opt_utils.h"
+#include "experimental/acl2015/mono_predicate_srl/pipe.h"
 
 namespace po = boost::program_options;
 namespace fe = ZuoPar::FrontEnd;
-namespace mono = ZuoPar::Experimental::ACL2015::MonoSRL;
+namespace mono = ZuoPar::Experimental::ACL2015::MonoPredicateSRL;
 
 int multi_learn(int argc, char** argv) {
   /*std::string usage = "Multi-threaded training component of ZuoPar::sequence labeler.\n";
@@ -34,8 +32,8 @@ int multi_learn(int argc, char** argv) {
   }
 
   //mono::MultiPipe pipe(opts);
-  //pipe.run();
-  return 0;*/
+  //pipe.run(); */
+  return 1;
 }
 
 /**
@@ -111,4 +109,4 @@ int test(int argc, char** argv) {
 }
 
 #include "frontend/template/main.h"
-MAIN("mono_srl", "experimental/mono_srl_seqlabeler")
+MAIN("Semantic Role Labeler with Mono Predicate", "experimental/mono_predicate_srl")

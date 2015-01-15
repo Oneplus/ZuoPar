@@ -7,94 +7,124 @@ namespace LexicalAnalyzer {
 namespace Postagger {
 
 Weight::Weight() {
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        cache.push_back( ctx.W0 ); }
-        )
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        cache.push_back( StringFeature(ctx.W0, act) ); })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        cache.push_back( ctx.W1 ); }
-        )
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        cache.push_back( StringFeature(ctx.W1, act) ); })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        cache.push_back( ctx.W2); }
-        )
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        cache.push_back( StringFeature(ctx.W2, act) ); })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        cache.push_back( ctx.W_1 ); }
-        )
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        cache.push_back( StringFeature(ctx.W_1, act) ); })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        cache.push_back( ctx.W_2 ); }
-        )
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        cache.push_back( StringFeature(ctx.W_2, act) ); })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        if (ctx.PRE1.size() > 0) { cache.push_back( ctx.PRE1 ); }
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        if (ctx.PRE1.size() > 0) { cache.push_back( StringFeature(ctx.PRE1, act) ); }
         })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        if (ctx.PRE2.size() > 0) { cache.push_back( ctx.PRE2 ); }
+  
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        if (ctx.PRE2.size() > 0) { cache.push_back( StringFeature(ctx.PRE2, act) ); }
         })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        if (ctx.PRE3.size() > 0) { cache.push_back( ctx.PRE3 ); }
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        if (ctx.PRE3.size() > 0) { cache.push_back( StringFeature(ctx.PRE3, act) ); }
         })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        if (ctx.PRE4.size() > 0) { cache.push_back( ctx.PRE4 ); }
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        if (ctx.PRE4.size() > 0) { cache.push_back( StringFeature(ctx.PRE4, act) ); }
         })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        if (ctx.SUF1.size() > 0) { cache.push_back( ctx.SUF1 ); }
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        if (ctx.SUF1.size() > 0) { cache.push_back( StringFeature(ctx.SUF1, act) ); }
         })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        if (ctx.SUF2.size() > 0) { cache.push_back( ctx.SUF2 ); }
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        if (ctx.SUF2.size() > 0) { cache.push_back( StringFeature(ctx.SUF2, act) ); }
         })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        if (ctx.SUF3.size() > 0) { cache.push_back( ctx.SUF3 ); }
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        if (ctx.SUF3.size() > 0) { cache.push_back( StringFeature(ctx.SUF3, act) ); }
         })
       );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        if (ctx.SUF4.size() > 0) { cache.push_back( ctx.SUF4 ); }
+
+  StringFeatureCollection::repo.push_back(
+      StringFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<StringFeature>& cache) -> void {
+        if (ctx.SUF4.size() > 0) { cache.push_back( StringFeature(ctx.SUF4, act) ); }
         })
       );
-  ufeat_map_repo.push_back( uf_map_t(
-        [](const ScoreContext& ctx, std::vector< ufp_t >& cache) -> void {
-        cache.push_back( ufp_t(ctx.NUM ) );
+
+  UnigramFeatureCollection::repo.push_back(
+      UnigramFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<UnigramFeature>& cache) -> void {
+        cache.push_back( UnigramFeature(ctx.NUM, act) );
         })
       );
-  ufeat_map_repo.push_back( uf_map_t(
-        [](const ScoreContext& ctx, std::vector< ufp_t >& cache) -> void {
-        cache.push_back( ufp_t(ctx.UPPERCASE) );
+
+  UnigramFeatureCollection::repo.push_back(
+      UnigramFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<UnigramFeature>& cache) -> void {
+        cache.push_back( UnigramFeature(ctx.UPPERCASE, act) );
         })
       );
-  ufeat_map_repo.push_back( uf_map_t(
-        [](const ScoreContext& ctx, std::vector< ufp_t >& cache) -> void {
-        cache.push_back( ufp_t(ctx.HYPHEN) );
+
+  UnigramFeatureCollection::repo.push_back(
+      UnigramFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<UnigramFeature>& cache) -> void {
+        cache.push_back( UnigramFeature(ctx.HYPHEN, act) );
         })
       );
-  ufeat_map_repo.push_back( uf_map_t(
-        [](const ScoreContext& ctx, std::vector< ufp_t >& cache) -> void {
-        cache.push_back( ufp_t(ctx.T_1) );
+
+  UnigramFeatureCollection::repo.push_back(
+      UnigramFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<UnigramFeature>& cache) -> void {
+        cache.push_back( UnigramFeature(ctx.T_1, act) );
         })
       );
-  bfeat_map_repo.push_back( bf_map_t(
-        [](const ScoreContext& ctx, std::vector< bfp_t >& cache) -> void {
-        cache.push_back( bfp_t(ctx.T_2, ctx.T_1) );
+
+  BigramFeatureCollection::repo.push_back(
+      BigramFeatureMap([](const ScoreContext& ctx, const Action& act,
+          std::vector<BigramFeature>& cache) -> void {
+        cache.push_back( BigramFeature(BigramMetaFeature(ctx.T_2, ctx.T_1), act) );
         })
       );
 }

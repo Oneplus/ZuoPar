@@ -1,12 +1,12 @@
-#include "experimental/acl2015/mono_srl/decoder.h"
-#include "experimental/acl2015/mono_srl/action.h"
-#include "experimental/acl2015/mono_srl/action_utils.h"
+#include "experimental/acl2015/mono_predicate_srl/decoder.h"
+#include "experimental/acl2015/mono_predicate_srl/action.h"
+#include "experimental/acl2015/mono_predicate_srl/action_utils.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 Decoder::Decoder(int nr, tag_t p, int beam_size, UpdateStrategy strategy,
     Weight* weight)
@@ -76,7 +76,7 @@ Decoder::transit(const State& source, const Action& act, const floatval_t& score
   target->score = score;
 }
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar

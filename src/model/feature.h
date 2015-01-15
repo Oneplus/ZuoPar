@@ -7,7 +7,10 @@
 
 namespace ZuoPar {
 
-template <class _MetaFeatureType, class _ActionType>
+template <
+  class _MetaFeatureType,
+  class _ActionType
+>
 class Feature {
 private:
   //!

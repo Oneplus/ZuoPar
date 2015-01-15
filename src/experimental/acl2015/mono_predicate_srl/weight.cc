@@ -1,11 +1,11 @@
-#include "experimental/acl2015/mono_srl/weight.h"
-#include "experimental/acl2015/mono_srl/action.h"
-#include "experimental/acl2015/mono_srl/score_context.h"
+#include "experimental/acl2015/mono_predicate_srl/weight.h"
+#include "experimental/acl2015/mono_predicate_srl/action.h"
+#include "experimental/acl2015/mono_predicate_srl/score_context.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_U1( w_2 );
@@ -45,14 +45,10 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_B11( position, vc_pred );
   ZUOPAR_FEATURE_MAP_REGIST_T111( position, p_pred, vc_pred );
   ZUOPAR_FEATURE_MAP_REGIST_U0( t_1 );
-  sfeat_map_repo.push_back( map_t(
-        [](const ScoreContext& ctx, std::vector<std::string>& cache) -> void {
-        cache.push_back( ctx.path ); }
-        )
-      );
+  ZUOPAR_FEATURE_MAP_REGIST_S0( path );
 }
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar

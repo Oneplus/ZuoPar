@@ -1,18 +1,18 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_DECODER_H__
+#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_DECODER_H__
 
 #include "engine/token_alphabet.h"
 #include "system/system.h"
-#include "experimental/acl2015/mono_srl/state.h"
-#include "experimental/acl2015/mono_srl/action.h"
-#include "experimental/acl2015/mono_srl/score_context.h"
-#include "experimental/acl2015/mono_srl/action.h"
-#include "experimental/acl2015/mono_srl/weight.h"
+#include "experimental/acl2015/mono_predicate_srl/state.h"
+#include "experimental/acl2015/mono_predicate_srl/action.h"
+#include "experimental/acl2015/mono_predicate_srl/score_context.h"
+#include "experimental/acl2015/mono_predicate_srl/action.h"
+#include "experimental/acl2015/mono_predicate_srl/weight.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
 
@@ -48,10 +48,10 @@ private:
   tag_t predicate_tag;
 };
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace lexicalanalyzer
 } //  namespace zuopar
 
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_DECODER_H__

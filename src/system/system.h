@@ -215,6 +215,17 @@ public:
     }
   }
 
+  void reset_beam_size(int size) {
+    if (beam_size < size) {
+      for (std::size_t i = 0; i < lattice_heads.size(); ++ i) {
+        _StateType* p = new _StateType[size+ 1];
+        std::copy(lattice_heads[i], lattice_heads[i]+ beam_size + 1, p);
+        delete [](lattice_heads[i]);
+        lattice_heads[i] = p;
+      }
+    }
+    beam_size = size;
+  }
 private:
   /**
    * allocate the lattice of index-th row.

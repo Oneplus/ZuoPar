@@ -1,4 +1,4 @@
-add_executable (mono_srl
+add_executable (mono_predicate_srl
     main.cc
     paths.cc
     opt_utils.cc
@@ -16,7 +16,7 @@ add_executable (mono_srl
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (mono_srl
+target_link_libraries (mono_predicate_srl
     boost_program_options
     boost_log_setup
     boost_log
@@ -26,4 +26,5 @@ target_link_libraries (mono_srl
     boost_system
     pthread)
 
-set_target_properties(mono_srl PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)
+set_target_properties(mono_predicate_srl
+    PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

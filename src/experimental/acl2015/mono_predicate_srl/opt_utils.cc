@@ -1,9 +1,9 @@
-#include "experimental/acl2015/mono_srl/opt_utils.h"
+#include "experimental/acl2015/mono_predicate_srl/opt_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL{
+namespace MonoPredicateSRL {
 
 namespace fe = ZuoPar::FrontEnd;
 namespace po = boost::program_options;
@@ -37,7 +37,7 @@ bool parse_test_option_ext(const po::variables_map& vm, TestOption& opts) {
   return true;
 }
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace frontend
 } //  namespace zuopar

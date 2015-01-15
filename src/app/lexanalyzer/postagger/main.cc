@@ -12,6 +12,7 @@ namespace fe = ZuoPar::FrontEnd;
 
 int multi_learn(int argc, char** argv) {
   std::cerr << "Not implemented." << std::endl;
+  return 1;
 }
 
 /**

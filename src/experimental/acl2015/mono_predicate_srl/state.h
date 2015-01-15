@@ -1,15 +1,15 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_STATE_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_STATE_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_STATE_H__
+#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_STATE_H__
 
 #include "types/common.h"
 #include "types/semchunks.h"
-#include "experimental/acl2015/mono_srl/paths.h"
-#include "experimental/acl2015/mono_srl/action.h"
+#include "experimental/acl2015/mono_predicate_srl/paths.h"
+#include "experimental/acl2015/mono_predicate_srl/action.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 class State {
 public:
@@ -74,9 +74,9 @@ public:
   Action last_action;
 };
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_STATE_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_STATE_H__

@@ -1,19 +1,19 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_PIPE_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_PIPE_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__
+#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__
 
 #include <unordered_map>
 #include "types/semchunks.h"
 #include "frontend/common_pipe_cfg.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/mono_srl/opt.h"
-#include "experimental/acl2015/mono_srl/weight.h"
-#include "experimental/acl2015/mono_srl/decoder.h"
-#include "experimental/acl2015/mono_srl/learner.h"
+#include "experimental/acl2015/mono_predicate_srl/opt.h"
+#include "experimental/acl2015/mono_predicate_srl/weight.h"
+#include "experimental/acl2015/mono_predicate_srl/decoder.h"
+#include "experimental/acl2015/mono_predicate_srl/learner.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
@@ -48,6 +48,9 @@ protected:
    *  @param[in]  model_path  The path to the model.
    */
   bool load_model(const std::string& model_path);
+
+  //!
+  bool save_model(const std::string& model_path);
 
   /**
    * Build the dependency output for the state chain which ends with the source
@@ -105,9 +108,9 @@ protected:
   std::vector<SemanticChunks> dataset;
 };
 
-} //  namespace monosrl
+} //  namespace monopredicatesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_SRL_PIPE_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__

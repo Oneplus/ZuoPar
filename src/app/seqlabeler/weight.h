@@ -2,7 +2,7 @@
 #define __ZUOPAR_APP_SEQUENCE_LABELER_MODEL_H__
 
 #include "types/common.h"
-#include "model/associated/feature_param_map_collection.h"
+#include "model/fast_associated/feature_param_map_collection.h"
 #include "app/seqlabeler/action.h"
 #include "app/seqlabeler/state.h"
 #include "app/seqlabeler/score_context.h"

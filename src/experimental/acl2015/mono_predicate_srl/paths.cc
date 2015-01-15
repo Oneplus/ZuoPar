@@ -1,10 +1,10 @@
-#include "experimental/acl2015/mono_srl/paths.h"
+#include "experimental/acl2015/mono_predicate_srl/paths.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoSRL {
+namespace MonoPredicateSRL {
 
 Paths::Paths(const MonoSemanticChunks& r) {
   payload.resize(r.size());
@@ -19,7 +19,7 @@ Paths::Paths(const MonoSemanticChunks& r) {
   }
 }
 
-} //  namespace monosrl
+} //  namespace monopredictesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
