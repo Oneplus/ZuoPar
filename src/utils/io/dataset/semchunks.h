@@ -14,14 +14,16 @@ namespace eg = ZuoPar::Engine;
 
 /**
  * Read dependency dataset. In each instance, one item per line. For each item,
- * there are 4 column representing: form, postag, head, deprel. Instances are
- * separated by newline.
+ * there are 4 column representing: form, postag, blank, senses, apreds. Instances
+ * are separated by newline.
  *
  *  @param[in]  is                The input stream.
  *  @param[out] dataset           The output dataset.
  *  @param[out] forms_alphabet    The alphabet for forms.
  *  @param[out] postags_alphabet  The alphabet for postags.
- *  @param[out] deprels_alphabet  The alphabet for dependency relations.
+ *  @param[out] senses_alphabet   The alphabet for senses.
+ *  @param[out] chunks_alphabet   The alphabet for chunk tag.
+ *  @param[in]  predicate_tag     The tag of predicate.
  *  @param[in]  incremental       If incremental is true, insert the token into
  *                                the alphabet, otherwise not perform insertion.
  */
@@ -32,6 +34,30 @@ void read_semchunks_dataset(
     eg::TokenAlphabet& postags_alphabet,
     eg::TokenAlphabet& senses_alphabet,
     eg::TokenAlphabet& chunks_alphabet,
+    const std::string& predicate_tag = "V",
+    bool incremental = true);
+
+/**
+ * Read one semantic chunk with chunk tag instance from the input stream.
+ *
+ *  @param[in]  is                The input stream
+ *  @param[out] dataset           The output dataset
+ *  @param[in]  forms_alphabet    The alphabet for forms
+ *  @param[in]  postags_alphabet  The alphabet for postags
+ *  @param[in]  senses_alphabet   The alphabet for senses
+ *  @param[in]  chunks_alphabet   The alphabet for chunks
+ *  @param[in]  semroles_alphabet The alphabet for semantic roles
+ *  @param[in]  incremental       Use to specify if add new key entry to the
+ *                                alphabet.
+ */
+void read_semchunks_with_chunk_dataset(std::istream& is,
+    std::vector<SemanticChunksWithChunks>& dataset,
+    eg::TokenAlphabet& forms_alphabet,
+    eg::TokenAlphabet& postags_alphabet,
+    eg::TokenAlphabet& senses_alphabet,
+    eg::TokenAlphabet& chunks_alphabet,
+    eg::TokenAlphabet& semroles_alphabet,
+    const std::string& predicate_tag = "V",
     bool incremental = true);
 
 } // namespace io

@@ -79,6 +79,9 @@ protected:
   //! The path to the verb class dictionary.
   std::string verb_class_path;
 
+  //! The tag of the predicate.
+  std::string predicate_tag;
+
   //!
   std::unordered_map<form_t, int> verb_classes;
 

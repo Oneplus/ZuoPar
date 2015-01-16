@@ -13,10 +13,12 @@ namespace fe = ZuoPar::FrontEnd;
 
 struct LearnOption: public fe::LearnOption {
   std::string verb_class_path;
+  std::string predicate_tag;
 };
 
 struct TestOption: public fe::TestOption {
   std::string verb_class_path;
+  std::string predicate_tag;
   std::string output_format;
 };
 

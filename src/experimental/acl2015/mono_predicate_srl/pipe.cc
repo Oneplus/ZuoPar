@@ -22,6 +22,7 @@ namespace fe = ZuoPar::FrontEnd;
 
 Pipe::Pipe(const LearnOption& opts)
   : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
+  predicate_tag = opts.predicate_tag;
   verb_class_path = opts.verb_class_path;
   if (load_model(opts.model_path)) {
     _INFO << "report: model is loaded.";
@@ -33,6 +34,7 @@ Pipe::Pipe(const LearnOption& opts)
 Pipe::Pipe(const TestOption& opts)
   : weight(0), decoder(0), learner(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
+  predicate_tag = opts.predicate_tag;
   verb_class_path = opts.verb_class_path;
   if (opts.output_format == "semchunks") {
     output_format = kSemanticChunks;
@@ -161,8 +163,8 @@ Pipe::setup() {
       return false;
     }
     _INFO << "report: loading dataset from reference file.";
-    ioutils::read_semchunks_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, senses_alphabet, tags_alphabet, true);
+    ioutils::read_semchunks_dataset(ifs, dataset, forms_alphabet, postags_alphabet,
+        senses_alphabet, tags_alphabet, predicate_tag, true);
     _INFO << "report: dataset is loaded from reference file.";
   } else {
     // not implemented.
@@ -172,9 +174,10 @@ Pipe::setup() {
       _ERROR << "#: testing halt";
       return false;
     }
-    ioutils::read_semchunks_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, senses_alphabet, tags_alphabet, true);
+    ioutils::read_semchunks_dataset(ifs, dataset, forms_alphabet, postags_alphabet,
+        senses_alphabet, tags_alphabet, predicate_tag, true);
   }
+  _INFO << "report: predicate tag is \"" << predicate_tag << "\"";
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << forms_alphabet.size() << " form(s) is detected.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
@@ -193,7 +196,7 @@ Pipe::run() {
     return;
   }
 
-  decoder = new Decoder(tags_alphabet.size(), tags_alphabet.encode("V"),
+  decoder = new Decoder(tags_alphabet.size(), tags_alphabet.encode(predicate_tag.c_str()),
       beam_size, update_strategy, weight);
 
   if (mode == kPipeLearn) {
@@ -275,7 +278,7 @@ Pipe::build_output(const State& source, SemanticChunks& output) {
     tag_t tag;
 
     if (ActionUtils::is_O(p->last_action)) {
-      predicate.second.push_back(0);
+      predicate.second.push_back(kSemanticChunkOuterTag);
     } else if (ActionUtils::is_B(p->last_action, tag)) {
       predicate.second.push_back(kSemanticChunkBeginTag+ tag);
     } else if (ActionUtils::is_I(p->last_action, tag)) {

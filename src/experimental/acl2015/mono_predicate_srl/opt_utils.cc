@@ -17,6 +17,11 @@ bool parse_learn_option_ext(const po::variables_map& vm, LearnOption& opts) {
   if (vm.count("verb-class")) {
     opts.verb_class_path = vm["verb-class"].as<std::string>();
   }
+
+  opts.predicate_tag = "V";
+  if (vm.count("predicate")) {
+    opts.predicate_tag = vm["predicate"].as<std::string>();
+  }
   return true;
 }
 
@@ -33,6 +38,11 @@ bool parse_test_option_ext(const po::variables_map& vm, TestOption& opts) {
   opts.verb_class_path = "";
   if (vm.count("verb-class")) {
     opts.verb_class_path = vm["verb-class"].as<std::string>();
+  }
+
+  opts.predicate_tag = "V";
+  if (vm.count("predicate")) {
+    opts.predicate_tag = vm["predicate"].as<std::string>();
   }
   return true;
 }
