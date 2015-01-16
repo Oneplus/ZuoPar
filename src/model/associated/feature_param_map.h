@@ -10,7 +10,7 @@
 #include <boost/functional/hash.hpp>
 
 #if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
-# include <sparsehash/dense_hash_map>
+# include <google/dense_hash_map>
 # include "utils/serialization/dense_hash_map.h"
 #else
 # include <unordered_map>

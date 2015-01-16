@@ -17,8 +17,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-// #include <google/dense_hash_map>
-#include <sparsehash/dense_hash_map>
+#include <google/dense_hash_map>
+//#include <sparsehash/dense_hash_map>
 #include <boost/config.hpp>
 
 #include <boost/serialization/utility.hpp>
