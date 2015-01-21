@@ -2,6 +2,7 @@
 #define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_SCORE_CONTEXT_H__
 
 #include <vector>
+#include <boost/assert.hpp>
 #include "types/common.h"
 #include "types/semchunks.h"
 #include "engine/token_alphabet.h"
@@ -23,13 +24,13 @@ public:
    *  @param[in]  state   The State
    */
   ScoreContext(const State& state)
-    : w_2(0), w_1(0), w0(0), w1(0), w2(0), dist(0),
+    : w_2(0), w_1(0), w0(0), w1(0), w2(0), dist(0), position(0),
     p_2(0), p_1(0), p0(0), p1(0), p2(0), w_pred(0),
     p_pred(0), p_pred_1(0), p_pred1(0), vc_pred(0),
     path(state.paths->payload[state.buffer]) {
     const MonoSemanticChunks* ref = state.ref;
     const std::vector<form_t>& forms = ref->forms;
-    const std::vector<postag_t>& postags= ref->postags;
+    const std::vector<postag_t>& postags = ref->postags;
 
     int j = state.buffer;
     int M = ref->size();
@@ -43,6 +44,8 @@ public:
       t_1 = kSemanticChunkBeginTag+ tag;
     } else if (ActionUtils::is_I(state.last_action, tag)) {
       t_1 = kSemanticChunkInterTag+ tag;
+    } else {
+      BOOST_ASSERT_MSG(false, "Unknown tag!");
     }
 
     if (j >= 2) { w_2 = forms[j- 2]; p_2 = postags[j- 2]; }
@@ -70,8 +73,8 @@ public:
         postags[ref->predicate.first+ 1]:
         eg::TokenAlphabet::END);
 
-    position = j < ref->predicate.first ? 1: (j == ref->predicate.first ? 2: 0);
-    dist= std::abs(j - ref->predicate.first);
+    position = (j < ref->predicate.first ? 1: (j == ref->predicate.first ? 2: 0));
+    dist= (j > ref->predicate.first? j - ref->predicate.first: ref->predicate.first -j);
   };
 
   form_t    w_2, w_1, w0, w1, w2;

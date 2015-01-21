@@ -116,18 +116,22 @@ Pipe::load_verb_class() {
   }
 
   std::string line;
+  verb_classes[0] = 0;
   while (std::getline(ifs, line)) {
     std::vector<std::string> tokens;
     algo::trim(line);
-    if (line.size() == 0) {
-      continue;
-    }
+    if (line.size() == 0) { continue; }
+
     algo::split(tokens, line, boost::is_any_of("\t "),
         boost::token_compress_on);
-
     BOOST_ASSERT_MSG(tokens.size() == 2, "not in \"key value\" format.");
 
     form_t predicate = forms_alphabet.encode(tokens[0].c_str());
+    if (predicate == 0) {
+      _WARN << "cache: found undefined predicate: " << tokens[0];
+      continue;
+    }
+
     std::string value = tokens[1];
     //_DEBUG << value;
     algo::trim(value);
@@ -139,10 +143,12 @@ Pipe::load_verb_class() {
         continue;
       }
       //_DEBUG << tokens[i];
+      BOOST_ASSERT_MSG(boost::lexical_cast<int>(tokens[i].c_str()) < 10, "Larger than 10!");
       val += boost::lexical_cast<int>(tokens[i].c_str());
       val *= 10;
     }
 
+    BOOST_ASSERT_MSG(val != 0, "Found Zero verb class!");
     verb_classes[predicate] = val;
   }
 
