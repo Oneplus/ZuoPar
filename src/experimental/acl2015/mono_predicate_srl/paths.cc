@@ -10,7 +10,8 @@ Paths::Paths(const MonoSemanticChunks& r) {
   payload.resize(r.size());
   const std::vector<postag_t>& postags = r.postags;
   size_t predicate_index = r.predicate.first;
-  payload[predicate_index] = boost::lexical_cast<std::string>(postags[predicate_index]);
+  //payload[predicate_index] = boost::lexical_cast<std::string>(postags[predicate_index]);
+  payload[predicate_index] = "";
   for (int i = predicate_index- 1; i >= 0; -- i) {
     payload[i] = boost::lexical_cast<std::string>(postags[i]) + "|" + payload[i+ 1];
   }

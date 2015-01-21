@@ -7,7 +7,6 @@
 #include <boost/functional/hash.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/serialization/singleton.hpp>
 #include "types/common.h"
 #include "system/action/abstract_action.h"
 

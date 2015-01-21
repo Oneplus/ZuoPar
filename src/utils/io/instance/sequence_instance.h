@@ -13,12 +13,12 @@ namespace eg = ZuoPar::Engine;
 /**
  * Read one segmentation instance from the input stream.
  *
- *  @param[in]  is                The input stream.
- *  @param[out] output            The output stream.
- *  @param[in]  forms_alphabet    The alphabet of forms.
- *  @param[in]  postags_alphabet  The alphabet of postags.
- *  @return     bool              Return true on successfully load, otherwise
- *                                false.
+ *  @param[in]  is                  The input stream.
+ *  @param[out] output              The output stream.
+ *  @param[in]  attributes_alphabet The alphabet of forms.
+ *  @param[in]  tags_alphabet       The alphabet of postags.
+ *  @return     bool                Return true on successfully load, otherwise
+ *                                  false.
  */
 bool read_sequence_instance(std::istream& is,
     SequenceInstance& output,
@@ -28,9 +28,12 @@ bool read_sequence_instance(std::istream& is,
 
 
 /**
+ * Write the sequence instance to the output stream.
  *
- *
- *
+ *  @param[out] os                  The output stream.
+ *  @param[in]  output              The sequence instance.
+ *  @param[in]  attributes_alphabet The alphabet of attributes.
+ *  @param[in]  tags_alphabet       The alphabet of tags.
  */
 void write_sequence_instance(std::ostream& os,
     const SequenceInstance& output,

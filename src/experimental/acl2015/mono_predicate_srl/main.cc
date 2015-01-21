@@ -87,9 +87,13 @@ int test(int argc, char** argv) {
   usage += "OPTIONS";
 
   po::options_description optparser = fe::build_test_optparser(usage);
-  optparser.add_options()("verb-class", po::value<std::string>(), "The path to the verb class.");
-  optparser.add_options()("predicate", po::value<std::string>(), "The predicate tag.");
-  optparser.add_options()("format,f", po::value<std::string>(), "The output format.");
+  optparser.add_options()
+    ("verb-class", po::value<std::string>(), "The path to the verb class.")
+    ("predicate", po::value<std::string>(), "The predicate tag.")
+    ("format", po::value<std::string>(), "The output format\n"
+                                         " - semchunk: the semantic chunk [default]\n"
+                                         " - conll: the conll props.");
+
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;

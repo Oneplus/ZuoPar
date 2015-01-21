@@ -1,11 +1,22 @@
-#ifndef __ZUOPAR_MODEL_FEATURE_PREFIX_ACTION_POINTWISE_PARAM_MAP_H__
-#define __ZUOPAR_MODEL_FEATURE_PREFIX_ACTION_POINTWISE_PARAM_MAP_H__
+#ifndef __ZUOPAR_MODEL_ASSOCIATED_FEATURE_PARAM_MAP_V3_H__
+#define __ZUOPAR_MODEL_ASSOCIATED_FEATURE_PARAM_MAP_V3_H__
 
 #include "settings.h"
+#include "types/math/sparse_vector.h"
+#include "types/internal/packed_scores.h"
 #include "ml/pointwise_param.h"
 #include "model/feature.h"
 #include "utils/logging.h"
-#include "utils/serialization/unordered_map.h"
+#include <boost/functional/hash.hpp>
+
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+# include <google/dense_hash_map>
+# include "utils/serialization/dense_hash_map.h"
+#else
+# include <unordered_map>
+# include "utils/serialization/unordered_map.h"
+# warning ("use std::unordered_map which is slow")
+#endif
 
 namespace ZuoPar {
 
@@ -20,24 +31,53 @@ namespace ZuoPar {
  * Previous implementation use the `Map [ Feature ] = parameter` structure,
  * and it runs slow.
  */
-template <class _FeaturePrefixType,
-          class _ScoreContextType,
-          class _ActionType>
-class FeaturePrefixActionPointwiseParamMap {
+template <
+  class _MetaFeatureType,
+  class _ScoreContextType,
+  class _ActionType
+>
+class FeatureParameterMap {
 private:
   //! Define the parameter type.
   typedef MachineLearning::PointwiseParameter param_t;
+
   //! Define the map entry type.
-  typedef boost::unordered_map<_ActionType, param_t> map_entry_t;
-  //! Define the 2nd-level mapping type
-  typedef boost::unordered_map<_FeaturePrefixType, map_entry_t> map_t;
+  typedef std::unordered_map<
+    _ActionType,
+    param_t,
+    boost::hash<_ActionType>
+  > map_entry_t;
+
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+  //! Define the 2nd-level mapping type.
+  typedef google::dense_hash_map<
+    _MetaFeatureType,
+    map_entry_t,
+    boost::hash<_MetaFeatureType>
+  > map_t;
+#else
+  typedef std::unordered_map<
+    _MetaFeatureType,
+    map_entry_t,
+    boost::hash<_MetaFeatureType>
+  > map_t;
+#endif
+
   //! Define the cache type.
-  typedef std::vector<_FeaturePrefixType> cache_t;
+  typedef std::vector<_MetaFeatureType> cache_t;
+
   //! Define the functor type.
   typedef std::function<void(const _ScoreContextType&, cache_t&)> extractor_t;
 
+  //!
+  typedef PackedScores<_ActionType> packed_score_t;
 public:
-  FeaturePointwiseParamMap(extractor_t _extractor): extractor(_extractor) {}
+  FeatureParameterMap(extractor_t _extractor)
+    : extractor(_extractor) {
+#if defined(UNORDERED_MAP_IMPL) and (UNORDERED_MAP_IMPL == dense_hash_map)
+    payload.set_empty_key(feature_t());
+#endif
+  }
 
   /**
    * Get the score for the (context, action) pair

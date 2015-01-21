@@ -7,15 +7,9 @@
 
 namespace ZuoPar {
 
-const int kChunkOuterPrefix = 1;
-const int kChunkBeginPrefix = 10000000;
-const int kChunkInterPrefix = 20000000;
-const int kChunkEndPrefix = 30000000;
-const int kChunkSinglePrefix = 40000000;
-
-const int kSemanticChunkOuterTag = 1;
-const int kSemanticChunkBeginTag = 10000000;
-const int kSemanticChunkInterTag = 20000000;
+const int kSemanticChunkOuterTag = 10000000;
+const int kSemanticChunkBeginTag = 20000000;
+const int kSemanticChunkInterTag = 30000000;
 
 class SemanticChunks {
 public:
@@ -46,19 +40,6 @@ public:
   const SemanticChunks::predicate_t&  predicate;  //! The mono predicate
 
   std::size_t size() const { return forms.size(); }
-};
-
-class SemanticChunksWithChunks {
-public:
-  typedef std::pair< std::size_t, std::vector<tag_t> > predicate_t;
-  std::vector<form_t> forms;
-  std::vector<postag_t> postags;
-  std::vector<tag_t> chunks;
-  std::vector<tag_t> senses;
-  std::vector<predicate_t> predicates;
-
-  std::size_t size() const { return forms.size(); }
-  std::size_t nr_predicates() const { return predicates.size(); }
 };
 
 } // namespace zuopar

@@ -49,7 +49,11 @@ protected:
    */
   bool load_model(const std::string& model_path);
 
-  //!
+  /**
+   * Save model to the file in specified path.
+   *
+   *  @param[in]  model_path  The path to the model.
+   */
   bool save_model(const std::string& model_path);
 
   /**
@@ -61,11 +65,7 @@ protected:
    */
   void build_output(const State& source, SemanticChunks& output);
 
-  /**
-   *
-   *
-   *
-   */
+  //! Load the verb class dictionary
   bool load_verb_class();
 
 protected:
@@ -82,7 +82,7 @@ protected:
   //! The tag of the predicate.
   std::string predicate_tag;
 
-  //!
+  //! The verb class dictionary.
   std::unordered_map<form_t, int> verb_classes;
 
   //! The pointer to the weights instances which is pointwise averaged

@@ -20,42 +20,32 @@ Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   int buffer = source.buffer;
-  if (buffer == source.ref->predicate.first) {
-    actions.push_back(ActionFactory::make_B(predicate_tag));
+  if (buffer == 0) {
+    actions.push_back(ActionFactory::make_O());
+    for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
+      actions.push_back(ActionFactory::make_B(p));
+    }
   } else {
-    if (buffer == 0) {
+    tag_t tag;
+    if (ActionUtils::is_B(source.last_action, tag)) {
+      actions.push_back(ActionFactory::make_O());
+      actions.push_back(ActionFactory::make_I(tag));
+      for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
+        actions.push_back(ActionFactory::make_B(p));
+      }
+    } else if (ActionUtils::is_I(source.last_action, tag)) {
+      actions.push_back(ActionFactory::make_O());
+      actions.push_back(ActionFactory::make_I(tag));
+      for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
+        actions.push_back(ActionFactory::make_B(p));
+      }
+    } else if (ActionUtils::is_O(source.last_action)) {
       actions.push_back(ActionFactory::make_O());
       for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-        if (p == predicate_tag) { continue; }
         actions.push_back(ActionFactory::make_B(p));
       }
     } else {
-      tag_t tag;
-      if (ActionUtils::is_B(source.last_action, tag)) {
-        actions.push_back(ActionFactory::make_O());
-        if (tag != predicate_tag) {
-          actions.push_back(ActionFactory::make_I(tag));
-        }
-        for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-          if (p == predicate_tag) { continue; }
-          actions.push_back(ActionFactory::make_B(p));
-        }
-      } else if (ActionUtils::is_I(source.last_action, tag)) {
-        actions.push_back(ActionFactory::make_O());
-        actions.push_back(ActionFactory::make_I(tag));
-        for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-          if (p == predicate_tag) { continue; }
-          actions.push_back(ActionFactory::make_B(p));
-        }
-      } else if (ActionUtils::is_O(source.last_action)) {
-        actions.push_back(ActionFactory::make_O());
-        for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
-          if (p == predicate_tag) { continue; }
-          actions.push_back(ActionFactory::make_B(p));
-        }
-      } else {
-        BOOST_ASSERT_MSG(false, "unknown transition");
-      }
+      BOOST_ASSERT_MSG(false, "unknown transition");
     }
   }
 }

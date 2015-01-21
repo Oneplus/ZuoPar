@@ -1,5 +1,6 @@
-#include "utils/io/dataset/semchunks.h"
-#include "utils/io/instance/semchunks.h"
+#include "utils/io/dataset/chunks.h"
+#include "utils/io/instance/chunks.h"
+#include "utils/logging.h"
 #include <sstream>
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
@@ -9,16 +10,15 @@ namespace ZuoPar {
 namespace IO {
 
 void
-read_semchunks_dataset(
-    std::istream& is,
-    std::vector<SemanticChunks>& dataset,
+read_chunks_with_semantic_roles_dataset(std::istream& is,
+    std::vector<ChunksWithSemanticRoles>& dataset,
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
     eg::TokenAlphabet& senses_alphabet,
     eg::TokenAlphabet& chunks_alphabet,
+    eg::TokenAlphabet& semroles_alphabet,
     const std::string& predicate_tag,
-    bool incremental
-    ) {
+    bool incremental) {
   namespace algo = boost::algorithm;
   dataset.clear();
   std::string data_context((std::istreambuf_iterator<char>(is)),
@@ -31,10 +31,11 @@ read_semchunks_dataset(
   // Loop over the instances
   while (instance != eos) {
     std::istringstream iss(*instance);
-    SemanticChunks semchunks;
-    read_semchunks_instance(iss, semchunks, forms_alphabet, postags_alphabet,
-        senses_alphabet, chunks_alphabet, predicate_tag, incremental);
-    dataset.push_back(semchunks);
+    ChunksWithSemanticRoles output;
+    read_chunks_with_semantic_roles_instance(iss, output, forms_alphabet,
+        postags_alphabet, senses_alphabet, chunks_alphabet, semroles_alphabet,
+        predicate_tag, incremental);
+    dataset.push_back(output);
     instance ++;
   }
 }

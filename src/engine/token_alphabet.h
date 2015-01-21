@@ -7,7 +7,6 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/split_member.hpp>
-#include <boost/serialization/singleton.hpp>
 #include "utils/serialization/unordered_map.h"
 
 namespace ZuoPar {

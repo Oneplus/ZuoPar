@@ -30,7 +30,7 @@ bool ActionUtils::is_I(const Action& act, tag_t& tag) {
 void ActionUtils::get_oracle_actions(const MonoSemanticChunks& instance,
     std::vector<Action>& actions) {
   actions.clear();
-  const std::vector<tag_t> tags = instance.predicate.second;
+  const std::vector<tag_t>& tags = instance.predicate.second;
   for (int i = 0; i < instance.size(); ++ i) {
     tag_t tag = tags[i];
     if (tag == kSemanticChunkOuterTag) {

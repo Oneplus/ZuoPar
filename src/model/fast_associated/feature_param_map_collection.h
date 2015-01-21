@@ -91,11 +91,15 @@ public:
     }
     for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
       bfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += ufeat_map_repo[i].size();
+      global_id += bfeat_map_repo[i].size();
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += ufeat_map_repo[i].size();
+      global_id += tfeat_map_repo[i].size();
+    }
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
+      global_id += sfeat_map_repo[i].size();
     }
   }
 
@@ -119,6 +123,9 @@ public:
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i, ++ global_id) {
       tfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
+    }
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i, ++ global_id) {
+      sfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
     }
   }
 
@@ -149,13 +156,14 @@ public:
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
       ret += ufeat_map_repo[i].score(ctx, act, avg, 0.);
     }
-
     for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
       ret += bfeat_map_repo[i].score(ctx, act, avg, 0.);
     }
-
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       ret += tfeat_map_repo[i].score(ctx, act, avg, 0.);
+    }
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      ret += sfeat_map_repo[i].score(ctx, act, avg, 0.);
     }
     return ret;
   }
@@ -168,13 +176,14 @@ public:
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
       ufeat_map_repo[i].batchly_score(ctx, actions, avg, result);
     }
-
     for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
       bfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
     }
-
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
+    }
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
     }
   }
 
@@ -205,17 +214,21 @@ public:
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
       ufeat_map_repo[i].update(ctx, act, timestamp, scale);
     }
-
     for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
       bfeat_map_repo[i].update(ctx, act, timestamp, scale);
     }
-
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].update(ctx, act, timestamp, scale);
+    }
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].update(ctx, act, timestamp, scale);
     }
   }
 
   /**
+   * Flush the parameter.
+   *
+   *  @param[in]  timestamp   The time stamp.
    */
   void flush(int timestamp) {
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
@@ -226,6 +239,9 @@ public:
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].flush(timestamp);
+    }
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].flush(timestamp);
     }
   }
 
@@ -252,6 +268,9 @@ public:
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].save(oa);
     }
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].save(oa);
+    }
     return true;
   }
 
@@ -272,13 +291,14 @@ public:
     for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
       ufeat_map_repo[i].load(ia);
     }
-
     for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
       bfeat_map_repo[i].load(ia);
     }
-
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].load(ia);
+    }
+    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
+      sfeat_map_repo[i].load(ia);
     }
     return true;
   }
@@ -292,123 +312,109 @@ protected:
   std::vector< tf_map_t > tfeat_map_repo;
   //! The string score mapping repository.
   std::vector< sf_map_t > sfeat_map_repo;
-  //! The unigram score caching facility.
-  // std::vector< uf_t > ufeat_cache;
-  //! The bigram score caching facility.
-  // std::vector< bf_t > bfeat_cache;
-  //! The trigram score caching facility.
-  //std::vector< tf_t > tfeat_cache;
 };
 
-#define ZUOPAR_EXTRACTOR_U0(name) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_U0(_1) [](const ScoreContext& ctx, \
     std::vector<ufp_t>& cache) -> void{ \
-  cache.push_back( ufp_t(ctx.name) ); \
+  cache.push_back( ufp_t(ctx._1) ); \
 }
 
-#define ZUOPAR_EXTRACTOR_U1(name) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_U1(_1) [](const ScoreContext& ctx, \
     std::vector<ufp_t>& cache) -> void{ \
-  if (ctx.name) { \
-    cache.push_back( ufp_t(ctx.name) ); \
+  if (ctx._1) { \
+    cache.push_back( ufp_t(ctx._1) ); \
   } \
 }
 
-#define ZUOPAR_EXTRACTOR_B00(name1, name2) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_B00(_1, _2) [](const ScoreContext& ctx, \
     std::vector<bfp_t>& cache) -> void{ \
-  cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
+  cache.push_back( bfp_t( ctx._1, ctx._2) ); \
 }
 
-#define ZUOPAR_EXTRACTOR_B10(name1, name2) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_B10(_1, _2) [](const ScoreContext& ctx, \
     std::vector<bfp_t>& cache) -> void{ \
-  if (ctx.name1) { \
-    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
+  if (ctx._1) { \
+    cache.push_back( bfp_t( ctx._1, ctx._2) ); \
   } \
 }
 
-#define ZUOPAR_EXTRACTOR_B10(name1, name2) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_B11(_1, _2) [](const ScoreContext& ctx, \
     std::vector<bfp_t>& cache) -> void{ \
-  if (ctx.name1) { \
-    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
+  if (ctx._1 && ctx._2) { \
+    cache.push_back( bfp_t( ctx._1, ctx._2) ); \
   } \
 }
 
-#define ZUOPAR_EXTRACTOR_B11(name1, name2) [](const ScoreContext& ctx, \
-    std::vector<bfp_t>& cache) -> void{ \
-  if (ctx.name1 && ctx.name2) { \
-    cache.push_back( bfp_t( ctx.name1, ctx.name2) ); \
-  } \
-}
-
-#define ZUOPAR_EXTRACTOR_T000(name1, name2, name3) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_T000(_1, _2, _3) [](const ScoreContext& ctx, \
     std::vector<tfp_t>& cache) -> void{ \
-  cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
+  cache.push_back( tfp_t(ctx._1, ctx._2, ctx._3) ); \
 }
 
-#define ZUOPAR_EXTRACTOR_T100(name1, name2, name3) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_T100(_1, _2, _3) [](const ScoreContext& ctx, \
     std::vector<tfp_t>& cache) -> void{ \
-  if (ctx.name1) { \
-    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
+  if (ctx._1) { \
+    cache.push_back( tfp_t(ctx._1, ctx._2, ctx._3) ); \
   } \
 }
 
-#define ZUOPAR_EXTRACTOR_T110(name1, name2, name3) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_T110(_1, _2, _3) [](const ScoreContext& ctx, \
     std::vector<tfp_t>& cache) -> void{ \
-  if (ctx.name1 && ctx.name2) { \
-    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
+  if (ctx._1 && ctx._2) { \
+    cache.push_back( tfp_t(ctx._1, ctx._2, ctx._3) ); \
   } \
 }
 
-#define ZUOPAR_EXTRACTOR_T111(name1, name2, name3) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_T111(_1, _2, _3) [](const ScoreContext& ctx, \
     std::vector<tfp_t>& cache) -> void{ \
-  if (ctx.name1 && ctx.name2 && ctx.name3) { \
-    cache.push_back( tfp_t(ctx.name1, ctx.name2, ctx.name3) ); \
+  if (ctx._1 && ctx._2 && ctx._3) { \
+    cache.push_back( tfp_t(ctx._1, ctx._2, ctx._3) ); \
   } \
 }
 
-#define ZUOPAR_EXTRACTOR_S0(name) [](const ScoreContext& ctx, \
+#define ZUOPAR_EXTRACTOR_S0(_1) [](const ScoreContext& ctx, \
     std::vector<sfp_t>& cache) -> void{ \
-  cache.push_back( sfp_t(ctx.name) ); \
+  cache.push_back( sfp_t(ctx._1) ); \
 }
 
-#define ZUOPAR_FEATURE_MAP_REGIST_U0(name) do { \
-  ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U0(name) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_U0(_1) do { \
+  ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U0(_1) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_U1(name) do { \
-  ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U1(name) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_U1(_1) do { \
+  ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U1(_1) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_B00(name1, name2) do { \
-  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B00(name1, name2) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_B00(_1, _2) do { \
+  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B00(_1, _2) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_B10(name1, name2) do { \
-  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B10(name1, name2) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_B10(_1, _2) do { \
+  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B10(_1, _2) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_B11(name1, name2) do { \
-  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B11(name1, name2) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_B11(_1, _2) do { \
+  bfeat_map_repo.push_back( bf_map_t( ZUOPAR_EXTRACTOR_B11(_1, _2) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_T000(name1, name2, name3) do { \
-  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T000(name1, name2, name3) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_T000(_1, _2, _3) do { \
+  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T000(_1, _2, _3) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_T100(name1, name2, name3) do { \
-  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T100(name1, name2, name3) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_T100(_1, _2, _3) do { \
+  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T100(_1, _2, _3) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_T110(name1, name2, name3) do { \
-  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T110(name1, name2, name3) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_T110(_1, _2, _3) do { \
+  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T110(_1, _2, _3) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_T111(name1, name2, name3) do { \
-  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T111(name1, name2, name3) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_T111(_1, _2, _3) do { \
+  tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T111(_1, _2, _3) ) ); \
 } while (0);
 
-#define ZUOPAR_FEATURE_MAP_REGIST_S0(name) do { \
-  sfeat_map_repo.push_back( sf_map_t( ZUOPAR_EXTRACTOR_S0(name) ) ); \
+#define ZUOPAR_FEATURE_MAP_REGIST_S0(_1) do { \
+  sfeat_map_repo.push_back( sf_map_t( ZUOPAR_EXTRACTOR_S0(_1) ) ); \
 } while (0);
-
 
 } //  end for zuopar
 

@@ -23,21 +23,20 @@ public:
    *  @param[in]  state   The State
    */
   ScoreContext(const State& state)
-    : w_2(0), w_1(0), w0(0), w1(0), w2(0),
+    : w_2(0), w_1(0), w0(0), w1(0), w2(0), dist(0),
     p_2(0), p_1(0), p0(0), p1(0), p2(0), w_pred(0),
     p_pred(0), p_pred_1(0), p_pred1(0), vc_pred(0),
     path(state.paths->payload[state.buffer]) {
     const MonoSemanticChunks* ref = state.ref;
     const std::vector<form_t>& forms = ref->forms;
     const std::vector<postag_t>& postags= ref->postags;
-    const std::vector<tag_t>& senses = ref->senses;
 
     int j = state.buffer;
     int M = ref->size();
 
     tag_t tag;
     if (NULL == state.previous) {
-      t_1 = 0;
+      t_1 = eg::TokenAlphabet::BEGIN;
     } else if (ActionUtils::is_O(state.last_action)) {
       t_1 = kSemanticChunkOuterTag;
     } else if (ActionUtils::is_B(state.last_action, tag)) {
@@ -46,49 +45,32 @@ public:
       t_1 = kSemanticChunkInterTag+ tag;
     }
 
-    if (j- 2 >= 0) {
-      w_2 = forms[j- 2];
-      p_2 = postags[j- 2];
-    } else {
-      w_2 = 1;
-      p_2 = 1;
-    }
+    if (j >= 2) { w_2 = forms[j- 2]; p_2 = postags[j- 2]; }
+    else { w_2 = p_2 = eg::TokenAlphabet::BEGIN; }
 
-    if (j- 1 >= 0) {
-      w_1 = forms[j- 1];
-      p_1 = postags[j- 1];
-    } else {
-      w_1 = 1;
-      p_1 = 1;
-    }
+    if (j >= 1) { w_1 = forms[j- 1]; p_1 = postags[j- 1]; }
+    else { w_1 = p_1 = eg::TokenAlphabet::BEGIN; }
 
     w0 = forms[j];
     p0 = postags[j];
 
-    if (j+ 1 < M) {
-      w1 = forms[j+ 1];
-      p1 = postags[j+ 1];
-    } else {
-      w1 = 2;
-      p1 = 2;
-    }
+    if (j+ 1 < M) { w1 = forms[j+ 1]; p1 = postags[j+ 1]; }
+    else { w1 = p1 = eg::TokenAlphabet::END; }
 
-    if (j+ 2 < M) {
-      w2 = forms[j+ 2];
-      p2 = postags[j+ 2];
-    } else {
-      w2 = 2;
-      p2 = 2;
-    }
+    if (j+ 2 < M) { w2 = forms[j+ 2]; p2 = postags[j+ 2];}
+    else { w2 = p2 = eg::TokenAlphabet::END; }
 
     w_pred = forms[ref->predicate.first];
     p_pred = postags[ref->predicate.first];
-    //vc_pred = senses[ref->predicate.first];
     vc_pred  = state.verb_class;
-    p_pred_1 = (ref->predicate.first >= 1 ? postags[ref->predicate.first- 1]: 1);
-    p_pred1 = (ref->predicate.first+ 1 < M ? postags[ref->predicate.first+ 1]: 2);
+    p_pred_1 = (ref->predicate.first >= 1 ?
+        postags[ref->predicate.first- 1]:
+        eg::TokenAlphabet::BEGIN);
+    p_pred1 = (ref->predicate.first+ 1 < M ?
+        postags[ref->predicate.first+ 1]:
+        eg::TokenAlphabet::END);
 
-    position = j < ref->predicate.first ? 1: 0;
+    position = j < ref->predicate.first ? 1: (j == ref->predicate.first ? 2: 0);
     dist= std::abs(j - ref->predicate.first);
   };
 
