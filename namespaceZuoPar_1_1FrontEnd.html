@@ -108,6 +108,12 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a8e2887b484584c12fda25ed00cf66d1b"><td class="memItemLeft" align="right" valign="top">po::options_description&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1FrontEnd.html#a8e2887b484584c12fda25ed00cf66d1b">build_learn_optparser</a> (const std::string &amp;usage)</td></tr>
+<tr class="separator:a8e2887b484584c12fda25ed00cf66d1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51b805a71ed4ba2659744e6aaac9421c"><td class="memItemLeft" align="right" valign="top">po::options_description&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1FrontEnd.html#a51b805a71ed4ba2659744e6aaac9421c">build_multi_learn_optparser</a> (const std::string &amp;usage)</td></tr>
+<tr class="separator:a51b805a71ed4ba2659744e6aaac9421c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6c2bee7979fe1a12d710302ef859a0f"><td class="memItemLeft" align="right" valign="top">po::options_description&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1FrontEnd.html#aa6c2bee7979fe1a12d710302ef859a0f">build_test_optparser</a> (const std::string &amp;usage)</td></tr>
+<tr class="separator:aa6c2bee7979fe1a12d710302ef859a0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae14cf1747eefe38e029e7f686c78e0a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1FrontEnd.html#ae14cf1747eefe38e029e7f686c78e0a8">parse_option</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1FrontEnd_1_1Option.html">Option</a> &amp;opts)</td></tr>
 <tr class="separator:ae14cf1747eefe38e029e7f686c78e0a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a112a4ec3a1c5866c6ad141eb8227c4dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1FrontEnd.html#a112a4ec3a1c5866c6ad141eb8227c4dc">parse_learn_option</a> (const po::variables_map &amp;vm, <a class="el" href="structZuoPar_1_1FrontEnd_1_1LearnOption.html">LearnOption</a> &amp;opts)</td></tr>
@@ -118,6 +124,78 @@ Functions</h2></td></tr>
 <tr class="separator:ace1d8c181588f0f40f956372002a6b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a8e2887b484584c12fda25ed00cf66d1b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">po::options_description ZuoPar::FrontEnd::build_learn_optparser </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>usage</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Build commonly used learn option parser.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">usage</td><td>The usage. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>parser The option parser </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a51b805a71ed4ba2659744e6aaac9421c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">po::options_description ZuoPar::FrontEnd::build_multi_learn_optparser </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>usage</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Build commonly used multi learn option parser.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">usage</td><td>The usage. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>parser The option parser </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa6c2bee7979fe1a12d710302ef859a0f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">po::options_description ZuoPar::FrontEnd::build_test_optparser </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>usage</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Build commonly used test option parser.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">usage</td><td>The usage. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>parser The option parser </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a112a4ec3a1c5866c6ad141eb8227c4dc"></a>
 <div class="memitem">
 <div class="memproto">

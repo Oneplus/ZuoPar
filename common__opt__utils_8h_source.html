@@ -100,23 +100,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>po = boost::program_options;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#ae14cf1747eefe38e029e7f686c78e0a8">parse_option</a>(<span class="keyword">const</span> po::variables_map&amp; vm, Option&amp; opts);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;po::options_description <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#a8e2887b484584c12fda25ed00cf66d1b">build_learn_optparser</a>(<span class="keyword">const</span> std::string&amp; usage);</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#a112a4ec3a1c5866c6ad141eb8227c4dc">parse_learn_option</a>(<span class="keyword">const</span> po::variables_map&amp; vm, LearnOption&amp; opts);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;po::options_description <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#a51b805a71ed4ba2659744e6aaac9421c">build_multi_learn_optparser</a>(<span class="keyword">const</span> std::string&amp; usage);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#a92728e5e562411e2282236cce012fafe">parse_multi_learn_option</a>(<span class="keyword">const</span> po::variables_map&amp; vm, MultiLearnOption&amp; opts);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;po::options_description <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#aa6c2bee7979fe1a12d710302ef859a0f">build_test_optparser</a>(<span class="keyword">const</span> std::string&amp; usage);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#ace1d8c181588f0f40f956372002a6b17">parse_test_option</a>(<span class="keyword">const</span> po::variables_map&amp; vm, TestOption&amp; opts);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#ae14cf1747eefe38e029e7f686c78e0a8">parse_option</a>(<span class="keyword">const</span> po::variables_map&amp; vm, Option&amp; opts);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">//  namespace frontend</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">//  namespace zuopar</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_FRONTEND_COMMON_OPT_UTILS_H__</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#a112a4ec3a1c5866c6ad141eb8227c4dc">parse_learn_option</a>(<span class="keyword">const</span> po::variables_map&amp; vm, LearnOption&amp; opts);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#a92728e5e562411e2282236cce012fafe">parse_multi_learn_option</a>(<span class="keyword">const</span> po::variables_map&amp; vm, MultiLearnOption&amp; opts);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceZuoPar_1_1FrontEnd.html#ace1d8c181588f0f40f956372002a6b17">parse_test_option</a>(<span class="keyword">const</span> po::variables_map&amp; vm, TestOption&amp; opts);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;} <span class="comment">//  namespace frontend</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;} <span class="comment">//  namespace zuopar</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_FRONTEND_COMMON_OPT_UTILS_H__</span></div>
 <div class="ttc" id="common__opt_8h_html"><div class="ttname"><a href="common__opt_8h.html">common_opt.h</a></div></div>
+<div class="ttc" id="namespaceZuoPar_1_1FrontEnd_html_aa6c2bee7979fe1a12d710302ef859a0f"><div class="ttname"><a href="namespaceZuoPar_1_1FrontEnd.html#aa6c2bee7979fe1a12d710302ef859a0f">ZuoPar::FrontEnd::build_test_optparser</a></div><div class="ttdeci">po::options_description build_test_optparser(const std::string &amp;usage)</div></div>
 <div class="ttc" id="namespaceZuoPar_1_1FrontEnd_html_ae14cf1747eefe38e029e7f686c78e0a8"><div class="ttname"><a href="namespaceZuoPar_1_1FrontEnd.html#ae14cf1747eefe38e029e7f686c78e0a8">ZuoPar::FrontEnd::parse_option</a></div><div class="ttdeci">bool parse_option(const po::variables_map &amp;vm, Option &amp;opts)</div></div>
 <div class="ttc" id="namespaceZuoPar_1_1FrontEnd_html_ace1d8c181588f0f40f956372002a6b17"><div class="ttname"><a href="namespaceZuoPar_1_1FrontEnd.html#ace1d8c181588f0f40f956372002a6b17">ZuoPar::FrontEnd::parse_test_option</a></div><div class="ttdeci">bool parse_test_option(const po::variables_map &amp;vm, TestOption &amp;opts)</div></div>
+<div class="ttc" id="namespaceZuoPar_1_1FrontEnd_html_a8e2887b484584c12fda25ed00cf66d1b"><div class="ttname"><a href="namespaceZuoPar_1_1FrontEnd.html#a8e2887b484584c12fda25ed00cf66d1b">ZuoPar::FrontEnd::build_learn_optparser</a></div><div class="ttdeci">po::options_description build_learn_optparser(const std::string &amp;usage)</div></div>
 <div class="ttc" id="namespaceZuoPar_1_1FrontEnd_html_a112a4ec3a1c5866c6ad141eb8227c4dc"><div class="ttname"><a href="namespaceZuoPar_1_1FrontEnd.html#a112a4ec3a1c5866c6ad141eb8227c4dc">ZuoPar::FrontEnd::parse_learn_option</a></div><div class="ttdeci">bool parse_learn_option(const po::variables_map &amp;vm, LearnOption &amp;opts)</div></div>
 <div class="ttc" id="namespaceZuoPar_1_1FrontEnd_html_a92728e5e562411e2282236cce012fafe"><div class="ttname"><a href="namespaceZuoPar_1_1FrontEnd.html#a92728e5e562411e2282236cce012fafe">ZuoPar::FrontEnd::parse_multi_learn_option</a></div><div class="ttdeci">bool parse_multi_learn_option(const po::variables_map &amp;vm, MultiLearnOption &amp;opts)</div></div>
+<div class="ttc" id="namespaceZuoPar_1_1FrontEnd_html_a51b805a71ed4ba2659744e6aaac9421c"><div class="ttname"><a href="namespaceZuoPar_1_1FrontEnd.html#a51b805a71ed4ba2659744e6aaac9421c">ZuoPar::FrontEnd::build_multi_learn_optparser</a></div><div class="ttdeci">po::options_description build_multi_learn_optparser(const std::string &amp;usage)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

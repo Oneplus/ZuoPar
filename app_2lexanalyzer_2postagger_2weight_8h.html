@@ -87,13 +87,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">weight.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="common_8h_source.html">types/common.h</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="string__feature__param__map__collection_8h_source.html">model/string/string_feature_param_map_collection.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="meta__feature_8h_source.html">model/meta_feature.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="feature_8h_source.html">model/feature.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="feature__param__map__v2_8h_source.html">model/associated/feature_param_map_v2.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="associated_2feature__param__map__collection_8h_source.html">model/associated/feature_param_map_collection.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="app_2lexanalyzer_2postagger_2action_8h_source.html">app/lexanalyzer/postagger/action.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="app_2lexanalyzer_2postagger_2state_8h_source.html">app/lexanalyzer/postagger/state.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="app_2lexanalyzer_2postagger_2score__context_8h_source.html">app/lexanalyzer/postagger/score_context.h</a>&quot;</code><br/>
@@ -113,6 +117,57 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html">ZuoPar::LexicalAnalyzer::Postagger</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a8f6f32ff7072deaa3813b6548928d837"><td class="memItemLeft" align="right" valign="top">typedef Feature&lt; std::string, <br class="typebreak"/>
+Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a8f6f32ff7072deaa3813b6548928d837">ZuoPar::LexicalAnalyzer::Postagger::StringFeature</a></td></tr>
+<tr class="separator:a8f6f32ff7072deaa3813b6548928d837"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42d5b4b2f280cd8087b53d7e0fa1d658"><td class="memItemLeft" align="right" valign="top">typedef Feature<br class="typebreak"/>
+&lt; UnigramMetaFeature, Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a42d5b4b2f280cd8087b53d7e0fa1d658">ZuoPar::LexicalAnalyzer::Postagger::UnigramFeature</a></td></tr>
+<tr class="separator:a42d5b4b2f280cd8087b53d7e0fa1d658"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fd636f401c7a1e9503268ac2eb13045"><td class="memItemLeft" align="right" valign="top">typedef Feature<br class="typebreak"/>
+&lt; BigramMetaFeature, Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a2fd636f401c7a1e9503268ac2eb13045">ZuoPar::LexicalAnalyzer::Postagger::BigramFeature</a></td></tr>
+<tr class="separator:a2fd636f401c7a1e9503268ac2eb13045"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b482892e88b816213c6b5b727ac11c0"><td class="memItemLeft" align="right" valign="top">typedef Feature<br class="typebreak"/>
+&lt; TrigramMetaFeature, Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a9b482892e88b816213c6b5b727ac11c0">ZuoPar::LexicalAnalyzer::Postagger::TrigramFeature</a></td></tr>
+<tr class="separator:a9b482892e88b816213c6b5b727ac11c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac16eef06643ac27f1faf9fd65489047f"><td class="memItemLeft" align="right" valign="top">typedef FeatureParameterMap<br class="typebreak"/>
+&lt; ScoreContext, Action, <br class="typebreak"/>
+StringFeature &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#ac16eef06643ac27f1faf9fd65489047f">ZuoPar::LexicalAnalyzer::Postagger::StringFeatureMap</a></td></tr>
+<tr class="separator:ac16eef06643ac27f1faf9fd65489047f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbd55cf5ea42838f76bf65879cf848b3"><td class="memItemLeft" align="right" valign="top">typedef FeatureParameterMap<br class="typebreak"/>
+&lt; ScoreContext, Action, <br class="typebreak"/>
+UnigramFeature &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#afbd55cf5ea42838f76bf65879cf848b3">ZuoPar::LexicalAnalyzer::Postagger::UnigramFeatureMap</a></td></tr>
+<tr class="separator:afbd55cf5ea42838f76bf65879cf848b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77d90b2827baf823bdf2d3ddfabaf98c"><td class="memItemLeft" align="right" valign="top">typedef FeatureParameterMap<br class="typebreak"/>
+&lt; ScoreContext, Action, <br class="typebreak"/>
+BigramFeature &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a77d90b2827baf823bdf2d3ddfabaf98c">ZuoPar::LexicalAnalyzer::Postagger::BigramFeatureMap</a></td></tr>
+<tr class="separator:a77d90b2827baf823bdf2d3ddfabaf98c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1999015d7231341fcab11e7eca2a43ae"><td class="memItemLeft" align="right" valign="top">typedef FeatureParameterMap<br class="typebreak"/>
+&lt; ScoreContext, Action, <br class="typebreak"/>
+TrigramFeature &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a1999015d7231341fcab11e7eca2a43ae">ZuoPar::LexicalAnalyzer::Postagger::TrigramFeatureMap</a></td></tr>
+<tr class="separator:a1999015d7231341fcab11e7eca2a43ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bcce658824b4bbaff6e675a5f82bc74"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+FeatureParameterCollection<br class="typebreak"/>
+&lt; ScoreContext, Action, <br class="typebreak"/>
+StringFeatureMap &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a0bcce658824b4bbaff6e675a5f82bc74">ZuoPar::LexicalAnalyzer::Postagger::StringFeatureCollection</a></td></tr>
+<tr class="separator:a0bcce658824b4bbaff6e675a5f82bc74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac624d273a840160cd728907dd37eccbb"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+FeatureParameterCollection<br class="typebreak"/>
+&lt; ScoreContext, Action, <br class="typebreak"/>
+UnigramFeatureMap &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#ac624d273a840160cd728907dd37eccbb">ZuoPar::LexicalAnalyzer::Postagger::UnigramFeatureCollection</a></td></tr>
+<tr class="separator:ac624d273a840160cd728907dd37eccbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62234eaa644a3f824be4e902ac34ed57"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+FeatureParameterCollection<br class="typebreak"/>
+&lt; ScoreContext, Action, <br class="typebreak"/>
+BigramFeatureMap &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a62234eaa644a3f824be4e902ac34ed57">ZuoPar::LexicalAnalyzer::Postagger::BigramFeatureCollection</a></td></tr>
+<tr class="separator:a62234eaa644a3f824be4e902ac34ed57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04e0befcd6bf656e43deb75891e42c4a"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+FeatureParameterCollection<br class="typebreak"/>
+&lt; ScoreContext, Action, <br class="typebreak"/>
+TrigramFeatureMap &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1Postagger.html#a04e0befcd6bf656e43deb75891e42c4a">ZuoPar::LexicalAnalyzer::Postagger::TrigramFeatureCollection</a></td></tr>
+<tr class="separator:a04e0befcd6bf656e43deb75891e42c4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

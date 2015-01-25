@@ -89,8 +89,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">semchunks.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="utils_2io_2instance_2semchunks_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef __ZUOPAR_UTILS_IO_SEMANTIC_CHUNKS_H__</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __ZUOPAR_UTILS_IO_SEMANTIC_CHUNKS_H__</span></div>
+<a href="utils_2io_2instance_2semchunks_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef __ZUOPAR_UTILS_IO_INSTANCE_SEMANTIC_CHUNKS_H__</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __ZUOPAR_UTILS_IO_INSTANCE_SEMANTIC_CHUNKS_H__</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="token__alphabet_8h.html">engine/token_alphabet.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="types_2semchunks_8h.html">types/semchunks.h</a>&quot;</span></div>
@@ -100,40 +100,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>eg = ZuoPar::Engine;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#ae647b16c4522cee8cddfd584a53f1395">read_semchunks_instance</a>(std::istream&amp; is,</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    SemanticChunks&amp; output,</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; senses_alphabet,</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; chunks_alphabet,</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a8234c5a08648153c2d13d2ffaff8235f">write_semchunks_instance</a>(std::ostream&amp; os,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">const</span> SemanticChunks&amp; output,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; senses_alphabet,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; chunks_alphabet);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a8f5c535b386c1749aecf3159b587919f">write_props_instance</a>(std::ostream&amp; os,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">const</span> SemanticChunks&amp; output,</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; senses_alphabet,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; chunks_alphabet);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;} <span class="comment">//  namespace io</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;} <span class="comment">//  namespace zuopar</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#aa828100a1c1d0b5642cdcd163d106e18">read_semchunks_instance</a>(std::istream&amp; is,</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    SemanticChunks&amp; output,</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; senses_alphabet,</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; chunks_alphabet,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">const</span> std::string&amp; predicate_tag,</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a8234c5a08648153c2d13d2ffaff8235f">write_semchunks_instance</a>(std::ostream&amp; os,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">const</span> SemanticChunks&amp; output,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; senses_alphabet,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; chunks_alphabet);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a8f5c535b386c1749aecf3159b587919f">write_props_instance</a>(std::ostream&amp; os,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">const</span> SemanticChunks&amp; output,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; senses_alphabet,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; chunks_alphabet);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_SEMANTIC_CHUNKS_H__</span></div>
-<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:16</div></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;} <span class="comment">//  namespace io</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;} <span class="comment">//  namespace zuopar</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_INSTANCE_SEMANTIC_CHUNKS_H__</span></div>
+<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:15</div></div>
 <div class="ttc" id="namespaceZuoPar_1_1IO_html_a8234c5a08648153c2d13d2ffaff8235f"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#a8234c5a08648153c2d13d2ffaff8235f">ZuoPar::IO::write_semchunks_instance</a></div><div class="ttdeci">void write_semchunks_instance(std::ostream &amp;os, const SemanticChunks &amp;output, const eg::TokenAlphabet &amp;forms_alphabet, const eg::TokenAlphabet &amp;postags_alphabet, const eg::TokenAlphabet &amp;senses_alphabet, const eg::TokenAlphabet &amp;chunks_alphabet)</div></div>
 <div class="ttc" id="token__alphabet_8h_html"><div class="ttname"><a href="token__alphabet_8h.html">token_alphabet.h</a></div></div>
 <div class="ttc" id="namespaceZuoPar_1_1IO_html_a8f5c535b386c1749aecf3159b587919f"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#a8f5c535b386c1749aecf3159b587919f">ZuoPar::IO::write_props_instance</a></div><div class="ttdeci">void write_props_instance(std::ostream &amp;os, const SemanticChunks &amp;output, const eg::TokenAlphabet &amp;forms_alphabet, const eg::TokenAlphabet &amp;postags_alphabet, const eg::TokenAlphabet &amp;senses_alphabet, const eg::TokenAlphabet &amp;chunks_alphabet)</div></div>
+<div class="ttc" id="namespaceZuoPar_1_1IO_html_aa828100a1c1d0b5642cdcd163d106e18"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#aa828100a1c1d0b5642cdcd163d106e18">ZuoPar::IO::read_semchunks_instance</a></div><div class="ttdeci">void read_semchunks_instance(std::istream &amp;is, SemanticChunks &amp;output, eg::TokenAlphabet &amp;forms_alphabet, eg::TokenAlphabet &amp;postags_alphabet, eg::TokenAlphabet &amp;senses_alphabet, eg::TokenAlphabet &amp;chunks_alphabet, const std::string &amp;predicate_tag, bool incremental=true)</div></div>
 <div class="ttc" id="types_2semchunks_8h_html"><div class="ttname"><a href="types_2semchunks_8h.html">semchunks.h</a></div></div>
-<div class="ttc" id="namespaceZuoPar_1_1IO_html_ae647b16c4522cee8cddfd584a53f1395"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#ae647b16c4522cee8cddfd584a53f1395">ZuoPar::IO::read_semchunks_instance</a></div><div class="ttdeci">void read_semchunks_instance(std::istream &amp;is, SemanticChunks &amp;output, eg::TokenAlphabet &amp;forms_alphabet, eg::TokenAlphabet &amp;postags_alphabet, eg::TokenAlphabet &amp;senses_alphabet, eg::TokenAlphabet &amp;chunks_alphabet, bool incremental=true)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

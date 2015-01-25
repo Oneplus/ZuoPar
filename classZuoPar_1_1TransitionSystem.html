@@ -90,7 +90,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classZuoPar_1_1TransitionSystem-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -99,6 +101,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="system_8h_source.html">system.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for ZuoPar::TransitionSystem&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classZuoPar_1_1TransitionSystem.png" usemap="#ZuoPar::TransitionSystem&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;_map" alt=""/>
+  <map id="ZuoPar::TransitionSystem&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;_map" name="ZuoPar::TransitionSystem&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;_map">
+<area href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Decoder.html" alt="ZuoPar::Experimental::ACL2015::MultiPredicateSRL::Decoder" shape="rect" coords="0,56,522,80"/>
+</map>
+ </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -116,25 +127,47 @@ _StateType *, const _StateType * &gt;&#160;</td><td class="memItemRight" valign=
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aed9867d13aafc262ded99272d59f1169"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aed9867d13aafc262ded99272d59f1169">TransitionSystem</a> (int _beam_size, bool _early_update, _ModelType *_model)</td></tr>
-<tr class="separator:aed9867d13aafc262ded99272d59f1169"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedba1ee0f11749665a266f42d182865e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aedba1ee0f11749665a266f42d182865e">TransitionSystem</a> (int beam_size_, <a class="el" href="namespaceZuoPar.html#a9d401f5b63336c6644748023316f970e">UpdateStrategy</a> update_strategy_, _ModelType *model_)</td></tr>
+<tr class="separator:aedba1ee0f11749665a266f42d182865e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bd3a5dd2dda304fdaa7e833acdb39b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a8bd3a5dd2dda304fdaa7e833acdb39b5">~TransitionSystem</a> ()</td></tr>
 <tr class="memdesc:a8bd3a5dd2dda304fdaa7e833acdb39b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The deallocator.  <a href="#a8bd3a5dd2dda304fdaa7e833acdb39b5">More...</a><br/></td></tr>
 <tr class="separator:a8bd3a5dd2dda304fdaa7e833acdb39b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d5f3e5ee4e859a27b18454031c9a30e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a49210d68b396fd948558582f40020452">const_decode_result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a8d5f3e5ee4e859a27b18454031c9a30e">decode</a> (const _StateType &amp;initial_state, const <a class="el" href="classZuoPar_1_1TransitionSystem.html#aa4ee26d60518801008ae70519588f6a9">action_sequence_t</a> &amp;gold_actions, int max_nr_actions)</td></tr>
 <tr class="separator:a8d5f3e5ee4e859a27b18454031c9a30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b4b27a23bca667d50b1f372bf425a9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a9b4b27a23bca667d50b1f372bf425a9a">reset_beam_size</a> (int size)</td></tr>
+<tr class="separator:a9b4b27a23bca667d50b1f372bf425a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a828a37c3862bb6be62e289d7829259b8"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; _ActionType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a828a37c3862bb6be62e289d7829259b8">action_collection_t</a></td></tr>
+<tr class="memdesc:a828a37c3862bb6be62e289d7829259b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a set of actions.  <a href="#a828a37c3862bb6be62e289d7829259b8">More...</a><br/></td></tr>
+<tr class="separator:a828a37c3862bb6be62e289d7829259b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad450ddd9b6efee9efb1b3d4a10581a90"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; _StateType * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ad450ddd9b6efee9efb1b3d4a10581a90">lattice_head_list_t</a></td></tr>
+<tr class="memdesc:ad450ddd9b6efee9efb1b3d4a10581a90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the type of header element of lattice.  <a href="#ad450ddd9b6efee9efb1b3d4a10581a90">More...</a><br/></td></tr>
+<tr class="separator:ad450ddd9b6efee9efb1b3d4a10581a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46d7568ad945cc1a01a394c30bd16a70"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a46d7568ad945cc1a01a394c30bd16a70">lattice_size_list_t</a></td></tr>
+<tr class="memdesc:a46d7568ad945cc1a01a394c30bd16a70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the type of element volumn of lattice.  <a href="#a46d7568ad945cc1a01a394c30bd16a70">More...</a><br/></td></tr>
+<tr class="separator:a46d7568ad945cc1a01a394c30bd16a70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af736b66e5d96286c808d59bd84800af4"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structZuoPar_1_1PackedScores.html">PackedScores</a>&lt; _ActionType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#af736b66e5d96286c808d59bd84800af4">packed_score_t</a></td></tr>
+<tr class="memdesc:af736b66e5d96286c808d59bd84800af4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the mapping between action and it's packed score.  <a href="#af736b66e5d96286c808d59bd84800af4">More...</a><br/></td></tr>
+<tr class="separator:af736b66e5d96286c808d59bd84800af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1bfd93496b93dc71f56f023f88e5e56"><td class="memItemLeft" align="right" valign="top">typedef boost::tuples::tuple<br class="typebreak"/>
+&lt; const _StateType <br class="typebreak"/>
+*, _ActionType, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a></td></tr>
+<tr class="memdesc:ae1bfd93496b93dc71f56f023f88e5e56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the (source.state, action, score) tuple.  <a href="#ae1bfd93496b93dc71f56f023f88e5e56">More...</a><br/></td></tr>
+<tr class="separator:ae1bfd93496b93dc71f56f023f88e5e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:ab4eaa4180de66afc07feebec663bfaf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ab4eaa4180de66afc07feebec663bfaf4">get_possible_actions</a> (const _StateType &amp;source)</td></tr>
 <tr class="separator:ab4eaa4180de66afc07feebec663bfaf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a575c95ea6b0bd081a73b07987873f295"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a575c95ea6b0bd081a73b07987873f295">get_possible_actions</a> (const _StateType &amp;source, action_collection_t &amp;actions)=0</td></tr>
+<tr class="memitem:a575c95ea6b0bd081a73b07987873f295"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a575c95ea6b0bd081a73b07987873f295">get_possible_actions</a> (const _StateType &amp;source, <a class="el" href="classZuoPar_1_1TransitionSystem.html#a828a37c3862bb6be62e289d7829259b8">action_collection_t</a> &amp;actions)=0</td></tr>
 <tr class="separator:a575c95ea6b0bd081a73b07987873f295"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44f8e3bae4f7259c2ff7def1645a178c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a44f8e3bae4f7259c2ff7def1645a178c">score_possible_actions</a> (const _StateType &amp;source)</td></tr>
 <tr class="separator:a44f8e3bae4f7259c2ff7def1645a178c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0303e98711a65148a8a70d03227fedbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a0303e98711a65148a8a70d03227fedbb">score_possible_actions</a> (const _StateType &amp;source, const action_collection_t &amp;actions, <a class="el" href="structZuoPar_1_1PackedScores.html">packed_score_t</a> &amp;scores)</td></tr>
-<tr class="separator:a0303e98711a65148a8a70d03227fedbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef63cab77a21ce798662e041720bf10d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aef63cab77a21ce798662e041720bf10d">extend_candidate_transition</a> (const scored_transition_t &amp;trans, int current_beam_size)</td></tr>
+<tr class="memitem:a226164213b4ae546dbc63030c2115e83"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a226164213b4ae546dbc63030c2115e83">score_possible_actions</a> (const _StateType &amp;source, const <a class="el" href="classZuoPar_1_1TransitionSystem.html#a828a37c3862bb6be62e289d7829259b8">action_collection_t</a> &amp;actions, <a class="el" href="classZuoPar_1_1TransitionSystem.html#af736b66e5d96286c808d59bd84800af4">packed_score_t</a> &amp;scores)</td></tr>
+<tr class="separator:a226164213b4ae546dbc63030c2115e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef63cab77a21ce798662e041720bf10d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aef63cab77a21ce798662e041720bf10d">extend_candidate_transition</a> (const <a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a> &amp;trans, int current_beam_size)</td></tr>
 <tr class="separator:aef63cab77a21ce798662e041720bf10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a4b1f937eb57d889a20ec0b9775e5ed"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a5a4b1f937eb57d889a20ec0b9775e5ed">transit</a> (const _StateType &amp;source, const _ActionType &amp;act, const <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &amp;score, _StateType *target)=0</td></tr>
 <tr class="separator:a5a4b1f937eb57d889a20ec0b9775e5ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,19 +176,67 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a64aa3ee363ade7298354b38964004b57"><td class="memItemLeft" align="right" valign="top">const _StateType *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a64aa3ee363ade7298354b38964004b57">search_best_state</a> (const _StateType *begin, const _StateType *end)</td></tr>
 <tr class="separator:a64aa3ee363ade7298354b38964004b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:a8e6a2872ba6448773d9ed6b3ffb128b9"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a8e6a2872ba6448773d9ed6b3ffb128b9">ScoredTransitionMore</a> (const <a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a> &amp;x, const <a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a> &amp;y)</td></tr>
+<tr class="memdesc:a8e6a2872ba6448773d9ed6b3ffb128b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The comparsion function between two scored transition.  <a href="#a8e6a2872ba6448773d9ed6b3ffb128b9">More...</a><br/></td></tr>
+<tr class="separator:a8e6a2872ba6448773d9ed6b3ffb128b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:aa30cd26038bf14d305c4ebb6f2f475a1"><td class="memItemLeft" align="right" valign="top">action_collection_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aa30cd26038bf14d305c4ebb6f2f475a1">possible_actions</a></td></tr>
+<tr class="memitem:a73547208c07de5b509930925668851e8"><td class="memItemLeft" align="right" valign="top">_ModelType *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a73547208c07de5b509930925668851e8">model</a></td></tr>
+<tr class="memdesc:a73547208c07de5b509930925668851e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pointer to the model, used to score the certain transition.  <a href="#a73547208c07de5b509930925668851e8">More...</a><br/></td></tr>
+<tr class="separator:a73547208c07de5b509930925668851e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05466dd583ae57fc6b6ba3b1149d0b8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ad450ddd9b6efee9efb1b3d4a10581a90">lattice_head_list_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a05466dd583ae57fc6b6ba3b1149d0b8b">lattice_heads</a></td></tr>
+<tr class="memdesc:a05466dd583ae57fc6b6ba3b1149d0b8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The header of each row in lattice.  <a href="#a05466dd583ae57fc6b6ba3b1149d0b8b">More...</a><br/></td></tr>
+<tr class="separator:a05466dd583ae57fc6b6ba3b1149d0b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10fe8c175ff2419d121b918722fb98b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a46d7568ad945cc1a01a394c30bd16a70">lattice_size_list_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a10fe8c175ff2419d121b918722fb98b0">lattice_size</a></td></tr>
+<tr class="memdesc:a10fe8c175ff2419d121b918722fb98b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of each row in lattice.  <a href="#a10fe8c175ff2419d121b918722fb98b0">More...</a><br/></td></tr>
+<tr class="separator:a10fe8c175ff2419d121b918722fb98b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4499579ed2a331fa2e7a8cff53fe49f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ac4499579ed2a331fa2e7a8cff53fe49f">beam_size</a></td></tr>
+<tr class="memdesc:ac4499579ed2a331fa2e7a8cff53fe49f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the beam.  <a href="#ac4499579ed2a331fa2e7a8cff53fe49f">More...</a><br/></td></tr>
+<tr class="separator:ac4499579ed2a331fa2e7a8cff53fe49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae91c631ae578e39c9a047a72f3844cb1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ae91c631ae578e39c9a047a72f3844cb1">use_avg</a></td></tr>
+<tr class="memdesc:ae91c631ae578e39c9a047a72f3844cb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use to specify if use averaged parameter.  <a href="#ae91c631ae578e39c9a047a72f3844cb1">More...</a><br/></td></tr>
+<tr class="separator:ae91c631ae578e39c9a047a72f3844cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0c3766095c2f39ee705ae2cb54d8026"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#a9d401f5b63336c6644748023316f970e">UpdateStrategy</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ac0c3766095c2f39ee705ae2cb54d8026">update_strategy</a></td></tr>
+<tr class="memdesc:ac0c3766095c2f39ee705ae2cb54d8026"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use to specify if use early update strategy.  <a href="#ac0c3766095c2f39ee705ae2cb54d8026">More...</a><br/></td></tr>
+<tr class="separator:ac0c3766095c2f39ee705ae2cb54d8026"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa30cd26038bf14d305c4ebb6f2f475a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a828a37c3862bb6be62e289d7829259b8">action_collection_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aa30cd26038bf14d305c4ebb6f2f475a1">possible_actions</a></td></tr>
 <tr class="memdesc:aa30cd26038bf14d305c4ebb6f2f475a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cached possible actions.  <a href="#aa30cd26038bf14d305c4ebb6f2f475a1">More...</a><br/></td></tr>
 <tr class="separator:aa30cd26038bf14d305c4ebb6f2f475a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0158457bcd2cb6e6160d50fca9335e40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZuoPar_1_1PackedScores.html">packed_score_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a0158457bcd2cb6e6160d50fca9335e40">packed_scores</a></td></tr>
+<tr class="memitem:a0158457bcd2cb6e6160d50fca9335e40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1TransitionSystem.html#af736b66e5d96286c808d59bd84800af4">packed_score_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a0158457bcd2cb6e6160d50fca9335e40">packed_scores</a></td></tr>
 <tr class="memdesc:a0158457bcd2cb6e6160d50fca9335e40"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cached packed score.  <a href="#a0158457bcd2cb6e6160d50fca9335e40">More...</a><br/></td></tr>
 <tr class="separator:a0158457bcd2cb6e6160d50fca9335e40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebf5b0422e7c5da386d27f46fd4455d9"><td class="memItemLeft" align="right" valign="top">scored_transition_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aebf5b0422e7c5da386d27f46fd4455d9">candidate_transitions</a></td></tr>
+<tr class="memitem:aebf5b0422e7c5da386d27f46fd4455d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1TransitionSystem.html#aebf5b0422e7c5da386d27f46fd4455d9">candidate_transitions</a></td></tr>
 <tr class="memdesc:aebf5b0422e7c5da386d27f46fd4455d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The k-best candidate transitions.  <a href="#aebf5b0422e7c5da386d27f46fd4455d9">More...</a><br/></td></tr>
 <tr class="separator:aebf5b0422e7c5da386d27f46fd4455d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a828a37c3862bb6be62e289d7829259b8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::vector&lt;_ActionType&gt; <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::<a class="el" href="classZuoPar_1_1TransitionSystem.html#a828a37c3862bb6be62e289d7829259b8">action_collection_t</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Define a set of actions. </p>
+
+</div>
+</div>
 <a class="anchor" id="aa4ee26d60518801008ae70519588f6a9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -204,8 +285,104 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
 
 </div>
 </div>
+<a class="anchor" id="ad450ddd9b6efee9efb1b3d4a10581a90"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::vector&lt;_StateType*&gt; <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::<a class="el" href="classZuoPar_1_1TransitionSystem.html#ad450ddd9b6efee9efb1b3d4a10581a90">lattice_head_list_t</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Define the type of header element of lattice. </p>
+
+</div>
+</div>
+<a class="anchor" id="a46d7568ad945cc1a01a394c30bd16a70"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::vector&lt;int&gt; <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::<a class="el" href="classZuoPar_1_1TransitionSystem.html#a46d7568ad945cc1a01a394c30bd16a70">lattice_size_list_t</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Define the type of element volumn of lattice. </p>
+
+</div>
+</div>
+<a class="anchor" id="af736b66e5d96286c808d59bd84800af4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="structZuoPar_1_1PackedScores.html">PackedScores</a>&lt;_ActionType&gt; <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::<a class="el" href="classZuoPar_1_1TransitionSystem.html#af736b66e5d96286c808d59bd84800af4">packed_score_t</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Define the mapping between action and it's packed score. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae1bfd93496b93dc71f56f023f88e5e56"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef boost::tuples::tuple&lt;const _StateType*, _ActionType, <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>&gt; <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::<a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Define the (source.state, action, score) tuple. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aed9867d13aafc262ded99272d59f1169"></a>
+<a class="anchor" id="aedba1ee0f11749665a266f42d182865e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -218,19 +395,19 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
           <td class="memname"><a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::<a class="el" href="classZuoPar_1_1TransitionSystem.html">TransitionSystem</a> </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>_beam_size</em>, </td>
+          <td class="paramname"><em>beam_size_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>_early_update</em>, </td>
+          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#a9d401f5b63336c6644748023316f970e">UpdateStrategy</a>&#160;</td>
+          <td class="paramname"><em>update_strategy_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">_ModelType *&#160;</td>
-          <td class="paramname"><em>_model</em>&#160;</td>
+          <td class="paramname"><em>model_</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -247,7 +424,9 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
 <p>The allocator for transition system.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">_beam_size</td><td>The beam size. [in] _model The model pointer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">beam_size_</td><td>The beam size. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">update_strategy_</td><td>The update strategy: none, early update or max violation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">model_</td><td>The model pointer. </td></tr>
   </table>
   </dd>
 </dl>
@@ -327,7 +506,6 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
     <tr><td class="paramdir">[in]</td><td class="paramname">initial_state</td><td>The initial state. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">gold_actions</td><td>The gold actions. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">max_nr_actions</td><td>The maximum number of transition actions. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">early_update</td><td>The early update strategy. </td></tr>
   </table>
   </dd>
 </dl>
@@ -347,7 +525,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
         <tr>
           <td class="memname">int <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::extend_candidate_transition </td>
           <td>(</td>
-          <td class="paramtype">const scored_transition_t &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a> &amp;&#160;</td>
           <td class="paramname"><em>trans</em>, </td>
         </tr>
         <tr>
@@ -431,7 +609,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">action_collection_t &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a828a37c3862bb6be62e289d7829259b8">action_collection_t</a> &amp;&#160;</td>
           <td class="paramname"><em>actions</em>&#160;</td>
         </tr>
         <tr>
@@ -454,6 +632,32 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a9b4b27a23bca667d50b1f372bf425a9a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::reset_beam_size </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -490,7 +694,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
 
 </div>
 </div>
-<a class="anchor" id="a0303e98711a65148a8a70d03227fedbb"></a>
+<a class="anchor" id="a226164213b4ae546dbc63030c2115e83"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -500,7 +704,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::score_possible_actions </td>
+          <td class="memname">virtual void <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::score_possible_actions </td>
           <td>(</td>
           <td class="paramtype">const _StateType &amp;&#160;</td>
           <td class="paramname"><em>source</em>, </td>
@@ -508,13 +712,13 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const action_collection_t &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1TransitionSystem.html#a828a37c3862bb6be62e289d7829259b8">action_collection_t</a> &amp;&#160;</td>
           <td class="paramname"><em>actions</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structZuoPar_1_1PackedScores.html">packed_score_t</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1TransitionSystem.html#af736b66e5d96286c808d59bd84800af4">packed_score_t</a> &amp;&#160;</td>
           <td class="paramname"><em>scores</em>&#160;</td>
         </tr>
         <tr>
@@ -525,7 +729,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -538,6 +742,44 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a8e6a2872ba6448773d9ed6b3ffb128b9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::ScoredTransitionMore </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The comparsion function between two scored transition. </p>
 
 </div>
 </div>
@@ -704,6 +946,30 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ac4499579ed2a331fa2e7a8cff53fe49f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::beam_size</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The size of the beam. </p>
+
+</div>
+</div>
 <a class="anchor" id="aebf5b0422e7c5da386d27f46fd4455d9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -714,7 +980,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">scored_transition_t* <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::candidate_transitions</td>
+          <td class="memname"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ae1bfd93496b93dc71f56f023f88e5e56">scored_transition_t</a>* <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::candidate_transitions</td>
         </tr>
       </table>
   </td>
@@ -728,6 +994,78 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
 
 </div>
 </div>
+<a class="anchor" id="a05466dd583ae57fc6b6ba3b1149d0b8b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classZuoPar_1_1TransitionSystem.html#ad450ddd9b6efee9efb1b3d4a10581a90">lattice_head_list_t</a> <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::lattice_heads</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The header of each row in lattice. </p>
+
+</div>
+</div>
+<a class="anchor" id="a10fe8c175ff2419d121b918722fb98b0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a46d7568ad945cc1a01a394c30bd16a70">lattice_size_list_t</a> <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::lattice_size</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The size of each row in lattice. </p>
+
+</div>
+</div>
+<a class="anchor" id="a73547208c07de5b509930925668851e8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">_ModelType* <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::model</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The pointer to the model, used to score the certain transition. </p>
+
+</div>
+</div>
 <a class="anchor" id="a0158457bcd2cb6e6160d50fca9335e40"></a>
 <div class="memitem">
 <div class="memproto">
@@ -738,7 +1076,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structZuoPar_1_1PackedScores.html">packed_score_t</a> <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::packed_scores</td>
+          <td class="memname"><a class="el" href="classZuoPar_1_1TransitionSystem.html#af736b66e5d96286c808d59bd84800af4">packed_score_t</a> <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::packed_scores</td>
         </tr>
       </table>
   </td>
@@ -762,7 +1100,7 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">action_collection_t <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::possible_actions</td>
+          <td class="memname"><a class="el" href="classZuoPar_1_1TransitionSystem.html#a828a37c3862bb6be62e289d7829259b8">action_collection_t</a> <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::possible_actions</td>
         </tr>
       </table>
   </td>
@@ -773,6 +1111,54 @@ template&lt;class _ActionType, class _StateType, class _ScoreContextType, class 
 </div><div class="memdoc">
 
 <p>The cached possible actions. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac0c3766095c2f39ee705ae2cb54d8026"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceZuoPar.html#a9d401f5b63336c6644748023316f970e">UpdateStrategy</a> <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::update_strategy</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Use to specify if use early update strategy. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae91c631ae578e39c9a047a72f3844cb1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class _ActionType, class _StateType, class _ScoreContextType, class _ModelType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classZuoPar_1_1TransitionSystem.html">ZuoPar::TransitionSystem</a>&lt; _ActionType, _StateType, _ScoreContextType, _ModelType &gt;::use_avg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Use to specify if use averaged parameter. </p>
 
 </div>
 </div>
