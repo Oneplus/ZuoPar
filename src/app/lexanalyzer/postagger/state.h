@@ -36,13 +36,15 @@ public:
    * Perform the shift action from source state.
    *
    *  @param[in]  source  The source state.
+   *  @param[in]  postag  The postag.
    */
   bool shift(const State& source, postag_t postag);
 
   //! If the state reach the terminating state.
   bool terminated() const;
 
-  //!
+  //! The cached postags. Actually, this attributes is not needed because the
+  //! postag sequence can be recovered from decoding matrix.
   postag_t postags[kMaxNumberOfWords];
 
   //! The front word in the buffer.

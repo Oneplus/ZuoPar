@@ -17,6 +17,8 @@ namespace eg = ZuoPar::Engine;
  *  @param[out] output            The output stream.
  *  @param[in]  forms_alphabet    The alphabet of forms.
  *  @param[in]  postags_alphabet  The alphabet of postags.
+ *  @param[in]  delimiter         The delimiter for separating the form and postag
+ *  @param[in]  incremental       Use to specify insert new entry into the alphabet
  *  @return     bool              Return true on successfully load, otherwise
  *                                false.
  */

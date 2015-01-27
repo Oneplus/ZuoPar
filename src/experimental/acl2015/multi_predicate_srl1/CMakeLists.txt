@@ -1,12 +1,12 @@
-add_executable (mono_predicate_srl
+add_executable (multi_predicate_srl1
     main.cc
-    paths.cc
     opt_utils.cc
-    argument_relation_utils.cc
     pipe.cc
     action.cc
     action_utils.cc
     state.cc
+    score_context.cc
+    information.cc
     decoder.cc
     weight.cc
     ${SOURCE_DIR}/frontend/common_opt_utils.cc
@@ -17,7 +17,7 @@ add_executable (mono_predicate_srl
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (mono_predicate_srl
+target_link_libraries (multi_predicate_srl1
     boost_program_options
     boost_log_setup
     boost_log
@@ -27,5 +27,5 @@ target_link_libraries (mono_predicate_srl
     boost_system
     pthread)
 
-set_target_properties(mono_predicate_srl
+set_target_properties (multi_predicate_srl1
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

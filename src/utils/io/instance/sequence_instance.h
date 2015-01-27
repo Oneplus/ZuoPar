@@ -11,12 +11,13 @@ namespace IO {
 namespace eg = ZuoPar::Engine;
 
 /**
- * Read one segmentation instance from the input stream.
+ * Read one sequence instance from the input stream.
  *
  *  @param[in]  is                  The input stream.
  *  @param[out] output              The output stream.
- *  @param[in]  attributes_alphabet The alphabet of forms.
- *  @param[in]  tags_alphabet       The alphabet of postags.
+ *  @param[in]  attributes_alphabet The alphabet of attributes.
+ *  @param[in]  tags_alphabet       The alphabet of tags.
+ *  @param[in]  incremental         Use to specify to add new entry into the alphabet.
  *  @return     bool                Return true on successfully load, otherwise
  *                                  false.
  */

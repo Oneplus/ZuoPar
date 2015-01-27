@@ -19,6 +19,7 @@ namespace eg = ZuoPar::Engine;
  *  @param[out] dataset           The output dataset.
  *  @param[out] forms_alphabet    The alphabet for forms.
  *  @param[out] postags_alphabet  The alphabet for postags.
+ *  @param[in]  delimiter         The delimiter for separating form and postag.
  *  @param[in]  incremental       Specify to insert token into alphabet.
  */
 void read_postag_dataset(
@@ -34,8 +35,8 @@ void read_postag_dataset(
  *
  *  @param[in]  is                The input stream.
  *  @param[out] dataset           The output dataset.
- *  @param[out] forms_alphabet    The alphabet for forms.
- *  @param[out] postags_alphabet  The alphabet for postags.
+ *  @param[in]  postags_alphabet  The alphabet for postags.
+ *  @param[in]  delimiter         The delimiter for separating form and postag.
  *  @param[in]  incremental       Specify to insert token into alphabet.
  */
 void read_postag_with_cache_dataset(

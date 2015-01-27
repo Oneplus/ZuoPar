@@ -25,8 +25,8 @@ public:
   /**
    * Constructor for action.
    *
-   *  @param[in]  name  The name for the action.
-   *  @param[in]  rel   The dependency relation.
+   *  @param[in]  name    The name for the action.
+   *  @param[in]  postag  The postag of this action.
    */
   Action(int name, postag_t postag) : AbstractAction(name, postag) {}
 

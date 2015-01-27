@@ -23,9 +23,10 @@ public:
   /**
    * Judge if the input action is a shift action.
    *
-   *  @param[in]  act   The action.
-   *  @return     bool  Return true on the action being a shift action, otherwise
-   *                    false.
+   *  @param[in]  act     The action.
+   *  @param[out] postag  The postag embed in this action.
+   *  @return     bool    Return true on the action being a shift action,
+   *                      otherwise false.
    */
   static bool is_shift(const Action& act, postag_t& postag);
 };

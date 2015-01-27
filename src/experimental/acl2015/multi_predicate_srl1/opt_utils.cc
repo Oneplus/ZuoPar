@@ -1,9 +1,9 @@
-#include "experimental/acl2015/mono_predicate_srl/opt_utils.h"
+#include "experimental/acl2015/multi_predicate_srl1/opt_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace MultiPredicateSRL {
 
 namespace fe = ZuoPar::FrontEnd;
 namespace po = boost::program_options;
@@ -38,7 +38,7 @@ bool parse_test_option_ext(const po::variables_map& vm, TestOption& opts) {
 
   opts.output_format = "semchunks";
   if (vm.count("format")) {
-    opts.output_format = vm["output"].as<std::string>();
+    opts.output_format = vm["format"].as<std::string>();
   }
 
   opts.verb_class_path = "";
@@ -59,7 +59,7 @@ bool parse_test_option_ext(const po::variables_map& vm, TestOption& opts) {
   return true;
 }
 
-} //  namespace monopredicatesrl
+} //  namespace multipredicatesrl
 } //  namespace acl2015
 } //  namespace frontend
 } //  namespace zuopar

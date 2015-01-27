@@ -66,10 +66,10 @@ public:
   /**
    * The constructor
    *
-   *  @param[in]  extractor   The extraction functor.
+   *  @param[in]  extractor_  The extraction functor.
    */
-  FeatureParameterMap(extractor_t _extractor)
-    : extractor(_extractor) {
+  FeatureParameterMap(extractor_t extractor_)
+    : extractor(extractor_) {
 #if defined(UNORDERED_MAP_IMPL) and (UNORDERED_MAP_IMPL == dense_hash_map)
     payload.set_empty_key(_FeatureType());
 #endif
@@ -78,8 +78,9 @@ public:
   /**
    * Convert the pointwised feature into vector.
    *
-   *  @param[in]  ctx           The score context
-   *  @param[in]  act           The action
+   *  @param[in]  ctx           The score context.
+   *  @param[in]  act           The action.
+   *  @param[in]  scale         Increase the value in sparse_vector by scale.
    *  @param[in]  offset        The offset for counting vector.
    *  @param[out] sparse_vector The sparse vector.
    */
@@ -107,8 +108,8 @@ public:
    *
    *  @param[in]  ctx           The score context
    *  @param[in]  act           The action
-   *  @param[in]  scale         Specify to use averaged parameter.
-   *  @param[in]  offset        The offset for counting vector.
+   *  @param[in]  scale         Increase the value in sparse_vector by scale.
+   *  @param[in]  gid           The offset for counting vector.
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize2(const _ScoreContextType& ctx, const _ActionType& act,

@@ -72,6 +72,12 @@ public:
 
   //! The last action.
   Action last_action;
+
+  //! The low bit for label set.
+  int label_set_low;
+
+  //! The high bit for label set.
+  int label_set_high;
 };
 
 } //  namespace monopredicatesrl

@@ -1,19 +1,19 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_PIPE_H__
+#define __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_PIPE_H__
 
 #include <unordered_map>
 #include "types/semchunks.h"
 #include "frontend/common_pipe_cfg.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/mono_predicate_srl/opt.h"
-#include "experimental/acl2015/mono_predicate_srl/weight.h"
-#include "experimental/acl2015/mono_predicate_srl/decoder.h"
-#include "experimental/acl2015/mono_predicate_srl/learner.h"
+#include "experimental/acl2015/multi_predicate_srl1/opt.h"
+#include "experimental/acl2015/multi_predicate_srl1/weight.h"
+#include "experimental/acl2015/multi_predicate_srl1/decoder.h"
+#include "experimental/acl2015/multi_predicate_srl1/learner.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace MultiPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
@@ -50,7 +50,7 @@ protected:
   bool load_model(const std::string& model_path);
 
   /**
-   * Save model to the file in specified path.
+   * Save the model to file in specified path.
    *
    *  @param[in]  model_path  The path to the model.
    */
@@ -65,11 +65,9 @@ protected:
    */
   void build_output(const State& source, SemanticChunks& output);
 
-  //! Load the verb class dictionary
+  //! Load the word class dictionary.
   bool load_verb_class();
 
-  //! Collect the argument relations.
-  void collect_argument_relations();
 protected:
   enum OutputFormat {
     kSemanticChunks,
@@ -87,7 +85,7 @@ protected:
   //! The prefix of the argument.
   std::string argument_prefix;
 
-  //! The verb class dictionary.
+  //! The verb class
   std::unordered_map<form_t, int> verb_classes;
 
   //! The pointer to the weights instances which is pointwise averaged
@@ -116,9 +114,9 @@ protected:
   std::vector<SemanticChunks> dataset;
 };
 
-} //  namespace monopredicatesrl
+} //  namespace multipredicatesrl
 } //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_PIPE_H__

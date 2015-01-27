@@ -113,36 +113,21 @@ protected:
     double score = 0.;
     double norm = 0.;
 
-    SparseVector2 correct_vector;
-    SparseVector2 predict_vector;
+    SparseVector2 updated_vector;
+    //SparseVector2 predict_vector;
 
     for (int i = last; i > 0; -- i) {
       const _ActionType& predict_action = predict_state_chain[i- 1]->last_action;
       const _ActionType& correct_action = correct_state_chain[i- 1]->last_action;
       score += model->score((*correct_state_chain[i]), correct_action, false);
       score -= model->score((*predict_state_chain[i]), predict_action, false);
-      model->vectorize2((*correct_state_chain[i]), correct_action, 1., &correct_vector);
-      model->vectorize2((*predict_state_chain[i]), predict_action, 1., &predict_vector);
+      model->vectorize2((*correct_state_chain[i]), correct_action, 1., &updated_vector);
+      model->vectorize2((*predict_state_chain[i]), predict_action, -1., &updated_vector);
     }
 
-    for (SparseVector2::const_iterator i = correct_vector.begin();
-        i != correct_vector.end(); ++ i) {
-      SparseVector2::const_iterator j = predict_vector.find(i->first);
-      if (j == predict_vector.end()) {
-        //Trick.
-        norm += i->second;
-      } else {
-        if (std::fabs(i->second - j->second) > 1e-8) {
-          norm += std::fabs(i->second - j->second);
-        }
-      }
-    }
-    for (SparseVector2::const_iterator i = predict_vector.begin();
-        i != predict_vector.end(); ++ i) {
-      SparseVector2::const_iterator j = correct_vector.find(i->first);
-      if (j == correct_vector.end()) {
-        norm += i->second;
-      }
+    for (SparseVector2::const_iterator i = updated_vector.begin();
+        i != updated_vector.end(); ++ i) {
+      norm += (i->second * i->second);
     }
 
     _TRACE << "learn: norm = " << norm;

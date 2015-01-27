@@ -15,10 +15,9 @@ public:
   AbstractSimpleAction(): action_name(0) {}
 
   /**
-   * Constructor for action.
+   * Constructor for simple action.
    *
    *  @param[in]  name  The name for the action.
-   *  @param[in]  rel   The dependency relation.
    */
   AbstractSimpleAction(int name) : action_name(name) {}
 

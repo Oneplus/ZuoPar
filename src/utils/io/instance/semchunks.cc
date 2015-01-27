@@ -66,7 +66,7 @@ read_semchunks_instance(std::istream& is,
         } else if (mat[j][i][0] == 'I') {
           tag = kSemanticChunkInterTag;
         } else {
-          BOOST_ASSERT(false);
+          BOOST_ASSERT_MSG(false, "utils::io::read_semchunk Unknown tag!");
         }
         std::size_t len = mat[j][i].size();
         tag += (incremental ?
@@ -79,7 +79,7 @@ read_semchunks_instance(std::istream& is,
       predicate.second.push_back(tag);
     }
     BOOST_ASSERT_MSG(predicate.first != -1, "predicate not found!");
-    output.semchunks.push_back(predicate);
+    output.predicates.push_back(predicate);
   }
 }
 
@@ -107,7 +107,7 @@ write_semchunks_instance(std::ostream& os,
   }
 
   for (int j = 0; j < output.nr_predicates(); ++ j) {
-    const SemanticChunks::predicate_t& predicate = output.semchunks[j];
+    const SemanticChunks::predicate_t& predicate = output.predicates[j];
     for (int i = 0; i < predicate.second.size(); ++ i) {
       if (predicate.second[i] == kSemanticChunkOuterTag) {
         mat[i][j+ 4] = "O";
@@ -155,7 +155,7 @@ write_props_instance(std::ostream& os,
   }
 
   for (int j = 0; j < output.nr_predicates(); ++ j) {
-    const SemanticChunks::predicate_t& predicate = output.semchunks[j];
+    const SemanticChunks::predicate_t& predicate = output.predicates[j];
 
     int i;
     for (i = 0; i < predicate.second.size(); ++ i) {

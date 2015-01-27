@@ -76,9 +76,9 @@ public:
   /**
    * Convert the pointwised feature collections into vector.
    *
-   *  @param[in]  ctx           The score context
+   *  @param[in]  state         The state.
    *  @param[in]  act           The action
-   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[in]  scale         Increase the value in sparse_vector by scale.
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize(const _StateType& state, const _ActionType& act, floatval_t scale,
@@ -106,9 +106,9 @@ public:
   /**
    * Convert the pointwised feature collections into vector.
    *
-   *  @param[in]  ctx           The score context
+   *  @param[in]  state         The state
    *  @param[in]  act           The action
-   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[in]  scale         Increase the value in sparse_vector by scale.
    *  @param[out] sparse_vector The version 2 sparse vector.
    */
   void vectorize2(const _StateType& state, const _ActionType& act, floatval_t scale,

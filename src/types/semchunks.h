@@ -18,10 +18,10 @@ public:
   std::vector<form_t> forms;          //! the forms of the semantic chunks
   std::vector<postag_t> postags;      //! the postags of the semantic chunks
   std::vector<tag_t> senses;          //! the senses of the semantic chunks
-  std::vector<predicate_t> semchunks; //! the semantic chunks
+  std::vector<predicate_t> predicates;//! the semantic chunks
 
   std::size_t size() const { return forms.size(); }
-  std::size_t nr_predicates() const { return semchunks.size(); }
+  std::size_t nr_predicates() const { return predicates.size(); }
 };
 
 class MonoSemanticChunks {

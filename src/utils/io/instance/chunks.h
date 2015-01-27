@@ -19,6 +19,7 @@ namespace eg = ZuoPar::Engine;
  *  @param[in]  senses_alphabet   The alphabet for senses
  *  @param[in]  chunks_alphabet   The alphabet for chunk
  *  @param[in]  semroles_alphabet The alphabet for semantic role
+ *  @param[in]  predicate_tag     The string predicate tag
  *  @param[in]  incremental       Use to specify if add new key entry to the
  *                                alphabet.
  */

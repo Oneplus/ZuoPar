@@ -30,7 +30,7 @@ public:
   //! Define a sequence of actions.
   typedef std::vector<_ActionType> action_sequence_t;
 
-private:
+protected:
   //! Define a set of actions.
   typedef std::vector<_ActionType>  action_collection_t;
 
@@ -51,7 +51,8 @@ private:
       const scored_transition_t& y) {
     return x.template get<2>() > y.template get<2>();
   }
-private:
+
+protected:
   //! The pointer to the model, used to score the certain transition.
   _ModelType* model;
 
@@ -83,9 +84,10 @@ public:
   /**
    * The allocator for transition system.
    *
-   *  @param[in]  _beam_size    The beam size.
-   *  @param[in]  _early_update Use to specify if perform early update.
-   *  @parma[in]  _model        The model pointer.
+   *  @param[in]  beam_size_        The beam size.
+   *  @param[in]  update_strategy_  The update strategy: none, early update or
+   *                                max violation.
+   *  @param[in]  model_            The model pointer.
    */
   TransitionSystem(
       int beam_size_,
@@ -280,7 +282,7 @@ protected:
    *  @param[in]  actions The possible actions.
    *  @param[out] scores  The score cache.
    */
-  void score_possible_actions(const _StateType& source,
+  virtual void score_possible_actions(const _StateType& source,
       const action_collection_t& actions,
       packed_score_t& scores) {
     for (typename packed_score_t::iterator itx = scores.begin();

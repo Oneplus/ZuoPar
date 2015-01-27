@@ -25,7 +25,7 @@ public:
    *
    *  @param[in]  ctx           The score context
    *  @param[in]  act           The action
-   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[in]  scale         Increase the value in sparse_vector by scale.
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize(const _ScoreContextType& ctx, const _ActionType& act, floatval_t scale,
@@ -42,7 +42,7 @@ public:
    *
    *  @param[in]  ctx           The score context
    *  @param[in]  act           The action
-   *  @param[in]  avg           Specify to use averaged parameter.
+   *  @param[in]  scale         Increase the value in sparse_vector by scale.
    *  @param[out] sparse_vector The version 2 sparse vector.
    */
   void vectorize2(const _ScoreContextType& ctx, const _ActionType& act, floatval_t scale,
@@ -71,6 +71,14 @@ public:
     return ret;
   }
 
+  /**
+   * Get score for the state context.
+   *
+   *  @param[in]  ctx     The input state context.
+   *  @param[in]  actions The possible actions.
+   *  @param[in]  avg     The average parameter.
+   *  @param[out] result  The result.
+   */
   void batchly_score(const _ScoreContextType& ctx,
       const std::vector<_ActionType>& actions,
       bool avg,

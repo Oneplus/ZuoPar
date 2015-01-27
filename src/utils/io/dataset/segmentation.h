@@ -24,7 +24,7 @@ namespace eg = ZuoPar::Engine;
 void read_segmentation_dataset(
     std::istream& is,
     std::vector<Segmentation>& dataset,
-    eg::TokenAlphabet& character_alphabet,
+    eg::TokenAlphabet& characters_alphabet,
     bool incremental = true);
 
 } //  end for io

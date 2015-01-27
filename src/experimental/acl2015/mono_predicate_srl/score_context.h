@@ -27,6 +27,7 @@ public:
     : w_2(0), w_1(0), w0(0), w1(0), w2(0), dist(0), position(0),
     p_2(0), p_1(0), p0(0), p1(0), p2(0), w_pred(0),
     p_pred(0), p_pred_1(0), p_pred1(0), vc_pred(0),
+    label_set_low(state.label_set_low), label_set_high(state.label_set_high),
     path(state.paths->payload[state.buffer]) {
     const MonoSemanticChunks* ref = state.ref;
     const std::vector<form_t>& forms = ref->forms;
@@ -85,6 +86,8 @@ public:
   tag_t     t_1;
   int position;
   int dist;
+  int label_set_low;
+  int label_set_high;
   const std::string& path;
 };
 

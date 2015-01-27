@@ -14,16 +14,15 @@ namespace eg = ZuoPar::Engine;
 
 /**
  * Read dependency dataset. In each instance, one item per line. For each item,
- * there are 4 column representing: form, postag, head, deprel. Instances are
- * separated by newline.
+ * there are multi-column: the first column represents the tag, the rest columns
+ * represents the string featuers. Instances are separated by newline.
  *
- *  @param[in]  is                The input stream.
- *  @param[out] dataset           The output dataset.
- *  @param[out] forms_alphabet    The alphabet for forms.
- *  @param[out] postags_alphabet  The alphabet for postags.
- *  @param[out] deprels_alphabet  The alphabet for dependency relations.
- *  @param[in]  incremental       If incremental is true, insert the token into
- *                                the alphabet, otherwise not perform insertion.
+ *  @param[in]  is                    The input stream.
+ *  @param[out] dataset               The output dataset.
+ *  @param[out] attributes_alphabets  The alphabet for the attributes.
+ *  @param[out] tags_alphabet         The alphabet for tags.
+ *  @param[in]  incremental           If incremental is true, insert the token into
+ *                                    the alphabet, otherwise not perform insertion.
  */
 void read_sequence_instance_dataset(
     std::istream& is,

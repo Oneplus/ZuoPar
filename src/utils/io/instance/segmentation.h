@@ -15,8 +15,8 @@ namespace eg = ZuoPar::Engine;
  *
  *  @param[in]  is                  The input stream.
  *  @param[out] output              The output stream.
- *  @param[in]  character_alphabet  /
- *  @param[in]  segmentation_tag_alphabet
+ *  @param[in]  character_alphabet  The character alphabet.
+ *  @param[in]  incremental         Use to specify if add new entry into the alphabet.
  */
 void read_segmentation_instance(std::istream& is,
     Segmentation& output,

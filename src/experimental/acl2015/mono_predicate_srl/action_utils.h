@@ -23,7 +23,7 @@ public:
       std::vector<Action>& actions);
 
   /**
-   * Judge if the input action is a shift action.
+   * Judge if the input action is a Other action.
    *
    *  @param[in]  act   The action.
    *  @return     bool  Return true on the action being a shift action, otherwise
@@ -31,10 +31,10 @@ public:
    */
   static bool is_O(const Action& act);
 
-  //!
+  //! Judge if the input action is a Begin action.
   static bool is_B(const Action& act, tag_t& tag);
 
-  //!
+  //! Judge if the input action is a Inter action.
   static bool is_I(const Action& act, tag_t& tag);
 };
 
