@@ -3,8 +3,8 @@
 
 #include "types/common.h"
 #include "types/semchunks.h"
-#include "experimental/acl2015/multi_predicate_srl1/information.h"
-#include "experimental/acl2015/multi_predicate_srl1/action.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/information.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -55,7 +55,7 @@ public:
   floatval_t score;
 
   //! The label set.
-  //std::vector<int> label_set;
+  std::vector<int> label_set;
 
   //! The last action.
   ActionCollection last_action;

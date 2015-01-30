@@ -28,7 +28,7 @@ private:
   int feat;
 
 public:
-  UnigramMetaFeature() { }
+  UnigramMetaFeature(): feat(0) { }
   UnigramMetaFeature(int f) : feat(f) {
     seed = f;
     //boost::hash_combine(seed, f);
@@ -55,7 +55,7 @@ class BigramMetaFeature: public AbstractMetaFeature {
 private:
   int feat0, feat1;
 public:
-  BigramMetaFeature() { }
+  BigramMetaFeature(): feat0(0), feat1(0) { }
   BigramMetaFeature(int f0, int f1): feat0(f0), feat1(f1) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
@@ -82,7 +82,7 @@ class TrigramMetaFeature: public AbstractMetaFeature {
 private:
   int feat0, feat1, feat2;
 public:
-  TrigramMetaFeature() { }
+  TrigramMetaFeature(): feat0(0), feat1(0), feat2(0) { }
   TrigramMetaFeature(int f0, int f1, int f2): feat0(f0), feat1(f1), feat2(f2) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
@@ -102,6 +102,35 @@ public:
   friend std::ostream& operator <<(std::ostream& os,
       const TrigramMetaFeature& s) {
     os << s.feat0 << "," << s.feat1 << "," << s.feat2;
+    return os;
+  }
+};
+
+class QuadgramMetaFeature: public AbstractMetaFeature {
+private:
+  int feat0, feat1, feat2, feat3;
+public:
+  QuadgramMetaFeature(): feat0(0), feat1(0), feat2(0), feat3(0) { }
+  QuadgramMetaFeature(int f0, int f1, int f2, int f3): feat0(f0), feat1(f1), feat2(f2), feat3(f3) {
+    boost::hash_combine(seed, f0);
+    boost::hash_combine(seed, f1);
+    boost::hash_combine(seed, f2);
+    boost::hash_combine(seed, f3);
+  }
+
+  //! The equal operator.
+  bool operator == (const QuadgramMetaFeature& a) const {
+    return (a.feat0 == feat0 && a.feat1 == feat1 && a.feat2 == feat2 && a.feat3 == feat3);
+  }
+
+  template<class Archive>
+  void serialize(Archive & ar, const unsigned version) {
+    ar & seed & feat0 & feat1 & feat2 & feat3;
+  }
+
+  friend std::ostream& operator <<(std::ostream& os,
+      const QuadgramMetaFeature& s) {
+    os << s.feat0 << "," << s.feat1 << "," << s.feat2 << s.feat3;
     return os;
   }
 };

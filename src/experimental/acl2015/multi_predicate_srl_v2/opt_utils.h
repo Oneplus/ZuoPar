@@ -3,7 +3,7 @@
 
 #include <boost/program_options.hpp>
 #include "frontend/common_opt_utils.h"
-#include "experimental/acl2015/multi_predicate_srl1/opt.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/opt.h"
 
 namespace ZuoPar {
 namespace Experimental {

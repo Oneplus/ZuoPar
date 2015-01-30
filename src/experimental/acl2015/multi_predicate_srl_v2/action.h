@@ -8,7 +8,6 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include "types/common.h"
-//#include "system/action/abstract_action.h"
 #include "system/action/abstract_simple_action.h"
 
 namespace ZuoPar {
@@ -23,8 +22,7 @@ public:
   /**
    * Constructor for action.
    *
-   *  @param[in]  name  The name for the action.
-   *  @param[in]  rel   The dependency relation.
+   *  @param[in]  tag   The name for the action.
    */
   Action(tag_t tag): AbstractSimpleAction(tag) {}
 

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "types/semchunks.h"
-#include "experimental/acl2015/multi_predicate_srl1/action.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -20,6 +20,32 @@ public:
    */
   static void get_oracle_actions(const SemanticChunks& instance,
       std::vector<ActionCollection>& actions);
+
+  //!
+  static int max(int nr_tags, bool erase_default = true);
+
+  /**
+   * Compress the action into the integer.
+   *
+   *  @param[in]  act     The action.
+   *  @param[in]  nr_tags The total number of tag categories.
+   *  @param[in]  erase   If erase is true, this function will erase the default
+   *                      tags: NONE(0), BEGIN(1), END(2).
+   */
+  static int compress(const Action& act, int nr_tags, bool erase = true);
+
+  /**
+   * Decompress the integer into the Action.
+   *
+   *  @param[in]  act     The compressed integer action.
+   *  @param[in]  nr_tags The total number of tag categories.
+   *  @param[in]  erase   If erase is true, this function will erase the default
+   *                      tags: NONE(0), BEGIN(1), END(2).
+   */
+  static Action decompress(int act, int nr_tags, bool erase = true);
+
+  //
+  static tag_t tag(const Action& act);
 
   /**
    * Judge if the input action is a shift action.

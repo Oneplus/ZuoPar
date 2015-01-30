@@ -20,10 +20,7 @@ public:
   Action(tag_t tag): AbstractSimpleAction(tag) {}
 
   //! Overload the ostream function.
-  friend std::ostream& operator<<(std::ostream& os, const Action& act) {
-    os << "TAG~" << act.action_name;
-    return os;
-  }
+  friend std::ostream& operator<<(std::ostream& os, const Action& act);
 
   friend class ActionUtils;
 };

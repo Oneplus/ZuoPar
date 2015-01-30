@@ -90,8 +90,8 @@ public:
     //! Use to cache extracted features.
     cache_t cache;
     extractor(ctx, cache);
-    for (int i = 0; i < cache.size(); ++ i) {
-      const feature_t& entry = feature_t(cache[i], act);
+    for (const _MetaFeatureType& c: cache) {
+      const feature_t& entry = feature_t(c, act);
       int id = offset;
       for (typename map_t::const_iterator itx = payload.begin();
           itx != payload.end();
@@ -118,8 +118,8 @@ public:
       floatval_t scale, int gid, SparseVector2* sparse_vector) {
     cache_t cache;
     extractor(ctx, cache);
-    for (int i = 0; i < cache.size(); ++ i) {
-      const feature_t& entry = feature_t(cache[i], act);
+    for (const _MetaFeatureType& c: cache) {
+      const feature_t& entry = feature_t(c, act);
       typename map_t::const_iterator itx = payload.find(entry);
       if (itx == payload.end()) {
         continue;
@@ -151,8 +151,8 @@ public:
     cache_t cache;
     extractor(ctx, cache);
     floatval_t ret = 0.;
-    for (int i = 0; i < cache.size(); ++ i) {
-      const feature_t& entry = feature_t(cache[i], act);
+    for (const _MetaFeatureType& c: cache) {
+      const feature_t& entry = feature_t(c, act);
 
       typename map_t::const_iterator itx = payload.find(entry);
       if (itx != payload.end()) {
@@ -181,13 +181,10 @@ public:
       packed_score_t& result) {
     cache_t cache;
     extractor(ctx, cache);
-    for (int i = 0; i < cache.size(); ++ i) {
-      feature_t entry(cache[i], actions[0]);
-      for (int j = 0; j < actions.size(); ++ j) {
-        const _ActionType& act= actions[j];
-        if (j > 0) {
-          entry.replace_action(act);
-        }
+    for (const _MetaFeatureType& c: cache) {
+      feature_t entry(c, actions[0]);
+      for (const _ActionType& act: actions) {
+        entry.replace_action(act);
 
         typename map_t::const_iterator itx = payload.find(entry);
         if (itx == payload.end()) {
@@ -214,8 +211,8 @@ public:
       int now, floatval_t scale = 1.) {
     cache_t cache;
     extractor(ctx, cache);
-    for (int i = 0; i < cache.size(); ++ i) {
-      const feature_t& entry = feature_t(cache[i], act);
+    for (const _MetaFeatureType& c: cache) {
+      const feature_t& entry = feature_t(c, act);
       param_t& param = payload[entry];
       param.add(now, scale);
     }

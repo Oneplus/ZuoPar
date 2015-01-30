@@ -1,7 +1,7 @@
 #include <boost/assert.hpp>
-#include "experimental/acl2015/multi_predicate_srl1/weight.h"
-#include "experimental/acl2015/multi_predicate_srl1/action.h"
-#include "experimental/acl2015/multi_predicate_srl1/score_context.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/weight.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/score_context.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -54,6 +54,7 @@ Weight::Weight() {
   B(p_pred, position); B(p0, position);
   T(p0, p_pred, position); T(p0, vc_pred, position);
   U(t_1);
+  T(w0, w_pred, label_set); T(p0, p_pred, label_set);
 }
 
 #undef U

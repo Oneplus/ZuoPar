@@ -3,7 +3,7 @@
 
 #include "types/common.h"
 #include "types/semchunks.h"
-#include "experimental/acl2015/mono_predicate_srl/paths.h"
+#include "experimental/acl2015/mono_predicate_srl/information.h"
 #include "experimental/acl2015/mono_predicate_srl/action.h"
 
 namespace ZuoPar {
@@ -19,9 +19,10 @@ public:
   /**
    * The constructor for the State.
    *
-   *  @param[in]  r   The pointer to the dependency state.
+   *  @param[in]  ref_  The pointer to the monosemantic chunk instance.
+   *  @param[in]  info_ The pointer to the information.
    */
-  State(const MonoSemanticChunks* r, const Paths* p, int verb_class);
+  State(const MonoSemanticChunks* ref_, const Information* info_);
 
   /**
    * This method is needed by @class TransitionSystem.
@@ -60,9 +61,7 @@ public:
   const State* previous;
 
   //! The path.
-  const Paths* paths;
-
-  int verb_class;
+  const Information* info;
 
   //! The pointer to the dependency tree.
   const MonoSemanticChunks* ref;
@@ -74,10 +73,7 @@ public:
   Action last_action;
 
   //! The low bit for label set.
-  int label_set_low;
-
-  //! The high bit for label set.
-  int label_set_high;
+  int label_set;
 };
 
 } //  namespace monopredicatesrl

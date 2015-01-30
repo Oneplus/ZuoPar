@@ -1,7 +1,8 @@
-add_executable (multi_predicate_srl1
+add_executable (multi_predicate_srl_v2
     main.cc
     opt_utils.cc
     pipe.cc
+    argument_relation_utils.cc
     action.cc
     action_utils.cc
     state.cc
@@ -13,11 +14,12 @@ add_executable (multi_predicate_srl1
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
     ${SOURCE_DIR}/utils/io/dataset/semchunks.cc
+    ${SOURCE_DIR}/utils/io/instance/csv.cc
     ${SOURCE_DIR}/utils/io/instance/semchunks.cc
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (multi_predicate_srl1
+target_link_libraries (multi_predicate_srl_v2
     boost_program_options
     boost_log_setup
     boost_log
@@ -27,5 +29,5 @@ target_link_libraries (multi_predicate_srl1
     boost_system
     pthread)
 
-set_target_properties (multi_predicate_srl1
+set_target_properties (multi_predicate_srl_v2
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

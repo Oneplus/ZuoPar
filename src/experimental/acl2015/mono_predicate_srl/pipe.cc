@@ -2,6 +2,7 @@
 #include <fstream>
 #include <algorithm>
 #include <boost/assert.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
@@ -228,8 +229,7 @@ Pipe::setup() {
   _INFO << "report: " << senses_alphabet.size() << " sense(s) is detected.";
   _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
 
-  load_verb_class();
-
+  if (!load_verb_class()) { return false; }
   return true;
 }
 
@@ -241,9 +241,7 @@ Pipe::run() {
   }
 
   collect_argument_relations();
-  tag_t predicate_tag_id = tags_alphabet.encode(predicate_tag.c_str());
-  BOOST_ASSERT_MSG(predicate_tag_id != 0, "Predicate tag not found in tag alphabet!");
-  decoder = new Decoder(tags_alphabet.size(), predicate_tag_id, beam_size, update_strategy, weight);
+  decoder = new Decoder(tags_alphabet.size(), beam_size, update_strategy, weight);
 
   if (mode == kPipeLearn) {
     learner = new Learner(weight, this->algorithm);
@@ -269,9 +267,7 @@ Pipe::run() {
           instance.senses,
           instance.predicates[i]);
 
-      Paths paths(mono_semchunks);
-
-      int verb_class = verb_classes[instance.forms[instance.predicates[i].first]];
+      Information info(mono_semchunks, verb_classes);
 
       // calculate the oracle transition actions.
       std::vector<Action> actions;
@@ -280,7 +276,7 @@ Pipe::run() {
       }
 
       int max_nr_actions = instance.size();
-      State init_state(&mono_semchunks, &paths, verb_class);
+      State init_state(&mono_semchunks, &info);
       Decoder::const_decode_result_t result = decoder->decode(init_state,
           actions, max_nr_actions);
 

@@ -1,6 +1,6 @@
 #include <boost/lexical_cast.hpp>
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/multi_predicate_srl1/information.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/information.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
@@ -26,7 +26,7 @@ Information::Information(const SemanticChunks& instance,
   predicates_verbclass.resize(N);
   postags_path_to_predicates.resize(N);
 
-  for (int i = 0; i < instance.nr_predicates(); ++ i) {
+  for (int i = 0; i < N; ++ i) {
     int predicate_id = instance.predicates[i].first;
 
     predicates_id[i] = predicate_id;

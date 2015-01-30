@@ -8,10 +8,8 @@ namespace Experimental {
 namespace ACL2015 {
 namespace MonoPredicateSRL {
 
-Decoder::Decoder(int nr, tag_t p, int beam_size, UpdateStrategy strategy,
-    Weight* weight)
+Decoder::Decoder(int nr, int beam_size, UpdateStrategy strategy, Weight* weight)
   : nr_tags(nr),
-  predicate_tag(p),
   TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, strategy, weight) {
 }
 

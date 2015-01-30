@@ -5,10 +5,10 @@
 #include "types/semchunks.h"
 #include "frontend/common_pipe_cfg.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/multi_predicate_srl1/opt.h"
-#include "experimental/acl2015/multi_predicate_srl1/weight.h"
-#include "experimental/acl2015/multi_predicate_srl1/decoder.h"
-#include "experimental/acl2015/multi_predicate_srl1/learner.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/opt.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/weight.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/decoder.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/learner.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -68,6 +68,8 @@ protected:
   //! Load the word class dictionary.
   bool load_verb_class();
 
+  //! Collect the argument relations.
+  void collect_argument_relations();
 protected:
   enum OutputFormat {
     kSemanticChunks,

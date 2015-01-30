@@ -1,10 +1,7 @@
 #include "utils/io/instance/semchunks.h"
+#include "utils/io/instance/csv.h"
 #include "utils/logging.h"
 #include <vector>
-#include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/trim.hpp>
 
 namespace ZuoPar {
 namespace IO {
@@ -18,21 +15,13 @@ read_semchunks_instance(std::istream& is,
     eg::TokenAlphabet& chunks_alphabet,
     const std::string& predicate_tag,
     bool incremental) {
-  namespace algo = boost::algorithm;
   std::vector< std::vector<std::string> > mat;
-  std::string line;
-  while (std::getline(is, line)) {
-    algo::trim(line);
-    if (line.size() == 0) { return; }
-    std::vector<std::string> items;
-    algo::split(items, line, boost::is_any_of("\t "), boost::token_compress_on);
-    mat.push_back(items);
-  }
+  read_csv(is, mat);
 
   int M = mat.size();
   int N = mat[0].size();
   for (int i = 0; i < M; ++ i) {
-    form_t form = (incremental ?
+    form_t form = (incremental?
         forms_alphabet.insert(mat[i][0].c_str()):
         forms_alphabet.encode(mat[i][0].c_str())
         );
@@ -61,6 +50,7 @@ read_semchunks_instance(std::istream& is,
       } else {
         BOOST_ASSERT_MSG(mat[j][i][1] == '-',
             "There should be a conjunction between boundary tag and chunk tag");
+
         if (mat[j][i][0] == 'B') {
           tag = kSemanticChunkBeginTag;
         } else if (mat[j][i][0] == 'I') {
@@ -68,6 +58,7 @@ read_semchunks_instance(std::istream& is,
         } else {
           BOOST_ASSERT_MSG(false, "utils::io::read_semchunk Unknown tag!");
         }
+
         std::size_t len = mat[j][i].size();
         tag += (incremental ?
             chunks_alphabet.insert(mat[j][i].substr(2, len - 2).c_str()):
@@ -124,11 +115,7 @@ write_semchunks_instance(std::ostream& os,
     }
   }
 
-  for (int i = 0; i < M; ++ i) {
-    for (int j = 0; j < N; ++ j) { os << mat[i][j]; if (j +1 < N) os << "\t"; }
-    os << std::endl;
-  }
-  os << std::endl;
+  write_csv(os, mat);
 }
 
 void
@@ -176,11 +163,7 @@ write_props_instance(std::ostream& os,
     }
   }
 
-  for (int i = 0; i < M; ++ i) {
-    for (int j = 0; j < N; ++ j) { os << mat[i][j]; if (j +1 < N) os << "\t"; }
-    os << std::endl;
-  }
-  os << std::endl;
+  write_csv(os, mat);
 }
 
 } //  namespace io

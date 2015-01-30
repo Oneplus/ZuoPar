@@ -26,6 +26,10 @@ public:
     return (*this);
   }
 
+  int code() const {
+    return action_name;
+  }
+
   bool operator == (const AbstractSimpleAction& a) const {
     return (a.action_name== action_name);
   }

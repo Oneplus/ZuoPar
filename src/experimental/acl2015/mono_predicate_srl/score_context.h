@@ -25,57 +25,45 @@ public:
    */
   ScoreContext(const State& state)
     : w_2(0), w_1(0), w0(0), w1(0), w2(0), dist(0), position(0),
-    p_2(0), p_1(0), p0(0), p1(0), p2(0), w_pred(0),
-    p_pred(0), p_pred_1(0), p_pred1(0), vc_pred(0),
-    label_set_low(state.label_set_low), label_set_high(state.label_set_high),
-    path(state.paths->payload[state.buffer]) {
+    p_2(0), p_1(0), p0(0), p1(0), p2(0),
+    w_pred(state.info->predicate_form0),
+    p_pred(state.info->predicate_postag0),
+    p_pred_1(state.info->predicate_postag_1),
+    p_pred1(state.info->predicate_postag1),
+    vc_pred(state.info->predicate_verbclass),
+    label_set(state.label_set),
+    path(state.info->postag_paths[state.buffer]) {
     const MonoSemanticChunks* ref = state.ref;
     const std::vector<form_t>& forms = ref->forms;
     const std::vector<postag_t>& postags = ref->postags;
 
-    int j = state.buffer;
+    int id= state.buffer;
+    int predicate_id = state.info->predicate_id;
     int M = ref->size();
 
-    tag_t tag;
     if (NULL == state.previous) {
       t_1 = eg::TokenAlphabet::BEGIN;
-    } else if (ActionUtils::is_O(state.last_action)) {
-      t_1 = kSemanticChunkOuterTag;
-    } else if (ActionUtils::is_B(state.last_action, tag)) {
-      t_1 = kSemanticChunkBeginTag+ tag;
-    } else if (ActionUtils::is_I(state.last_action, tag)) {
-      t_1 = kSemanticChunkInterTag+ tag;
     } else {
-      BOOST_ASSERT_MSG(false, "Unknown tag!");
+      t_1 = state.last_action.code();
     }
 
-    if (j >= 2) { w_2 = forms[j- 2]; p_2 = postags[j- 2]; }
+    if (id >= 2) { w_2 = forms[id- 2]; p_2 = postags[id- 2]; }
     else { w_2 = p_2 = eg::TokenAlphabet::BEGIN; }
 
-    if (j >= 1) { w_1 = forms[j- 1]; p_1 = postags[j- 1]; }
+    if (id >= 1) { w_1 = forms[id- 1]; p_1 = postags[id- 1]; }
     else { w_1 = p_1 = eg::TokenAlphabet::BEGIN; }
 
-    w0 = forms[j];
-    p0 = postags[j];
+    w0 = forms[id];
+    p0 = postags[id];
 
-    if (j+ 1 < M) { w1 = forms[j+ 1]; p1 = postags[j+ 1]; }
+    if (id+ 1 < M) { w1 = forms[id+ 1]; p1 = postags[id+ 1]; }
     else { w1 = p1 = eg::TokenAlphabet::END; }
 
-    if (j+ 2 < M) { w2 = forms[j+ 2]; p2 = postags[j+ 2];}
+    if (id+ 2 < M) { w2 = forms[id+ 2]; p2 = postags[id+ 2];}
     else { w2 = p2 = eg::TokenAlphabet::END; }
 
-    w_pred = forms[ref->predicate.first];
-    p_pred = postags[ref->predicate.first];
-    vc_pred  = state.verb_class;
-    p_pred_1 = (ref->predicate.first >= 1 ?
-        postags[ref->predicate.first- 1]:
-        eg::TokenAlphabet::BEGIN);
-    p_pred1 = (ref->predicate.first+ 1 < M ?
-        postags[ref->predicate.first+ 1]:
-        eg::TokenAlphabet::END);
-
-    position = (j < ref->predicate.first ? 1: (j == ref->predicate.first ? 2: 0));
-    dist= (j > ref->predicate.first? j - ref->predicate.first: ref->predicate.first -j);
+    position = (id < predicate_id ? 1: (id == predicate_id ? 2: 0));
+    dist = (id < predicate_id? predicate_id - id: id - predicate_id);
   };
 
   form_t    w_2, w_1, w0, w1, w2;
@@ -86,8 +74,7 @@ public:
   tag_t     t_1;
   int position;
   int dist;
-  int label_set_low;
-  int label_set_high;
+  int label_set;
   const std::string& path;
 };
 

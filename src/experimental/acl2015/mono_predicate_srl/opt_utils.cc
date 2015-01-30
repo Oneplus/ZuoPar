@@ -38,7 +38,7 @@ bool parse_test_option_ext(const po::variables_map& vm, TestOption& opts) {
 
   opts.output_format = "semchunks";
   if (vm.count("format")) {
-    opts.output_format = vm["output"].as<std::string>();
+    opts.output_format = vm["format"].as<std::string>();
   }
 
   opts.verb_class_path = "";

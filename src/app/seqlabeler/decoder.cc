@@ -16,7 +16,7 @@ Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   tag_t s = 1;
-  if (source.previous != NULL) { s = ActionUtils::tag(source.last_action); }
+  if (source.previous != NULL) { s = source.last_action.code(); }
   for (tag_t p = eg::TokenAlphabet::END+ 1; p < nr_tags; ++ p) {
     if (trans[s][p]) {
       _TRACE << "decoder: legal transition: " << s << " -> " << p;
@@ -28,7 +28,7 @@ Decoder::get_possible_actions(const State& source,
 void
 Decoder::transit(const State& source, const Action& act, const floatval_t& score,
     State* target) {
-  tag_t tag = ActionUtils::tag(act);
+  tag_t tag = act.code();
   target->tag(source, tag);
   target->score = score;
 }

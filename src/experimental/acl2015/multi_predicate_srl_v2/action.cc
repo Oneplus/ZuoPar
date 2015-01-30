@@ -1,6 +1,6 @@
 #include <boost/assert.hpp>
 #include "types/semchunks.h"
-#include "experimental/acl2015/multi_predicate_srl1/action.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
 
 namespace ZuoPar {
 namespace Experimental {

@@ -8,22 +8,20 @@ namespace ACL2015 {
 namespace MonoPredicateSRL {
 
 State::State()
-  : ref(0), paths(0), verb_class(0) {
+  : ref(0), info(0) {
   clear();
 }
 
-State::State(const MonoSemanticChunks* r, const Paths* p, int vc)
-  : ref(r), paths(p), verb_class(vc) {
+State::State(const MonoSemanticChunks* ref_, const Information* info_)
+  : ref(ref_), info(info_) {
   clear();
 }
 
 void
 State::copy(const State& source) {
   this->ref = source.ref;
-  this->paths = source.paths;
-  this->verb_class = source.verb_class;
-  this->label_set_low = source.label_set_low;
-  this->label_set_high = source.label_set_high;
+  this->info = source.info;
+  this->label_set = source.label_set;
   this->score = source.score;
   this->previous = source.previous;
   this->buffer = source.buffer;
@@ -35,8 +33,7 @@ State::clear() {
   this->score = 0;
   this->previous = 0;
   this->buffer = 0;
-  this->label_set_low = 0;
-  this->label_set_high = 0;
+  this->label_set = 0;
 }
 
 bool
@@ -53,11 +50,11 @@ bool
 State::B(const State& source, const tag_t& tag) {
   if (source.terminated()) { return false; }
   this->copy(source);
-  if      (tag == ArgumentRelationUtils::arg0) { label_set_low |= (1<<0); }
-  else if (tag == ArgumentRelationUtils::arg1) { label_set_low |= (1<<1); }
-  else if (tag == ArgumentRelationUtils::arg2) { label_set_low |= (1<<2); }
-  else if (tag == ArgumentRelationUtils::arg3) { label_set_low |= (1<<3); }
-  else if (tag == ArgumentRelationUtils::arg4) { label_set_low |= (1<<4); }
+  if      (tag == ArgumentRelationUtils::arg0) { label_set |= (1<<0); }
+  else if (tag == ArgumentRelationUtils::arg1) { label_set |= (1<<1); }
+  else if (tag == ArgumentRelationUtils::arg2) { label_set |= (1<<2); }
+  else if (tag == ArgumentRelationUtils::arg3) { label_set |= (1<<3); }
+  else if (tag == ArgumentRelationUtils::arg4) { label_set |= (1<<4); }
   ++ this->buffer;
   this->last_action = ActionFactory::make_B(tag);
   this->previous = &source;
@@ -68,11 +65,11 @@ bool
 State::I(const State& source, const tag_t& tag) {
   if (source.terminated()) { return false; }
   this->copy(source);
-  if      (tag == ArgumentRelationUtils::arg0) { label_set_low |= (1<<0); }
-  else if (tag == ArgumentRelationUtils::arg1) { label_set_low |= (1<<1); }
-  else if (tag == ArgumentRelationUtils::arg2) { label_set_low |= (1<<2); }
-  else if (tag == ArgumentRelationUtils::arg3) { label_set_low |= (1<<3); }
-  else if (tag == ArgumentRelationUtils::arg4) { label_set_low |= (1<<4); }
+  if      (tag == ArgumentRelationUtils::arg0) { label_set |= (1<<0); }
+  else if (tag == ArgumentRelationUtils::arg1) { label_set |= (1<<1); }
+  else if (tag == ArgumentRelationUtils::arg2) { label_set |= (1<<2); }
+  else if (tag == ArgumentRelationUtils::arg3) { label_set |= (1<<3); }
+  else if (tag == ArgumentRelationUtils::arg4) { label_set |= (1<<4); }
   ++ this->buffer;
   this->last_action = ActionFactory::make_I(tag);
   this->previous = &source;

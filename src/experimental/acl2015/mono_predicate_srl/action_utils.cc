@@ -8,20 +8,21 @@ namespace ACL2015 {
 namespace MonoPredicateSRL {
 
 bool ActionUtils::is_O(const Action& act) {
-  return (act.action_name == Action::kO);
+  return (act.action_name == kSemanticChunkOuterTag);
 }
 
 bool ActionUtils::is_B(const Action& act, tag_t& tag) {
-  if (act.action_name == Action::kB) {
-    tag = act.deprel;
+  if (act.action_name > kSemanticChunkBeginTag &&
+      act.action_name < kSemanticChunkInterTag) {
+    tag = act.action_name - kSemanticChunkBeginTag;
     return true;
   }
   return false;
 }
 
 bool ActionUtils::is_I(const Action& act, tag_t& tag) {
-  if (act.action_name == Action::kI) {
-    tag = act.deprel;
+  if (act.action_name > kSemanticChunkInterTag) {
+    tag = act.action_name - kSemanticChunkInterTag;
     return true;
   }
   return false;
@@ -30,9 +31,7 @@ bool ActionUtils::is_I(const Action& act, tag_t& tag) {
 void ActionUtils::get_oracle_actions(const MonoSemanticChunks& instance,
     std::vector<Action>& actions) {
   actions.clear();
-  const std::vector<tag_t>& tags = instance.predicate.second;
-  for (int i = 0; i < instance.size(); ++ i) {
-    tag_t tag = tags[i];
+  for (const tag_t& tag: instance.predicate.second) {
     if (tag == kSemanticChunkOuterTag) {
       actions.push_back(ActionFactory::make_O());
     } else if (tag > kSemanticChunkBeginTag && tag < kSemanticChunkInterTag) {
@@ -40,7 +39,7 @@ void ActionUtils::get_oracle_actions(const MonoSemanticChunks& instance,
     } else if (tag > kSemanticChunkInterTag) {
       actions.push_back(ActionFactory::make_I(tag - kSemanticChunkInterTag));
     } else {
-      BOOST_ASSERT_MSG(false, "illegal tag!");
+      BOOST_ASSERT_MSG(false, "Illegal tag!");
     }
   }
 }

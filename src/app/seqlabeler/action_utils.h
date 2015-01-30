@@ -18,8 +18,6 @@ public:
    */
   static void get_oracle_actions(const SequenceInstance& instance,
       std::vector<Action>& actions);
-
-  static tag_t tag(const Action& act);
 };
 
 } //  end for lexicalanalyzer

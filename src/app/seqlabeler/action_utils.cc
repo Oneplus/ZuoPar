@@ -5,18 +5,12 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-tag_t
-ActionUtils::tag(const Action& act) {
-  return act.action_name;
-}
-
 void
 ActionUtils::get_oracle_actions(const SequenceInstance& instance,
     std::vector<Action>& actions) {
   actions.clear();
-  for (int i = 0; i < instance.size(); ++ i) {
-    tag_t tag = instance[i].tag;
-    actions.push_back(ActionFactory::make(tag));
+  for (const SequenceItem& item: instance) {
+    actions.push_back(ActionFactory::make(item.tag));
   }
 }
 

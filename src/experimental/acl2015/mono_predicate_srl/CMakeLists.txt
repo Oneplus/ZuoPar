@@ -1,6 +1,6 @@
 add_executable (mono_predicate_srl
     main.cc
-    paths.cc
+    information.cc
     opt_utils.cc
     argument_relation_utils.cc
     pipe.cc
@@ -13,6 +13,7 @@ add_executable (mono_predicate_srl
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
     ${SOURCE_DIR}/utils/io/dataset/semchunks.cc
+    ${SOURCE_DIR}/utils/io/instance/csv.cc
     ${SOURCE_DIR}/utils/io/instance/semchunks.cc
     ${SOURCE_DIR}/utils/io/stream.cc
     )

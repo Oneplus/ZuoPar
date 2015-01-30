@@ -97,7 +97,6 @@ int test(int argc, char** argv) {
                                          " - semchunk: the semantic chunk [default]\n"
                                          " - conll: the conll props.");
 
-
   if (argc == 1) {
     std::cerr << optparser << std::endl;
     return 1;

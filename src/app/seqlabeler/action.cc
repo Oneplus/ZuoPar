@@ -4,8 +4,12 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-Action
-ActionFactory::make(const tag_t& tag) {
+std::ostream& operator<<(std::ostream& os, const Action& act) {
+  os << "TAG~" << act.action_name;
+  return os;
+}
+
+Action ActionFactory::make(const tag_t& tag) {
   return Action(tag);
 }
 

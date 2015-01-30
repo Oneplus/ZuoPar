@@ -5,8 +5,8 @@
 #include "types/common.h"
 #include "types/semchunks.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/multi_predicate_srl1/state.h"
-#include "experimental/acl2015/multi_predicate_srl1/action_utils.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/state.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/action_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -34,10 +34,10 @@ public:
   tag_t     vc_pred;
   tag_t     t_1;
   const std::string* path;
-  int j;
   int position;
   int dist;
   int label_set;
+  int id;
   int predicate_rank;
 
   const std::vector< std::vector<std::string> >& postags_path_to_predicate;

@@ -6,9 +6,9 @@
 #include "model/feature.h"
 #include "model/associated/feature_param_map_v2.h"
 #include "model/associated/feature_param_map_collection.h"
-#include "experimental/acl2015/multi_predicate_srl1/action.h"
-#include "experimental/acl2015/multi_predicate_srl1/state.h"
-#include "experimental/acl2015/multi_predicate_srl1/score_context.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/state.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/score_context.h"
 
 namespace ZuoPar {
 namespace Experimental {

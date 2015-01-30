@@ -1,10 +1,7 @@
 #include "utils/io/instance/chunks.h"
+#include "utils/io/instance/csv.h"
 #include "utils/logging.h"
 #include <vector>
-#include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/trim.hpp>
 
 namespace ZuoPar {
 namespace IO {
@@ -19,16 +16,8 @@ read_chunks_with_semantic_roles_instance(std::istream& is,
     eg::TokenAlphabet& semroles_alphabet,
     const std::string& predicate_tag,
     bool incremental) {
-  namespace algo = boost::algorithm;
   std::vector< std::vector<std::string> > mat;
-  std::string line;
-  while (std::getline(is, line)) {
-    algo::trim(line);
-    if (line.size() == 0) { return; }
-    std::vector<std::string> items;
-    algo::split(items, line, boost::is_any_of("\t "), boost::token_compress_on);
-    mat.push_back(items);
-  }
+  read_csv(is, mat);
 
   int M = mat.size();
   int N = mat[0].size();

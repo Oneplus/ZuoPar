@@ -1,4 +1,4 @@
-#include "experimental/acl2015/multi_predicate_srl1/score_context.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/score_context.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -23,36 +23,29 @@ ScoreContext::ScoreContext(const State& state_)
   const std::vector<form_t>& forms = ref->forms;
   const std::vector<postag_t>& postags = ref->postags;
 
-  j = state.buffer;
+  id = state.buffer;
   int M = ref->size();
   predicate_rank = 0;
 
-  tag_t tag;
   if (NULL == state.previous) {
     t_1 = eg::TokenAlphabet::BEGIN;
-  } else if (ActionUtils::is_O(state.last_action[predicate_rank])) {
-    t_1 = kSemanticChunkOuterTag;
-  } else if (ActionUtils::is_B(state.last_action[predicate_rank], tag)) {
-    t_1 = kSemanticChunkBeginTag+ tag;
-  } else if (ActionUtils::is_I(state.last_action[predicate_rank], tag)) {
-    t_1 = kSemanticChunkInterTag+ tag;
   } else {
-    BOOST_ASSERT_MSG(false, "Unknown tag!");
+    t_1 = state.last_action[predicate_rank].code();
   }
 
-  if (j >= 2) { w_2 = forms[j- 2]; p_2 = postags[j- 2]; }
+  if (id >= 2) { w_2 = forms[id- 2]; p_2 = postags[id- 2]; }
   else { w_2 = p_2 = eg::TokenAlphabet::BEGIN; }
 
-  if (j >= 1) { w_1 = forms[j- 1]; p_1 = postags[j- 1]; }
+  if (id >= 1) { w_1 = forms[id- 1]; p_1 = postags[id- 1]; }
   else { w_1 = p_1 = eg::TokenAlphabet::BEGIN; }
 
-  w0 = forms[j];
-  p0 = postags[j];
+  w0 = forms[id];
+  p0 = postags[id];
 
-  if (j+ 1 < M) { w1 = forms[j+ 1]; p1 = postags[j+ 1]; }
+  if (id+ 1 < M) { w1 = forms[id+ 1]; p1 = postags[id+ 1]; }
   else { w1 = p1 = eg::TokenAlphabet::END; }
 
-  if (j+ 2 < M) { w2 = forms[j+ 1]; p2 = postags[j+ 2]; }
+  if (id+ 2 < M) { w2 = forms[id+ 1]; p2 = postags[id+ 2]; }
   else { w2 = p2 = eg::TokenAlphabet::END; }
 
   w_pred  = predicates_form0[predicate_rank];
@@ -60,11 +53,12 @@ ScoreContext::ScoreContext(const State& state_)
   p_pred1 = predicates_postag1[predicate_rank];
   p_pred_1= predicates_postag_1[predicate_rank];
   vc_pred  = predicates_verbclass[predicate_rank];
+  label_set = state.label_set[predicate_rank];
 
   int predicate_id = predicates_id[predicate_rank];
-  position = (j < predicate_id ? 1: (j == predicate_id ? 2: 0));
-  dist= (j > predicate_id ? j- predicate_id : predicate_id- j);
-  path= &postags_path_to_predicate[predicate_rank][j];
+  position = (id < predicate_id ? 1: (id == predicate_id ? 2: 0));
+  dist= (id < predicate_id ? predicate_id- id : id- predicate_id);
+  path= &postags_path_to_predicate[predicate_rank][id];
 }
 
 void
@@ -80,23 +74,17 @@ ScoreContext::reset_predicate_rank(int rank) {
   p_pred1 = predicates_postag1[predicate_rank];
   p_pred_1= predicates_postag_1[predicate_rank];
   vc_pred = predicates_verbclass[predicate_rank];
+  label_set = state.label_set[predicate_rank];
 
   int predicate_id = predicates_id[predicate_rank];
-  position = (j < predicate_id ? 1: (j == predicate_id ? 2: 0));
-  dist= (j > predicate_id ? j- predicate_id : predicate_id- j);
-  path= &postags_path_to_predicate[predicate_rank][j];
+  position = (id < predicate_id ? 1: (id == predicate_id ? 2: 0));
+  dist= (id > predicate_id ? id- predicate_id : predicate_id- id);
+  path= &postags_path_to_predicate[predicate_rank][id];
 
-  tag_t tag;
   if (NULL == state.previous) {
     t_1 = eg::TokenAlphabet::BEGIN;
-  } else if (ActionUtils::is_O(state.last_action[predicate_rank])) {
-    t_1 = kSemanticChunkOuterTag;
-  } else if (ActionUtils::is_B(state.last_action[predicate_rank], tag)) {
-    t_1 = kSemanticChunkBeginTag+ tag;
-  } else if (ActionUtils::is_I(state.last_action[predicate_rank], tag)) {
-    t_1 = kSemanticChunkInterTag+ tag;
   } else {
-    BOOST_ASSERT_MSG(false, "Unknown tag!");
+    t_1 = state.last_action[predicate_rank].code();
   }
 }
 

@@ -10,8 +10,9 @@
 #include "utils/io/stream.h"
 #include "utils/io/dataset/semchunks.h"
 #include "utils/io/instance/semchunks.h"
-#include "experimental/acl2015/multi_predicate_srl1/action_utils.h"
-#include "experimental/acl2015/multi_predicate_srl1/pipe.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/action_utils.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/pipe.h"
+#include "experimental/acl2015/multi_predicate_srl_v2/argument_relation_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -106,6 +107,40 @@ Pipe::save_model(const std::string& model_path) {
   return true;
 }
 
+void
+Pipe::collect_argument_relations() {
+  std::string argument;
+  argument = argument_prefix + boost::lexical_cast<std::string>(0);
+  ArgumentRelationUtils::arg0 = tags_alphabet.encode(argument.c_str());
+  if (ArgumentRelationUtils::arg0 == 0) {
+    _WARN << "core argument 0: " << argument << " not found!";
+  }
+
+  argument = argument_prefix + boost::lexical_cast<std::string>(1);
+  ArgumentRelationUtils::arg1 = tags_alphabet.encode(argument.c_str());
+  if (ArgumentRelationUtils::arg1 == 0) {
+    _WARN << "core argument 1: " << argument << " not found!";
+  }
+
+  argument = argument_prefix + boost::lexical_cast<std::string>(2);
+  ArgumentRelationUtils::arg2 = tags_alphabet.encode(argument.c_str());
+  if (ArgumentRelationUtils::arg2 == 0) {
+    _WARN << "core argument 2: " << argument << " not found!";
+  }
+
+  argument = argument_prefix + boost::lexical_cast<std::string>(3);
+  ArgumentRelationUtils::arg3 = tags_alphabet.encode(argument.c_str());
+  if (ArgumentRelationUtils::arg3 == 0) {
+    _WARN << "core argument 3: " << argument << " not found!";
+  }
+
+  argument = argument_prefix + boost::lexical_cast<std::string>(4);
+  ArgumentRelationUtils::arg4 = tags_alphabet.encode(argument.c_str());
+  if (ArgumentRelationUtils::arg4 == 0) {
+    _WARN << "core argument 4: " << argument << " not found!";
+  }
+}
+
 bool
 Pipe::load_verb_class() {
   namespace algo = boost::algorithm;
@@ -184,6 +219,7 @@ Pipe::setup() {
         senses_alphabet, tags_alphabet, predicate_tag, true);
   }
   _INFO << "report: predicate tg is \"" << predicate_tag << "\"";
+  _INFO << "report: argument prefix is \"" << argument_prefix << "\"";
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << forms_alphabet.size() << " form(s) is detected.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
@@ -201,34 +237,32 @@ Pipe::run() {
     return;
   }
 
-  size_t N = dataset.size();
-  /*int max_size = beam_size;
-  for (size_t n = 0; n < N; ++ n) {
-    int size = beam_size * dataset[n].nr_predicates();
-    if (max_size < size) { max_size = size; }
+  collect_argument_relations();
+  int max_nr_predicates = -1;
+  for (const SemanticChunks& instance: dataset) {
+    max_nr_predicates = std::max((int)instance.nr_predicates(), max_nr_predicates);
   }
 
-  _INFO << "pipe: the actual beam size is " << max_size/beam_size
-    << "*" << beam_size << "=" << max_size;*/
-  decoder = new Decoder(tags_alphabet.size(), beam_size, update_strategy, weight);
+  _INFO << "pipe: max number of predicates: " << max_nr_predicates;
+  _INFO << "pipe: cube size: " << 8;
+  decoder = new Decoder(tags_alphabet.size(), beam_size, max_nr_predicates,
+      8, update_strategy, weight);
 
   if (mode == kPipeLearn) {
     learner = new Learner(weight, this->algorithm);
   }
 
+  size_t N = dataset.size();
   std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
 
   std::vector<std::size_t> ranks;
   for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
   while (shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
 
-  size_t m = 1;
   for (size_t n = 0; n < N; ++ n) {
-    _TRACE << "pipe: instance #" << n;
     const SemanticChunks& instance = dataset[ranks[n]];
-    //decoder->reset_beam_size(beam_size* instance.nr_predicates());
-
     SemanticChunks output;
+
     // calculate the oracle transition actions.
     std::vector<ActionCollection> actions;
     if (mode == kPipeLearn) {
@@ -245,7 +279,7 @@ Pipe::run() {
         actions, max_nr_actions);
 
     if (mode == kPipeLearn) {
-      learner->set_timestamp(m);
+      learner->set_timestamp(n+ 1);
       learner->learn(result.first, result.second);
     } else {
       build_output((*result.first), output);
@@ -272,8 +306,9 @@ Pipe::run() {
   _INFO << "pipe: processed #" << N << " instances.";
 
   if (mode == kPipeLearn) {
-    learner->set_timestamp(m);
+    learner->set_timestamp(N);
     learner->flush();
+    _INFO << "pipe: nr errors: " << learner->errors();
     save_model(model_path);
   }
 }
@@ -290,7 +325,7 @@ Pipe::build_output(const State& source, SemanticChunks& output) {
 
     for (int i = 0; i < N; ++ i) {
       const Action& act = p->last_action[i];
-      BOOST_ASSERT_MSG(N == last_action.size(),
+      BOOST_ASSERT_MSG(N == p->last_action.size(),
           "Number of predicate and number of meta-action unmatch!");
       if (ActionUtils::is_O(act)) {
         output.predicates[i].second.push_back(kSemanticChunkOuterTag);
@@ -306,12 +341,6 @@ Pipe::build_output(const State& source, SemanticChunks& output) {
     std::reverse(output.predicates[i].second.begin(), output.predicates[i].second.end());
     output.predicates[i].first = source.ref->predicates[i].first;
   }
-
-  /*for (int i = 0; i < N; ++ i) {
-    for (int j = 0; j < output.predicates[i].second.size(); ++ j) {
-      _DEBUG << output.predicates[i].second[j];
-    }
-  }*/
 }
 
 } //  namespace multipredicatesrl
