@@ -130,7 +130,7 @@ public:
 
   friend std::ostream& operator <<(std::ostream& os,
       const QuadgramMetaFeature& s) {
-    os << s.feat0 << "," << s.feat1 << "," << s.feat2 << s.feat3;
+    os << s.feat0 << "," << s.feat1 << "," << s.feat2 << "," << s.feat3;
     return os;
   }
 };

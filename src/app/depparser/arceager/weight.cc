@@ -20,6 +20,7 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_U1( N2p );
   // There should be a quadgram feature in Zhang and Nirve (2011)
   // regist_quadgram_feature( S0w, S0p, N0w, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_Q1111(S0w, S0p, N0w, N0p);
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0w, S0p, N0w );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0w, N0w, N0p );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0w, S0p, N0p );

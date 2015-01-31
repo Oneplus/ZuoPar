@@ -25,6 +25,9 @@ public:
   //! The trigram feature type
   typedef TrigramMetaFeature  tfp_t;
 
+  //! The quadgram feature type
+  typedef QuadgramMetaFeature qfp_t;
+
   //! The trigram feature type
   typedef std::string  sfp_t;
 
@@ -36,6 +39,9 @@ public:
 
   //! Instantiate the trigram feature type
   typedef Feature<TrigramMetaFeature, _ActionType> tf_t;
+
+  //! Instantiate the trigram feature type
+  typedef Feature<QuadgramMetaFeature, _ActionType> qf_t;
 
   //! Instantiate the string feature type
   typedef Feature<std::string, _ActionType> sf_t;
@@ -60,6 +66,13 @@ public:
     _ScoreContextType,
     _ActionType
   > tf_map_t;
+
+  //! Instantiate the quadgram mapping
+  typedef FeatureParameterMap<
+    qfp_t,
+    _ScoreContextType,
+    _ActionType
+  > qf_map_t;
 
   //! Instantiate the string mapping
   typedef FeatureParameterMap<
@@ -97,6 +110,10 @@ public:
       tfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
       global_id += tfeat_map_repo[i].size();
     }
+    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
+      qfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
+      global_id += qfeat_map_repo[i].size();
+    }
     for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
       sfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
       global_id += sfeat_map_repo[i].size();
@@ -123,6 +140,9 @@ public:
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i, ++ global_id) {
       tfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
+    }
+    for (int i = 0; i < qfeat_map_repo.size(); ++ i, ++ global_id) {
+      qfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
     }
     for (int i = 0; i < sfeat_map_repo.size(); ++ i, ++ global_id) {
       sfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
@@ -162,6 +182,9 @@ public:
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       ret += tfeat_map_repo[i].score(ctx, act, avg, 0.);
     }
+    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
+      ret += qfeat_map_repo[i].score(ctx, act, avg, 0.);
+    }
     for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
       ret += sfeat_map_repo[i].score(ctx, act, avg, 0.);
     }
@@ -181,6 +204,9 @@ public:
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
+    }
+    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
+      qfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
     }
     for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
       sfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
@@ -220,6 +246,9 @@ public:
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].update(ctx, act, timestamp, scale);
     }
+    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
+      qfeat_map_repo[i].update(ctx, act, timestamp, scale);
+    }
     for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
       sfeat_map_repo[i].update(ctx, act, timestamp, scale);
     }
@@ -239,6 +268,9 @@ public:
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].flush(timestamp);
+    }
+    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
+      qfeat_map_repo[i].flush(timestamp);
     }
     for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
       sfeat_map_repo[i].flush(timestamp);
@@ -267,6 +299,9 @@ public:
     }
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].save(oa);
+    }
+    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
+      qfeat_map_repo[i].save(oa);
     }
     for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
       sfeat_map_repo[i].save(oa);
@@ -297,6 +332,9 @@ public:
     for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
       tfeat_map_repo[i].load(ia);
     }
+    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
+      qfeat_map_repo[i].load(ia);
+    }
     for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
       sfeat_map_repo[i].load(ia);
     }
@@ -304,14 +342,11 @@ public:
   }
 
 protected:
-  //! The unigram score mapping repository.
-  std::vector< uf_map_t > ufeat_map_repo;
-  //! The bigram score mapping repository.
-  std::vector< bf_map_t > bfeat_map_repo;
-  //! The trigram score mapping repository.
-  std::vector< tf_map_t > tfeat_map_repo;
-  //! The string score mapping repository.
-  std::vector< sf_map_t > sfeat_map_repo;
+  std::vector< uf_map_t > ufeat_map_repo;  //! The unigram score mapping repository.
+  std::vector< bf_map_t > bfeat_map_repo;  //! The bigram score mapping repository.
+  std::vector< tf_map_t > tfeat_map_repo;  //! The trigram score mapping repository.
+  std::vector< qf_map_t > qfeat_map_repo;  //! The quadgram score mapping repository.
+  std::vector< sf_map_t > sfeat_map_repo;  //! The string score mapping repository.
 };
 
 #define ZUOPAR_EXTRACTOR_U0(_1) [](const ScoreContext& ctx, \
@@ -371,6 +406,13 @@ protected:
   } \
 }
 
+#define ZUOPAR_EXTRACTOR_Q1111(_1, _2, _3, _4) [](const ScoreContext& ctx, \
+    std::vector<qfp_t>& cache) -> void{ \
+  if (ctx._1 && ctx._2 && ctx._3 && ctx._4) { \
+    cache.push_back( qfp_t(ctx._1, ctx._2, ctx._3, ctx._4) ); \
+  } \
+}
+
 #define ZUOPAR_EXTRACTOR_S0(_1) [](const ScoreContext& ctx, \
     std::vector<sfp_t>& cache) -> void{ \
   cache.push_back( sfp_t(ctx._1) ); \
@@ -410,6 +452,10 @@ protected:
 
 #define ZUOPAR_FEATURE_MAP_REGIST_T111(_1, _2, _3) do { \
   tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T111(_1, _2, _3) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_Q1111(_1, _2, _3, _4) do { \
+  qfeat_map_repo.push_back( qf_map_t( ZUOPAR_EXTRACTOR_Q1111(_1, _2, _3, _4) ) ); \
 } while (0);
 
 #define ZUOPAR_FEATURE_MAP_REGIST_S0(_1) do { \
