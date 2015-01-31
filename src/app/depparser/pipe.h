@@ -99,7 +99,7 @@ public:
     decoder = new Decoder(deprels_alphabet.size(), beam_size, update_strategy, weight);
 
     if (mode == kPipeLearn) {
-      learner = new Learner(weight);
+      learner = new Learner(weight, this->algorithm);
     }
     size_t N = dataset.size();
     std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
