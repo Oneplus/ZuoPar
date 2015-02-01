@@ -1,6 +1,7 @@
 #ifndef __ZUOPAR_APP_DEPPARSER_MULTI_PIPE_H__
 #define __ZUOPAR_APP_DEPPARSER_MULTI_PIPE_H__
 
+#include <algorithm>
 #include <boost/bind/bind.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
@@ -65,6 +66,10 @@ public:
 
     minibatch_learner = new MinibatchLearner(this->weight);
     std::size_t N = this->dataset.size();
+    std::vector<std::size_t> ranks;
+    for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
+    while (this->shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
+
     int nr_batches = (N % batch_size == 0? N / batch_size: N/batch_size+ 1);
     for (std::size_t batch_id = 0; batch_id < nr_batches; ++ batch_id) {
       //! Producer
