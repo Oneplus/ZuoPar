@@ -46,6 +46,7 @@ public:
       S0w = forms[S0]; S0p = postags[S0];
       S0la = state.nr_left_children[S0]; S0ra = state.nr_right_children[S0];
       S0lset = state.left_label_set[S0]; S0rset = state.right_label_set[S0];
+      S0hl = state.deprels[S0];
 
       int S0ld = state.left_most_child[S0];
       if (S0ld >= 0) {
@@ -97,16 +98,16 @@ public:
 
     int S0h = state.heads[state.top0];
     if (S0h >= 0) {
-      S0hw = forms[S0h]; S0hp = postags[S0h]; S0hl = state.deprels[S0h];
+      S0hw = forms[S0h]; S0hp = postags[S0h]; S0h2l = state.deprels[S0h];
     }
 
     int S0h2 = (S0h >= 0 ? state.heads[S0h] : -1);
     if (S0h2 >= 0) {
-      S0h2w = forms[S0h2]; S0h2p = postags[S0h2]; S0h2l = state.deprels[S0h2];
+      S0h2w = forms[S0h2]; S0h2p = postags[S0h2];
     }
 
     if (S0 >= 0 && N0 < len) {
-      DistS0N0 = Math::binned_1_2_3_4_5_6_10[N0 - S0];;
+      DistS0N0 = Math::binned_1_2_3_4_5_6_10[N0 - S0];
     }
   };
 
