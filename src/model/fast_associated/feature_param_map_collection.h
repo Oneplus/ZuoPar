@@ -406,6 +406,13 @@ protected:
   } \
 }
 
+#define ZUOPAR_EXTRACTOR_Q1100(_1, _2, _3, _4) [](const ScoreContext& ctx, \
+    std::vector<qfp_t>& cache) -> void{ \
+  if (ctx._1 && ctx._2) { \
+    cache.push_back( qfp_t(ctx._1, ctx._2, ctx._3, ctx._4) ); \
+  } \
+}
+
 #define ZUOPAR_EXTRACTOR_Q1111(_1, _2, _3, _4) [](const ScoreContext& ctx, \
     std::vector<qfp_t>& cache) -> void{ \
   if (ctx._1 && ctx._2 && ctx._3 && ctx._4) { \
@@ -452,6 +459,10 @@ protected:
 
 #define ZUOPAR_FEATURE_MAP_REGIST_T111(_1, _2, _3) do { \
   tfeat_map_repo.push_back( tf_map_t( ZUOPAR_EXTRACTOR_T111(_1, _2, _3) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_Q1100(_1, _2, _3, _4) do { \
+  qfeat_map_repo.push_back( qf_map_t( ZUOPAR_EXTRACTOR_Q1100(_1, _2, _3, _4) ) ); \
 } while (0);
 
 #define ZUOPAR_FEATURE_MAP_REGIST_Q1111(_1, _2, _3, _4) do { \
