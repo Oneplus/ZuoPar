@@ -60,6 +60,7 @@ public:
       decoder_pool[i] = new Decoder(
           this->deprels_alphabet.size(),
           this->beam_size,
+          false,
           this->update_strategy,
           this->weight);
     }

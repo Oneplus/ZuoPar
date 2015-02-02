@@ -35,7 +35,7 @@ MultiPipe::run() {
   decoder_pool.resize(num_threads);
   for (int i = 0; i < num_threads; ++ i) {
     decoder_pool[i] = new Decoder(tags_alphabet.size(), trans,
-        beam_size, update_strategy, weight);
+        beam_size, false, update_strategy, weight);
   }
 
   minibatch_learner = new MinibatchLearner(weight);

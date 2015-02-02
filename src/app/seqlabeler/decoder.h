@@ -26,7 +26,7 @@ public:
    *  @param[in]  weight    The pointer to the weight.
    */
   Decoder(int nr, const std::vector< std::vector<bool> >& trans_,
-      int beam_size, UpdateStrategy strategy, Weight* weight);
+      int beam_size, bool avg, UpdateStrategy strategy, Weight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,

@@ -128,7 +128,7 @@ parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
 
   opts.update_strategy = "early";
   if (vm.count("update")) {
-    if (vm["update"].as<std::string>() == "navie" ||
+    if (vm["update"].as<std::string>() == "naive" ||
         vm["update"].as<std::string>() == "early" ||
         vm["update"].as<std::string>() == "max") {
       opts.update_strategy = vm["update"].as<std::string>();

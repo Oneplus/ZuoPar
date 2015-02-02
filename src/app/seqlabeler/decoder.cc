@@ -5,10 +5,10 @@ namespace ZuoPar {
 namespace SequenceLabeler {
 
 Decoder::Decoder(int nr, const std::vector< std::vector<bool> >& trans_,
-    int beam_size, UpdateStrategy strategy, Weight* weight)
+    int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
   : nr_tags(nr),
   trans(trans_),
-  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, strategy, weight) {
+  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, avg, strategy, weight) {
 }
 
 void

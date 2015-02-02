@@ -91,11 +91,12 @@ public:
    */
   TransitionSystem(
       int beam_size_,
+      bool use_avg_,
       UpdateStrategy update_strategy_,
       _ModelType* model_)
     : beam_size(beam_size_),
+    use_avg(use_avg_),
     update_strategy(update_strategy_),
-    use_avg(false),
     model(model_) {
     candidate_transitions = new scored_transition_t[beam_size];
   }
@@ -130,7 +131,7 @@ public:
     const _StateType* max_violate_predite_state = NULL;
     const _StateType* max_violate_correct_state = NULL;
 
-    use_avg = (gold_actions.size() == 0);
+    //use_avg = (gold_actions.size() == 0);
     _StateType* row = allocate_lattice(0);
     const _StateType* correct_state = NULL;
 

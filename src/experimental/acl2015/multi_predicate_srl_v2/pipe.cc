@@ -244,12 +244,14 @@ Pipe::run() {
   }
 
   _INFO << "pipe: max number of predicates: " << max_nr_predicates;
-  _INFO << "pipe: cube size: " << 8;
-  decoder = new Decoder(tags_alphabet.size(), beam_size, max_nr_predicates,
-      8, update_strategy, weight);
-
+  _INFO << "pipe: cube size: " << beam_size;
   if (mode == kPipeLearn) {
+    decoder = new Decoder(tags_alphabet.size(), beam_size, max_nr_predicates,
+        beam_size, false, update_strategy, weight);
     learner = new Learner(weight, this->algorithm);
+  } else {
+    decoder = new Decoder(tags_alphabet.size(), beam_size, max_nr_predicates,
+        beam_size, true, update_strategy, weight);
   }
 
   size_t N = dataset.size();

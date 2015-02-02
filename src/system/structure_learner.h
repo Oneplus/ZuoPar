@@ -69,7 +69,7 @@ public:
     model->flush(timestamp);
   }
 
-  int errors() {
+  int errors() const {
     return nr_errors;
   }
 protected:

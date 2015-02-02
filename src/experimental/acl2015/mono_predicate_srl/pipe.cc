@@ -241,10 +241,12 @@ Pipe::run() {
   }
 
   collect_argument_relations();
-  decoder = new Decoder(tags_alphabet.size(), beam_size, update_strategy, weight);
 
   if (mode == kPipeLearn) {
+    decoder = new Decoder(tags_alphabet.size(), beam_size, false, update_strategy, weight);
     learner = new Learner(weight, this->algorithm);
+  } else {
+    decoder = new Decoder(tags_alphabet.size(), beam_size, true, update_strategy, weight);
   }
   size_t N = dataset.size();
   size_t m = 1;

@@ -5,10 +5,10 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
 
-Decoder::Decoder(int nr, int beam_size, Weight* weight)
+Decoder::Decoder(int nr, int beam_size, bool avg, Weight* weight)
   : nr_postags(nr),
   TransitionSystem<Action, State, ScoreContext, Weight>(
-      beam_size, UpdateStrategy::kEarlyUpdate, weight) {
+      beam_size, avg, UpdateStrategy::kEarlyUpdate, weight) {
 }
 
 void

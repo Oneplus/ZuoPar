@@ -97,11 +97,14 @@ public:
     if (!setup()) {
       return;
     }
-    decoder = new Decoder(deprels_alphabet.size(), beam_size, update_strategy, weight);
 
     if (mode == kPipeLearn) {
+      decoder = new Decoder(deprels_alphabet.size(), beam_size, false, update_strategy, weight);
       learner = new Learner(weight, this->algorithm);
+    } else {
+      decoder = new Decoder(deprels_alphabet.size(), beam_size, true, update_strategy, weight);
     }
+
     size_t N = dataset.size();
     std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
     std::vector<std::size_t> ranks;

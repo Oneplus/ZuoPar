@@ -4,6 +4,7 @@
 #include "types/common.h"
 #include "system/options.h"
 #include "frontend/common_opt.h"
+#include "utils/logging.h"
 
 namespace ZuoPar {
 namespace FrontEnd {

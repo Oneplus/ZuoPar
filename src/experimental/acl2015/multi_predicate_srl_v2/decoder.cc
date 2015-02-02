@@ -38,8 +38,7 @@ bool cube_item_greater(const CubeItem* first, const CubeItem* second) {
 }
 
 Decoder::Decoder(int nr_tags_, int cap_predicates_, int beam_size, int cube_size_,
-    UpdateStrategy strategy,
-    Weight* weight)
+    bool avg, UpdateStrategy strategy, Weight* weight)
   : nr_tags(nr_tags_),
   cap_predicates(cap_predicates_),
   cube_size(cube_size_),
@@ -47,7 +46,7 @@ Decoder::Decoder(int nr_tags_, int cap_predicates_, int beam_size, int cube_size
     ActionCollection,
     State,
     ScoreContext,
-    Weight>(beam_size, strategy, weight) {
+    Weight>(beam_size, avg, strategy, weight) {
   // init the cube.
   int cap_tags = ActionUtils::max(nr_tags);
   cube_make(cube, cap_predicates, cap_tags);
@@ -103,13 +102,15 @@ Decoder::get_possible_actions(const State& source,
   ScoreContext ctx(source);
   calculate_meta_packed_scores(ctx, nr_predicates);
 
+  for (int i = 0; i < nr_predicates; ++ i) {
+    for (int j = 0; j < total_tags; ++ j) { cube[i][j].clear(); }
+  }
+
   int first_i_tag = ActionUtils::compress(ActionFactory::make_I(3), nr_tags);
   if (buffer == 0) {
     for (int rank = 0; rank < nr_predicates; ++ rank) {
       const std::vector<floatval_t>& SCORES = meta_packed_scores[rank];
       for (int tag = 0; tag < first_i_tag; ++ tag) {
-        cube[rank][tag].clear();
-
         if (rank == 0) {
           cube_push_back(cube[rank][tag], CubeItem(tag, SCORES[tag], NULL), cube_size);
         } else {
@@ -129,8 +130,6 @@ Decoder::get_possible_actions(const State& source,
     for (int rank = 0; rank < nr_predicates; ++ rank) {
       const std::vector<floatval_t>& SCORES = meta_packed_scores[rank];
       for (int tag = 0; tag < first_i_tag; ++ tag) {
-        cube[rank][tag].clear();
-
         if (rank == 0) {
           cube_push_back(cube[rank][tag], CubeItem(tag, SCORES[tag], NULL), cube_size);
         } else {
@@ -148,12 +147,11 @@ Decoder::get_possible_actions(const State& source,
       if (ActionUtils::is_B(source.last_action[rank], mask) ||
           ActionUtils::is_I(source.last_action[rank], mask)) {
         tag = ActionUtils::compress(ActionFactory::make_I(mask), nr_tags);
-        cube[rank][tag].clear();
         //_TRACE << "mask " << mask << ", tag " << tag;
         if (rank == 0) {
           cube_push_back(cube[rank][tag], CubeItem(tag, SCORES[tag], NULL), cube_size);
         } else {
-          for (int prev_tag = 0; prev_tag < first_i_tag; ++ prev_tag) {
+          for (int prev_tag = 0; prev_tag < total_tags; ++ prev_tag) {
             for (int i = 0; i < cube[rank- 1][prev_tag].size(); ++ i) {
               const CubeItem* previous = &cube[rank- 1][prev_tag][i];
               cube_push_back(cube[rank][tag],

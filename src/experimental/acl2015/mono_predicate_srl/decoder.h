@@ -31,7 +31,7 @@ public:
    *  @param[in]  beam_size The size of beam.
    *  @param[in]  weight    The pointer to the weight.
    */
-  Decoder(int nr, int beam_size, UpdateStrategy update_strategy, Weight* weight);
+  Decoder(int nr, int beam_size, bool avg, UpdateStrategy update_strategy, Weight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,

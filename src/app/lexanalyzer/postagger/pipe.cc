@@ -83,10 +83,11 @@ Pipe::run() {
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
 
-  decoder = new Decoder(postags_alphabet.size(), beam_size, weight);
-
   if (mode == kPipeLearn) {
+    decoder = new Decoder(postags_alphabet.size(), false, beam_size, weight);
     learner = new Learner(weight);
+  } else {
+    decoder = new Decoder(postags_alphabet.size(), true, beam_size, weight);
   }
   size_t N = dataset.size();
   std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));

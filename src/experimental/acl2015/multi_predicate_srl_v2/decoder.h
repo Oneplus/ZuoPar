@@ -65,7 +65,7 @@ public:
    *  @param[in]  weight          The pointer to the weight.
    */
   Decoder(int nr_tags, int cap_predicates, int beam_size, int cube_size,
-      UpdateStrategy strategy, Weight* weight);
+      bool avg, UpdateStrategy strategy, Weight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,

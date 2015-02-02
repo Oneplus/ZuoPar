@@ -1,13 +1,18 @@
-#include "app/depparser/arceager/decoder.h"
-#include "app/depparser/arceager/action_utils.h"
+#include "experimental/hc_search/arceager/decoder.h"
+#include "experimental/hc_search/arceager/action_utils.h"
 
 namespace ZuoPar {
-namespace DependencyParser {
-namespace ArcEager {
+namespace Experimental {
+namespace HCSearchDependencyParser {
 
-Decoder::Decoder(int nr, int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
+Decoder::Decoder(int nr, int beam_size, bool avg, UpdateStrategy strategy, HeuristicWeight* weight)
   : nr_deprels(nr),
-  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, avg, strategy, weight) {
+  TransitionSystem<
+    Action,
+    State,
+    HeuristicScoreContext,
+    HeuristicWeight
+  >(beam_size, avg, strategy, weight) {
 }
 
 void
@@ -62,6 +67,15 @@ Decoder::transit(const State& source, const Action& act, const floatval_t& score
   target->score = score;
 }
 
-} //  end for namespace arceager
-} //  end for namespace dependencyparser
-} //  end for namespace zuopar
+void
+Decoder::get_results_in_beam(std::vector<const State*>& results,
+    int round) {
+  _INFO << round << " " << lattice_heads.size();
+  for (int i = 0; i < lattice_size[round]; ++ i) {
+    results.push_back(lattice_heads[round]+ i);
+  }
+}
+
+} //  namespace arceager
+} //  namespace dependencyparser
+} //  namespace zuopar
