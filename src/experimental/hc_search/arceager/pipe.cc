@@ -285,7 +285,10 @@ Pipe::run() {
       if (rerank) {
         for (const State* candidate_result: final_results) {
           floatval_t score = cost_weight->score((*candidate_result), true);
-          if (score > best_score) { best_result = candidate_result; }
+          if (score > best_score) {
+            best_score = score;
+            best_result = candidate_result;
+          }
         }
       } else {
         best_result = result.first;
