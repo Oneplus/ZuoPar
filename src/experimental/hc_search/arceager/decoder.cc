@@ -5,8 +5,10 @@ namespace ZuoPar {
 namespace Experimental {
 namespace HCSearchDependencyParser {
 
-Decoder::Decoder(int nr, int beam_size, bool avg, UpdateStrategy strategy, HeuristicWeight* weight)
+Decoder::Decoder(int nr, int root,
+    int beam_size, bool avg, UpdateStrategy strategy, HeuristicWeight* weight)
   : nr_deprels(nr),
+  root_tag(root),
   TransitionSystem<
     Action,
     State,
@@ -33,7 +35,9 @@ Decoder::get_possible_actions(const State& source,
     if (!source.stack.empty()) {
       if (source.buffer < len - 1 || source.nr_empty_heads == 1) {
         for (deprel_t l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
-          actions.push_back(ActionFactory::make_right_arc(l));
+          if (l != root_tag) {
+            actions.push_back(ActionFactory::make_right_arc(l));
+          }
         }
       }
 
@@ -41,7 +45,9 @@ Decoder::get_possible_actions(const State& source,
         actions.push_back(ActionFactory::make_reduce());
       } else {
         for (deprel_t l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
-          actions.push_back(ActionFactory::make_left_arc(l));
+          if (l != root_tag) {
+            actions.push_back(ActionFactory::make_left_arc(l));
+          }
         }
       }
     }
@@ -70,7 +76,6 @@ Decoder::transit(const State& source, const Action& act, const floatval_t& score
 void
 Decoder::get_results_in_beam(std::vector<const State*>& results,
     int round) {
-  _INFO << round << " " << lattice_heads.size();
   for (int i = 0; i < lattice_size[round]; ++ i) {
     results.push_back(lattice_heads[round]+ i);
   }

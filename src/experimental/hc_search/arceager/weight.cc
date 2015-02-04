@@ -20,21 +20,22 @@ HeuristicWeight::HeuristicWeight() {
   ZUOPAR_FEATURE_MAP_REGIST_B11( N1w, N1p );
   ZUOPAR_FEATURE_MAP_REGIST_U1( N2w );
   ZUOPAR_FEATURE_MAP_REGIST_U1( N2p );
+  ZUOPAR_FEATURE_MAP_REGIST_B11( N2w, N2p );
   // There should be a quadgram feature in Zhang and Nirve (2011)
   // regist_quadgram_feature( S0w, S0p, N0w, N0p );
-  ZUOPAR_FEATURE_MAP_REGIST_Q1111(S0w, S0p, N0w, N0p);
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0w, S0p, N0w );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0w, N0w, N0p );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0w, S0p, N0p );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, N0w, N0p );
-  ZUOPAR_FEATURE_MAP_REGIST_B11( S0w, N0w );
-  ZUOPAR_FEATURE_MAP_REGIST_B11( S0p, N0p );
-  ZUOPAR_FEATURE_MAP_REGIST_B11( N0p, N1p );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( N0p, N1p, N2p );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, N0p, N1p );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0hp, S0p, N0p );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0ldp, N0p );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0rdp, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_Q1100(S0w, S0p, N0w, N0p);
+  ZUOPAR_FEATURE_MAP_REGIST_T110( S0w, S0p, N0w );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S0w, N0w, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_T110( S0w, S0p, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S0p, N0w, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0w, N0w );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S0p, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_B10( N0p, N1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( N0p, N1p, N2p );
+  ZUOPAR_FEATURE_MAP_REGIST_T110( S0p, N0p, N1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T110( S0hp, S0p, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_T110( S0p, S0ldp, N0p );
+  ZUOPAR_FEATURE_MAP_REGIST_T110( S0p, S0rdp, N0p );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, N0p, N0ldp );
   ZUOPAR_FEATURE_MAP_REGIST_B11( S0w, DistS0N0 );
   ZUOPAR_FEATURE_MAP_REGIST_B11( S0p, DistS0N0 );
@@ -214,38 +215,126 @@ CostWeight::CostWeight() {
                 ctx.postags[four.get<3>()]));
           }
         }));
-/*
+
+  // grand sibling: forms
   qfeat_map_repo.push_back(qf_map_t(
         [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
           for (const boost::tuple<int, int, int, int>& four: ctx.grand_siblings) {
-            cache.push_back(qf_t(four.get<0>(), four.get<1>(), four.get<2>(), four.get<3>()));
+            cache.push_back(qf_t(
+                ctx.forms[four.get<0>()],
+                ctx.forms[four.get<1>()],
+                ctx.forms[four.get<2>()],
+                ctx.forms[four.get<3>()]));
           }
         }));
+
+  // grand sibling: postags
+  qfeat_map_repo.push_back(qf_map_t(
+        [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
+          for (const boost::tuple<int, int, int, int>& four: ctx.grand_siblings) {
+            cache.push_back(qf_t(
+                ctx.postags[four.get<0>()],
+                ctx.postags[four.get<1>()],
+                ctx.postags[four.get<2>()],
+                ctx.postags[four.get<3>()]));
+          }
+        }));
+
+  // tri sibling: forms
   qfeat_map_repo.push_back(qf_map_t(
         [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
           for (const boost::tuple<int, int, int, int>& four: ctx.tri_siblings) {
-            cache.push_back(qf_t(four.get<0>(), four.get<1>(), four.get<2>(), four.get<3>()));
+            cache.push_back(qf_t(
+                ctx.forms[four.get<0>()],
+                ctx.forms[four.get<1>()],
+                ctx.forms[four.get<2>()],
+                ctx.forms[four.get<3>()]));
           }
         }));
+
+  // tri sibling: postags
+  qfeat_map_repo.push_back(qf_map_t(
+        [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
+          for (const boost::tuple<int, int, int, int>& four: ctx.tri_siblings) {
+            cache.push_back(qf_t(
+                ctx.postags[four.get<0>()],
+                ctx.postags[four.get<1>()],
+                ctx.postags[four.get<2>()],
+                ctx.postags[four.get<3>()]));
+          }
+        }));
+
+  // grad grand parent: forms
   qfeat_map_repo.push_back(qf_map_t(
         [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
           for (const boost::tuple<int, int, int, int>& four: ctx.grand_grandparents) {
-            cache.push_back(qf_t(four.get<0>(), four.get<1>(), four.get<2>(), four.get<3>()));
+            cache.push_back(qf_t(
+                ctx.forms[four.get<0>()],
+                ctx.forms[four.get<1>()],
+                ctx.forms[four.get<2>()],
+                ctx.forms[four.get<3>()]));
           }
         }));
+
+  // grad grand parent.
+  qfeat_map_repo.push_back(qf_map_t(
+        [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
+          for (const boost::tuple<int, int, int, int>& four: ctx.grand_grandparents) {
+            cache.push_back(qf_t(
+                ctx.postags[four.get<0>()],
+                ctx.postags[four.get<1>()],
+                ctx.postags[four.get<2>()],
+                ctx.postags[four.get<3>()]));
+          }
+        }));
+
+  // outer sibling grandchild: forms
   qfeat_map_repo.push_back(qf_map_t(
         [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
           for (const boost::tuple<int, int, int, int>& four: ctx.outer_sibling_grandchildren) {
-            cache.push_back(qf_t(four.get<0>(), four.get<1>(), four.get<2>(), four.get<3>()));
+            cache.push_back(qf_t(
+                ctx.forms[four.get<0>()],
+                ctx.forms[four.get<1>()],
+                ctx.forms[four.get<2>()],
+                ctx.forms[four.get<3>()]));
           }
         }));
+
+  // outer sibling grandchild: postags
+  qfeat_map_repo.push_back(qf_map_t(
+        [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
+          for (const boost::tuple<int, int, int, int>& four: ctx.outer_sibling_grandchildren) {
+            cache.push_back(qf_t(
+                ctx.postags[four.get<0>()],
+                ctx.postags[four.get<1>()],
+                ctx.postags[four.get<2>()],
+                ctx.postags[four.get<3>()]));
+          }
+        }));
+
+  // inter sibling grandchild: forms
   qfeat_map_repo.push_back(qf_map_t(
         [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
           for (const boost::tuple<int, int, int, int>& four: ctx.inner_sibling_grandchildren) {
-            cache.push_back(qf_t(four.get<0>(), four.get<1>(), four.get<2>(), four.get<3>()));
+            cache.push_back(qf_t(
+                ctx.forms[four.get<0>()],
+                ctx.forms[four.get<1>()],
+                ctx.forms[four.get<2>()],
+                ctx.forms[four.get<3>()]));
           }
         }));
-*/
+
+  // inter sibling grandchild: postags
+  qfeat_map_repo.push_back(qf_map_t(
+        [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {
+          for (const boost::tuple<int, int, int, int>& four: ctx.inner_sibling_grandchildren) {
+            cache.push_back(qf_t(
+                ctx.postags[four.get<0>()],
+                ctx.postags[four.get<1>()],
+                ctx.postags[four.get<2>()],
+                ctx.postags[four.get<3>()]));
+          }
+        }));
 }
 
 } //  namespace hcsearchdependencyparser

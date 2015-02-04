@@ -14,7 +14,7 @@ read_dependency_instance(std::istream& is,
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
     eg::TokenAlphabet& deprels_alphabet,
-    bool incremental) {
+    size_t flag) {
   namespace algo = boost::algorithm;
   std::string item_context;
   while (std::getline(is, item_context)) {
@@ -23,17 +23,17 @@ read_dependency_instance(std::istream& is,
     algo::split(items, item_context, boost::is_any_of("\t "),
         boost::token_compress_on);
 
-    form_t form = (incremental ?
+    form_t form = ((flag & (1<<1))?
         forms_alphabet.insert(items[0].c_str()) :
         forms_alphabet.encode(items[0].c_str())
         );
 
-    postag_t postag = (incremental ?
+    postag_t postag = ((flag & (1<<2))?
         postags_alphabet.insert(items[1].c_str()) :
         postags_alphabet.encode(items[1].c_str())
         );
 
-    deprel_t deprel = (incremental ?
+    deprel_t deprel = ((flag & (1<<3))?
         deprels_alphabet.insert(items[3].c_str()) :
         deprels_alphabet.encode(items[3].c_str())
         );

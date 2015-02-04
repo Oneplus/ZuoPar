@@ -98,25 +98,25 @@ public:
       SparseVector* sparse_vector) {
     int global_id = 0;
     _ScoreContextType ctx(state);
-    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
-      ufeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += ufeat_map_repo[i].size();
+    for (uf_map_t& entry: ufeat_map_repo) {
+      entry.vectorize(ctx, act, scale, global_id, sparse_vector);
+      global_id += entry.size();
     }
-    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
-      bfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += bfeat_map_repo[i].size();
+    for (bf_map_t& entry: bfeat_map_repo) {
+      entry.vectorize(ctx, act, scale, global_id, sparse_vector);
+      global_id += entry.size();
     }
-    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
-      tfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += tfeat_map_repo[i].size();
+    for (tf_map_t& entry: tfeat_map_repo) {
+      entry.vectorize(ctx, act, scale, global_id, sparse_vector);
+      global_id += entry.size();
     }
-    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
-      qfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += qfeat_map_repo[i].size();
+    for (qf_map_t& entry: qfeat_map_repo) {
+      entry.vectorize(ctx, act, scale, global_id, sparse_vector);
+      global_id += entry.size();
     }
-    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
-      sfeat_map_repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += sfeat_map_repo[i].size();
+    for (sf_map_t& entry: sfeat_map_repo) {
+      entry.vectorize(ctx, act, scale, global_id, sparse_vector);
+      global_id += entry.size();
     }
   }
 
@@ -132,20 +132,25 @@ public:
       SparseVector2* sparse_vector) {
     int global_id = 0;
     _ScoreContextType ctx(state);
-    for (int i = 0; i < ufeat_map_repo.size(); ++ i, ++ global_id) {
-      ufeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
+    for (uf_map_t& entry: ufeat_map_repo) {
+      entry.vectorize2(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
     }
-    for (int i = 0; i < bfeat_map_repo.size(); ++ i, ++ global_id) {
-      bfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
+    for (bf_map_t& entry: bfeat_map_repo) {
+      entry.vectorize2(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
     }
-    for (int i = 0; i < tfeat_map_repo.size(); ++ i, ++ global_id) {
-      tfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
+    for (tf_map_t& entry: tfeat_map_repo) {
+      entry.vectorize2(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
     }
-    for (int i = 0; i < qfeat_map_repo.size(); ++ i, ++ global_id) {
-      qfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
+    for (qf_map_t& entry: qfeat_map_repo) {
+      entry.vectorize2(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
     }
-    for (int i = 0; i < sfeat_map_repo.size(); ++ i, ++ global_id) {
-      sfeat_map_repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
+    for (sf_map_t& entry: sfeat_map_repo) {
+      entry.vectorize2(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
     }
   }
 
@@ -173,21 +178,11 @@ public:
    */
   floatval_t score(const _ScoreContextType& ctx, const _ActionType& act, bool avg) {
     floatval_t ret = 0;
-    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
-      ret += ufeat_map_repo[i].score(ctx, act, avg, 0.);
-    }
-    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
-      ret += bfeat_map_repo[i].score(ctx, act, avg, 0.);
-    }
-    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
-      ret += tfeat_map_repo[i].score(ctx, act, avg, 0.);
-    }
-    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
-      ret += qfeat_map_repo[i].score(ctx, act, avg, 0.);
-    }
-    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
-      ret += sfeat_map_repo[i].score(ctx, act, avg, 0.);
-    }
+    for (uf_map_t& entry: ufeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
+    for (bf_map_t& entry: bfeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
+    for (tf_map_t& entry: tfeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
+    for (qf_map_t& entry: qfeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
+    for (sf_map_t& entry: sfeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
     return ret;
   }
 
@@ -196,21 +191,11 @@ public:
       const std::vector<_ActionType>& actions,
       bool avg,
       packed_score_t& result) {
-    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
-      ufeat_map_repo[i].batchly_score(ctx, actions, avg, result);
-    }
-    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
-      bfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
-    }
-    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
-      tfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
-    }
-    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
-      qfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
-    }
-    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
-      sfeat_map_repo[i].batchly_score(ctx, actions, avg, result);
-    }
+    for (uf_map_t& entry: ufeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+    for (bf_map_t& entry: bfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+    for (tf_map_t& entry: tfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+    for (qf_map_t& entry: qfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+    for (sf_map_t& entry: sfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
   }
 
   /**
@@ -237,21 +222,11 @@ public:
    */
   void update(const _ScoreContextType& ctx, const _ActionType& act, int timestamp,
       floatval_t scale) {
-    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
-      ufeat_map_repo[i].update(ctx, act, timestamp, scale);
-    }
-    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
-      bfeat_map_repo[i].update(ctx, act, timestamp, scale);
-    }
-    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
-      tfeat_map_repo[i].update(ctx, act, timestamp, scale);
-    }
-    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
-      qfeat_map_repo[i].update(ctx, act, timestamp, scale);
-    }
-    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
-      sfeat_map_repo[i].update(ctx, act, timestamp, scale);
-    }
+    for (uf_map_t& entry: ufeat_map_repo) { entry.update(ctx, act, timestamp, scale); }
+    for (bf_map_t& entry: bfeat_map_repo) { entry.update(ctx, act, timestamp, scale); }
+    for (tf_map_t& entry: tfeat_map_repo) { entry.update(ctx, act, timestamp, scale); }
+    for (qf_map_t& entry: qfeat_map_repo) { entry.update(ctx, act, timestamp, scale); }
+    for (sf_map_t& entry: sfeat_map_repo) { entry.update(ctx, act, timestamp, scale); }
   }
 
   /**
@@ -260,21 +235,11 @@ public:
    *  @param[in]  timestamp   The time stamp.
    */
   void flush(int timestamp) {
-    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
-      ufeat_map_repo[i].flush(timestamp);
-    }
-    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
-      bfeat_map_repo[i].flush(timestamp);
-    }
-    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
-      tfeat_map_repo[i].flush(timestamp);
-    }
-    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
-      qfeat_map_repo[i].flush(timestamp);
-    }
-    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
-      sfeat_map_repo[i].flush(timestamp);
-    }
+    for (uf_map_t& entry: ufeat_map_repo) { entry.flush(timestamp); }
+    for (bf_map_t& entry: bfeat_map_repo) { entry.flush(timestamp); }
+    for (tf_map_t& entry: tfeat_map_repo) { entry.flush(timestamp); }
+    for (qf_map_t& entry: qfeat_map_repo) { entry.flush(timestamp); }
+    for (sf_map_t& entry: sfeat_map_repo) { entry.flush(timestamp); }
   }
 
   /**
@@ -291,21 +256,11 @@ public:
   }
 
   bool save(boost::archive::text_oarchive& oa) {
-    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
-      ufeat_map_repo[i].save(oa);
-    }
-    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
-      bfeat_map_repo[i].save(oa);
-    }
-    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
-      tfeat_map_repo[i].save(oa);
-    }
-    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
-      qfeat_map_repo[i].save(oa);
-    }
-    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
-      sfeat_map_repo[i].save(oa);
-    }
+    for (uf_map_t& entry: ufeat_map_repo) { entry.save(oa); }
+    for (bf_map_t& entry: bfeat_map_repo) { entry.save(oa); }
+    for (tf_map_t& entry: tfeat_map_repo) { entry.save(oa); }
+    for (qf_map_t& entry: qfeat_map_repo) { entry.save(oa); }
+    for (sf_map_t& entry: sfeat_map_repo) { entry.save(oa); }
     return true;
   }
 
@@ -323,21 +278,11 @@ public:
   }
 
   bool load(boost::archive::text_iarchive& ia) {
-    for (int i = 0; i < ufeat_map_repo.size(); ++ i) {
-      ufeat_map_repo[i].load(ia);
-    }
-    for (int i = 0; i < bfeat_map_repo.size(); ++ i) {
-      bfeat_map_repo[i].load(ia);
-    }
-    for (int i = 0; i < tfeat_map_repo.size(); ++ i) {
-      tfeat_map_repo[i].load(ia);
-    }
-    for (int i = 0; i < qfeat_map_repo.size(); ++ i) {
-      qfeat_map_repo[i].load(ia);
-    }
-    for (int i = 0; i < sfeat_map_repo.size(); ++ i) {
-      sfeat_map_repo[i].load(ia);
-    }
+    for (uf_map_t& entry: ufeat_map_repo) { entry.load(ia); }
+    for (bf_map_t& entry: bfeat_map_repo) { entry.load(ia); }
+    for (tf_map_t& entry: tfeat_map_repo) { entry.load(ia); }
+    for (qf_map_t& entry: qfeat_map_repo) { entry.load(ia); }
+    for (sf_map_t& entry: sfeat_map_repo) { entry.load(ia); }
     return true;
   }
 

@@ -5,8 +5,9 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-Decoder::Decoder(int nr, int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
-  : nr_deprels(nr),
+Decoder::Decoder(int nr, int root,
+    int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
+  : nr_deprels(nr), root_tag(root),
   TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, avg, strategy, weight) {
 }
 
@@ -21,10 +22,14 @@ Decoder::get_possible_actions(const State& source,
   if (source.stack_size() >= 2) {
     //
     for (deprel_t l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
-      actions.push_back(ActionFactory::make_left_arc(l));
+      if (l != root_tag) {
+        actions.push_back(ActionFactory::make_left_arc(l));
+      }
     }
     for (deprel_t l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
-      actions.push_back(ActionFactory::make_right_arc(l));
+      if (l != root_tag) {
+        actions.push_back(ActionFactory::make_right_arc(l));
+      }
     }
   }
 }

@@ -35,9 +35,38 @@ public:
     ++ nr_errors;
 
     if (algorithm == kAveragePerceptron) {
+      _TRACE << "learn: update " << (void *)predict_state << " by " << -1;
+      _TRACE << "learn: update " << (void *)correct_state << " by " << 1;
       model->update((*predict_state), timestamp, -1.);
       model->update((*correct_state), timestamp, 1.);
     } else if (algorithm == kPassiveAgressive) {
+      floatval_t error = margin; //
+      floatval_t score = 0.;
+      floatval_t norm = 0.;
+
+      SparseVector2 updated_vector;
+      score += model->score((*correct_state), false);
+      score -= model->score((*predict_state), false);
+      model->vectorize2((*correct_state), 1., &updated_vector);
+      model->vectorize2((*predict_state), -1., &updated_vector);
+
+      for (SparseVector2::const_iterator i = updated_vector.begin();
+          i != updated_vector.end(); ++ i) {
+        norm += (i->second * i->second);
+      }
+
+      _TRACE << "learn: norm = " << norm;
+      floatval_t step = 0.;
+      if (norm < 1e-8) {
+        step = 0;
+      } else {
+        step = (error - score) / norm;
+      }
+
+      _TRACE << "learn: update " << (void *)predict_state << " by " << (-step);
+      _TRACE << "learn: update " << (void *)correct_state << " by " << step;
+      model->update((*correct_state), timestamp, step);
+      model->update((*predict_state), timestamp, -step);
     }
   }
 

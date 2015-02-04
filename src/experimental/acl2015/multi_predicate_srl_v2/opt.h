@@ -11,17 +11,17 @@ namespace MultiPredicateSRL {
 
 namespace fe = ZuoPar::FrontEnd;
 
-struct LearnOption: public fe::LearnOption {
+struct ExtraOption {
+  int cube_height;
   std::string verb_class_path;
   std::string predicate_tag;
   std::string argument_prefix;
 };
 
-struct TestOption: public fe::TestOption {
-  std::string verb_class_path;
+struct LearnOption: public fe::LearnOption, public ExtraOption {};
+
+struct TestOption: public fe::TestOption, public ExtraOption {
   std::string output_format;
-  std::string predicate_tag;
-  std::string argument_prefix;
 };
 
 } //  namespace multipredicatesrl

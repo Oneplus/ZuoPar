@@ -10,18 +10,32 @@ namespace HCSearchDependencyParser {
 
 namespace fe = ZuoPar::FrontEnd;
 
-struct LearnOneOption: public fe::LearnOption {
-  std::string phase_one_model_path;
-};
+struct RootOption { std::string root; };
+struct PhaseOneModelOption { std::string phase_one_model_path; };
+struct PhaseTwoModelOption { std::string phase_two_model_path; };
 
-struct LearnTwoOption: public fe::LearnOption {
-  std::string phase_one_model_path; //! The path to the model in phase ONE.
-  std::string phase_two_model_path; //! The path to the model in phase TWO.
-};
+struct LearnOneOption:
+  public fe::LearnOption,
+  public RootOption,
+  public PhaseOneModelOption {};
 
-struct TestOption: public fe::TestOption {
-  std::string phase_one_model_path; //! The path to the model in phase ONE.
-  std::string phase_two_model_path; //! The path to the model in phase TWO.
+struct LearnTwoOption:
+  public fe::LearnOption,
+  public RootOption,
+  public PhaseOneModelOption,
+  public PhaseTwoModelOption {};
+
+struct EvaluateOption:
+  public fe::TestOption,
+  public RootOption,
+  public PhaseOneModelOption {};
+
+struct TestOption:
+  public fe::TestOption,
+  public RootOption,
+  public PhaseOneModelOption,
+  public PhaseTwoModelOption {
+  bool rerank;
 };
 
 

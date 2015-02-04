@@ -6,7 +6,7 @@
 #include "app/depparser/arcstandard/opt_utils.h"
 #include "app/depparser/arcstandard/pipe.h"
 
-namespace fe = ZuoPar::FrontEnd;
+namespace dp = ZuoPar::DependencyParser;
 namespace as = ZuoPar::DependencyParser::ArcStandard;
 namespace po = boost::program_options;
 
@@ -15,7 +15,7 @@ int multi_learn(int argc, char** argv) {
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: sequence_labeler multi-learn [options]\n";
   usage += "OPTIONS";
-  po::options_description optparser = fe::build_multi_learn_optparser(usage);
+  po::options_description optparser = dp::build_multi_learn_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -25,8 +25,8 @@ int multi_learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  fe::MultiLearnOption opts;
-  if (!parse_multi_learn_option(vm, opts)) {
+  dp::MultiLearnOption opts;
+  if (!dp::parse_multi_learn_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }
@@ -50,7 +50,7 @@ int learn(int argc, char** argv) {
   usage += "Usage: arcstandard_depparser learn [options]\n";
   usage += "OPTIONS";
 
-  po::options_description optparser = fe::build_learn_optparser(usage);
+  po::options_description optparser = dp::build_learn_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -60,8 +60,8 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  fe::LearnOption opts;
-  if (!parse_learn_option(vm, opts)) {
+  dp::LearnOption opts;
+  if (!dp::parse_learn_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }
@@ -85,7 +85,7 @@ int test(int argc, char** argv) {
   usage += "Usage: arcstandard_depparser test [options]\n";
   usage += "OPTIONS";
 
-  po::options_description optparser = fe::build_test_optparser(usage);
+  po::options_description optparser = dp::build_test_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -95,8 +95,8 @@ int test(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  fe::TestOption opts;
-  if (!parse_test_option(vm, opts)) {
+  dp::TestOption opts;
+  if (!dp::parse_test_option(vm, opts)) {
     std::cerr << optparser << std::endl;
     return 1;
   }

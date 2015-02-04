@@ -5,6 +5,7 @@ add_executable (arceager_depparser
     state.cc
     decoder.cc
     weight.cc
+    ${SOURCE_DIR}/app/depparser/opt_utils.cc
     ${SOURCE_DIR}/frontend/common_opt_utils.cc
     ${SOURCE_DIR}/types/dependency.cc
     ${SOURCE_DIR}/engine/token_alphabet.cc

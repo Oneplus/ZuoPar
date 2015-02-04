@@ -35,7 +35,8 @@ public:
   }
 
   bool operator == (const AbstractAction& a) const {
-    return (a.action_name == action_name && a.deprel == deprel);
+    return (a.deprel == deprel && a.action_name == action_name);
+    //return (a.action_name == action_name && a.deprel == deprel);
   }
 
   bool operator != (const AbstractAction& a) const {

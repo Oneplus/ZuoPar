@@ -15,7 +15,7 @@ read_dependency_dataset(
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
     eg::TokenAlphabet& deprels_alphabet,
-    bool incremental
+    size_t flag
     ) {
 
   namespace algo = boost::algorithm;
@@ -32,7 +32,7 @@ read_dependency_dataset(
     std::istringstream iss(*instance);
     Dependency parse;
     read_dependency_instance(iss, parse, forms_alphabet,
-        postags_alphabet, deprels_alphabet, incremental);
+        postags_alphabet, deprels_alphabet, flag);
     dataset.push_back(parse);
     instance ++;
   }

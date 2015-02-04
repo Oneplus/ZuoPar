@@ -26,6 +26,7 @@ public:
   Pipe(const LearnOneOption& opts);
   Pipe(const LearnTwoOption& opts);
   Pipe(const TestOption& opts);
+  Pipe(const EvaluateOption& opts);
   bool setup();
   void run();
   bool phase_one_load_model(const std::string& phase_one_model_path);
@@ -38,6 +39,7 @@ private:
   enum PipeModeExt {
     kPipeLearnPhaseOne,
     kPipeLearnPhaseTwo,
+    kPipeEvaluate,
     kPipeTest};
   PipeModeExt mode_ext;
 
@@ -55,6 +57,8 @@ private:
   eg::TokenAlphabet postags_alphabet;
   eg::TokenAlphabet deprels_alphabet;
   std::vector<Dependency> dataset;
+  bool rerank;
+  std::string root;
 };
 
 

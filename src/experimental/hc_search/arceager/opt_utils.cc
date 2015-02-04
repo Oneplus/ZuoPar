@@ -8,8 +8,88 @@ namespace HCSearchDependencyParser {
 namespace fe = ZuoPar::FrontEnd;
 namespace po = boost::program_options;
 
-bool
-parse_option_ext(const po::variables_map& vm, fe::Option& opts) {
+po::options_description build_phase_one_learn_optparser(const std::string& usage) {
+  po::options_description optparser(usage);
+  optparser.add_options()
+    ("help,h", "Show help information.")
+    ("algorithm,a", po::value<std::string>(), "The learning algorithm.\n"
+                                              " ap - average perceptron [default]\n"
+                                              " pa - passive aggressive")
+    ("beam,b",      po::value<int>(),         "The size for beam [default=64].")
+    ("display,d",   po::value<int>(),         "The display interval [default=1000].")
+    ("reference,r", po::value<std::string>(), "The path to the reference file.")
+    ("shuffle,s",   po::value<int>(),         "The flag for shuffling instance.\n"
+                                              " 0  - not shuffle instance [default].\n"
+                                              " >0 - perform s time shuffle (avoid fake shuffle.)")
+    ("update,u",    po::value<std::string>(), "Specify the early update strategy.\n"
+                                              " naive - no update\n"
+                                              " early - early update (Collins 04) [default]\n"
+                                              " max - max violation (Huang 12)")
+    ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
+    ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
+    ("verbose,v", "Logging every detail.")
+    ;
+
+  return optparser;
+}
+
+po::options_description build_phase_two_learn_optparser(const std::string& usage) {
+  po::options_description optparser(usage);
+  optparser.add_options()
+    ("help,h", "Show help information.")
+    ("algorithm,a", po::value<std::string>(), "The learning algorithm.\n"
+                                              " ap - average perceptron [default]\n"
+                                              " pa - passive aggressive")
+    ("beam,b",      po::value<int>(),         "The size for beam [default=64].")
+    ("display,d",   po::value<int>(),         "The display interval [default=1000].")
+    ("reference,r", po::value<std::string>(), "The path to the reference file.")
+    ("shuffle,s",   po::value<int>(),         "The flag for shuffling instance.\n"
+                                              " 0  - not shuffle instance [default].\n"
+                                              " >0 - perform s time shuffle (avoid fake shuffle.)")
+    ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
+    ("phase-two-model", po::value<std::string>(), "The path to the phase two model.")
+    ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
+    ("verbose,v", "Logging every detail.")
+    ;
+
+  return optparser;
+}
+
+po::options_description build_test_optparser(const std::string& usage) {
+  po::options_description optparser(usage);
+  optparser.add_options()
+    ("help,h",                              "Show help information.")
+    ("input,i",   po::value<std::string>(), "The path to the input file.")
+    ("output,o",  po::value<std::string>(), "The path to the output file.")
+    ("display,d", po::value<int>(),         "The display interval [default=1000].")
+    ("beam,b",    po::value<int>(),         "The size for beam [default=64].")
+    ("root",      po::value<std::string>(), "The root tag [default=ROOT].")
+    ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
+    ("phase-two-model", po::value<std::string>(), "The path to the phase two model.")
+    ("rerank", "Specify to perform phase two reranking.")
+    ("verbose,v", "Logging every detail.")
+    ;
+
+  return optparser;
+}
+
+po::options_description build_evaluate_optparser(const std::string& usage) {
+  po::options_description optparser(usage);
+  optparser.add_options()
+    ("help,h",                                "Show help information.")
+    ("input,i",     po::value<std::string>(), "The path to the input file.")
+    ("display,d",   po::value<int>(),         "The display interval [default=1000].")
+    ("beam,b",      po::value<int>(),         "The size for beam [default=64].")
+    ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
+    ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
+    ("verbose,v", "Logging every detail.")
+    ;
+
+  return optparser;
+}
+
+
+bool parse_option_ext(const po::variables_map& vm, fe::Option& opts) {
   namespace utils = ZuoPar::Utility;
   utils::init_boost_log(vm.count("verbose"));
   if (vm.count("help")) { return false; }
@@ -22,10 +102,9 @@ parse_option_ext(const po::variables_map& vm, fe::Option& opts) {
   return true;
 }
 
-bool
-parse_learn_option_ext(const po::variables_map& vm, fe::LearnOption& opts) {
+bool parse_learn_option_ext(const po::variables_map& vm, fe::LearnOption& opts) {
   if (!vm.count("reference")) {
-    _ERROR << "parse opt: reference file must be specified [-r].";
+    _ERROR << "parse opt: reference file must be specified [--reference].";
     return false;
   } else {
     opts.reference_path = vm["reference"].as<std::string>();
@@ -61,10 +140,15 @@ parse_learn_option_ext(const po::variables_map& vm, fe::LearnOption& opts) {
   return true;
 }
 
-bool
-parse_phase_one_learn_option(const po::variables_map& vm, LearnOneOption& opts) {
-  if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
-  if (!parse_learn_option_ext(vm, static_cast<fe::LearnOption&>(opts))) { return false; }
+bool parse_root_option(const po::variables_map& vm, RootOption& opts) {
+  opts.root = "ROOT";
+  if (vm.count("root")) {
+    opts.root= vm["root"].as<std::string>();
+  }
+  return true;
+}
+
+bool parse_phase_one_model_option(const po::variables_map& vm, PhaseOneModelOption& opts) {
   if (vm.count("phase-one-model")) {
     opts.phase_one_model_path = vm["phase-one-model"].as<std::string>();
   } else {
@@ -74,18 +158,7 @@ parse_phase_one_learn_option(const po::variables_map& vm, LearnOneOption& opts) 
   return true;
 }
 
-bool
-parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& opts) {
-  if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
-  if (!parse_learn_option_ext(vm, static_cast<fe::LearnOption&>(opts))) { return false; }
-
-  opts.update_strategy = "naive";
-  if (vm.count("phase-one-model")) {
-    opts.phase_one_model_path = vm["phase-one-model"].as<std::string>();
-  } else {
-    _ERROR << "parse opt: phase ONE model path must be specified [--phase-one-model]";
-    return false;
-  }
+bool parse_phase_two_model_option(const po::variables_map& vm, PhaseTwoModelOption& opts) {
   if (vm.count("phase-two-model")) {
     opts.phase_two_model_path = vm["phase-two-model"].as<std::string>();
   } else {
@@ -95,14 +168,36 @@ parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& opts) 
   return true;
 }
 
-bool
-parse_test_option(const po::variables_map& vm, TestOption& opts) {
+bool parse_phase_one_learn_option(const po::variables_map& vm, LearnOneOption& opts) {
+  if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
+  if (!parse_learn_option_ext(vm, static_cast<fe::LearnOption&>(opts))) { return false; }
+  if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
+  if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  return true;
+}
+
+bool parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& opts) {
+  if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
+  if (!parse_learn_option_ext(vm, static_cast<fe::LearnOption&>(opts))) { return false; }
+  if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
+  if (!parse_phase_two_model_option(vm, static_cast<PhaseTwoModelOption&>(opts))) { return false; }
+  if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  opts.update_strategy = "naive";
+  return true;
+}
+
+bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
   if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
   if (!vm.count("input")) {
-    _ERROR << "parse opt: input file must be specified [-i].";
+    _ERROR << "parse opt: input file must be specified [--input].";
     return false;
   } else {
     opts.input_path = vm["input"].as<std::string>();
+  }
+
+  opts.rerank = false;
+  if (vm.count("rerank")) {
+    opts.rerank = true;
   }
 
   opts.output_path = "";
@@ -112,19 +207,28 @@ parse_test_option(const po::variables_map& vm, TestOption& opts) {
     opts.output_path = vm["output"].as<std::string>();
   }
 
-  if (!vm.count("phase-one-model")) {
-    _ERROR << "parse opt: phase one model should be specified [--phase-one-model]";
-  } else {
-    opts.phase_one_model_path = vm["phase-one-model"].as<std::string>();
-  }
-
-  if (!vm.count("phase-two-model")) {
-    _ERROR << "parse opt: phase two model should be specified [--phase-two-model]";
-  } else {
-    opts.phase_two_model_path = vm["phase-two-model"].as<std::string>();
+  if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
+  if (opts.rerank && !parse_phase_two_model_option(vm, static_cast<PhaseTwoModelOption&>(opts))) {
+    return false;
   }
   return true;
 }
+
+bool parse_evaluate_option(const po::variables_map& vm, EvaluateOption& opts) {
+  if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
+  if (!vm.count("input")) {
+    _ERROR << "parse opt: input file must be specified [--input].";
+    return false;
+  } else {
+    opts.input_path = vm["input"].as<std::string>();
+  }
+
+  if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
+  return true;
+}
+
 
 } //  namespace hcsearchdependencyparser
 } //  namespace experimental

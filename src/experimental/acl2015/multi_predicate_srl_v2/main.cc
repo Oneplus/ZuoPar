@@ -28,6 +28,7 @@ int learn(int argc, char** argv) {
 
   po::options_description optparser = fe::build_learn_optparser(usage);
   optparser.add_options()
+    ("cube-height", po::value<int>(), "The height of cube for cube-proning[default=8]")
     ("verb-class", po::value<std::string>(), "The path to the verb class.")
     ("predicate", po::value<std::string>(), "The predicate tag [default=\"V\"].")
     ("prefix", po::value<std::string>(), "The argument prefix [default=\"A\"].");
@@ -66,6 +67,7 @@ int test(int argc, char** argv) {
 
   po::options_description optparser = fe::build_test_optparser(usage);
   optparser.add_options()
+    ("cube-height", po::value<int>(), "The height of cube for cube-proning[default=8]")
     ("verb-class", po::value<std::string>(), "The path to the verb class.")
     ("predicate", po::value<std::string>(), "The predicate tag [default=\"V\"].")
     ("prefix", po::value<std::string>(), "The argument prefix [default=\"A\"].")

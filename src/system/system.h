@@ -290,6 +290,7 @@ protected:
         itx != scores.end(); ++ itx) {
       itx->second = 0;
     }
+    //scores.clear();
     _ScoreContextType ctx(source);
     model->batchly_score(ctx, actions, use_avg, scores);
   }

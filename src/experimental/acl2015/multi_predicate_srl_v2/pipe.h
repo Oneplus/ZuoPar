@@ -78,6 +78,8 @@ protected:
 
   OutputFormat output_format;
 
+  int cube_height;
+
   //! The path to the verb class dictionary.
   std::string verb_class_path;
 

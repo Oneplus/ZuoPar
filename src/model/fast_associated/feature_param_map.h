@@ -86,7 +86,7 @@ public:
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize(const _ScoreContextType& ctx, const _ActionType& act,
-      floatval_t scale, int offset, SparseVector* sparse_vector) {
+      floatval_t scale, int offset, SparseVector* sparse_vector) const {
     //! Use to cache extracted features.
     cache_t cache;
     extractor(ctx, cache);
@@ -115,7 +115,7 @@ public:
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize2(const _ScoreContextType& ctx, const _ActionType& act,
-      floatval_t scale, int gid, SparseVector2* sparse_vector) {
+      floatval_t scale, int gid, SparseVector2* sparse_vector) const {
     cache_t cache;
     extractor(ctx, cache);
     for (const _MetaFeatureType& c: cache) {
@@ -147,7 +147,7 @@ public:
    *  @return     floatval_t  The score.
    */
   floatval_t score(const _ScoreContextType& ctx, const _ActionType& act,
-      bool avg, floatval_t default_return_value = 0.) {
+      bool avg, floatval_t default_return_value = 0.) const {
     cache_t cache;
     extractor(ctx, cache);
     floatval_t ret = 0.;
@@ -178,7 +178,7 @@ public:
   void batchly_score(const _ScoreContextType& ctx,
       const std::vector<_ActionType>& actions,
       bool avg,
-      packed_score_t& result) {
+      packed_score_t& result) const {
     cache_t cache;
     extractor(ctx, cache);
     for (const _MetaFeatureType& c: cache) {

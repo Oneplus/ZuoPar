@@ -24,6 +24,7 @@ namespace fe = ZuoPar::FrontEnd;
 
 Pipe::Pipe(const LearnOption& opts)
   : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
+  cube_height = opts.cube_height;
   predicate_tag = opts.predicate_tag;
   verb_class_path = opts.verb_class_path;
   argument_prefix = opts.argument_prefix;
@@ -37,6 +38,7 @@ Pipe::Pipe(const LearnOption& opts)
 Pipe::Pipe(const TestOption& opts)
   : weight(0), decoder(0), learner(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
+  cube_height = opts.cube_height;
   predicate_tag = opts.predicate_tag;
   verb_class_path = opts.verb_class_path;
   argument_prefix = opts.argument_prefix;
@@ -244,14 +246,14 @@ Pipe::run() {
   }
 
   _INFO << "pipe: max number of predicates: " << max_nr_predicates;
-  _INFO << "pipe: cube size: " << beam_size;
+  _INFO << "pipe: cube size: " << cube_height;
   if (mode == kPipeLearn) {
     decoder = new Decoder(tags_alphabet.size(), beam_size, max_nr_predicates,
-        beam_size, false, update_strategy, weight);
+        cube_height, false, update_strategy, weight);
     learner = new Learner(weight, this->algorithm);
   } else {
     decoder = new Decoder(tags_alphabet.size(), beam_size, max_nr_predicates,
-        beam_size, true, update_strategy, weight);
+        cube_height, true, update_strategy, weight);
   }
 
   size_t N = dataset.size();

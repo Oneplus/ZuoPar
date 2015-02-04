@@ -15,7 +15,8 @@ protected:
   std::size_t seed;
 public:
   //! The default constructor.
-  AbstractMetaFeature() : seed(0) {}
+  AbstractMetaFeature(): seed(0) {}
+  AbstractMetaFeature(size_t s): seed(s) {}
   friend class boost::serialization::access;
   //! hash value.
   friend std::size_t hash_value(const AbstractMetaFeature& s) {
@@ -29,10 +30,7 @@ private:
 
 public:
   UnigramMetaFeature(): feat(0) { }
-  UnigramMetaFeature(int f) : feat(f) {
-    seed = f;
-    //boost::hash_combine(seed, f);
-  }
+  UnigramMetaFeature(int f): feat(f), AbstractMetaFeature(f) { /*boost::hash_combine(seed, f);*/ }
 
   //! The equal operator.
   bool operator == (const UnigramMetaFeature& a) const {

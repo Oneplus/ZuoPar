@@ -31,7 +31,7 @@ void read_dependency_dataset(
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
     eg::TokenAlphabet& deprels_alphabet,
-    bool incremental = true);
+    size_t flag = 0xffff);
 
 }
 }

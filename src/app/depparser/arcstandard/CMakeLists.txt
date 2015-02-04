@@ -5,13 +5,14 @@ add_executable (arcstandard_depparser
     state.cc
     decoder.cc
     weight.cc
+    ${SOURCE_DIR}/app/depparser/opt_utils.cc
     ${SOURCE_DIR}/frontend/common_opt_utils.cc
     ${SOURCE_DIR}/types/dependency.cc
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
+    ${SOURCE_DIR}/utils/io/stream.cc
     ${SOURCE_DIR}/utils/io/dataset/dependency.cc
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
-    ${SOURCE_DIR}/utils/io/stream.cc
     )
 
 target_link_libraries (arcstandard_depparser

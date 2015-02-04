@@ -25,15 +25,15 @@ template <
   class Learner,
   class MinibatchLearner
 >
-class CommonDependencyMultiPipe: public CommonDependencyPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner> {
+class CommonDependencyMultiPipe
+: public CommonDependencyPipe<Action, ActionUtils, State, Weight, Decoder, Learner> {
 public:
   /**
    * The learning mode constructor.
    *
    *  @param[in]  opts  The learning options.
    */
-  CommonDependencyMultiPipe(const fe::MultiLearnOption& opts)
+  CommonDependencyMultiPipe(const MultiLearnOption& opts)
     : minibatch_learner(0),
     CommonDependencyPipe<
       Action,
@@ -42,8 +42,9 @@ public:
       Weight,
       Decoder,
       Learner
-    >(static_cast<fe::LearnOption>(opts)) {
+    >(static_cast<const fe::LearnOption&>(opts)) {
     _INFO << "::MULTI-LEARN:: mode is activated.";
+    this->root = opts.root;
     this->batch_size = opts.batch_size;
     this->num_threads = opts.num_threads;
     _INFO << "report: batch size = " << batch_size;
@@ -56,9 +57,11 @@ public:
       return;
     }
     decoder_pool.resize(num_threads);
+    deprel_t root_tag = this->deprels_alphabet.encode(this->root.c_str());
     for (int i = 0; i < num_threads; ++ i) {
       decoder_pool[i] = new Decoder(
           this->deprels_alphabet.size(),
+          root_tag,
           this->beam_size,
           false,
           this->update_strategy,

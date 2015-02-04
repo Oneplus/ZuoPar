@@ -10,8 +10,8 @@
 #include "utils/io/stream.h"
 #include "utils/io/dataset/dependency.h"
 #include "utils/io/instance/dependency.h"
-#include "frontend/common_opt.h"
 #include "frontend/common_pipe_cfg.h"
+#include "app/depparser/opt.h"
 
 namespace ZuoPar {
 namespace DependencyParser {
@@ -28,15 +28,31 @@ template <
   class Learner
 >
 class CommonDependencyPipe: public fe::CommonPipeConfigure {
-
-public:
+protected:
   /**
    * The learning mode constructor.
    *
    *  @param[in]  opts  The learning options.
    */
   CommonDependencyPipe(const fe::LearnOption& opts)
-    : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
+    : weight(0), decoder(0), learner(0),
+    fe::CommonPipeConfigure(opts) {
+    if (load_model(opts.model_path)) {
+      _INFO << "report: model is loaded.";
+    } else {
+      _INFO << "report: model is not loaded.";
+    }
+  }
+public:
+  /**
+   * The learning mode constructor.
+   *
+   *  @param[in]  opts  The learning options.
+   */
+  CommonDependencyPipe(const LearnOption& opts)
+    : weight(0), decoder(0), learner(0),
+    fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
+    this->root = opts.root;
     if (load_model(opts.model_path)) {
       _INFO << "report: model is loaded.";
     } else {
@@ -49,8 +65,10 @@ public:
    *
    *  @param[in]  opts  The testing options.
    */
-  CommonDependencyPipe(const fe::TestOption& opts)
-    : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
+  CommonDependencyPipe(const TestOption& opts)
+    : weight(0), decoder(0), learner(0),
+    fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
+    this->root = opts.root;
     if (load_model(opts.model_path)) {
       _INFO << "report: model is loaded.";
     } else {
@@ -98,11 +116,14 @@ public:
       return;
     }
 
+    deprel_t root_tag = deprels_alphabet.encode(this->root.c_str());
     if (mode == kPipeLearn) {
-      decoder = new Decoder(deprels_alphabet.size(), beam_size, false, update_strategy, weight);
+      decoder = new Decoder(deprels_alphabet.size(), root_tag,
+          beam_size, false, update_strategy, weight);
       learner = new Learner(weight, this->algorithm);
     } else {
-      decoder = new Decoder(deprels_alphabet.size(), beam_size, true, update_strategy, weight);
+      decoder = new Decoder(deprels_alphabet.size(), root_tag,
+          beam_size, true, update_strategy, weight);
     }
 
     size_t N = dataset.size();
@@ -129,9 +150,6 @@ public:
         learner->learn(result.first, result.second);
       } else {
         Dependency output;
-        for (int i = 0; i < instance.size(); ++ i) {
-          output.push_back(instance.forms[i], instance.postags[i], 0, 0);
-        }
         build_output((*result.first), output);
         ioutils::write_dependency_instance((*os), output, forms_alphabet,
             postags_alphabet, deprels_alphabet);
@@ -210,19 +228,16 @@ public:
    */
   void build_output(const State& source, Dependency& output) {
     size_t len = source.ref->size();
-    if (output.heads.size() != len) {
-      output.heads.resize(len);
-    }
-
-    if (output.deprels.size() != len) {
-      output.deprels.resize(len);
-    }
+    output.forms = source.ref->forms;
+    output.postags = source.ref->postags;
+    output.heads.resize(len);
+    output.deprels.resize(len);
 
     for (size_t i = 0; i < len; ++ i) {
       output.heads[i] = source.heads[i];
       output.deprels[i] = source.deprels[i];
       if (output.heads[i] == -1) {
-        output.deprels[i] = deprels_alphabet.encode("ROOT");
+        output.deprels[i] = deprels_alphabet.encode(root.c_str());
       }
     }
   }
@@ -249,6 +264,8 @@ protected:
 
   //! The dataset.
   std::vector<Dependency> dataset;
+
+  std::string root;
 };
 
 } //  namespace dependencyparser

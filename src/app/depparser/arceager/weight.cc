@@ -84,14 +84,6 @@ Weight::Weight() {
   // There should also be the label set feature.
 }
 
-#undef _u
-#undef _b
-#undef _t
-
-#undef ZUOPAR_FEATURE_MAP_REGIST_U1
-#undef ZUOPAR_FEATURE_MAP_REGIST_B11
-#undef ZUOPAR_FEATURE_MAP_REGIST_T111
-
 } //  end for namespace arceager
 } //  end for namespace dependencyparser
 } //  end for namespace zuopar

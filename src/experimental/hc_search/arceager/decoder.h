@@ -27,7 +27,8 @@ public:
    *  @param[in]  update_strategy The update strategy.
    *  @param[in]  weight          The pointer to the weight.
    */
-  Decoder(int nr, int beam_size, bool avg, UpdateStrategy update_strategy, HeuristicWeight* weight);
+  Decoder(int nr, int root,
+      int beam_size, bool avg, UpdateStrategy update_strategy, HeuristicWeight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,
@@ -42,6 +43,7 @@ public:
 
 private:
   int nr_deprels;
+  int root_tag;
 };
 
 } //  end for namespace arceager

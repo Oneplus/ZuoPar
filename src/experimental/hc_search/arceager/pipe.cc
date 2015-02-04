@@ -15,6 +15,7 @@ Pipe::Pipe(const LearnOneOption& opts)
   cost_learner(0),
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
+  root = opts.root;
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
     _INFO << "report(1): model " << phase_one_model_path << " is loaded.";
@@ -31,6 +32,7 @@ Pipe::Pipe(const LearnTwoOption& opts)
   cost_learner(0),
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
+  root = opts.root;
   phase_one_model_path = opts.phase_one_model_path;
   phase_two_model_path = opts.phase_two_model_path;
   if (phase_one_load_model(phase_one_model_path) &&
@@ -51,10 +53,32 @@ Pipe::Pipe(const TestOption& opts)
   cost_learner(0),
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
+  rerank = opts.rerank;
+  root = opts.root;
   phase_one_model_path = opts.phase_one_model_path;
   phase_two_model_path = opts.phase_two_model_path;
-  if (phase_one_load_model(phase_one_model_path) &&
-      phase_two_load_model(phase_two_model_path)) {
+  if (!rerank && phase_one_load_model(phase_one_model_path)) {
+    _INFO << "report(no-rerank): model is loaded.";
+  } else if (rerank
+      && phase_one_load_model(phase_one_model_path)
+      && phase_two_load_model(phase_two_model_path)) {
+    _INFO << "report(rerank): model is loaded.";
+  } else {
+    _INFO << "report(t): model is not loaded.";
+  }
+}
+
+Pipe::Pipe(const EvaluateOption& opts)
+  : mode_ext(kPipeEvaluate),
+  heuristic_weight(0),
+  heuristic_learner(0),
+  cost_weight(0),
+  cost_learner(0),
+  decoder(0),
+  fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
+  root = opts.root;
+  phase_one_model_path = opts.phase_one_model_path;
+  if (phase_one_load_model(phase_one_model_path)) {
     _INFO << "report(t): model is loaded.";
   } else {
     _INFO << "report(t): model is not loaded.";
@@ -144,7 +168,7 @@ Pipe::setup() {
     }
     _INFO << "report: loading dataset from reference file.";
     ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, deprels_alphabet, true);
+        postags_alphabet, deprels_alphabet);
   } else {
     std::ifstream ifs(input_path.c_str());
     if (!ifs.good()) {
@@ -153,7 +177,7 @@ Pipe::setup() {
       return false;
     }
     ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, deprels_alphabet, true);
+        postags_alphabet, deprels_alphabet, ((1<<1)|(1<<2)));
   }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << forms_alphabet.size() << " form(s) is loaded.";
@@ -167,12 +191,13 @@ Pipe::run() {
   namespace ioutils = ZuoPar::IO;
   if (!setup()) { return; }
 
+  deprel_t root_tag = deprels_alphabet.encode(root.c_str());
   if (mode_ext == kPipeLearnPhaseOne) {
-    decoder = new Decoder(deprels_alphabet.size(), beam_size, false, update_strategy,
-        heuristic_weight);
+    decoder = new Decoder(deprels_alphabet.size(), root_tag,
+        beam_size, false, update_strategy, heuristic_weight);
   } else {
-    decoder = new Decoder(deprels_alphabet.size(), beam_size, true, UpdateStrategy::kNaive,
-        heuristic_weight);
+    decoder = new Decoder(deprels_alphabet.size(), root_tag,
+        beam_size, true, UpdateStrategy::kNaive, heuristic_weight);
   }
 
   if (mode_ext == kPipeLearnPhaseOne) {
@@ -188,11 +213,20 @@ Pipe::run() {
   for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
   while (shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
 
+  int nr_total = 0;
+  int nr_correct = 0;
+  int nr_gold_in_beam = 0;
+  int nr_gold_in_beam_not_best = 0;
+  int nr_correct_in_beam = 0;
+  int nr_correct_in_beam_not_best = 0;
+
   for (size_t n = 0; n < N; ++ n) {
     const Dependency& instance = dataset[ranks[n]];
 
     std::vector<Action> actions;
-    if (mode_ext == kPipeLearnPhaseOne || mode_ext == kPipeLearnPhaseTwo) {
+    if (mode_ext == kPipeLearnPhaseOne ||
+        mode_ext == kPipeLearnPhaseTwo ||
+        mode_ext == kPipeEvaluate) {
       ActionUtils::get_oracle_actions(instance, actions);
     }
 
@@ -209,19 +243,55 @@ Pipe::run() {
     } else if (mode_ext == kPipeLearnPhaseTwo) {
       std::vector<const State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
+      floatval_t corret_score = cost_weight->score((*result.second), false);
       for (const State* candidate_result: final_results) {
+        ++ nr_total;
         Dependency output;
         build_output((*candidate_result), output);
         int l = loss(output, instance, true);
-        cost_learner->set_timestamp(n+ 1);
         if (l != 0) {
-          cost_learner->learn(candidate_result, result.second, l);
+          floatval_t predict_score = cost_weight->score((*candidate_result), false);
+          if (predict_score >= corret_score) {
+            cost_learner->set_timestamp(nr_total);
+            cost_learner->learn(candidate_result, result.second, l);
+          }
         }
-        //_INFO << "#" << l;
       }
-      // exit(1);
-    } else {
+    } else if (mode_ext == kPipeEvaluate) {
+      std::vector<const State*> final_results;
+      decoder->get_results_in_beam(final_results, max_nr_actions);
+
+      bool gold_in_beam = false;
+      bool correct_in_beam = false;
+      for (const State* candidate_result: final_results) {
+        Dependency output;
+        build_output((*candidate_result), output);
+        if (0 == loss(output, instance, true)) { correct_in_beam = true; }
+        if (candidate_result == result.second) { gold_in_beam = true; }
+      }
+
+      if (gold_in_beam) { ++ nr_gold_in_beam; }
+      if (correct_in_beam) { ++ nr_correct_in_beam; }
+      if (gold_in_beam && result.first != result.second) { ++ nr_gold_in_beam_not_best; }
       Dependency output;
+      build_output((*result.first), output);
+      if (correct_in_beam && 0 != loss(output, instance, true)) { ++ nr_correct_in_beam_not_best; }
+    } else {
+      std::vector<const State*> final_results;
+      decoder->get_results_in_beam(final_results, max_nr_actions);
+
+      floatval_t best_score = -1.;
+      const State* best_result = NULL;
+      if (rerank) {
+        for (const State* candidate_result: final_results) {
+          floatval_t score = cost_weight->score((*candidate_result), true);
+          if (score > best_score) { best_result = candidate_result; }
+        }
+      } else {
+        best_result = result.first;
+      }
+      Dependency output;
+      build_output((*best_result), output);
       ioutils::write_dependency_instance((*os), output, forms_alphabet,
           postags_alphabet, deprels_alphabet);
     }
@@ -238,10 +308,19 @@ Pipe::run() {
     _INFO << "pipe: nr errors: " << heuristic_learner->errors();
     phase_one_save_model(phase_one_model_path);
   } else if (mode_ext == kPipeLearnPhaseTwo) {
-    cost_learner->set_timestamp(N);
+    cost_learner->set_timestamp(nr_total);
     cost_learner->flush();
-    _INFO << "pipe: nr errors: " << cost_learner->errors();
+    _INFO << "pipe: nr errors: " << cost_learner->errors() << "/" << nr_total;
     phase_two_save_model(phase_two_model_path);
+  } else if (mode_ext == kPipeEvaluate) {
+    _INFO << "report: gold in beam: " << nr_gold_in_beam <<
+      "/" << N << "=" << floatval_t(nr_gold_in_beam)/N;
+    _INFO << "report: gold in beam (not best): " << nr_gold_in_beam_not_best
+      << "/" << N << "=" << floatval_t(nr_gold_in_beam_not_best)/N;
+    _INFO << "report: correct in beam: " << nr_correct_in_beam
+      << "/" << N << "=" << floatval_t(nr_correct_in_beam)/N;
+    _INFO << "report: correct in beam (not best): " << nr_correct_in_beam_not_best
+      << "/" << N << "=" << floatval_t(nr_correct_in_beam_not_best)/N;
   }
 }
 
@@ -256,7 +335,7 @@ Pipe::build_output(const State& source, Dependency& output) {
     output.heads[i] = source.heads[i];
     output.deprels[i] = source.deprels[i];
     if (output.heads[i] == -1) {
-      output.deprels[i] = deprels_alphabet.encode("ROOT");
+      output.deprels[i] = deprels_alphabet.encode(root.c_str());
     }
   }
 }
