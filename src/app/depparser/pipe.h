@@ -90,7 +90,7 @@ public:
 
       _INFO << "report: loading dataset from reference file.";
       ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
-          postags_alphabet, deprels_alphabet, true);
+          postags_alphabet, deprels_alphabet);
       _INFO << "report: dataset is loaded from reference file.";
     } else {
       std::ifstream ifs(input_path.c_str());
@@ -100,7 +100,7 @@ public:
         return false;
       }
       ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
-          postags_alphabet, deprels_alphabet, true);
+          postags_alphabet, deprels_alphabet, ((1<<1)|(1<<2)));
     }
     _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
     _INFO << "report: " << forms_alphabet.size() << " forms(s) is detected.";
