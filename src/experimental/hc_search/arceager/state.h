@@ -23,6 +23,9 @@ public:
    */
   State(const Dependency& r);
 
+  //!
+  void build(const Dependency& p);
+
   /**
    * This method is needed by @class TransitionSystem.
    *

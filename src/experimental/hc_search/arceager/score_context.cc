@@ -102,7 +102,7 @@ CostScoreContext::CostScoreContext(const State& state)
   : forms(state.ref->forms),
   postags(state.ref->postags),
   deprels(state.deprels) {
-  int len = state.ref->size();
+  len = state.ref->size();
   int root = -1;
   std::vector< std::vector<int> > tree(len);
 
@@ -116,10 +116,34 @@ CostScoreContext::CostScoreContext(const State& state)
   }
 
   for (int hid = 0; hid < len; ++ hid) {
+    H.push_back( hid );
+    H_H.push_back( std::make_pair(hid, hid) );
+    H_H_H.push_back( boost::make_tuple(hid, hid, hid) );
+    H_H_pH.push_back( boost::make_tuple(hid, hid, hid- 1) );
+    H_H_nH.push_back( boost::make_tuple(hid, hid, hid+ 1) );
+    H_pH_H_nH.push_back( boost::make_tuple(hid, hid- 1, hid, hid+ 1));
     const std::vector<int>& hnode = tree[hid];
     for (int j = 0; j < hnode.size(); ++ j) {
       int mid = hnode[j];
-      arcs.push_back( std::make_pair(hid, mid) );
+      H_M.push_back( std::make_pair(hid, mid) );
+
+      // head modifier context group (1)
+      pH_H_M_Mn.push_back( boost::make_tuple(hid- 1, hid, mid, mid+ 1));
+      pH_H_M.push_back( boost::make_tuple(hid- 1, hid, mid));
+      H_M_Mn.push_back( boost::make_tuple(hid, mid, mid+ 1));
+      pH_H_Mn.push_back( boost::make_tuple(hid- 1, hid, mid+ 1));
+      pH_M_Mn.push_back( boost::make_tuple(hid- 1, mid, mid+ 1));
+
+      // head modifier context group (2)
+      H_nH_pM_M.push_back( boost::make_tuple(hid, hid+1, mid-1, mid));
+      H_nH_pM.push_back( boost::make_tuple(hid, hid+1, mid));
+      nH_pM_M.push_back( boost::make_tuple(hid+1, mid-1, mid));
+      H_nH_M.push_back( boost::make_tuple(hid, hid+1, mid));
+      H_pM_M.push_back( boost::make_tuple(hid, mid-1, mid));
+
+      H_H_M.push_back( boost::make_tuple(hid, hid, mid) );
+      H_M_M.push_back( boost::make_tuple(hid, mid, mid) );
+      H_H_M_M.push_back( boost::make_tuple(hid, hid, mid, mid) );
     }
 
     for (int j = 1; j < hnode.size(); ++ j) {

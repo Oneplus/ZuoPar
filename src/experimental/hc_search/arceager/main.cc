@@ -12,6 +12,31 @@ namespace fe = ZuoPar::FrontEnd;
 namespace hc = ZuoPar::Experimental::HCSearchDependencyParser;
 namespace po = boost::program_options;
 
+int prepare_phase_two(int argc, char** argv) {
+  std::string usage = "Preparing component of ZuoPar::HC-search arceager depparser phase(2).\n";
+  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
+  usage += "Usage: " __EXE__ " learn-phase-one [options]\n";
+  usage += "OPTIONS";
+
+  po::options_description optparser = hc::build_phase_two_prepare_optparser(usage);
+  if (argc == 1) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, optparser), vm);
+
+  hc::PrepareTwoOption opts;
+  if (!hc::parse_phase_two_prepare_option(vm, opts)) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  hc::Pipe pipe(opts);
+  pipe.run();
+  return 0;
+}
+
 /**
  * Perform the learning process of ZuoPar::arceager dependency parser.
  *
@@ -67,7 +92,7 @@ int learn_phase_two(int argc, char** argv) {
   }
 
   hc::Pipe pipe(opts);
-  pipe.run();
+  pipe.learn2();
   return 0;
 }
 
@@ -132,14 +157,21 @@ int test(int argc, char** argv) {
 int main(int argc, char** argv) {
   std::string usage = "ZuoPar::HC-search arceager dependency parser.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: " __EXE__;
-  usage += " [learn-phase-one|learn-phase-two|evaluate|test] [options]";
+  usage += "Usage: " __EXE__ " [target] [options]\n\n";
+  usage += "targets: \n";
+  usage += " - learn-phase-one:   learning phase one model, without final update.\n"
+           " - prepare-phase-two: generate pair-wised training instances.\n"
+           " - learn-phase-two:   learning phase two model.\n"
+           " - evaluate:          evaluate the recall in beam.\n"
+           " - test:              perform the final test.\n";
 
   if (argc == 1) {
     std::cerr << usage << std::endl;
     return 1;
   } else if (strcmp(argv[1], "learn-phase-one") == 0) {
     learn_phase_one(argc- 1, argv+ 1);
+  } else if (strcmp(argv[1], "prepare-phase-two") == 0) {
+    prepare_phase_two(argc- 1, argv+ 1);
   } else if (strcmp(argv[1], "learn-phase-two") == 0) {
     learn_phase_two(argc- 1, argv+ 1);
   } else if (strcmp(argv[1], "evaluate") == 0) {

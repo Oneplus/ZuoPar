@@ -55,6 +55,22 @@ po::options_description build_phase_two_learn_optparser(const std::string& usage
   return optparser;
 }
 
+po::options_description build_phase_two_prepare_optparser(const std::string& usage) {
+  po::options_description optparser(usage);
+  optparser.add_options()
+    ("help,h",                                "Show help information.")
+    ("input,i",     po::value<std::string>(), "The path to the input file.")
+    ("output,o",    po::value<std::string>(), "The path to the output file.")
+    ("display,d",   po::value<int>(),         "The display interval [default=1000].")
+    ("beam,b",      po::value<int>(),         "The size for beam [default=64].")
+    ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
+    ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
+    ("verbose,v", "Logging every detail.")
+    ;
+
+  return optparser;
+}
+
 po::options_description build_test_optparser(const std::string& usage) {
   po::options_description optparser(usage);
   optparser.add_options()
@@ -102,6 +118,25 @@ bool parse_option_ext(const po::variables_map& vm, fe::Option& opts) {
   return true;
 }
 
+bool parse_input_ext(const po::variables_map& vm, fe::TestOption& opts) {
+  if (!vm.count("input")) {
+    _ERROR << "parse opt: input file must be specified [--input].";
+    return false;
+  } else {
+    opts.input_path = vm["input"].as<std::string>();
+  }
+  return true;
+}
+
+bool parse_output_ext(const po::variables_map& vm, fe::TestOption& opts) {
+  if (!vm.count("output")) {
+    _INFO << "parse opt: output path not specified, use stdout instead.";
+  } else {
+    opts.output_path = vm["output"].as<std::string>();
+  }
+  return true;
+}
+
 bool parse_learn_option_ext(const po::variables_map& vm, fe::LearnOption& opts) {
   if (!vm.count("reference")) {
     _ERROR << "parse opt: reference file must be specified [--reference].";
@@ -142,9 +177,7 @@ bool parse_learn_option_ext(const po::variables_map& vm, fe::LearnOption& opts) 
 
 bool parse_root_option(const po::variables_map& vm, RootOption& opts) {
   opts.root = "ROOT";
-  if (vm.count("root")) {
-    opts.root= vm["root"].as<std::string>();
-  }
+  if (vm.count("root")) { opts.root= vm["root"].as<std::string>(); }
   return true;
 }
 
@@ -182,31 +215,23 @@ bool parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& o
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   if (!parse_phase_two_model_option(vm, static_cast<PhaseTwoModelOption&>(opts))) { return false; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
-  opts.update_strategy = "naive";
+  return true;
+}
+
+bool parse_phase_two_prepare_option(const po::variables_map& vm, PrepareTwoOption& opts) {
+  if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
+  if (!parse_input_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
+  if (!parse_output_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
+  if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   return true;
 }
 
 bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
   if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
-  if (!vm.count("input")) {
-    _ERROR << "parse opt: input file must be specified [--input].";
-    return false;
-  } else {
-    opts.input_path = vm["input"].as<std::string>();
-  }
-
-  opts.rerank = false;
-  if (vm.count("rerank")) {
-    opts.rerank = true;
-  }
-
-  opts.output_path = "";
-  if (!vm.count("output")) {
-    _INFO << "parse opt: output path not specified, use stdout instead.";
-  } else {
-    opts.output_path = vm["output"].as<std::string>();
-  }
-
+  if (!parse_input_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
+  if (!parse_output_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
+  opts.rerank = false; if (vm.count("rerank")) { opts.rerank = true; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   if (opts.rerank && !parse_phase_two_model_option(vm, static_cast<PhaseTwoModelOption&>(opts))) {
@@ -217,18 +242,11 @@ bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
 
 bool parse_evaluate_option(const po::variables_map& vm, EvaluateOption& opts) {
   if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
-  if (!vm.count("input")) {
-    _ERROR << "parse opt: input file must be specified [--input].";
-    return false;
-  } else {
-    opts.input_path = vm["input"].as<std::string>();
-  }
-
+  if (!parse_input_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   return true;
 }
-
 
 } //  namespace hcsearchdependencyparser
 } //  namespace experimental

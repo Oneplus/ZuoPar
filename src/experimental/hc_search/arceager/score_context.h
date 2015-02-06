@@ -48,11 +48,30 @@ class CostScoreContext {
 public:
   //! The score context class for extracting the global information.
   CostScoreContext(const State& state);
-
+  int len;
   const std::vector<form_t>& forms;
   const std::vector<postag_t>& postags;
   const deprel_t* deprels;
-  std::vector< std::pair<int, int> > arcs;
+  std::vector< int > H;
+  std::vector< std::pair<int, int> > H_H;
+  std::vector< boost::tuple<int, int, int> > H_H_H;
+  std::vector< boost::tuple<int, int, int> > H_H_pH;
+  std::vector< boost::tuple<int, int, int> > H_H_nH;
+  std::vector< boost::tuple<int, int, int, int > > H_pH_H_nH;
+  std::vector< std::pair<int, int> > H_M;
+  std::vector< boost::tuple<int, int, int, int > > pH_H_M_Mn;
+  std::vector< boost::tuple<int, int, int > > pH_H_M;
+  std::vector< boost::tuple<int, int, int > > H_M_Mn;
+  std::vector< boost::tuple<int, int, int > > pH_H_Mn;
+  std::vector< boost::tuple<int, int, int > > pH_M_Mn;
+  std::vector< boost::tuple<int, int, int, int > > H_nH_pM_M;
+  std::vector< boost::tuple<int, int, int > > H_nH_pM;
+  std::vector< boost::tuple<int, int, int > > nH_pM_M;
+  std::vector< boost::tuple<int, int, int > > H_pM_M;
+  std::vector< boost::tuple<int, int, int > > H_nH_M;
+  std::vector< boost::tuple<int, int, int > > H_H_M;
+  std::vector< boost::tuple<int, int, int > > H_M_M;
+  std::vector< boost::tuple<int, int, int, int > > H_H_M_M;
   std::vector< boost::tuple<int, int, int> > consecutive_siblings;
   std::vector< boost::tuple<int, int, int> > grandparents;
   std::vector< boost::tuple<int, int, int, int> > head_bigrams;

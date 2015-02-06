@@ -19,6 +19,11 @@ struct LearnOneOption:
   public RootOption,
   public PhaseOneModelOption {};
 
+struct PrepareTwoOption:
+  public fe::TestOption,
+  public RootOption,
+  public PhaseOneModelOption {};
+
 struct LearnTwoOption:
   public fe::LearnOption,
   public RootOption,

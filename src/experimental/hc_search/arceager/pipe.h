@@ -24,41 +24,65 @@ namespace eg = ZuoPar::Engine;
 class Pipe: public fe::CommonPipeConfigure {
 public:
   Pipe(const LearnOneOption& opts);
+  Pipe(const PrepareTwoOption& opts);
   Pipe(const LearnTwoOption& opts);
   Pipe(const TestOption& opts);
   Pipe(const EvaluateOption& opts);
   bool setup();
   void run();
+  void learn2();
   bool phase_one_load_model(const std::string& phase_one_model_path);
   bool phase_two_load_model(const std::string& phase_two_model_path);
   void phase_one_save_model(const std::string& phase_one_model_path);
   void phase_two_save_model(const std::string& phase_two_model_path);
   void build_output(const State& source, Dependency& output);
-  int loss(const Dependency& predict, const Dependency& oracle, bool labeled);
+  void write_prepared_data(const State& source, std::ostream& os);
+  bool read_dataset2();
+private:
+  //!
+  bool is_punctuation(const char* token);
+
+  //!
+  bool is_punctuation(const form_t& form);
+
+  //! Calculate the loss of the predicted dependency tree
+  int loss(const Dependency& predict, const Dependency& oracle,
+      bool labeled, bool ignore_punctuation, int& nr_effective_tokens);
 private:
   enum PipeModeExt {
     kPipeLearnPhaseOne,
+    kPipePreparePhaseTwo,
     kPipeLearnPhaseTwo,
     kPipeEvaluate,
     kPipeTest};
-  PipeModeExt mode_ext;
 
+  PipeModeExt mode_ext;
+  bool rerank;                      //! Use to specify rerank.
+  std::string root;                 //! The root relation string.
+  std::string phase_one_model_path; //! The path to the phase one model.
+  std::string phase_two_model_path; //! The path to the phase two model.
+
+  //! The weight for the heuristic step.
   HeuristicWeight*  heuristic_weight;
+
+  //! The learner for the heuristic step.
   HeuristicLearner* heuristic_learner;
 
-  CostWeight*   cost_weight;
-  CostLearner*  cost_learner;
+  //! The weight for the reranking step.
+  CostWeight* cost_weight;
 
+  //! The learner for the reranking step.
+  CostLearner* cost_learner;
+
+  //! The decoder, for step (1);
   Decoder* decoder;
 
-  std::string phase_one_model_path;
-  std::string phase_two_model_path;
   eg::TokenAlphabet forms_alphabet;
   eg::TokenAlphabet postags_alphabet;
   eg::TokenAlphabet deprels_alphabet;
+
   std::vector<Dependency> dataset;
-  bool rerank;
-  std::string root;
+  std::vector<std::pair<Dependency, Dependency> > dataset2;
 };
 
 

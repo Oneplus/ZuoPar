@@ -15,6 +15,17 @@ State::State(const Dependency& r)
   clear();
 }
 
+void
+State::build(const Dependency& r) {
+  ref = &r;
+  this->buffer = r.size();
+  for (int i = 0; i < r.heads.size(); ++ i) {
+    heads[i] = r.heads[i];
+    deprels[i] = r.deprels[i];
+  }
+}
+
+
 bool
 State::complete() const {
   return (this->stack.size() == 1 && this->buffer == this->ref->size());
