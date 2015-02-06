@@ -396,7 +396,12 @@ Pipe::run() {
       decoder->get_results_in_beam(final_results, max_nr_actions);
       if (oracle) {
         for (const State* candidate_result: final_results) {
-          write_prepared_data((*candidate_result), (*result.second), (*os));
+          Dependency output; build_output((*candidate_result), output);
+          int dummy;
+          int loss1 = loss(output, instance, true, true, dummy);
+          if (loss1 > 0) {
+            write_prepared_data((*candidate_result), (*result.second), (*os));
+          }
         }
       } else {
         int best_loss = instance.size(), dummy;
