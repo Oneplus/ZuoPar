@@ -2,6 +2,7 @@
 #include "utils/io/dataset/dependency.h"
 #include "experimental/hc_search/arceager/pipe.h"
 #include "experimental/hc_search/arceager/action_utils.h"
+#include "experimental/hc_search/arceager/knowledge.h"
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -55,6 +56,7 @@ Pipe::Pipe(const PrepareTwoOption& opts)
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
   root = opts.root;
+  oracle = opts.oracle;
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
     _INFO << "report(p): model is loaded.";
@@ -173,6 +175,33 @@ Pipe::phase_two_save_model(const std::string& phase_two_model_path) {
   }
 }
 
+void
+Pipe::build_knowledge() {
+  punctuation_forms.insert(forms_alphabet.encode("."));
+  punctuation_forms.insert(forms_alphabet.encode(","));
+  punctuation_forms.insert(forms_alphabet.encode("?"));
+  punctuation_forms.insert(forms_alphabet.encode("!"));
+  punctuation_forms.insert(forms_alphabet.encode(";"));
+  punctuation_forms.insert(forms_alphabet.encode("-LRB-"));
+  punctuation_forms.insert(forms_alphabet.encode("-RRB-"));
+  punctuation_forms.insert(forms_alphabet.encode("`"));
+  punctuation_forms.insert(forms_alphabet.encode("``"));
+  punctuation_forms.insert(forms_alphabet.encode("'"));
+  punctuation_forms.insert(forms_alphabet.encode("''"));
+
+  punctuation_postags.insert(postags_alphabet.encode("."));
+  punctuation_postags.insert(postags_alphabet.encode(","));
+  punctuation_postags.insert(postags_alphabet.encode("?"));
+  punctuation_postags.insert(postags_alphabet.encode("!"));
+  punctuation_postags.insert(postags_alphabet.encode(";"));
+  punctuation_postags.insert(postags_alphabet.encode("-LRB-"));
+  punctuation_postags.insert(postags_alphabet.encode("-RRB-"));
+  punctuation_postags.insert(postags_alphabet.encode("`"));
+  punctuation_postags.insert(postags_alphabet.encode("``"));
+  punctuation_postags.insert(postags_alphabet.encode("'"));
+  punctuation_postags.insert(postags_alphabet.encode("''"));
+}
+
 bool
 Pipe::setup() {
   namespace ioutils = ZuoPar::IO;
@@ -201,6 +230,7 @@ Pipe::setup() {
   _INFO << "report: " << forms_alphabet.size() << " form(s) is loaded.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is loaded.";
   _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is loaded.";
+  build_knowledge();
   return true;
 }
 
@@ -294,13 +324,15 @@ Pipe::learn2() {
     _TRACE << "loss: " << l;
     if (l != 0 && predict_score >= oracle_score - 1e-8) {
       cost_learner->set_timestamp(n+ 1);
-      cost_learner->learn(&predict_state, &oracle_state, l);
+      cost_learner->learn(&predict_state, &oracle_state, l,
+          &oracle_score, &predict_score);
     }
 
     if ((n+ 1) % display_interval == 0) {
       _INFO << "pipe: processed #" << (n+ 1) << " instances.";
     }
   }
+  _INFO << "pipe: processed #" << N << " instances.";
 
   cost_learner->set_timestamp(N);
   cost_learner->flush();
@@ -362,8 +394,31 @@ Pipe::run() {
     } else if (mode_ext == kPipePreparePhaseTwo) {
       std::vector<const State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
-      for (const State* candidate_result: final_results) {
-        write_prepared_data((*candidate_result), (*os));
+      if (oracle) {
+        for (const State* candidate_result: final_results) {
+          write_prepared_data((*candidate_result), (*result.second), (*os));
+        }
+      } else {
+        int best_loss = instance.size(), dummy;
+        for (const State* candidate_result: final_results) {
+          Dependency output; build_output((*candidate_result), output);
+          int loss1 = loss(output, instance, true, true, dummy);
+          if (loss1 < best_loss) { best_loss = loss1; }
+        }
+        std::vector<const State*> Y_good;
+        std::vector<const State*> Y_bad;
+        for (const State* candidate_result: final_results) {
+          Dependency output; build_output((*candidate_result), output);
+          int loss1 = loss(output, instance, true, true, dummy);
+          if (loss1 == best_loss) { Y_good.push_back(candidate_result); }
+          else { Y_bad.push_back(candidate_result); }
+        }
+
+        for (const State* good: Y_good) {
+          for (const State* bad: Y_bad) {
+            write_prepared_data((*good), (*bad), (*os));
+          }
+        }
       }
     } else if (mode_ext == kPipeEvaluate) {
       std::vector<const State*> final_results;
@@ -452,17 +507,18 @@ Pipe::run() {
 }
 
 void
-Pipe::write_prepared_data(const State& source, std::ostream& os) {
-  size_t len = source.ref->size();
+Pipe::write_prepared_data(const State& good, const State& bad, std::ostream& os) {
+  size_t len = good.ref->size();
   // Format: form postag gold-head gold-deprel predict-head predict-deprel
   for (size_t i = 0; i < len; ++ i) {
-    os << forms_alphabet.decode(source.ref->forms[i]) << "\t"
-       << postags_alphabet.decode(source.ref->postags[i]) << "\t"
-       << source.ref->heads[i] << "\t"
-       << deprels_alphabet.decode(source.ref->deprels[i]) << "\t"
-       << source.heads[i] << "\t";
-    if (source.heads[i] == -1) { os << root << std::endl; }
-    else { os << deprels_alphabet.decode(source.deprels[i]) << std::endl; }
+    os << forms_alphabet.decode(good.ref->forms[i]) << "\t"
+       << postags_alphabet.decode(good.ref->postags[i]) << "\t"
+       << good.heads[i] << "\t";
+    if (good.heads[i] == -1) { os << root << "\t"; }
+    else { os << deprels_alphabet.decode(good.deprels[i]) << "\t"; }
+    os << bad.heads[i] << "\t";
+    if (bad.heads[i] == -1) { os << root << std::endl; }
+    else { os << deprels_alphabet.decode(bad.deprels[i]) << std::endl; }
   }
   os << std::endl;
 }

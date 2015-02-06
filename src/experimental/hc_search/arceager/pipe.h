@@ -36,7 +36,8 @@ public:
   void phase_one_save_model(const std::string& phase_one_model_path);
   void phase_two_save_model(const std::string& phase_two_model_path);
   void build_output(const State& source, Dependency& output);
-  void write_prepared_data(const State& source, std::ostream& os);
+  void build_knowledge();
+  void write_prepared_data(const State& good, const State& bad, std::ostream& os);
   bool read_dataset2();
 private:
   //!
@@ -58,6 +59,7 @@ private:
 
   PipeModeExt mode_ext;
   bool rerank;                      //! Use to specify rerank.
+  bool oracle;                      //! Used in preparation phase.
   std::string root;                 //! The root relation string.
   std::string phase_one_model_path; //! The path to the phase one model.
   std::string phase_two_model_path; //! The path to the phase two model.

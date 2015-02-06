@@ -65,6 +65,7 @@ po::options_description build_phase_two_prepare_optparser(const std::string& usa
     ("beam,b",      po::value<int>(),         "The size for beam [default=64].")
     ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
+    ("oracle", "Specify oracle as ybest [default=false].")
     ("verbose,v", "Logging every detail.")
     ;
 
@@ -224,6 +225,7 @@ bool parse_phase_two_prepare_option(const po::variables_map& vm, PrepareTwoOptio
   if (!parse_output_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
+  opts.oracle = false; if (vm.count("oracle")) { opts.oracle = true; }
   return true;
 }
 

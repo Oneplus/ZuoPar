@@ -22,7 +22,7 @@ struct LearnOneOption:
 struct PrepareTwoOption:
   public fe::TestOption,
   public RootOption,
-  public PhaseOneModelOption {};
+  public PhaseOneModelOption { bool oracle; };
 
 struct LearnTwoOption:
   public fe::LearnOption,

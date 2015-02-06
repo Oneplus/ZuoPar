@@ -15,22 +15,19 @@ template <
 >
 class MetaFeatureParameterCollection {
 public:
-  //! The unigram feature type
-  typedef UnigramMetaFeature  uf_t;
-
-  //! The bigram feature type
-  typedef BigramMetaFeature   bf_t;
-
-  //! The trigram feature type
-  typedef TrigramMetaFeature  tf_t;
-
-  //! The quadgram feature type
-  typedef QuadgramMetaFeature qf_t;
+  typedef UnigramMetaFeature  uf_t;   //! The unigram feature type
+  typedef BigramMetaFeature   bf_t;   //! The bigram feature type
+  typedef TrigramMetaFeature  tf_t;   //! The trigram feature type
+  typedef QuadgramMetaFeature qf_t;   //! The quadgram feature type
+  typedef QuingramMetaFeature q5f_t;  //! The quingram feature type
+  typedef HexgramMetaFeature  hf_t;   //! The quingram feature type
 
   typedef MetaFeatureParameterMap<UnigramMetaFeature,  _ScoreContextType> uf_map_t;
   typedef MetaFeatureParameterMap<BigramMetaFeature,   _ScoreContextType> bf_map_t;
   typedef MetaFeatureParameterMap<TrigramMetaFeature,  _ScoreContextType> tf_map_t;
   typedef MetaFeatureParameterMap<QuadgramMetaFeature, _ScoreContextType> qf_map_t;
+  typedef MetaFeatureParameterMap<QuingramMetaFeature, _ScoreContextType> q5f_map_t;
+  typedef MetaFeatureParameterMap<HexgramMetaFeature,  _ScoreContextType> hf_map_t;
   typedef MetaFeatureParameterMap<std::string,         _ScoreContextType> sf_map_t;
 
   MetaFeatureParameterCollection() {}
@@ -58,6 +55,14 @@ public:
       global_id += repo.size();
     }
     for (qf_map_t& repo: qfeat_map_repo) {
+      repo.vectorize(ctx, scale, global_id, sparse_vector);
+      global_id += repo.size();
+    }
+    for (q5f_map_t& repo: q5feat_map_repo) {
+      repo.vectorize(ctx, scale, global_id, sparse_vector);
+      global_id += repo.size();
+    }
+    for (hf_map_t& repo: hfeat_map_repo) {
       repo.vectorize(ctx, scale, global_id, sparse_vector);
       global_id += repo.size();
     }
@@ -94,6 +99,14 @@ public:
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
     }
+    for (q5f_map_t& repo: q5feat_map_repo) {
+      repo.vectorize2(ctx, scale, global_id, sparse_vector);
+      ++ global_id;
+    }
+    for (hf_map_t& repo: hfeat_map_repo) {
+      repo.vectorize2(ctx, scale, global_id, sparse_vector);
+      ++ global_id;
+    }
     for (sf_map_t& repo: sfeat_map_repo) {
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
@@ -114,6 +127,8 @@ public:
     for (bf_map_t& repo: bfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
     for (tf_map_t& repo: tfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
     for (qf_map_t& repo: qfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
+    for (q5f_map_t& repo:q5feat_map_repo){ ret += repo.score(ctx, avg, 0.); }
+    for (hf_map_t& repo: hfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
     for (sf_map_t& repo: sfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
     return ret;
   }
@@ -131,6 +146,8 @@ public:
     for (bf_map_t& repo: bfeat_map_repo) { repo.update(ctx, timestamp, scale); }
     for (tf_map_t& repo: tfeat_map_repo) { repo.update(ctx, timestamp, scale); }
     for (qf_map_t& repo: qfeat_map_repo) { repo.update(ctx, timestamp, scale); }
+    for (q5f_map_t& repo:q5feat_map_repo){ repo.update(ctx, timestamp, scale); }
+    for (hf_map_t& repo: hfeat_map_repo) { repo.update(ctx, timestamp, scale); }
     for (sf_map_t& repo: sfeat_map_repo) { repo.update(ctx, timestamp, scale); }
   }
 
@@ -142,6 +159,8 @@ public:
     for (bf_map_t& repo: bfeat_map_repo) { repo.flush(timestamp); }
     for (tf_map_t& repo: tfeat_map_repo) { repo.flush(timestamp); }
     for (qf_map_t& repo: qfeat_map_repo) { repo.flush(timestamp); }
+    for (q5f_map_t& repo:q5feat_map_repo){ repo.flush(timestamp); }
+    for (hf_map_t& repo: hfeat_map_repo) { repo.flush(timestamp); }
     for (sf_map_t& repo: sfeat_map_repo) { repo.flush(timestamp); }
   }
 
@@ -158,6 +177,8 @@ public:
     for (bf_map_t& repo: bfeat_map_repo) { repo.save(oa); }
     for (tf_map_t& repo: tfeat_map_repo) { repo.save(oa); }
     for (qf_map_t& repo: qfeat_map_repo) { repo.save(oa); }
+    for (q5f_map_t& repo:q5feat_map_repo){ repo.save(oa); }
+    for (hf_map_t& repo: hfeat_map_repo) { repo.save(oa); }
     for (sf_map_t& repo: sfeat_map_repo) { repo.save(oa); }
     return true;
   }
@@ -175,16 +196,20 @@ public:
     for (bf_map_t& repo: bfeat_map_repo) { repo.load(ia); }
     for (tf_map_t& repo: tfeat_map_repo) { repo.load(ia); }
     for (qf_map_t& repo: qfeat_map_repo) { repo.load(ia); }
+    for (q5f_map_t& repo:q5feat_map_repo){ repo.load(ia); }
+    for (hf_map_t& repo: hfeat_map_repo) { repo.load(ia); }
     for (sf_map_t& repo: sfeat_map_repo) { repo.load(ia); }
     return true;
   }
 
 protected:
-  std::vector< uf_map_t > ufeat_map_repo;  //! The unigram score mapping repository.
-  std::vector< bf_map_t > bfeat_map_repo;  //! The bigram score mapping repository.
-  std::vector< tf_map_t > tfeat_map_repo;  //! The trigram score mapping repository.
-  std::vector< qf_map_t > qfeat_map_repo;  //! The quadgram score mapping repository.
-  std::vector< sf_map_t > sfeat_map_repo;  //! The string score mapping repository.
+  std::vector< uf_map_t > ufeat_map_repo;   //! The unigram score mapping repository.
+  std::vector< bf_map_t > bfeat_map_repo;   //! The bigram score mapping repository.
+  std::vector< tf_map_t > tfeat_map_repo;   //! The trigram score mapping repository.
+  std::vector< qf_map_t > qfeat_map_repo;   //! The quadgram score mapping repository.
+  std::vector< q5f_map_t> q5feat_map_repo;  //! The quingram score mapping repository.
+  std::vector< hf_map_t > hfeat_map_repo;   //! The hexgram score mapping repository.
+  std::vector< sf_map_t > sfeat_map_repo;   //! The string score mapping repository.
 };
 
 } //  end for zuopar

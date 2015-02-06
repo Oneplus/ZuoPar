@@ -46,38 +46,119 @@ public:
 
 class CostScoreContext {
 public:
+  typedef boost::tuple<int, int>                      T2;
+  typedef boost::tuple<int, int, int>                 T3;
+  typedef boost::tuple<int, int, int, int>            T4;
+  typedef boost::tuple<int, int, int, int, int>       T5;
+  typedef boost::tuple<int, int, int, int, int, int>  T6;
+public:
   //! The score context class for extracting the global information.
   CostScoreContext(const State& state);
   int len;
   const std::vector<form_t>& forms;
   const std::vector<postag_t>& postags;
   const deprel_t* deprels;
-  std::vector< int > H;
-  std::vector< std::pair<int, int> > H_H;
-  std::vector< boost::tuple<int, int, int> > H_H_H;
-  std::vector< boost::tuple<int, int, int> > H_H_pH;
-  std::vector< boost::tuple<int, int, int> > H_H_nH;
-  std::vector< boost::tuple<int, int, int, int > > H_pH_H_nH;
-  std::vector< std::pair<int, int> > H_M;
-  std::vector< boost::tuple<int, int, int, int > > pH_H_M_Mn;
-  std::vector< boost::tuple<int, int, int > > pH_H_M;
-  std::vector< boost::tuple<int, int, int > > H_M_Mn;
-  std::vector< boost::tuple<int, int, int > > pH_H_Mn;
-  std::vector< boost::tuple<int, int, int > > pH_M_Mn;
-  std::vector< boost::tuple<int, int, int, int > > H_nH_pM_M;
-  std::vector< boost::tuple<int, int, int > > H_nH_pM;
-  std::vector< boost::tuple<int, int, int > > nH_pM_M;
-  std::vector< boost::tuple<int, int, int > > H_pM_M;
-  std::vector< boost::tuple<int, int, int > > H_nH_M;
-  std::vector< boost::tuple<int, int, int > > H_H_M;
-  std::vector< boost::tuple<int, int, int > > H_M_M;
-  std::vector< boost::tuple<int, int, int, int > > H_H_M_M;
-  std::vector< boost::tuple<int, int, int> > consecutive_siblings;
-  std::vector< boost::tuple<int, int, int> > grandparents;
+
+  //! Begin singular
+  /* 1 */ std::vector< int > H;
+  /* 2 */ std::vector< T2 > H_H;
+  /* 3 */ std::vector< T3 > H_H_H;
+  /* 4 */ std::vector< T3 > H_pH_H;
+  /* 5 */ std::vector< T3 > H_nH_H;
+  /* 6 */ std::vector< T4 > pH_H_nH_H;
+  //! End singular
+
+  //! Begin first-order
+  // - relation
+  /* 7 */ std::vector< T2 > H_M;
+  /* 8 */ std::vector< T3 > H_H_M;
+  /* 9 */ std::vector< T3 > H_M_M;
+  /* 10*/ std::vector< T4 > H_M_M_M;
+  /* 11*/ std::vector< T4 > H_H_M_M;
+  /* 12*/ std::vector< T5 > H_H_M_M_M;
+  /* 13*/ std::vector< T3 > H_M_Dir;
+  /* 14*/ std::vector< T3 > H_M_Dist;
+  /* 15*/ std::vector< T4 > H_H_M_Dir;
+  /* 16*/ std::vector< T4 > H_H_M_Dist;
+  /* 17*/ std::vector< T4 > H_M_M_Dir;
+  /* 18*/ std::vector< T4 > H_M_M_Dist;
+  /* 19*/ std::vector< T5 > H_H_M_M_Dir;
+  /* 20*/ std::vector< T5 > H_H_M_M_Dist;
+  // - context
+  /* 21*/ std::vector< T4 > pH_H_M_Mn;
+  /* 22*/ std::vector< T3 > pH_H_M;
+  /* 23*/ std::vector< T3 > H_M_Mn;
+  /* 24*/ std::vector< T3 > pH_H_Mn;
+  /* 25*/ std::vector< T3 > pH_M_Mn;
+  /* 26*/ std::vector< T4 > H_nH_pM_M;
+  /* 27*/ std::vector< T3 > H_nH_pM;
+  /* 28*/ std::vector< T3 > nH_pM_M;
+  /* 29*/ std::vector< T3 > H_pM_M;
+  /* 30*/ std::vector< T3 > H_nH_M;
+  //! End first-order
+
+  //! Begin 2nd-order
+  //! Begin 2nd-order sibling.
+  // - relation
+  std::vector< T3 > H_S_M;
+  std::vector< T4 > H_S_M_Dir; // ! Dir is collasped.
+  std::vector< T5 > H_S_M_S_M;
+  std::vector< T2 > S_M;
+  std::vector< T3 > S_M_Dir;
+  std::vector< T4 > S_M_S_M;
+  // - context
+  std::vector< T4 > pH_H_S_M;
+  std::vector< T4 > H_nH_S_M;
+  std::vector< T4 > H_pS_S_M;
+  std::vector< T4 > H_S_nS_M;
+  std::vector< T4 > H_S_pM_M;
+  std::vector< T4 > H_S_M_nM;
+  //! End for 2nd-order sibling.
+
+  //! Begin 2nd-order grandparent.
+  // - relation
+  std::vector< T3 > G_P_M;
+  std::vector< T5 > G_P_M_P_M;
+  std::vector< T4 > G_P_M_Dir;
+  std::vector< T2 > G_M;
+  std::vector< T3 > G_M_Dir;
+  // - context
+  std::vector< T4 > pG_G_P_M;
+  std::vector< T4 > G_nG_P_M;
+  std::vector< T4 > G_pP_P_M;
+  std::vector< T4 > G_P_nP_M;
+  std::vector< T4 > G_P_pM_M;
+  std::vector< T4 > G_P_M_nM;
+  //! End for 2nd-order sibling.
+
+  //! Begin 3rd-order grandgrandparents
+  std::vector< T4 > G_P_M_C;
+  std::vector< T5 > G_P_M_C_Dir;
+  std::vector< T3 > G_P_C;
+  std::vector< T4 > G_P_C_Dir;
+  std::vector< T3 > G_M_C;
+  std::vector< T4 > G_M_C_Dir;
+  std::vector< T2 > G_C;
+  std::vector< T3 > G_C_Dir;
+  //! End for 3rd-order grandgrandparents
+
+  //! Begin 3rd-order grand-sibling
+  std::vector< T4 > G_P_M_S;
+  std::vector< T5 > G_P_M_S_Dir;
+  std::vector< T3 > G_M_S;
+  std::vector< T4 > G_M_S_Dir;
+  //! End for 3rd-order grand-sibling
+
+  //! Begin 3rd-order tri-sibling
+  std::vector< T4 > H_M_S_T;
+  std::vector< T5 > H_M_S_T_Dir;
+  std::vector< T3 > H_M_T;
+  std::vector< T4 > H_M_T_Dir;
+  //! End for 3rd-order tri-sibling
+
+  int RB;
+
   std::vector< boost::tuple<int, int, int, int> > head_bigrams;
-  std::vector< boost::tuple<int, int, int, int> > grand_siblings;
-  std::vector< boost::tuple<int, int, int, int> > tri_siblings;
-  std::vector< boost::tuple<int, int, int, int> > grand_grandparents;
   std::vector< boost::tuple<int, int, int, int> > outer_sibling_grandchildren;
   std::vector< boost::tuple<int, int, int, int> > inner_sibling_grandchildren;
 };

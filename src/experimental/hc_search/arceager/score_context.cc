@@ -1,4 +1,5 @@
 #include "experimental/hc_search/arceager/score_context.h"
+#include "utils/math/fast_binned.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -94,9 +95,11 @@ HeuristicScoreContext::HeuristicScoreContext(const State& state)
   }
 
   if (S0 >= 0 && N0 < len) {
-    DistS0N0 = Math::binned_1_2_3_4_5_6_10[N0 - S0];;
+    DistS0N0 = Math::binned_1_2_3_4_5_6_10[N0 - S0];
   }
 }
+
+#define __M boost::make_tuple
 
 CostScoreContext::CostScoreContext(const State& state) 
   : forms(state.ref->forms),
@@ -108,64 +111,106 @@ CostScoreContext::CostScoreContext(const State& state)
 
   for (int i = 0; i < len; ++ i) {
     int hid = state.heads[i];
-    if (hid != -1) {
-      tree[hid].push_back(i);
-    } else {
-      root = hid;
-    }
+    if (hid != -1) { tree[hid].push_back(i); }
+    else { root = i; }
   }
 
+  RB = 0; int now = root;
+  while (tree[now].size() != 0) {
+    ++ RB;
+    now = tree[now].back();
+  }
+  RB = RB * 256 / len;
+
   for (int hid = 0; hid < len; ++ hid) {
-    H.push_back( hid );
-    H_H.push_back( std::make_pair(hid, hid) );
-    H_H_H.push_back( boost::make_tuple(hid, hid, hid) );
-    H_H_pH.push_back( boost::make_tuple(hid, hid, hid- 1) );
-    H_H_nH.push_back( boost::make_tuple(hid, hid, hid+ 1) );
-    H_pH_H_nH.push_back( boost::make_tuple(hid, hid- 1, hid, hid+ 1));
+    // Begin singular
+    H.push_back(hid);
+    H_H.push_back( __M(hid, hid) );
+    H_H_H.push_back( __M(hid, hid, hid) );
+    H_pH_H.push_back( __M(hid, hid- 1, hid) );
+    H_nH_H.push_back( __M(hid, hid+ 1, hid) );
+    pH_H_nH_H.push_back( __M(hid- 1, hid, hid+ 1, hid) );
+    // End singular
+
+    // Begin first-order
     const std::vector<int>& hnode = tree[hid];
     for (int j = 0; j < hnode.size(); ++ j) {
       int mid = hnode[j];
-      H_M.push_back( std::make_pair(hid, mid) );
+      deprel_t Rel = state.deprels[mid];
+      int Dir  = (hid < mid? 0: 1);
+      int Dist = (hid < mid?
+          Math::binned_1_2_3_4_5_6_10[mid- hid]:
+          Math::binned_1_2_3_4_5_6_10[hid- mid]);
 
-      // head modifier context group (1)
-      pH_H_M_Mn.push_back( boost::make_tuple(hid- 1, hid, mid, mid+ 1));
-      pH_H_M.push_back( boost::make_tuple(hid- 1, hid, mid));
-      H_M_Mn.push_back( boost::make_tuple(hid, mid, mid+ 1));
-      pH_H_Mn.push_back( boost::make_tuple(hid- 1, hid, mid+ 1));
-      pH_M_Mn.push_back( boost::make_tuple(hid- 1, mid, mid+ 1));
+      // relation
+      /*7*/  H_M.push_back( __M(hid, mid) );
+      /*8*/  H_H_M.push_back( __M(hid, hid, mid));
+      /*9*/  H_M_M.push_back( __M(hid, mid, mid));
+      /*10*/ H_H_M_M.push_back( __M(hid, hid, mid, mid));
+      /*11*/ H_M_M_M.push_back( __M(hid, mid, mid, mid));
+      /*12*/ H_H_M_M_M.push_back( __M(hid, hid, mid, mid, mid));
+      /*13*/ H_M_Dir.push_back( __M(hid, mid, Dir) );
+      /*14*/ H_M_Dist.push_back( __M(hid, mid, Dist) );
+      /*15*/ H_H_M_Dir.push_back( __M(hid, hid, mid, Dir) );
+      /*16*/ H_H_M_Dist.push_back( __M(hid, hid, mid, Dist) );
+      /*17*/ H_M_M_Dir.push_back( __M(hid, mid, mid, Dir) );
+      /*18*/ H_M_M_Dist.push_back( __M(hid, mid, mid, Dist) );
+      /*19*/ H_H_M_M_Dir.push_back( __M(hid, hid, mid, mid, Dir) );
+      /*20*/ H_H_M_M_Dist.push_back( __M(hid, hid, mid, mid, Dist) );
 
-      // head modifier context group (2)
-      H_nH_pM_M.push_back( boost::make_tuple(hid, hid+1, mid-1, mid));
-      H_nH_pM.push_back( boost::make_tuple(hid, hid+1, mid));
-      nH_pM_M.push_back( boost::make_tuple(hid+1, mid-1, mid));
-      H_nH_M.push_back( boost::make_tuple(hid, hid+1, mid));
-      H_pM_M.push_back( boost::make_tuple(hid, mid-1, mid));
-
-      H_H_M.push_back( boost::make_tuple(hid, hid, mid) );
-      H_M_M.push_back( boost::make_tuple(hid, mid, mid) );
-      H_H_M_M.push_back( boost::make_tuple(hid, hid, mid, mid) );
+      // context
+      /*21*/ pH_H_M_Mn.push_back(__M(hid- 1, hid, mid, mid+ 1));
+      /*22*/ pH_H_M.push_back(__M(hid- 1, hid, mid));
+      /*23*/ H_M_Mn.push_back(__M(hid, mid, mid+ 1));
+      /*24*/ pH_H_Mn.push_back(__M(hid- 1, hid, mid+ 1));
+      /*25*/ pH_M_Mn.push_back(__M(hid- 1, mid, mid+ 1));
+      /*26*/ H_nH_pM_M.push_back(__M(hid, hid+1, mid-1, mid));
+      /*27*/ H_nH_pM.push_back(__M(hid, hid+1, mid));
+      /*28*/ nH_pM_M.push_back(__M(hid+1, mid-1, mid));
+      /*29*/ H_nH_M.push_back(__M(hid, hid+1, mid));
+      /*30*/ H_pM_M.push_back(__M(hid, mid-1, mid));
     }
+    // End first order
 
     for (int j = 1; j < hnode.size(); ++ j) {
-      int mid = hnode[j- 1], sid = hnode[j];
-      consecutive_siblings.push_back( boost::make_tuple(hid, mid, sid) );
+      int sid = hnode[j- 1], mid = hnode[j];
+      int Dir = (((hid < sid) << 1) | ((hid < mid) << 2));
+
+      H_S_M.push_back( __M(hid, sid, mid) );
+      H_S_M_S_M.push_back( __M(hid, sid, mid, sid, mid) );
+      H_S_M_Dir.push_back( __M(hid, sid, mid, Dir) );
+
+      S_M.push_back( __M(sid, mid) );
+      S_M_S_M.push_back( __M(sid, mid, sid, mid) );
+      S_M_Dir.push_back( __M(sid, mid, Dir) );
+
+      pH_H_S_M.push_back( __M(hid- 1, hid, sid, mid) );
+      H_nH_S_M.push_back( __M(hid, hid+ 1, sid, mid) );
+      H_pS_S_M.push_back( __M(hid, sid- 1, sid, mid) );
+      H_S_nS_M.push_back( __M(hid, sid, sid+ 1, mid) );
+      H_S_pM_M.push_back( __M(hid, sid, mid- 1, mid) );
+      H_S_M_nM.push_back( __M(hid, sid, mid, mid+ 1) );
 
       const std::vector<int>& mnode = tree[mid];
       for (int l = 0; l < mnode.size(); ++ l) {
         int gcid = mnode[l];
-        outer_sibling_grandchildren.push_back(boost::make_tuple(hid, mid, gcid, sid));
+        outer_sibling_grandchildren.push_back(__M(hid, mid, gcid, sid));
       }
 
       const std::vector<int>& snode = tree[sid];
       for (int l = 0; l < snode.size(); ++ l) {
         int gcid = snode[l];
-        inner_sibling_grandchildren.push_back(boost::make_tuple(hid, mid, sid, gcid));
+        inner_sibling_grandchildren.push_back(__M(hid, mid, sid, gcid));
       }
     }
 
     for (int j = 2; j < hnode.size(); ++ j) {
       int mid = hnode[j- 2], sid = hnode[j- 1], tid = hnode[j];
-      tri_siblings.push_back(boost::make_tuple(hid, mid, sid, tid));
+      int Dir = ((hid < mid) << 1 | (hid < sid) << 2 | (hid < tid) << 3);
+      H_M_S_T.push_back( __M(hid, mid, sid, tid) );
+      H_M_S_T_Dir.push_back( __M(hid, mid, sid, tid, Dir) );
+      H_M_T.push_back( __M(hid, mid, tid) );
+      H_M_T_Dir.push_back( __M(hid, mid, tid, Dir) );
     }
   }
 
@@ -173,15 +218,54 @@ CostScoreContext::CostScoreContext(const State& state)
     const std::vector<int>& gnode = tree[gid];
     for (int j = 0; j < gnode.size(); ++ j) {
       int hid = gnode[j];
+
       const std::vector<int>& hnode = tree[hid];
       for (int k = 0; k < hnode.size(); ++ k) {
         int mid = hnode[k];
-        grandparents.push_back( boost::make_tuple(gid, hid, mid) );
+        int Dir = ((gid < hid) << 1 | (hid < mid) << 2);
+
+        G_P_M.push_back( __M(gid, hid, mid) );
+        G_P_M_P_M.push_back( __M(gid, hid, mid, hid, mid) );
+        G_P_M_Dir.push_back( __M(gid, hid, mid, Dir) );
+
+        G_M.push_back( __M(gid, mid) );
+        G_M_Dir.push_back( __M(gid, mid, Dir) );
+
+        pG_G_P_M.push_back( __M(gid- 1, gid, hid, mid) );
+        G_nG_P_M.push_back( __M(gid, gid+ 1, hid, mid) );
+        G_pP_P_M.push_back( __M(gid, hid- 1, hid, mid) );
+        G_P_nP_M.push_back( __M(gid, hid, hid+ 1, mid) );
+        G_P_pM_M.push_back( __M(gid, hid, mid- 1, mid) );
+        G_P_M_nM.push_back( __M(gid, hid, mid, mid+ 1) );
+
+        const std::vector<int>& mnode = tree[mid];
+        for (int l = 0; l < mnode.size(); ++ l) {
+          int cid = mnode[l];
+          int Dir = (((gid < hid) << 1) | ((hid < mid) << 2) | ((mid < cid) << 3));
+
+          G_P_M_C.push_back( __M(gid, hid, mid, cid) );
+          G_P_M_C_Dir.push_back( __M(gid, hid, mid, cid, Dir) );
+
+          G_P_C.push_back( __M(gid, hid, cid) );
+          G_P_C_Dir.push_back( __M(gid, hid, cid, Dir) );
+
+          G_M_C.push_back( __M(gid, mid, cid) );
+          G_M_C_Dir.push_back( __M(gid, mid, cid, Dir) );
+
+          G_C.push_back( __M(gid, cid) );
+          G_C_Dir.push_back( __M(gid, cid, Dir) );
+        }
       }
 
       for (int k = 1; k < hnode.size(); ++ k) {
         int mid = hnode[k- 1], sid = hnode[k];
-        grand_siblings.push_back( boost::make_tuple(gid, hid, mid, sid) );
+        int Dir = (((gid < hid) << 1) | ((hid < mid) << 2) | ((hid < sid) << 3));
+
+        G_P_M_S.push_back( __M(gid, hid, mid, sid) );
+        G_M_S.push_back( __M(gid, mid, sid) );
+
+        G_P_M_S_Dir.push_back( __M(gid, hid, mid, sid, Dir) );
+        G_M_S_Dir.push_back( __M(gid, mid, sid, Dir) );
       }
     }
   }

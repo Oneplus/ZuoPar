@@ -109,7 +109,8 @@ private:
   int feat0, feat1, feat2, feat3;
 public:
   QuadgramMetaFeature(): feat0(0), feat1(0), feat2(0), feat3(0) { }
-  QuadgramMetaFeature(int f0, int f1, int f2, int f3): feat0(f0), feat1(f1), feat2(f2), feat3(f3) {
+  QuadgramMetaFeature(int f0, int f1, int f2, int f3)
+    : feat0(f0), feat1(f1), feat2(f2), feat3(f3) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
     boost::hash_combine(seed, f2);
@@ -129,6 +130,76 @@ public:
   friend std::ostream& operator <<(std::ostream& os,
       const QuadgramMetaFeature& s) {
     os << s.feat0 << "," << s.feat1 << "," << s.feat2 << "," << s.feat3;
+    return os;
+  }
+};
+
+class QuingramMetaFeature: public AbstractMetaFeature {
+private:
+  int feat0, feat1, feat2, feat3, feat4;
+public:
+  QuingramMetaFeature(): feat0(0), feat1(0), feat2(0), feat3(0), feat4(0) {}
+  QuingramMetaFeature(int f0, int f1, int f2, int f3, int f4)
+    : feat0(f0), feat1(f1), feat2(f2), feat3(f3), feat4(f4) {
+    boost::hash_combine(seed, f0);
+    boost::hash_combine(seed, f1);
+    boost::hash_combine(seed, f2);
+    boost::hash_combine(seed, f3);
+    boost::hash_combine(seed, f4);
+  }
+
+  //! The equal operator.
+  bool operator == (const QuingramMetaFeature& a) const {
+    return (a.feat0 == feat0 && a.feat1 == feat1
+        && a.feat2 == feat2 && a.feat3 == feat3
+        && a.feat4 == feat4);
+  }
+
+  template<class Archive>
+  void serialize(Archive & ar, const unsigned version) {
+    ar & seed & feat0 & feat1 & feat2 & feat3 & feat4;
+  }
+
+  friend std::ostream& operator <<(std::ostream& os,
+      const QuingramMetaFeature& s) {
+    os << s.feat0 << "," << s.feat1 << "," << s.feat2 << "," << s.feat3
+       << "," << s.feat4;
+    return os;
+  }
+};
+
+class HexgramMetaFeature: public AbstractMetaFeature {
+private:
+  int feat0, feat1, feat2, feat3, feat4, feat5;
+public:
+  HexgramMetaFeature()
+    : feat0(0), feat1(0), feat2(0), feat3(0), feat4(0), feat5(0) {}
+  HexgramMetaFeature(int f0, int f1, int f2, int f3, int f4, int f5)
+    : feat0(f0), feat1(f1), feat2(f2), feat3(f3), feat4(f4), feat5(f5) {
+    boost::hash_combine(seed, f0);
+    boost::hash_combine(seed, f1);
+    boost::hash_combine(seed, f2);
+    boost::hash_combine(seed, f3);
+    boost::hash_combine(seed, f4);
+    boost::hash_combine(seed, f5);
+  }
+
+  //! The equal operator.
+  bool operator == (const HexgramMetaFeature& a) const {
+    return (a.feat0 == feat0 && a.feat1 == feat1
+        && a.feat2 == feat2 && a.feat3 == feat3
+        && a.feat4 == feat4 && a.feat5 == feat5);
+  }
+
+  template<class Archive>
+  void serialize(Archive & ar, const unsigned version) {
+    ar & seed & feat0 & feat1 & feat2 & feat3 & feat4 & feat5;
+  }
+
+  friend std::ostream& operator <<(std::ostream& os,
+      const HexgramMetaFeature& s) {
+    os << s.feat0 << "," << s.feat1 << "," << s.feat2 << "," << s.feat3
+       << "," << s.feat4 << "," << s.feat5;
     return os;
   }
 };

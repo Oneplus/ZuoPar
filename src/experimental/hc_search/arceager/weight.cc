@@ -1,7 +1,6 @@
 #include "experimental/hc_search/arceager/weight.h"
 #include "experimental/hc_search/arceager/action.h"
 #include "experimental/hc_search/arceager/score_context.h"
-#include "utils/math/fast_binned.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -86,181 +85,307 @@ HeuristicWeight::HeuristicWeight() {
   ZUOPAR_FEATURE_MAP_REGIST_B10( N0p, N0lset );
 }
 
-#define G(id, _W) (((id) < 0) ? 1: (((id) >= ctx.len) ? 2: ctx._W[(id)]))
-
-#define __REG_U(name, _W1) do {                                             \
-  ufeat_map_repo.push_back(uf_map_t(                                        \
-        [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void { \
-          for (const int& one: ctx.name) {                                  \
-            cache.push_back(uf_t(G(one, _W1)));                             \
-          }                                                                 \
-        }));                                                                \
-} while (0);
-
-#define __REG_B(name, _W1, _W2) do {                                        \
-  bfeat_map_repo.push_back(bf_map_t(                                        \
-        [](const CostScoreContext& ctx, std::vector<bf_t>& cache) -> void { \
-          for (const std::pair<int, int>& two: ctx.name) {                  \
-            cache.push_back(bf_t(                                           \
-                G(two.first, _W1),                                          \
-                G(two.second, _W2))) ;                                      \
-          }                                                                 \
-        }));                                                                \
-} while (0);
-
-#define __REG_B_DIR(name, _W1, _W2) do {                                    \
-  tfeat_map_repo.push_back(tf_map_t(                                        \
-        [](const CostScoreContext& ctx, std::vector<tf_t>& cache) -> void { \
-          for (const std::pair<int, int>& two: ctx.name) {                  \
-            cache.push_back(tf_t(                                           \
-                G(two.first, _W1),                                          \
-                G(two.second, _W2),                                         \
-                (two.first < two.second? 1: 2)));                           \
-          }                                                                 \
-        }));                                                                \
-} while (0);
-
-#define __REG_B_DIST(name, _W1, _W2) do {                                   \
-  tfeat_map_repo.push_back(tf_map_t(                                        \
-        [](const CostScoreContext& ctx, std::vector<tf_t>& cache) -> void { \
-          for (const std::pair<int, int>& two: ctx.name) {                  \
-            cache.push_back(tf_t(                                           \
-                G(two.first, _W1),                                          \
-                G(two.second, _W2),                                         \
-                (two.first < two.second?                                    \
-                 Math::binned_1_2_3_4_5_6_10[two.second- two.first]:        \
-                 Math::binned_1_2_3_4_5_6_10[two.first- two.second])));     \
-          }                                                                 \
-        }));                                                                \
-} while (0);
-
-#define __REG_T(name, _W1, _W2, _W3) do {                                   \
-  tfeat_map_repo.push_back(tf_map_t(                                        \
-        [](const CostScoreContext& ctx, std::vector<tf_t>& cache) -> void { \
-          for (const boost::tuple<int, int, int>& three: ctx.name) {        \
-            cache.push_back(tf_t(                                           \
-                G(three.get<0>(), _W1),                                     \
-                G(three.get<1>(), _W2),                                     \
-                G(three.get<2>(), _W3)));                                   \
-          }                                                                 \
-        }));                                                                \
-} while (0);
-
-#define __REG_T_DIST(name, _W1, _W2, _W3) do {                                \
-  qfeat_map_repo.push_back(qf_map_t(                                          \
-        [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void {   \
-          for (const boost::tuple<int, int, int>& three: ctx.name) {          \
-            cache.push_back(qf_t(                                             \
-                G(three.get<0>(), _W1),                                       \
-                G(three.get<1>(), _W2),                                       \
-                G(three.get<2>(), _W3),                                       \
-                (three.get<0>() < three.get<2>()?                             \
-                 Math::binned_1_2_3_4_5_6_10[three.get<2>()- three.get<0>()]: \
-                 Math::binned_1_2_3_4_5_6_10[three.get<0>()- three.get<2>()]) \
-                ));                                                           \
-          }                                                                   \
-        }));                                                                  \
-} while (0);
-
-
-#define __REG_Q(name, _W1, _W2, _W3, _W4) do {                              \
-  qfeat_map_repo.push_back(qf_map_t(                                        \
-        [](const CostScoreContext& ctx, std::vector<qf_t>& cache) -> void { \
-          for (const boost::tuple<int, int, int, int>& four: ctx.name) {    \
-            cache.push_back(qf_t(                                           \
-                G(four.get<0>(), _W1),                                      \
-                G(four.get<1>(), _W2),                                      \
-                G(four.get<2>(), _W3),                                      \
-                G(four.get<3>(), _W4)));                                    \
-          }                                                                 \
-        }));                                                                \
-} while (0);
-
 CostWeight::CostWeight() {
-  //! First-Order features.
-  //! Head
-  __REG_U(H, deprels);
-  __REG_B(H_H, deprels, postags);
-  __REG_B(H_H, deprels, forms);
-  __REG_T(H_H_H, deprels, forms, postags);
-  __REG_T(H_H_pH, deprels, postags, postags);
-  __REG_T(H_H_nH, deprels, postags, postags);
-  __REG_Q(H_pH_H_nH, deprels, postags, postags, postags);
-  //! Head-Modifier:
-  __REG_B(H_M, forms, forms);
-  __REG_B(H_M, forms, postags);
-  __REG_B(H_M, postags, forms);
-  __REG_B(H_M, postags, postags);
-  __REG_T(H_M_M, postags, postags, forms);
-  __REG_T(H_M_M, forms, postags, forms);
-  __REG_T(H_H_M, forms, postags, postags);
-  __REG_T(H_H_M, forms, postags, forms);
-  __REG_Q(H_H_M_M, forms, postags, forms, postags);
-  __REG_Q(pH_H_M_Mn, postags, postags, postags, postags);
-  __REG_T(pH_H_M, postags, postags, postags);
-  __REG_T(H_M_Mn, postags, postags, postags);
-  __REG_T(pH_H_Mn, postags, postags, postags);
-  __REG_T(pH_M_Mn, postags, postags, postags);
-  __REG_Q(H_nH_pM_M, postags, postags, postags, postags);
-  __REG_T(H_nH_M, postags, postags, postags);
-  __REG_T(H_pM_M, postags, postags, postags);
-  __REG_T(nH_pM_M, postags, postags, postags);
-  __REG_T(H_nH_pM, postags, postags, postags);
+  /*Begin singular*/ {
+    __REG_1(H, deprels);                  /* lab(H) */
+    __REG_2(H_H, postags, deprels); /* H.p + lab(H) */
+    __REG_2(H_H, forms, deprels);   /* H.w + lab(H) */
+    __REG_3(H_H_H, forms, postags, deprels); /* H.w + H.p + lab(H) */
+    __REG_3(H_pH_H, postags, postags, deprels); /* H.p + pH.p + lab(H) */
+    __REG_3(H_nH_H, postags, postags, deprels); /* H.p + nH.p + lab(H) */
+    __REG_4(pH_H_nH_H, postags, postags, postags, deprels); /* pH.p + H.p + nH.p + lab(H) */
+  } //! End singular
 
-  //! Head-Modifier: distance argumented.
-  __REG_B_DIST(H_M, forms, forms);
-  __REG_B_DIST(H_M, forms, postags);
-  __REG_B_DIST(H_M, postags, forms);
-  __REG_B_DIST(H_M, postags, postags);
-  __REG_T_DIST(H_M_M, postags, postags, forms);
-  __REG_T_DIST(H_M_M, forms, postags, forms);
-  __REG_T_DIST(H_H_M, forms, postags, postags);
-  __REG_T_DIST(H_H_M, forms, postags, forms);
-  __REG_T(H_M_M, postags, postags, deprels);
-  __REG_T(H_M_M, postags, forms, deprels);
-  __REG_T(H_M_M, forms, postags, deprels);
-  __REG_T(H_M_M, forms, forms, deprels);
-  __REG_T_DIST(H_M_M, postags, postags, deprels);
-  __REG_T_DIST(H_M_M, forms, postags, deprels);
-  __REG_T_DIST(H_M_M, postags, forms, deprels);
-  __REG_T_DIST(H_M_M, forms, forms, deprels);
+  /* Begin 1st-order */ {
+    __REG_2(H_M, forms, forms);     /* H.w + M.w */
+    __REG_2(H_M, forms, postags);   /* H.w + M.p */
+    __REG_2(H_M, postags, forms);   /* H.p + M.w */
+    __REG_2(H_M, postags, postags); /* H.p + M.p */
 
-  //! consecutive sibling: forms
-  __REG_T(consecutive_siblings, forms, forms, forms);
-  //! consecutive sibling: postags
-  __REG_T(consecutive_siblings, postags, postags, postags);
-  //! consecutive sibling: deprels(1)
-  __REG_T(consecutive_siblings, forms, deprels, deprels);
-  //! consecutive sibling: deprels(1)
-  __REG_T(consecutive_siblings, postags, deprels, deprels);
-  //! grand parents: forms
-  //__REG_T(grandparents, forms, forms, forms);
-  //! grand parents: postags
-  __REG_T(grandparents, postags, postags, postags);
+    __REG_3(H_M_M, forms, forms, deprels);      /* H.w + M.w + lab(H, M) */
+    __REG_3(H_M_M, forms, postags, deprels);    /* H.w + M.p + lab(H, M) */
+    __REG_3(H_M_M, postags, forms, deprels);    /* H.p + M.w + lab(H, M) */
+    __REG_3(H_M_M, postags, postags, deprels);  /* H.p + M.p + lab(H, M) */
+
+    __REG_3(H_M_M, postags, postags, forms);  /* H.p + M.p + M.w */
+    __REG_3(H_M_M, forms, postags, forms);    /* H.w + M.p + M.w */
+    __REG_3(H_H_M, forms, postags, postags);  /* H.w + H.p + M.p */
+    __REG_3(H_H_M, forms, postags, forms);    /* H.w + H.p + M.p */
+
+    __REG_4(H_M_M_M, postags, postags, forms, deprels);  /* H.p + M.p + M.w + lab(H, M) */
+    __REG_4(H_M_M_M, forms, postags, forms, deprels);    /* H.w + M.p + M.w + lab(H, M) */
+    __REG_4(H_H_M_M, forms, postags, postags, deprels);  /* H.w + H.p + M.p + lab(H, M) */
+    __REG_4(H_H_M_M, forms, postags, forms, deprels);    /* H.w + H.p + M.p + lab(H, M) */
+    __REG_4(H_H_M_M, forms, postags, forms, postags);   /* H.w + H.p + M.w + M.p */
+
+    // distance and dir.
+    __REGN_3(H_M_Dist, forms, forms);
+    __REGN_3(H_M_Dist, forms, postags);
+    __REGN_3(H_M_Dist, postags, forms);
+    __REGN_3(H_M_Dist, postags, postags);
+
+    __REGN_4(H_M_M_Dist, postags, postags, forms);
+    __REGN_4(H_M_M_Dist, forms, postags, forms);
+    __REGN_4(H_H_M_Dist, forms, postags, postags);
+    __REGN_4(H_H_M_Dist, forms, postags, forms);
+
+    __REGN_3(H_M_Dir, forms, forms);
+    __REGN_3(H_M_Dir, forms, postags);
+    __REGN_3(H_M_Dir, postags, forms);
+    __REGN_3(H_M_Dir, postags, postags);
+
+    __REGN_4(H_M_M_Dir, postags, postags, forms);
+    __REGN_4(H_M_M_Dir, forms, postags, forms);
+    __REGN_4(H_H_M_Dir, forms, postags, postags);
+    __REGN_4(H_H_M_Dir, forms, postags, forms);
+
+    // Context.
+    __REG_4(pH_H_M_Mn, postags, postags, postags, postags);
+    __REG_3(pH_H_M, postags, postags, postags);
+    __REG_3(H_M_Mn, postags, postags, postags);
+    __REG_3(pH_H_Mn, postags, postags, postags);
+    __REG_3(pH_M_Mn, postags, postags, postags);
+    __REG_4(H_nH_pM_M, postags, postags, postags, postags);
+    __REG_3(H_nH_M, postags, postags, postags);
+    __REG_3(H_pM_M, postags, postags, postags);
+    __REG_3(nH_pM_M, postags, postags, postags);
+    __REG_3(H_nH_pM, postags, postags, postags);
+  } //  end 1st-order
+
+  /*begin 2nd-order: sibling*/ {
+    __REG_3(H_S_M, postags, postags, postags);
+    __REG_3(H_S_M, forms, postags, postags);
+    __REG_3(H_S_M, postags, forms, postags);
+    __REG_3(H_S_M, postags, postags, forms);
+
+    __REG_3(H_S_M, forms, deprels, deprels);
+    __REG_3(H_S_M, postags, deprels, deprels);
+    __REG_5(H_S_M_S_M, postags, postags, postags, deprels, deprels);
+    __REG_5(H_S_M_S_M, forms, postags, postags, deprels, deprels);
+    __REG_5(H_S_M_S_M, postags, forms, postags, deprels, deprels);
+    __REG_5(H_S_M_S_M, postags, postags, forms, deprels, deprels);
+
+    __REG_2(S_M, postags, postags);
+    __REG_2(S_M, forms, forms);
+    __REG_2(S_M, postags, forms);
+    __REG_2(S_M, forms, postags);
+
+    __REG_2(S_M, deprels, deprels);
+    __REG_4(S_M_S_M, postags, postags, deprels, deprels);
+    __REG_4(S_M_S_M, forms, forms, deprels, deprels);
+    __REG_4(S_M_S_M, postags, forms, deprels, deprels);
+    __REG_4(S_M_S_M, forms, postags, deprels, deprels);
+
+    // direction
+    __REGN_4(H_S_M_Dir, postags, postags, postags);
+    __REGN_4(H_S_M_Dir, forms, postags, postags);
+    __REGN_4(H_S_M_Dir, postags, forms, postags);
+    __REGN_4(H_S_M_Dir, postags, postags, forms);
+
+    __REGN_3(S_M_Dir, postags, postags);
+    __REGN_3(S_M_Dir, forms, forms);
+    __REGN_3(S_M_Dir, postags, forms);
+    __REGN_3(S_M_Dir, forms, postags);
+
+    // - Context
+    __REG_4(pH_H_S_M, postags, postags, postags, postags);
+    __REG_4(H_nH_S_M, postags, postags, postags, postags);
+    __REG_4(H_pS_S_M, postags, postags, postags, postags);
+    __REG_4(H_S_nS_M, postags, postags, postags, postags);
+    __REG_4(H_S_pM_M, postags, postags, postags, postags);
+    __REG_4(H_S_M_nM, postags, postags, postags, postags);
+    __REG_4(pH_H_S_M, postags, forms, postags, postags);
+    __REG_4(H_nH_S_M, forms, postags, postags, postags);
+    __REG_4(H_pS_S_M, forms, postags, postags, postags);
+    __REG_4(H_S_nS_M, forms, postags, postags, postags);
+    __REG_4(H_S_pM_M, forms, postags, postags, postags);
+    __REG_4(H_S_M_nM, forms, postags, postags, postags);
+    __REG_4(pH_H_S_M, postags, postags, forms, postags);
+    __REG_4(H_nH_S_M, postags, postags, forms, postags);
+    __REG_4(H_pS_S_M, postags, postags, forms, postags);
+    __REG_4(H_S_nS_M, postags, forms, postags, postags);
+    __REG_4(H_S_pM_M, postags, forms, postags, postags);
+    __REG_4(H_S_M_nM, postags, forms, postags, postags);
+    __REG_4(pH_H_S_M, postags, postags, postags, forms);
+    __REG_4(H_nH_S_M, postags, postags, postags, forms);
+    __REG_4(H_pS_S_M, postags, postags, postags, forms);
+    __REG_4(H_S_nS_M, postags, postags, postags, forms);
+    __REG_4(H_S_pM_M, postags, postags, postags, forms);
+    __REG_4(H_S_M_nM, postags, postags, forms, postags);
+  } // end for 2nd-order sibling
+
+  /*begin 2nd-order: grandparent*/ {
+    __REG_3(G_P_M, postags, postags, postags);
+    __REG_3(G_P_M, forms, postags, postags);
+    __REG_3(G_P_M, postags, forms, postags);
+    __REG_3(G_P_M, postags, postags, forms);
+
+    __REG_3(G_P_M, forms, deprels, deprels);
+    __REG_3(G_P_M, postags, deprels, deprels);
+    __REG_5(G_P_M_P_M, postags, postags, postags, deprels, deprels);
+    __REG_5(G_P_M_P_M, forms, postags, postags, deprels, deprels);
+    __REG_5(G_P_M_P_M, postags, forms, postags, deprels, deprels);
+    __REG_5(G_P_M_P_M, postags, postags, forms, deprels, deprels);
+
+    __REG_2(G_M, postags, postags);
+    __REG_2(G_M, forms, postags);
+    __REG_2(G_M, postags, forms);
+
+    // direction
+    __REGN_4(G_P_M_Dir, postags, postags, postags);
+    __REGN_4(G_P_M_Dir, forms, postags, postags);
+    __REGN_4(G_P_M_Dir, postags, forms, postags);
+    __REGN_4(G_P_M_Dir, postags, postags, forms);
+
+    __REGN_3(G_M_Dir, postags, postags);
+    __REGN_3(G_M_Dir, forms, postags);
+    __REGN_3(G_M_Dir, postags, forms);
+
+    // context
+    __REG_4(pG_G_P_M, postags, postags, postags, postags);
+    __REG_4(G_nG_P_M, postags, postags, postags, postags);
+    __REG_4(G_pP_P_M, postags, postags, postags, postags);
+    __REG_4(G_P_nP_M, postags, postags, postags, postags);
+    __REG_4(G_P_pM_M, postags, postags, postags, postags);
+    __REG_4(G_P_M_nM, postags, postags, postags, postags);
+
+    __REG_4(pG_G_P_M, postags, forms, postags, postags);
+    __REG_4(G_nG_P_M, forms, postags, postags, postags);
+    __REG_4(G_pP_P_M, forms, postags, postags, postags);
+    __REG_4(G_P_nP_M, forms, postags, postags, postags);
+    __REG_4(G_P_pM_M, forms, postags, postags, postags);
+    __REG_4(G_P_M_nM, forms, postags, postags, postags);
+
+    __REG_4(pG_G_P_M, postags, postags, forms, postags);
+    __REG_4(G_nG_P_M, postags, postags, forms, postags);
+    __REG_4(G_pP_P_M, postags, postags, forms, postags);
+    __REG_4(G_P_nP_M, postags, forms, postags, postags);
+    __REG_4(G_P_pM_M, postags, forms, postags, postags);
+    __REG_4(G_P_M_nM, postags, forms, postags, postags);
+
+    __REG_4(pG_G_P_M, postags, postags, postags, forms);
+    __REG_4(G_nG_P_M, postags, postags, postags, forms);
+    __REG_4(G_pP_P_M, postags, postags, postags, forms);
+    __REG_4(G_P_nP_M, postags, postags, postags, forms);
+    __REG_4(G_P_pM_M, postags, postags, postags, forms);
+    __REG_4(G_P_M_nM, postags, postags, forms, postags);
+  } // end for 2nd-order grandparent
+
+  /* Third-order */ {
+    __REG_4(G_P_M_C, postags, postags, postags, postags);
+    __REG_4(G_P_M_C, forms, postags, postags, postags);
+    __REG_4(G_P_M_C, postags, forms, postags, postags);
+    __REG_4(G_P_M_C, postags, postags, forms, postags);
+    __REG_4(G_P_M_C, postags, postags, postags, forms);
+
+    __REGN_5(G_P_M_C_Dir, postags, postags, postags, postags);
+    __REGN_5(G_P_M_C_Dir, forms, postags, postags, postags);
+    __REGN_5(G_P_M_C_Dir, postags, forms, postags, postags);
+    __REGN_5(G_P_M_C_Dir, postags, postags, forms, postags);
+    __REGN_5(G_P_M_C_Dir, postags, postags, postags, forms);
+
+    // deprels
+    __REG_4(G_P_M_C, postags, deprels, deprels, deprels);
+    __REG_4(G_P_M_C, forms, deprels, deprels, deprels);
+
+    __REG_3(G_P_C, postags, postags, postags);
+    __REG_3(G_P_C, forms, postags, postags);
+    __REG_3(G_P_C, postags, forms, postags);
+    __REG_3(G_P_C, postags, postags, forms);
+
+    __REGN_4(G_P_C_Dir, postags, postags, postags);
+    __REGN_4(G_P_C_Dir, forms, postags, postags);
+    __REGN_4(G_P_C_Dir, postags, forms, postags);
+    __REGN_4(G_P_C_Dir, postags, postags, forms);
+
+    __REG_3(G_M_C, postags, postags, postags);
+    __REG_3(G_M_C, forms, postags, postags);
+    __REG_3(G_M_C, postags, forms, postags);
+    __REG_3(G_M_C, postags, postags, forms);
+
+    __REGN_4(G_M_C_Dir, postags, postags, postags);
+    __REGN_4(G_M_C_Dir, forms, postags, postags);
+    __REGN_4(G_M_C_Dir, postags, forms, postags);
+    __REGN_4(G_M_C_Dir, postags, postags, forms);
+
+    __REG_2(G_C, postags, postags);
+    __REG_2(G_C, forms, postags);
+    __REG_2(G_C, postags, forms);
+
+    __REGN_3(G_C_Dir, postags, postags);
+    __REGN_3(G_C_Dir, forms, postags);
+    __REGN_3(G_C_Dir, postags, forms);
+
+    __REG_4(G_P_M_S, postags, postags, postags, postags);
+    __REG_4(G_P_M_S, forms, postags, postags, postags);
+    __REG_4(G_P_M_S, postags, forms, postags, postags);
+    __REG_4(G_P_M_S, postags, postags, forms, postags);
+    __REG_4(G_P_M_S, postags, postags, postags, forms);
+
+    __REGN_5(G_P_M_S_Dir, postags, postags, postags, postags);
+    __REGN_5(G_P_M_S_Dir, forms, postags, postags, postags);
+    __REGN_5(G_P_M_S_Dir, postags, forms, postags, postags);
+    __REGN_5(G_P_M_S_Dir, postags, postags, forms, postags);
+    __REGN_5(G_P_M_S_Dir, postags, postags, postags, forms);
+
+    __REG_3(G_M_S, postags, postags, postags);
+    __REG_3(G_M_S, forms, postags, postags);
+    __REG_3(G_M_S, postags, forms, postags);
+    __REG_3(G_M_S, postags, postags, forms);
+
+    __REGN_4(G_M_S_Dir, postags, postags, postags);
+    __REGN_4(G_M_S_Dir, forms, postags, postags);
+    __REGN_4(G_M_S_Dir, postags, forms, postags);
+    __REGN_4(G_M_S_Dir, postags, postags, forms);
+
+    // deprels
+    __REG_4(G_P_M_S, postags, deprels, deprels, deprels);
+    __REG_4(G_P_M_S, forms, deprels, deprels, deprels);
+
+    __REG_4(H_M_S_T, postags, postags, postags, postags);
+    __REG_4(H_M_S_T, forms, postags, postags, postags);
+    __REG_4(H_M_S_T, postags, forms, postags, postags);
+    __REG_4(H_M_S_T, postags, postags, forms, postags);
+    __REG_4(H_M_S_T, postags, postags, postags, forms);
+
+    __REGN_5(H_M_S_T_Dir, postags, postags, postags, postags);
+    __REGN_5(H_M_S_T_Dir, forms, postags, postags, postags);
+    __REGN_5(H_M_S_T_Dir, postags, forms, postags, postags);
+    __REGN_5(H_M_S_T_Dir, postags, postags, forms, postags);
+    __REGN_5(H_M_S_T_Dir, postags, postags, postags, forms);
+
+    __REG_3(H_M_T, postags, postags, postags);
+    __REG_3(H_M_T, forms, postags, postags);
+    __REG_3(H_M_T, postags, forms, postags);
+    __REG_3(H_M_T, postags, postags, forms);
+
+    __REGN_4(H_M_T_Dir, postags, postags, postags);
+    __REGN_4(H_M_T_Dir, forms, postags, postags);
+    __REGN_4(H_M_T_Dir, postags, forms, postags);
+    __REGN_4(H_M_T_Dir, postags, postags, forms);
+
+    // deprels
+    __REG_4(H_M_S_T, postags, deprels, deprels, deprels);
+    __REG_4(H_M_S_T, forms, deprels, deprels, deprels);
+  } // end for third-order
+
+  ufeat_map_repo.push_back(uf_map_t(
+        [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
+          cache.push_back(ctx.RB);
+        }));
+
   //! head bigram: forms
-  //__REG_Q(head_bigrams, forms, forms, forms, forms);
+  //__REG_4(head_bigrams, forms, forms, forms, forms);
   //! head bigram: postags
-  __REG_Q(head_bigrams, postags, postags, postags, postags);
-  //! grand sibling: forms
-  //__REG_Q(grand_siblings, forms, forms, forms, forms);
-  //! grand sibling: postags
-  __REG_Q(grand_siblings, postags, postags, postags, postags);
-  //! tri sibling: forms
-  //__REG_Q(tri_siblings, forms, forms, forms, forms);
-  //! tri sibling: postags
-  __REG_Q(tri_siblings, postags, postags, postags, postags);
-  //! grad grand parent: forms
-  //__REG_Q(grand_grandparents, forms, forms, forms, forms);
-  //! grad grand parent: postags
-  __REG_Q(grand_grandparents, postags, postags, postags, postags);
+  __REG_4(head_bigrams, postags, postags, postags, postags);
   //! outer sibling grandchild: forms
-  //__REG_Q(outer_sibling_grandchildren, forms, forms, forms, forms);
+  //__REG_4(outer_sibling_grandchildren, forms, forms, forms, forms);
   //! outer sibling grandchild: postags
-  __REG_Q(outer_sibling_grandchildren, postags, postags, postags, postags);
+  __REG_4(outer_sibling_grandchildren, postags, postags, postags, postags);
   //! inter sibling grandchild: forms
-  //__REG_Q(inner_sibling_grandchildren, forms, forms, forms, forms);
+  //__REG_4(inner_sibling_grandchildren, forms, forms, forms, forms);
   //! inter sibling grandchild: postags
-  __REG_Q(inner_sibling_grandchildren, postags, postags, postags, postags)
+  __REG_4(inner_sibling_grandchildren, postags, postags, postags, postags)
 }
 
 } //  namespace hcsearchdependencyparser

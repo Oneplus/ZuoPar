@@ -8,6 +8,7 @@ add_executable (hc_arceager_depparser
     decoder.cc
     weight.cc
     pipe.cc
+    knowledge.cc
     ${SOURCE_DIR}/types/dependency.cc
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
