@@ -571,7 +571,7 @@ Pipe::loss(const Dependency& predict, const Dependency& oracle,
 }
 
 bool Pipe::is_punctuation(const postag_t& postag) {
-  return PUNC_POS.find(postag) == PUNC_POS.end();
+  return (PUNC_POS.find(postag) != PUNC_POS.end());
 }
 
 } //  namespace hcsearchdependencyparser
