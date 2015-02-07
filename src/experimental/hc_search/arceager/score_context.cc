@@ -1,4 +1,5 @@
 #include "experimental/hc_search/arceager/score_context.h"
+#include "experimental/hc_search/arceager/knowledge.h"
 #include "utils/math/fast_binned.h"
 
 namespace ZuoPar {
@@ -115,12 +116,39 @@ CostScoreContext::CostScoreContext(const State& state)
     else { root = i; }
   }
 
+  // Calculate right branch.
   RB = 0; int now = root;
   while (tree[now].size() != 0) {
     ++ RB;
     now = tree[now].back();
   }
   RB = RB * 256 / len;
+
+  span_length.resize(len, 0);
+  non_punctuation_span_length(root, postags, tree, span_length);
+  for (int i = 0; i < len; ++ i) {
+    span_length[i] = Math::binned_1_2_3_4_5_6_10[span_length[i]];
+  }
+
+  nr_children.resize(len, 0);
+  for (int i = 0; i < len; ++ i) {
+    nr_children[i] = 0;
+    for (int c: tree[i]) {
+      if (PUNC_POS.find(postags[c]) == PUNC_POS.end()) { ++ nr_children[i]; }
+    }
+    nr_children[i] = Math::binned_1_2_3_4_5_6_10[nr_children[i]];
+  }
+
+  for (int i = 0; i < len; ++ i) {
+    if (ADP_POS.find(postags[i]) != ADP_POS.end()) {
+      int hid = state.heads[i];
+      for (int mid: tree[i]) {
+        PP_H_M.push_back(__M(hid, mid));
+        PP_H_H_M.push_back(__M(hid, hid, mid));
+        PP_H_M_M.push_back(__M(hid, mid, mid));
+      }
+    }
+  }
 
   for (int hid = 0; hid < len; ++ hid) {
     // Begin singular
@@ -269,6 +297,20 @@ CostScoreContext::CostScoreContext(const State& state)
       }
     }
   }
+}
+
+int
+CostScoreContext::non_punctuation_span_length(int now,
+    const std::vector<postag_t>& postags,
+    const std::vector<std::vector<int> >& tree,
+    std::vector<int>& result) {
+  result[now] = 0;
+  const std::vector<int>& node = tree[now];
+  for (int child: node) {
+    result[now] += non_punctuation_span_length(child, postags, tree, result);
+  }
+  if (PUNC_POS.find(postags[now]) == PUNC_POS.end()) { result[now] += 1; }
+  return result[now];
 }
 
 } //  namespace hcsearchdependencyparser

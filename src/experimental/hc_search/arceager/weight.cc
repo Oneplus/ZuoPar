@@ -369,10 +369,28 @@ CostWeight::CostWeight() {
     __REG_4(H_M_S_T, forms, deprels, deprels, deprels);
   } // end for third-order
 
-  ufeat_map_repo.push_back(uf_map_t(
-        [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
-          cache.push_back(ctx.RB);
-        }));
+  /*High order*/ {
+    // right -branch
+    ufeat_map_repo.push_back(uf_map_t(
+          [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
+            cache.push_back(ctx.RB);
+          }));
+
+    // span length
+    __REG_2(H_H, postags, span_length);
+
+    // valency
+    __REG_2(H_H, postags, nr_children);
+
+    //
+    __REG_2(PP_H_M, postags, postags);
+    __REG_2(PP_H_M, forms, postags);
+    __REG_2(PP_H_M, postags, forms);
+    __REG_2(PP_H_M, forms, forms);
+
+    __REG_3(PP_H_H_M, forms, postags, postags);
+    __REG_3(PP_H_M_M, postags, forms, postags);
+  }
 
   //! head bigram: forms
   //__REG_4(head_bigrams, forms, forms, forms, forms);

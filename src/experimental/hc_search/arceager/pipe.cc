@@ -177,29 +177,31 @@ Pipe::phase_two_save_model(const std::string& phase_two_model_path) {
 
 void
 Pipe::build_knowledge() {
-  punctuation_forms.insert(forms_alphabet.encode("."));
-  punctuation_forms.insert(forms_alphabet.encode(","));
-  punctuation_forms.insert(forms_alphabet.encode("?"));
-  punctuation_forms.insert(forms_alphabet.encode("!"));
-  punctuation_forms.insert(forms_alphabet.encode(";"));
-  punctuation_forms.insert(forms_alphabet.encode("-LRB-"));
-  punctuation_forms.insert(forms_alphabet.encode("-RRB-"));
-  punctuation_forms.insert(forms_alphabet.encode("`"));
-  punctuation_forms.insert(forms_alphabet.encode("``"));
-  punctuation_forms.insert(forms_alphabet.encode("'"));
-  punctuation_forms.insert(forms_alphabet.encode("''"));
+  PUNC_POS.insert(postags_alphabet.encode("."));
+  PUNC_POS.insert(postags_alphabet.encode(","));
+  PUNC_POS.insert(postags_alphabet.encode("?"));
+  PUNC_POS.insert(postags_alphabet.encode("!"));
+  PUNC_POS.insert(postags_alphabet.encode(";"));
+  PUNC_POS.insert(postags_alphabet.encode("-LRB-"));
+  PUNC_POS.insert(postags_alphabet.encode("-RRB-"));
+  PUNC_POS.insert(postags_alphabet.encode("`"));
+  PUNC_POS.insert(postags_alphabet.encode("``"));
+  PUNC_POS.insert(postags_alphabet.encode("'"));
+  PUNC_POS.insert(postags_alphabet.encode("''"));
 
-  punctuation_postags.insert(postags_alphabet.encode("."));
-  punctuation_postags.insert(postags_alphabet.encode(","));
-  punctuation_postags.insert(postags_alphabet.encode("?"));
-  punctuation_postags.insert(postags_alphabet.encode("!"));
-  punctuation_postags.insert(postags_alphabet.encode(";"));
-  punctuation_postags.insert(postags_alphabet.encode("-LRB-"));
-  punctuation_postags.insert(postags_alphabet.encode("-RRB-"));
-  punctuation_postags.insert(postags_alphabet.encode("`"));
-  punctuation_postags.insert(postags_alphabet.encode("``"));
-  punctuation_postags.insert(postags_alphabet.encode("'"));
-  punctuation_postags.insert(postags_alphabet.encode("''"));
+  CONJ_POS.insert(postags_alphabet.encode("CC"));
+
+  ADP_POS.insert(postags_alphabet.encode("IN"));
+  ADP_POS.insert(postags_alphabet.encode("RP"));
+
+  VERB_POS.insert(postags_alphabet.encode("MD"));
+  VERB_POS.insert(postags_alphabet.encode("VB"));
+  VERB_POS.insert(postags_alphabet.encode("VBD"));
+  VERB_POS.insert(postags_alphabet.encode("VBN"));
+  VERB_POS.insert(postags_alphabet.encode("VBG"));
+  VERB_POS.insert(postags_alphabet.encode("VBP"));
+  VERB_POS.insert(postags_alphabet.encode("VBZ"));
+  VERB_POS.insert(postags_alphabet.encode("VP"));
 }
 
 bool
@@ -231,6 +233,7 @@ Pipe::setup() {
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is loaded.";
   _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is loaded.";
   build_knowledge();
+  _INFO << "report: postag knowledge is built.";
   return true;
 }
 
@@ -286,7 +289,8 @@ Pipe::read_dataset2() {
   _INFO << "report: " << forms_alphabet.size() << " form(s) is found.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is found.";
   _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is found.";
-
+  build_knowledge();
+  _INFO << "report: postag knowledge is built.";
   return true;
 }
 
@@ -377,7 +381,9 @@ Pipe::run() {
     const Dependency& instance = dataset[ranks[n]];
 
     std::vector<Action> actions;
-    if (mode_ext == kPipeLearnPhaseOne || mode_ext == kPipeEvaluate) {
+    if (mode_ext == kPipeLearnPhaseOne
+        || mode_ext == kPipePreparePhaseTwo
+        || mode_ext == kPipeEvaluate) {
       ActionUtils::get_oracle_actions(instance, actions);
     }
 
@@ -400,7 +406,7 @@ Pipe::run() {
           int dummy;
           int loss1 = loss(output, instance, true, true, dummy);
           if (loss1 > 0) {
-            write_prepared_data((*candidate_result), (*result.second), (*os));
+            write_prepared_data((*result.second), (*candidate_result), (*os));
           }
         }
       } else {
@@ -552,7 +558,7 @@ Pipe::loss(const Dependency& predict, const Dependency& oracle,
 
   nr_effective_tokens = 0;
   for (int i = 0; i < N; ++ i) {
-    if (ignore_punctuation && is_punctuation(predict.forms[i])) {
+    if (ignore_punctuation && is_punctuation(predict.postags[i])) {
       continue;
     }
     ++ nr_effective_tokens;
@@ -564,16 +570,8 @@ Pipe::loss(const Dependency& predict, const Dependency& oracle,
   return err;
 }
 
-bool Pipe::is_punctuation(const char* token) {
-  return boost::regex_match(token,
-      boost::regex("^[,?!:;]$|^-LRB-$|^-RRB-$|^[.]+$|^[`]+$|^[']+$"));
-}
-
-bool
-Pipe::is_punctuation(const form_t& form) {
-  const char *token = forms_alphabet.decode(form);
-  if (NULL == token) { return false; }
-  return is_punctuation(token);
+bool Pipe::is_punctuation(const postag_t& postag) {
+  return PUNC_POS.find(postag) == PUNC_POS.end();
 }
 
 } //  namespace hcsearchdependencyparser

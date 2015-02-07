@@ -58,6 +58,8 @@ public:
   const std::vector<form_t>& forms;
   const std::vector<postag_t>& postags;
   const deprel_t* deprels;
+  std::vector< int > span_length;
+  std::vector< int > nr_children;
 
   //! Begin singular
   /* 1 */ std::vector< int > H;
@@ -156,11 +158,24 @@ public:
   std::vector< T4 > H_M_T_Dir;
   //! End for 3rd-order tri-sibling
 
+  std::vector< T2 > PP_H_M;
+  std::vector< T3 > PP_H_H_M;
+  std::vector< T3 > PP_H_M_M;
+
+  //! Right branch
   int RB;
+
+  //! Coordination
 
   std::vector< boost::tuple<int, int, int, int> > head_bigrams;
   std::vector< boost::tuple<int, int, int, int> > outer_sibling_grandchildren;
   std::vector< boost::tuple<int, int, int, int> > inner_sibling_grandchildren;
+
+private:
+  int non_punctuation_span_length(int now,
+      const std::vector<postag_t>& postags,
+      const std::vector<std::vector<int> >& tree,
+      std::vector<int>& result);
 };
 
 } //  namespace arceager

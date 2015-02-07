@@ -41,10 +41,7 @@ public:
   bool read_dataset2();
 private:
   //!
-  bool is_punctuation(const char* token);
-
-  //!
-  bool is_punctuation(const form_t& form);
+  bool is_punctuation(const form_t& postag);
 
   //! Calculate the loss of the predicted dependency tree
   int loss(const Dependency& predict, const Dependency& oracle,

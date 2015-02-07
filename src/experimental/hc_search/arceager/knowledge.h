@@ -7,10 +7,12 @@ namespace ZuoPar {
 namespace Experimental {
 namespace HCSearchDependencyParser {
 
-static std::set<form_t> punctuation_forms;
-static std::set<postag_t> punctuation_postags;
-static std::set<postag_t> conjunction_postags;
-static std::set<postag_t> pp_postags;
+//static std::set<form_t> PUNC;
+static std::set<postag_t> PUNC_POS;
+static std::set<postag_t> CONJ_POS;
+static std::set<postag_t> ADP_POS;
+static std::set<postag_t> VERB_POS;
+//static std::set<postag_t> ;
 
 } //  namespace hcsearchdependencyparser
 } //  namespace Experimental
