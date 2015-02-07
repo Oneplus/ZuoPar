@@ -250,40 +250,46 @@ Pipe::read_dataset2() {
   _INFO << "report: loading dataset from reference file.";
 
   dataset2.clear();
-  std::string data_context((std::istreambuf_iterator<char>(ifs)),
-      std::istreambuf_iterator<char>());
-  boost::regex INSTANCE_DELIMITER("\n\n");
-  boost::sregex_token_iterator instance(data_context.begin(),
-      data_context.end(), INSTANCE_DELIMITER, -1);
-  boost::sregex_token_iterator eos;
+  //std::string data_context((std::istreambuf_iterator<char>(ifs)),
+  //    std::istreambuf_iterator<char>());
+  //boost::regex INSTANCE_DELIMITER("\n\n");
+  //boost::sregex_token_iterator instance(data_context.begin(),
+  //    data_context.end(), INSTANCE_DELIMITER, -1);
+  //boost::sregex_token_iterator eos;
 
+  std::string instance, buffer;
   // Loop over the instances
   size_t n = 0;
-  while (instance != eos) {
-    std::istringstream iss(*instance);
-    Dependency predict, oracle;
+  while (std::getline(ifs, buffer)) {
+    algo::trim(buffer);
+    if (buffer.size() == 0) {
+      std::istringstream iss(instance);
+      Dependency predict, oracle;
 
-    std::string item_context;
-    while (std::getline(iss, item_context)) {
-      std::vector<std::string> items;
-      algo::trim(item_context);
-      algo::split(items, item_context, boost::is_any_of("\t "), boost::token_compress_on);
+      std::string item_context;
+      while (std::getline(iss, item_context)) {
+        std::vector<std::string> items;
+        algo::trim(item_context);
+        algo::split(items, item_context, boost::is_any_of("\t "), boost::token_compress_on);
 
-      // Format: form postag gold-head gold-deprel predict-head predict-deprel
-      form_t form = forms_alphabet.encode(items[0].c_str());
-      postag_t postag = postags_alphabet.encode(items[1].c_str());
-      deprel_t oracle_deprel = deprels_alphabet.encode(items[3].c_str());
-      deprel_t predict_deprel = deprels_alphabet.encode(items[5].c_str());
-      oracle.push_back(form, postag, atoi(items[2].c_str()), oracle_deprel);
-      predict.push_back(form, postag, atoi(items[4].c_str()), predict_deprel);
+        // Format: form postag gold-head gold-deprel predict-head predict-deprel
+        form_t form = forms_alphabet.encode(items[0].c_str());
+        postag_t postag = postags_alphabet.encode(items[1].c_str());
+        deprel_t oracle_deprel = deprels_alphabet.encode(items[3].c_str());
+        deprel_t predict_deprel = deprels_alphabet.encode(items[5].c_str());
+        oracle.push_back(form, postag, atoi(items[2].c_str()), oracle_deprel);
+        predict.push_back(form, postag, atoi(items[4].c_str()), predict_deprel);
+      }
+
+      dataset2.push_back(std::make_pair(predict, oracle));
+      if ((n+ 1) % display_interval == 0) {
+        _INFO << "pipe: loaded #" << (n+ 1) << " instances.";
+      }
+      ++ n;
+      instance = "";
+    } else {
+      instance += buffer + "\n";
     }
-
-    dataset2.push_back(std::make_pair(predict, oracle));
-    if ((n+ 1) % display_interval == 0) {
-      _INFO << "pipe: loaded #" << (n+ 1) << " instances.";
-    }
-    ++ n;
-    instance ++;
   }
   _INFO << "report: load #" << dataset2.size() << " instances.";
   _INFO << "report: " << forms_alphabet.size() << " form(s) is found.";
