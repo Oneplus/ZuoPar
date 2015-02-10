@@ -122,30 +122,55 @@ CostScoreContext::CostScoreContext(const State& state)
     ++ RB;
     now = tree[now].back();
   }
-  RB = RB * 256 / len;
+  RB = RB * 255 / len;
+  RB = Math::binned_1_2_3_4_5_6_10[RB+ 1];
 
   span_length.resize(len, 0);
   non_punctuation_span_length(root, postags, tree, span_length);
-  for (int i = 0; i < len; ++ i) {
+  /*for (int i = 0; i < len; ++ i) {
     span_length[i] = Math::binned_1_2_3_4_5_6_10[span_length[i]];
-  }
+  }*/
 
   nr_children.resize(len, 0);
+  nr_left_children.resize(len, 0);
+  nr_right_children.resize(len, 0);
+  label_set.resize(len, 0);
+  left_label_set.resize(len, 0);
+  right_label_set.resize(len, 0);
+
   for (int i = 0; i < len; ++ i) {
     nr_children[i] = 0;
     for (int c: tree[i]) {
-      if (PUNC_POS.find(postags[c]) == PUNC_POS.end()) { ++ nr_children[i]; }
+      if (PUNC_POS.find(postags[c]) == PUNC_POS.end()) {
+        //! Non-punctuation.
+        ++ nr_children[i];
+        label_set[i] |= deprels[c];
+        if (c < i) {
+          ++ nr_left_children[i];
+          left_label_set[i] |= deprels[c];
+        } else {
+          ++ nr_right_children[i];
+          right_label_set[i] |= deprels[c];
+        }
+      }
     }
-    nr_children[i] = Math::binned_1_2_3_4_5_6_10[nr_children[i]];
+    //nr_children[i] = Math::binned_1_2_3_4_5_6_10[nr_children[i]];
+    //nr_left_children[i] = Math::binned_1_2_3_4_5_6_10[nr_left_children[i]];
+    //nr_right_children[i] = Math::binned_1_2_3_4_5_6_10[nr_right_children[i]];
   }
 
   for (int i = 0; i < len; ++ i) {
     if (ADP_POS.find(postags[i]) != ADP_POS.end()) {
       int hid = state.heads[i];
       for (int mid: tree[i]) {
+        // int Dir  = ((hid < i) << 1 | (i < mid) << 2);
         PP_H_M.push_back(__M(hid, mid));
         PP_H_H_M.push_back(__M(hid, hid, mid));
         PP_H_M_M.push_back(__M(hid, mid, mid));
+
+        // PP_H_M_Dir.push_back(__M(hid, mid, Dir));
+        // PP_H_H_M_Dir.push_back(__M(hid, hid, mid, Dir));
+        // PP_H_M_M_Dir.push_back(__M(hid, mid, mid, Dir));
       }
     }
   }
@@ -219,16 +244,20 @@ CostScoreContext::CostScoreContext(const State& state)
       H_S_pM_M.push_back( __M(hid, sid, mid- 1, mid) );
       H_S_M_nM.push_back( __M(hid, sid, mid, mid+ 1) );
 
-      const std::vector<int>& mnode = tree[mid];
-      for (int l = 0; l < mnode.size(); ++ l) {
-        int gcid = mnode[l];
-        outer_sibling_grandchildren.push_back(__M(hid, mid, gcid, sid));
-      }
-
       const std::vector<int>& snode = tree[sid];
       for (int l = 0; l < snode.size(); ++ l) {
         int gcid = snode[l];
-        inner_sibling_grandchildren.push_back(__M(hid, mid, sid, gcid));
+        int Dir = (((hid < mid) << 1) | ((hid < sid) << 2) | ((sid < gcid) << 3));
+        H_S_GC_M.push_back(__M(hid, sid, gcid, mid));
+        H_S_GC_M_Dir.push_back(__M(hid, sid, gcid, mid, Dir));
+      }
+
+      const std::vector<int>& mnode = tree[mid];
+      for (int l = 0; l < mnode.size(); ++ l) {
+        int gcid = mnode[l];
+        int Dir = (((hid < mid) << 1) | ((hid < sid) << 2) | ((mid < gcid) << 3));
+        H_S_M_GC.push_back(__M(hid, sid, mid, gcid));
+        H_S_M_GC_Dir.push_back(__M(hid, sid, mid, gcid, Dir));
       }
     }
 
@@ -240,6 +269,15 @@ CostScoreContext::CostScoreContext(const State& state)
       H_M_T.push_back( __M(hid, mid, tid) );
       H_M_T_Dir.push_back( __M(hid, mid, tid, Dir) );
     }
+  }
+
+  for (int mid = 1; mid < len; ++ mid) {
+    int mid1 = mid - 1;
+    int hid = state.heads[mid];
+    int hid1 = state.heads[mid1];
+    int Dir = ((hid < mid) << 1 | (hid1 < mid) << 2);
+    H1_H_M1_M.push_back( __M(hid1, hid, mid1, mid) );
+    H1_H_M1_M_Dir.push_back( __M(hid1, hid, mid1, mid, Dir) );
   }
 
   for (int gid = 0; gid < len; ++ gid) {
@@ -309,7 +347,10 @@ CostScoreContext::non_punctuation_span_length(int now,
   for (int child: node) {
     result[now] += non_punctuation_span_length(child, postags, tree, result);
   }
-  if (PUNC_POS.find(postags[now]) == PUNC_POS.end()) { result[now] += 1; }
+  if (PUNC_POS.find(postags[now]) == PUNC_POS.end()) {
+    // Non-punctuation
+    result[now] += 1;
+  }
   return result[now];
 }
 

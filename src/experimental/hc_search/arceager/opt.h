@@ -13,6 +13,7 @@ namespace fe = ZuoPar::FrontEnd;
 struct RootOption { std::string root; };
 struct PhaseOneModelOption { std::string phase_one_model_path; };
 struct PhaseTwoModelOption { std::string phase_two_model_path; };
+struct PhaseTwoLanguageOption { std::string language; };
 
 struct LearnOneOption:
   public fe::LearnOption,
@@ -22,24 +23,31 @@ struct LearnOneOption:
 struct PrepareTwoOption:
   public fe::TestOption,
   public RootOption,
-  public PhaseOneModelOption { bool oracle; };
+  public PhaseOneModelOption,
+  public PhaseTwoLanguageOption { };
 
 struct LearnTwoOption:
   public fe::LearnOption,
   public RootOption,
   public PhaseOneModelOption,
-  public PhaseTwoModelOption {};
+  public PhaseTwoModelOption,
+  public PhaseTwoLanguageOption {
+  double margin;
+  std::string method;
+};
 
 struct EvaluateOption:
   public fe::TestOption,
   public RootOption,
-  public PhaseOneModelOption {};
+  public PhaseOneModelOption,
+  public PhaseTwoLanguageOption {};
 
 struct TestOption:
   public fe::TestOption,
   public RootOption,
   public PhaseOneModelOption,
-  public PhaseTwoModelOption {
+  public PhaseTwoModelOption,
+  public PhaseTwoLanguageOption {
   bool rerank;
 };
 

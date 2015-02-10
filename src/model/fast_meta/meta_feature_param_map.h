@@ -175,7 +175,7 @@ public:
    *
    *  @param[in]  oa    The output archive stream.
    */
-  void save(boost::archive::text_oarchive& oa) {
+  void save(boost::archive::text_oarchive& oa) const {
     oa << payload;
   }
 

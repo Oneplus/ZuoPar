@@ -110,7 +110,7 @@ public:
       }
     }
 
-    delete []candidate_transitions;
+    delete [](candidate_transitions);
   }
 
   /**
@@ -226,6 +226,8 @@ public:
         delete [](lattice_heads[i]);
         lattice_heads[i] = p;
       }
+      delete [](candidate_transitions);
+      candidate_transitions = new scored_transition_t[size];
     }
     beam_size = size;
   }
@@ -238,9 +240,9 @@ private:
   _StateType* allocate_lattice(int index) {
     if (index >= lattice_heads.size()) {
       for (size_t i = lattice_heads.size(); i <= index; ++ i) {
-        lattice_heads.push_back(NULL);
+        _StateType* lattice_head = new _StateType[beam_size+ 1];
+        lattice_heads.push_back(lattice_head);
         // Allocate one more space to the dummy state.
-        lattice_heads.back() = new _StateType[beam_size+ 1];
       }
     }
     return lattice_heads.at(index);

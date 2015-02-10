@@ -20,7 +20,7 @@ public:
 };
 
 class CostWeight
-: public MetaFeatureParameterCollection<State, CostScoreContext> {
+: public MetaFeatureParameterCollection<CostScoreContext> {
 public:
   //! The weight constructor.
   CostWeight();
@@ -31,7 +31,7 @@ public:
 #define __REGN_1(name) do {                                                 \
   ufeat_map_repo.push_back(uf_map_t(                                        \
         [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void { \
-          for (const int& one: ctx.name) { cache.push_back(one); }          \
+          for (const int& one: ctx.name) { cache.push_back(uf_t(one)); }    \
         }));                                                                \
 } while (0);
 

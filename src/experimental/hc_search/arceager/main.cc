@@ -92,7 +92,7 @@ int learn_phase_two(int argc, char** argv) {
   }
 
   hc::Pipe pipe(opts);
-  pipe.learn2();
+  pipe.run2();
   return 0;
 }
 

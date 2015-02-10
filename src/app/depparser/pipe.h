@@ -76,6 +76,12 @@ public:
     }
   }
 
+  ~CommonDependencyPipe() {
+    if (weight)  { delete weight;  weight = 0;  }
+    if (decoder) { delete decoder; decoder = 0; }
+    if (learner) { delete learner; learner = 0; }
+  }
+
   bool setup() {
     namespace ioutils = ZuoPar::IO;
 

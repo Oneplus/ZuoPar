@@ -24,6 +24,7 @@ bool parse_input_ext(const po::variables_map& vm, fe::TestOption& opts);
 bool parse_output_ext(const po::variables_map& vm, fe::TestOption& opts);
 bool parse_phase_one_model_option(const po::variables_map& vm, PhaseOneModelOption& opts);
 bool parse_phase_two_model_option(const po::variables_map& vm, PhaseTwoModelOption& opts);
+bool parse_phase_two_language_option(const po::variables_map& vm, PhaseTwoLanguageOption& opts);
 bool parse_root_option(const po::variables_map& vm, RootOption& opts);
 
 bool parse_phase_one_learn_option(const po::variables_map& vm, LearnOneOption& opts);

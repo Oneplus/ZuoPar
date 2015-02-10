@@ -39,7 +39,7 @@ struct PointwiseParameter {
     ar & w & w_sum;
   }
 
-  floatval_t dot(bool avg) {
+  floatval_t dot(bool avg) const {
     if (avg) {
       return w_sum;
     } else {

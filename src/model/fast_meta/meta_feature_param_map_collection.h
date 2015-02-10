@@ -9,10 +9,7 @@
 
 namespace ZuoPar {
 
-template <
-  class _StateType,
-  class _ScoreContextType
->
+template <class _ScoreContextType>
 class MetaFeatureParameterCollection {
 public:
   typedef UnigramMetaFeature  uf_t;   //! The unigram feature type
@@ -40,33 +37,33 @@ public:
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize(const _ScoreContextType& ctx, floatval_t scale,
-      SparseVector* sparse_vector) {
+      SparseVector* sparse_vector) const {
     int global_id = 0;
-    for (uf_map_t& repo: ufeat_map_repo) {
+    for (const uf_map_t& repo: ufeat_map_repo) {
       repo.vectorize(ctx, scale, global_id, sparse_vector);
       global_id += repo.size();
     }
-    for (bf_map_t& repo: bfeat_map_repo) {
+    for (const bf_map_t& repo: bfeat_map_repo) {
       repo.vectorize(ctx, scale, global_id, sparse_vector);
       global_id += repo.size();
     }
-    for (tf_map_t& repo: tfeat_map_repo) {
+    for (const tf_map_t& repo: tfeat_map_repo) {
       repo.vectorize(ctx, scale, global_id, sparse_vector);
       global_id += repo.size();
     }
-    for (qf_map_t& repo: qfeat_map_repo) {
+    for (const qf_map_t& repo: qfeat_map_repo) {
       repo.vectorize(ctx, scale, global_id, sparse_vector);
       global_id += repo.size();
     }
-    for (q5f_map_t& repo: q5feat_map_repo) {
+    for (const q5f_map_t& repo: q5feat_map_repo) {
       repo.vectorize(ctx, scale, global_id, sparse_vector);
       global_id += repo.size();
     }
-    for (hf_map_t& repo: hfeat_map_repo) {
+    for (const hf_map_t& repo: hfeat_map_repo) {
       repo.vectorize(ctx, scale, global_id, sparse_vector);
       global_id += repo.size();
     }
-    for (sf_map_t& repo: sfeat_map_repo) {
+    for (const sf_map_t& repo: sfeat_map_repo) {
       repo.vectorize(ctx, scale, global_id, sparse_vector);
       global_id += repo.size();
     }
@@ -81,33 +78,33 @@ public:
    *  @param[out] sparse_vector The version 2 sparse vector.
    */
   void vectorize2(const _ScoreContextType& ctx, floatval_t scale,
-      SparseVector2* sparse_vector) {
+      SparseVector2* sparse_vector) const {
     int global_id = 0;
-    for (uf_map_t& repo: ufeat_map_repo) {
+    for (const uf_map_t& repo: ufeat_map_repo) {
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
     }
-    for (bf_map_t& repo: bfeat_map_repo) {
+    for (const bf_map_t& repo: bfeat_map_repo) {
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
     }
-    for (tf_map_t& repo: tfeat_map_repo) {
+    for (const tf_map_t& repo: tfeat_map_repo) {
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
     }
-    for (qf_map_t& repo: qfeat_map_repo) {
+    for (const qf_map_t& repo: qfeat_map_repo) {
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
     }
-    for (q5f_map_t& repo: q5feat_map_repo) {
+    for (const q5f_map_t& repo: q5feat_map_repo) {
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
     }
-    for (hf_map_t& repo: hfeat_map_repo) {
+    for (const hf_map_t& repo: hfeat_map_repo) {
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
     }
-    for (sf_map_t& repo: sfeat_map_repo) {
+    for (const sf_map_t& repo: sfeat_map_repo) {
       repo.vectorize2(ctx, scale, global_id, sparse_vector);
       ++ global_id;
     }
@@ -121,15 +118,15 @@ public:
    *  @return     floatval_t  The score of applying the action act to the state
    *                           context.
    */
-  floatval_t score(const _ScoreContextType& ctx, bool avg) {
+  floatval_t score(const _ScoreContextType& ctx, bool avg) const {
     floatval_t ret = 0;
-    for (uf_map_t& repo: ufeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (bf_map_t& repo: bfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (tf_map_t& repo: tfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (qf_map_t& repo: qfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (q5f_map_t& repo:q5feat_map_repo){ ret += repo.score(ctx, avg, 0.); }
-    for (hf_map_t& repo: hfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (sf_map_t& repo: sfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
+    for (const uf_map_t& repo: ufeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
+    for (const bf_map_t& repo: bfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
+    for (const tf_map_t& repo: tfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
+    for (const qf_map_t& repo: qfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
+    for (const q5f_map_t& repo:q5feat_map_repo){ ret += repo.score(ctx, avg, 0.); }
+    for (const hf_map_t& repo: hfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
+    for (const sf_map_t& repo: sfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
     return ret;
   }
 
@@ -171,15 +168,15 @@ public:
    *  @return     bool  If successfully saved, return true; otherwise return
    *                    false.
    */
-  bool save(std::ostream& os) {
+  bool save(std::ostream& os) const {
     boost::archive::text_oarchive oa(os);
-    for (uf_map_t& repo: ufeat_map_repo) { repo.save(oa); }
-    for (bf_map_t& repo: bfeat_map_repo) { repo.save(oa); }
-    for (tf_map_t& repo: tfeat_map_repo) { repo.save(oa); }
-    for (qf_map_t& repo: qfeat_map_repo) { repo.save(oa); }
-    for (q5f_map_t& repo:q5feat_map_repo){ repo.save(oa); }
-    for (hf_map_t& repo: hfeat_map_repo) { repo.save(oa); }
-    for (sf_map_t& repo: sfeat_map_repo) { repo.save(oa); }
+    for (const uf_map_t& repo: ufeat_map_repo) { repo.save(oa); }
+    for (const bf_map_t& repo: bfeat_map_repo) { repo.save(oa); }
+    for (const tf_map_t& repo: tfeat_map_repo) { repo.save(oa); }
+    for (const qf_map_t& repo: qfeat_map_repo) { repo.save(oa); }
+    for (const q5f_map_t& repo:q5feat_map_repo){ repo.save(oa); }
+    for (const hf_map_t& repo: hfeat_map_repo) { repo.save(oa); }
+    for (const sf_map_t& repo: sfeat_map_repo) { repo.save(oa); }
     return true;
   }
 

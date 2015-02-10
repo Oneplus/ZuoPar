@@ -30,9 +30,10 @@ public:
   void set_timestamp(int ts) {  timestamp = ts; }
 
   void learn(const _StateType* predict_state,
-      const _StateType* correct_state, floatval_t margin,
-      const floatval_t* correct_score = NULL,
-      const floatval_t* predict_score = NULL) {
+      const _StateType* correct_state,
+      floatval_t margin,
+      const floatval_t* predict_score = NULL,
+      const floatval_t* correct_score = NULL) {
     if (predict_state == correct_state) { return; }
     ++ nr_errors;
 
@@ -47,7 +48,7 @@ public:
       floatval_t norm = 0.;
 
       SparseVector2 updated_vector;
-      if (correct_score == NULL && predict_score == NULL) {
+      if (correct_score == NULL || predict_score == NULL) {
         score += model->score((*correct_state), false);
         score -= model->score((*predict_state), false);
       } else {

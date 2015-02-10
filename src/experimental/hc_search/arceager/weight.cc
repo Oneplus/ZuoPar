@@ -269,6 +269,9 @@ CostWeight::CostWeight() {
     __REG_4(G_P_nP_M, postags, postags, postags, forms);
     __REG_4(G_P_pM_M, postags, postags, postags, forms);
     __REG_4(G_P_M_nM, postags, postags, forms, postags);
+
+    __REG_4(H1_H_M1_M, postags, postags, postags, postags);
+    __REGN_5(H1_H_M1_M_Dir, postags, postags, postags, postags);
   } // end for 2nd-order grandparent
 
   /* Third-order */ {
@@ -285,8 +288,8 @@ CostWeight::CostWeight() {
     __REGN_5(G_P_M_C_Dir, postags, postags, postags, forms);
 
     // deprels
-    __REG_4(G_P_M_C, postags, deprels, deprels, deprels);
-    __REG_4(G_P_M_C, forms, deprels, deprels, deprels);
+    //__REG_4(G_P_M_C, postags, deprels, deprels, deprels);
+    //__REG_4(G_P_M_C, forms, deprels, deprels, deprels);
 
     __REG_3(G_P_C, postags, postags, postags);
     __REG_3(G_P_C, forms, postags, postags);
@@ -339,8 +342,8 @@ CostWeight::CostWeight() {
     __REGN_4(G_M_S_Dir, postags, postags, forms);
 
     // deprels
-    __REG_4(G_P_M_S, postags, deprels, deprels, deprels);
-    __REG_4(G_P_M_S, forms, deprels, deprels, deprels);
+    //__REG_4(G_P_M_S, postags, deprels, deprels, deprels);
+    //__REG_4(G_P_M_S, forms, deprels, deprels, deprels);
 
     __REG_4(H_M_S_T, postags, postags, postags, postags);
     __REG_4(H_M_S_T, forms, postags, postags, postags);
@@ -365,22 +368,62 @@ CostWeight::CostWeight() {
     __REGN_4(H_M_T_Dir, postags, postags, forms);
 
     // deprels
-    __REG_4(H_M_S_T, postags, deprels, deprels, deprels);
-    __REG_4(H_M_S_T, forms, deprels, deprels, deprels);
+    //__REG_4(H_M_S_T, postags, deprels, deprels, deprels);
+    //__REG_4(H_M_S_T, forms, deprels, deprels, deprels);
+
+    //! outer sibling grandchild: postags
+    __REG_4(H_S_M_GC, postags, postags, postags, postags);
+    __REG_4(H_S_M_GC, forms, postags, postags, postags);
+    __REG_4(H_S_M_GC, postags, forms, postags, postags);
+    __REG_4(H_S_M_GC, postags, postags, forms, postags);
+    __REG_4(H_S_M_GC, postags, postags, postags, forms);
+
+    __REGN_5(H_S_M_GC_Dir, postags, postags, postags, postags);
+    __REGN_5(H_S_M_GC_Dir, forms, postags, postags, postags);
+    __REGN_5(H_S_M_GC_Dir, postags, forms, postags, postags);
+    __REGN_5(H_S_M_GC_Dir, postags, postags, forms, postags);
+    __REGN_5(H_S_M_GC_Dir, postags, postags, postags, forms);
+
+    //! outer sibling grandchild: postags
+    __REG_4(H_S_GC_M, postags, postags, postags, postags);
+    __REG_4(H_S_GC_M, forms, postags, postags, postags);
+    __REG_4(H_S_GC_M, postags, forms, postags, postags);
+    __REG_4(H_S_GC_M, postags, postags, forms, postags);
+    __REG_4(H_S_GC_M, postags, postags, postags, forms);
+
+    __REGN_5(H_S_GC_M_Dir, postags, postags, postags, postags);
+    __REGN_5(H_S_GC_M_Dir, forms, postags, postags, postags);
+    __REGN_5(H_S_GC_M_Dir, postags, forms, postags, postags);
+    __REGN_5(H_S_GC_M_Dir, postags, postags, forms, postags);
+    __REGN_5(H_S_GC_M_Dir, postags, postags, postags, forms);
   } // end for third-order
 
   /*High order*/ {
     // right -branch
     ufeat_map_repo.push_back(uf_map_t(
           [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
-            cache.push_back(ctx.RB);
+            cache.push_back(uf_t(ctx.RB));
           }));
 
     // span length
     __REG_2(H_H, postags, span_length);
+    __REG_2(H_H, forms, span_length);
 
     // valency
     __REG_2(H_H, postags, nr_children);
+    __REG_2(H_H, postags, nr_left_children);
+    __REG_2(H_H, postags, nr_right_children);
+    __REG_2(H_H, forms, nr_children);
+    __REG_2(H_H, forms, nr_left_children);
+    __REG_2(H_H, forms, nr_right_children);
+
+    // label set
+    __REG_2(H_H, postags, label_set);
+    __REG_2(H_H, postags, left_label_set);
+    __REG_2(H_H, postags, right_label_set);
+    __REG_2(H_H, forms, label_set);
+    __REG_2(H_H, forms, left_label_set);
+    __REG_2(H_H, forms, right_label_set);
 
     //
     __REG_2(PP_H_M, postags, postags);
@@ -391,19 +434,6 @@ CostWeight::CostWeight() {
     __REG_3(PP_H_H_M, forms, postags, postags);
     __REG_3(PP_H_M_M, postags, forms, postags);
   }
-
-  //! head bigram: forms
-  //__REG_4(head_bigrams, forms, forms, forms, forms);
-  //! head bigram: postags
-  __REG_4(head_bigrams, postags, postags, postags, postags);
-  //! outer sibling grandchild: forms
-  //__REG_4(outer_sibling_grandchildren, forms, forms, forms, forms);
-  //! outer sibling grandchild: postags
-  __REG_4(outer_sibling_grandchildren, postags, postags, postags, postags);
-  //! inter sibling grandchild: forms
-  //__REG_4(inner_sibling_grandchildren, forms, forms, forms, forms);
-  //! inter sibling grandchild: postags
-  __REG_4(inner_sibling_grandchildren, postags, postags, postags, postags)
 }
 
 } //  namespace hcsearchdependencyparser

@@ -3,6 +3,7 @@
 #include "experimental/hc_search/arceager/pipe.h"
 #include "experimental/hc_search/arceager/action_utils.h"
 #include "experimental/hc_search/arceager/knowledge.h"
+#include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -38,6 +39,14 @@ Pipe::Pipe(const LearnTwoOption& opts)
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
   root = opts.root;
+  language = opts.language;
+  _INFO << "report: language = " << language;
+  margin = opts.margin;
+  _INFO << "report: margin = " << margin;
+  if (opts.method == "or") { mode_learn_two = kPipeLearnTwoOracleAgainstRest; }
+  else if (opts.method == "ngb") {  mode_learn_two = kPipeLearnTwoNaiveGoodAgainstBad;  }
+  else if (opts.method == "rgb") {  mode_learn_two = kPipeLearnTwoRelexedGoodAgainstBad; }
+  _INFO << "report: training method = " << opts.method;
   phase_one_model_path = opts.phase_one_model_path;
   phase_two_model_path = opts.phase_two_model_path;
   if (phase_one_load_model(phase_one_model_path) && phase_two_load_model(phase_two_model_path)) {
@@ -56,7 +65,8 @@ Pipe::Pipe(const PrepareTwoOption& opts)
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
   root = opts.root;
-  oracle = opts.oracle;
+  language = opts.language;
+  _INFO << "report: language = " << language;
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
     _INFO << "report(p): model is loaded.";
@@ -73,8 +83,9 @@ Pipe::Pipe(const TestOption& opts)
   cost_learner(0),
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
-  rerank = opts.rerank;
   root = opts.root;
+  language = opts.language;  _INFO << "report: language = " << language;
+  rerank = opts.rerank;  _INFO << "report: rerank = " << (rerank ? "true": "false");
   phase_one_model_path = opts.phase_one_model_path;
   phase_two_model_path = opts.phase_two_model_path;
   if (!rerank && phase_one_load_model(phase_one_model_path)) {
@@ -97,6 +108,8 @@ Pipe::Pipe(const EvaluateOption& opts)
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
   root = opts.root;
+  language = opts.language;
+  _INFO << "report: language = " << language;
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
     _INFO << "report(e): model is loaded.";
@@ -105,13 +118,22 @@ Pipe::Pipe(const EvaluateOption& opts)
   }
 }
 
+Pipe::~Pipe() {
+  if (heuristic_learner) { delete heuristic_learner; }
+  if (heuristic_weight)  { delete heuristic_weight; }
+  if (cost_learner)      { delete cost_learner; }
+  if (cost_weight)       { delete cost_weight; }
+  if (decoder)           { delete decoder; }
+}
+
 bool
 Pipe::phase_one_load_model(const std::string& phase_one_model_path) {
   heuristic_weight = new HeuristicWeight;
 
   std::ifstream mfs(phase_one_model_path);
   if (!mfs.good()) {
-    _WARN << "pipe: model doesn't exist.";
+    _WARN << "pipe: phase(1) model doesn't exist.";
+    mfs.close();
     return false;
   }
   if (!forms_alphabet.load(mfs)) {
@@ -130,6 +152,7 @@ Pipe::phase_one_load_model(const std::string& phase_one_model_path) {
     _WARN << "pipe: failed to load phase one weight.";
     return false;
   }
+  mfs.close();
   return true;
 }
 
@@ -139,14 +162,14 @@ Pipe::phase_two_load_model(const std::string& phase_two_model_path) {
   std::ifstream mfs(phase_two_model_path);
 
   if (!mfs.good()) {
-    _WARN << "pipe: phase two model doesn't exist.";
+    _WARN << "pipe: phase(2) model doesn't exist.";
     return false;
   }
-
   if (!cost_weight->load(mfs)) {
     _WARN << "pipe: failed to load phase two weight.";
     return false;
   }
+  mfs.close();
   return true;
 }
 
@@ -162,6 +185,7 @@ Pipe::phase_one_save_model(const std::string& phase_one_model_path) {
     heuristic_weight->save(mfs);
     _INFO << "pipe: phase(1) model saved to " << phase_one_model_path;
   }
+  mfs.close();
 }
 
 void
@@ -173,35 +197,55 @@ Pipe::phase_two_save_model(const std::string& phase_two_model_path) {
     cost_weight->save(mfs);
     _INFO << "pipe: phase(2) model saved to " << phase_two_model_path;
   }
+  mfs.close();
 }
 
 void
 Pipe::build_knowledge() {
-  PUNC_POS.insert(postags_alphabet.encode("."));
-  PUNC_POS.insert(postags_alphabet.encode(","));
-  PUNC_POS.insert(postags_alphabet.encode("?"));
-  PUNC_POS.insert(postags_alphabet.encode("!"));
-  PUNC_POS.insert(postags_alphabet.encode(";"));
-  PUNC_POS.insert(postags_alphabet.encode("-LRB-"));
-  PUNC_POS.insert(postags_alphabet.encode("-RRB-"));
-  PUNC_POS.insert(postags_alphabet.encode("`"));
-  PUNC_POS.insert(postags_alphabet.encode("``"));
-  PUNC_POS.insert(postags_alphabet.encode("'"));
-  PUNC_POS.insert(postags_alphabet.encode("''"));
-
-  CONJ_POS.insert(postags_alphabet.encode("CC"));
-
-  ADP_POS.insert(postags_alphabet.encode("IN"));
-  ADP_POS.insert(postags_alphabet.encode("RP"));
-
-  VERB_POS.insert(postags_alphabet.encode("MD"));
-  VERB_POS.insert(postags_alphabet.encode("VB"));
-  VERB_POS.insert(postags_alphabet.encode("VBD"));
-  VERB_POS.insert(postags_alphabet.encode("VBN"));
-  VERB_POS.insert(postags_alphabet.encode("VBG"));
-  VERB_POS.insert(postags_alphabet.encode("VBP"));
-  VERB_POS.insert(postags_alphabet.encode("VBZ"));
-  VERB_POS.insert(postags_alphabet.encode("VP"));
+  if (language == "en") {
+    // punctuation
+    PUNC_POS.insert(postags_alphabet.encode("."));
+    PUNC_POS.insert(postags_alphabet.encode(","));
+    PUNC_POS.insert(postags_alphabet.encode("?"));
+    PUNC_POS.insert(postags_alphabet.encode("!"));
+    PUNC_POS.insert(postags_alphabet.encode(";"));
+    PUNC_POS.insert(postags_alphabet.encode("-LRB-"));
+    PUNC_POS.insert(postags_alphabet.encode("-RRB-"));
+    PUNC_POS.insert(postags_alphabet.encode("`"));
+    PUNC_POS.insert(postags_alphabet.encode("``"));
+    PUNC_POS.insert(postags_alphabet.encode("'"));
+    PUNC_POS.insert(postags_alphabet.encode("''"));
+    // Conjunction.
+    CONJ_POS.insert(postags_alphabet.encode("CC"));
+    // Preposition
+    ADP_POS.insert(postags_alphabet.encode("IN"));
+    ADP_POS.insert(postags_alphabet.encode("RP"));
+    // Verb
+    VERB_POS.insert(postags_alphabet.encode("MD"));
+    VERB_POS.insert(postags_alphabet.encode("VB"));
+    VERB_POS.insert(postags_alphabet.encode("VBD"));
+    VERB_POS.insert(postags_alphabet.encode("VBN"));
+    VERB_POS.insert(postags_alphabet.encode("VBG"));
+    VERB_POS.insert(postags_alphabet.encode("VBP"));
+    VERB_POS.insert(postags_alphabet.encode("VBZ"));
+    VERB_POS.insert(postags_alphabet.encode("VP"));
+    _INFO << "report: postag knowledge for English is built.";
+  } else if (language == "ch") {
+    // Punctuation
+    PUNC_POS.insert(postags_alphabet.encode("PU"));
+    // Conjunction.
+    CONJ_POS.insert(postags_alphabet.encode("CC"));
+    // Preposition
+    ADP_POS.insert(postags_alphabet.encode("P"));
+    //
+    VERB_POS.insert(postags_alphabet.encode("VV"));
+    VERB_POS.insert(postags_alphabet.encode("VA"));
+    VERB_POS.insert(postags_alphabet.encode("VC"));
+    VERB_POS.insert(postags_alphabet.encode("VE"));
+    _INFO << "report: postag knowledge for Chinese is built.";
+  } else {
+    _INFO << "pipe: unknown language, no knowledge is built.";
+  }
 }
 
 bool
@@ -233,12 +277,11 @@ Pipe::setup() {
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is loaded.";
   _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is loaded.";
   build_knowledge();
-  _INFO << "report: postag knowledge is built.";
   return true;
 }
 
 bool
-Pipe::read_dataset2() {
+Pipe::setup2() {
   namespace algo = boost::algorithm;
 
   std::ifstream ifs(reference_path.c_str());
@@ -250,13 +293,6 @@ Pipe::read_dataset2() {
   _INFO << "report: loading dataset from reference file.";
 
   dataset2.clear();
-  //std::string data_context((std::istreambuf_iterator<char>(ifs)),
-  //    std::istreambuf_iterator<char>());
-  //boost::regex INSTANCE_DELIMITER("\n\n");
-  //boost::sregex_token_iterator instance(data_context.begin(),
-  //    data_context.end(), INSTANCE_DELIMITER, -1);
-  //boost::sregex_token_iterator eos;
-
   std::string instance, buffer;
   // Loop over the instances
   size_t n = 0;
@@ -264,24 +300,87 @@ Pipe::read_dataset2() {
     algo::trim(buffer);
     if (buffer.size() == 0) {
       std::istringstream iss(instance);
-      Dependency predict, oracle;
+      std::vector< std::vector<std::string> > mat;
 
-      std::string item_context;
-      while (std::getline(iss, item_context)) {
-        std::vector<std::string> items;
-        algo::trim(item_context);
-        algo::split(items, item_context, boost::is_any_of("\t "), boost::token_compress_on);
-
-        // Format: form postag gold-head gold-deprel predict-head predict-deprel
-        form_t form = forms_alphabet.encode(items[0].c_str());
-        postag_t postag = postags_alphabet.encode(items[1].c_str());
-        deprel_t oracle_deprel = deprels_alphabet.encode(items[3].c_str());
-        deprel_t predict_deprel = deprels_alphabet.encode(items[5].c_str());
-        oracle.push_back(form, postag, atoi(items[2].c_str()), oracle_deprel);
-        predict.push_back(form, postag, atoi(items[4].c_str()), predict_deprel);
+      std::string item_context, header;
+      std::getline(iss, header); // the header
+      int nr_good = 0, nr_bad = 0;
+      std::vector<std::string> items;
+      std::vector< std::pair<bool, floatval_t> > info;
+      algo::trim(header);
+      algo::split(items, header, boost::is_any_of("\t "), boost::token_compress_on);
+      for (const std::string& token: items) {
+        if (algo::starts_with(token, "good:")) {
+          ++ nr_good;
+          floatval_t score =
+            boost::lexical_cast<floatval_t>(token.substr(token.find_first_of(':')+ 1));
+          info.push_back( std::make_pair(true, score) );
+        }
+        if (algo::starts_with(token, "bad:")) {
+          ++ nr_bad;
+          floatval_t score =
+            boost::lexical_cast<floatval_t>(token.substr(token.find_first_of(':')+ 1));
+          info.push_back( std::make_pair(false, score) );
+        }
       }
 
-      dataset2.push_back(std::make_pair(predict, oracle));
+      while (std::getline(iss, item_context)) {
+        items.clear();
+        algo::trim(item_context);
+        algo::split(items, item_context, boost::is_any_of("\t "), boost::token_compress_on);
+        mat.push_back(items);
+      }
+
+      bool bad_format = false; int col = mat[0].size();
+      for (int r = 0; r < mat.size(); ++ r) {
+        if (mat[r].size() != col) {
+          _WARN << "Unmatched number of columns"; bad_format = true; }
+        if (bad_format) { break; }
+      }
+      if (bad_format) { continue; }
+
+      int N = mat.size(), M = mat[0].size();
+      RerankingInstance ri;
+
+      ri.init(N, nr_good, nr_bad);
+      for (int rank = 0, ig = 0, ib = 0; rank < info.size(); ++ rank) {
+        if (info[rank].first) {
+          ri.good[ig].rank = rank;
+          ri.good[ig].score = info[rank].second;
+          ++ ig;
+        } else {
+          ri.bad[ib].rank = rank;
+          ri.bad[ib].score = info[rank].second;
+          ++ ib;
+        }
+      }
+      for (int r = 0; r < mat.size(); ++ r) {
+        ri.forms[r] = forms_alphabet.encode(mat[r][0].c_str());
+        ri.postags[r] = postags_alphabet.encode(mat[r][1].c_str());
+
+        size_t delimiter_position;
+        delimiter_position = mat[r][2].find_first_of('/');
+        ri.oracle.heads[r] = atoi(mat[r][2].substr(0, delimiter_position).c_str());
+        ri.oracle.deprels[r] = deprels_alphabet.encode(
+            mat[r][2].substr(delimiter_position+ 1).c_str());
+
+        for (int c = 3, ig = 0, ib = 0; c < M; ++ c) {
+          delimiter_position = mat[r][c].find_first_of('/');
+          if (info[c- 3].first) {
+            ri.good[ig].heads[r] = atoi(mat[r][c].substr(0, delimiter_position).c_str());
+            ri.good[ig].deprels[r] = deprels_alphabet.encode(
+                mat[r][c].substr(delimiter_position+ 1).c_str());
+            ++ ig;
+          } else {
+            ri.bad[ib].heads[r] = atoi(mat[r][c].substr(0, delimiter_position).c_str());
+            ri.bad[ib].deprels[r] = deprels_alphabet.encode(
+                mat[r][c].substr(delimiter_position+ 1).c_str());
+            ++ ib;
+          }
+        }
+      }
+      dataset2.push_back(ri);
+
       if ((n+ 1) % display_interval == 0) {
         _INFO << "pipe: loaded #" << (n+ 1) << " instances.";
       }
@@ -296,23 +395,44 @@ Pipe::read_dataset2() {
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is found.";
   _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is found.";
   build_knowledge();
-  _INFO << "report: postag knowledge is built.";
   return true;
 }
 
 void
-Pipe::learn2() {
-  namespace ioutils = ZuoPar::IO;
-  if (mode_ext != kPipeLearnPhaseTwo) {
-    _WARN << "Pipe: learn phase two not specified.";
-    return;
-  }
+Pipe::wrapper_to_instance(const DependencyWrapper& wrapper, Dependency& instance) {
+  instance.forms= wrapper.forms;
+  instance.postags = wrapper.postags;
+  instance.heads = wrapper.heads;
+  instance.deprels = wrapper.deprels;
+}
 
-  if (!read_dataset2()) {
-    return;
-  }
+void
+Pipe::train_one_pair(const Dependency& oracle, const Dependency& good,
+    const Dependency& bad, int timestamp) {
+  State good_state, bad_state;
+  good_state.build(good);
+  bad_state.build(bad);
 
-  size_t N = dataset2.size();
+  floatval_t good_score = cost_weight->score(good_state, false);
+  floatval_t bad_score = cost_weight->score(bad_state, false);
+
+  int dummy;
+  int good_loss = loss(good, oracle, true, true, dummy);
+  int bad_loss = loss(bad, oracle, true, true, dummy);
+  int delta_loss = bad_loss - good_loss;
+  //_TRACE << "loss: " << loss1;
+
+  if (delta_loss > 0 && good_score - bad_score < delta_loss - 1e-8) {
+    cost_learner->set_timestamp(timestamp);
+    cost_learner->learn(&bad_state, &good_state,
+        delta_loss, &bad_score, &good_score);
+  }
+}
+
+void
+Pipe::run2_learn_naive(const std::vector< train_tuple_t >& train_data) {
+  size_t N = train_data.size();
+
   std::vector<std::size_t> ranks;
   for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
   while (shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
@@ -320,24 +440,12 @@ Pipe::learn2() {
   cost_learner = new CostLearner(cost_weight, this->algorithm);
 
   for (size_t n = 0; n < N; ++ n) {
-    const Dependency& predict = dataset2[ranks[n]].first;
-    const Dependency& oracle = dataset2[ranks[n]].second;
-    State predict_state, oracle_state;
-    predict_state.build(predict);
-    oracle_state.build(oracle);
+    Dependency oracle_instance, good_instance, bad_instance;
+    wrapper_to_instance(train_data[ranks[n]].get<0>(), oracle_instance);
+    wrapper_to_instance(train_data[ranks[n]].get<1>(), good_instance);
+    wrapper_to_instance(train_data[ranks[n]].get<2>(), bad_instance);
 
-    floatval_t predict_score = cost_weight->score(predict_state, false);
-    floatval_t oracle_score = cost_weight->score(oracle_state, false);
-
-    int pseudo;
-    int l = loss(predict, oracle, true, true, pseudo);
-    _TRACE << "loss: " << l;
-    if (l != 0 && predict_score >= oracle_score - 1e-8) {
-      cost_learner->set_timestamp(n+ 1);
-      cost_learner->learn(&predict_state, &oracle_state, l,
-          &oracle_score, &predict_score);
-    }
-
+    train_one_pair(oracle_instance, good_instance, bad_instance, n+ 1);
     if ((n+ 1) % display_interval == 0) {
       _INFO << "pipe: processed #" << (n+ 1) << " instances.";
     }
@@ -349,6 +457,150 @@ Pipe::learn2() {
 
   _INFO << "pipe: nr errors: " << cost_learner->errors() << "/" << N;
   phase_two_save_model(phase_two_model_path);
+}
+
+void
+Pipe::run2_learn_oracle_against_rest() {
+  std::vector< train_tuple_t > train_data;
+
+  for (const RerankingInstance& instance: dataset2) {
+    DependencyWrapper oracle(instance.forms, instance.postags,
+        instance.oracle.heads, instance.oracle.deprels);
+
+    for (const RerankingInstanceParse& parse: instance.good) {
+      train_data.push_back( boost::make_tuple(
+            oracle,
+            oracle,
+            DependencyWrapper(instance.forms, instance.postags, parse.heads, parse.deprels)
+            ) );
+    }
+
+    for (const RerankingInstanceParse& parse: instance.bad) {
+      train_data.push_back( boost::make_tuple(
+            oracle,
+            oracle,
+            DependencyWrapper(instance.forms, instance.postags, parse.heads, parse.deprels)
+            ) );
+    }
+  }
+  _INFO << "report: generate #" << train_data.size() << " training pairs.";
+
+  run2_learn_naive(train_data);
+};
+
+void
+Pipe::run2_learn_naive_good_against_bad() {
+  std::vector< train_tuple_t > train_data;
+
+  for (const RerankingInstance& instance: dataset2) {
+    DependencyWrapper oracle(instance.forms, instance.postags,
+        instance.oracle.heads, instance.oracle.deprels);
+    for (const RerankingInstanceParse& good: instance.good) {
+      for (const RerankingInstanceParse& bad: instance.bad) {
+        train_data.push_back( boost::make_tuple(
+              oracle,
+              DependencyWrapper(instance.forms, instance.postags, good.heads, good.deprels),
+              DependencyWrapper(instance.forms, instance.postags, bad.heads, bad.deprels)
+              ) );
+      }
+    }
+  }
+  _INFO << "report: generate #" << train_data.size() << " training pairs.";
+  run2_learn_naive(train_data);
+};
+
+void
+Pipe::run2_learn_relaxed_good_against_bad() {
+  size_t N = dataset2.size();
+
+  std::vector<std::size_t> ranks;
+  for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
+  while (shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
+
+  cost_learner = new CostLearner(cost_weight, this->algorithm);
+
+  for (size_t n = 0; n < dataset2.size(); ++ n) {
+    const RerankingInstance& instance = dataset2[ranks[n]];
+
+    int worst_good_position = -1, best_bad_position = -1;
+    floatval_t worst_good_score, best_bad_score;
+
+    for (int i = 0; i < instance.good.size(); ++ i) {
+      Dependency dependency(instance.forms, instance.postags,
+          instance.good[i].heads, instance.good[i].deprels);
+      State state;
+      state.build(dependency);
+      floatval_t score = cost_weight->score(state, false);
+      if (worst_good_position == -1 || score < worst_good_score) {
+        worst_good_position = i;
+        worst_good_score = score;
+      }
+    }
+
+    for (int i = 0; i < instance.bad.size(); ++ i) {
+      Dependency dependency(instance.forms, instance.postags,
+          instance.bad[i].heads, instance.bad[i].deprels);
+      State state;
+      state.build(dependency);
+      floatval_t score = cost_weight->score(state, false);
+      if (best_bad_position == -1 || score > best_bad_score) {
+        best_bad_position = i;
+        best_bad_score = score;
+      }
+    }
+
+    if (best_bad_position == -1 || worst_good_position == -1) {
+      _WARN << "best bad or worst good was not found.";
+      _INFO << "# good = " << instance.good.size()
+        << ", # bad = " << instance.bad.size()
+        << ", id = " << n;
+      continue;
+    }
+
+    Dependency oracle_instance(instance.forms, instance.postags,
+        instance.oracle.heads, instance.oracle.deprels);
+    Dependency good_instance(instance.forms, instance.postags,
+        instance.good[worst_good_position].heads,
+        instance.good[worst_good_position].deprels);
+    Dependency bad_instance(instance.forms, instance.postags,
+        instance.bad[best_bad_position].heads,
+        instance.bad[best_bad_position].deprels);
+
+    train_one_pair(oracle_instance, good_instance, bad_instance, n+ 1);
+    if ((n+ 1) % display_interval == 0) {
+      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
+    }
+  }
+  _INFO << "pipe: processed #" << N << " instances.";
+
+  cost_learner->set_timestamp(N);
+  cost_learner->flush();
+
+  _INFO << "pipe: nr errors: " << cost_learner->errors() << "/" << N;
+  phase_two_save_model(phase_two_model_path);
+}
+
+void
+Pipe::run2() {
+  namespace ioutils = ZuoPar::IO;
+  if (mode_ext != kPipeLearnPhaseTwo) {
+    _WARN << "Pipe: learn phase two not specified.";
+    return;
+  }
+
+  if (!setup2()) {
+    return;
+  }
+
+  if (mode_learn_two == kPipeLearnTwoOracleAgainstRest) {
+    run2_learn_oracle_against_rest();
+  } else if (mode_learn_two == kPipeLearnTwoNaiveGoodAgainstBad) {
+    run2_learn_naive_good_against_bad();
+  } else if (mode_learn_two == kPipeLearnTwoRelexedGoodAgainstBad) {
+    run2_learn_relaxed_good_against_bad();
+  } else {
+    _ERROR << "unknown learning method.";
+  }
 }
 
 void
@@ -406,43 +658,53 @@ Pipe::run() {
     } else if (mode_ext == kPipePreparePhaseTwo) {
       std::vector<const State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
-      if (oracle) {
-        for (const State* candidate_result: final_results) {
-          Dependency output; build_output((*candidate_result), output);
-          int dummy;
-          int loss1 = loss(output, instance, true, true, dummy);
-          if (loss1 > 0) {
-            write_prepared_data((*result.second), (*candidate_result), (*os));
-          }
-        }
-      } else {
-        int best_loss = instance.size(), dummy;
-        for (const State* candidate_result: final_results) {
-          Dependency output; build_output((*candidate_result), output);
-          int loss1 = loss(output, instance, true, true, dummy);
-          if (loss1 < best_loss) { best_loss = loss1; }
-        }
-        std::vector<const State*> Y_good;
-        std::vector<const State*> Y_bad;
-        for (const State* candidate_result: final_results) {
-          Dependency output; build_output((*candidate_result), output);
-          int loss1 = loss(output, instance, true, true, dummy);
-          if (loss1 == best_loss) { Y_good.push_back(candidate_result); }
-          else { Y_bad.push_back(candidate_result); }
-        }
+      int best_loss = instance.size(), dummy;
+      for (const State* candidate_result: final_results) {
+        Dependency output; build_output((*candidate_result), output);
+        int loss1 = loss(output, instance, true, true, dummy);
+        if (loss1 < best_loss) { best_loss = loss1; }
+      }
 
-        for (const State* good: Y_good) {
-          for (const State* bad: Y_bad) {
-            write_prepared_data((*good), (*bad), (*os));
-          }
+      int nr_good = 0;
+      for (const State* candidate_result: final_results) {
+        Dependency output; build_output((*candidate_result), output);
+        int loss1 = loss(output, instance, true, true, dummy);
+        if (loss1 == best_loss) { ++ nr_good; }
+      }
+
+      std::sort(final_results.begin(), final_results.end(),
+          [](const State* x,  const State* y) -> bool { return x->score > y->score; });
+
+      (*os) << "#forms\tpostags\toracle";
+      for (const State* candidate_result: final_results) {
+        Dependency output; build_output((*candidate_result), output);
+        int loss1 = loss(output, instance, true, true, dummy);
+        if (loss1 == best_loss) {
+          (*os) << "\tgood:" << candidate_result->score;
+        } else {
+          (*os) << "\tbad:" << candidate_result->score;
         }
       }
+      (*os) << std::endl;
+      for (size_t i = 0; i < instance.size(); ++ i) {
+        (*os) << forms_alphabet.decode(instance.forms[i]) << " "
+          << postags_alphabet.decode(instance.postags[i]) << " "
+          << instance.heads[i] << "/"
+          << (instance.heads[i] == -1? root: deprels_alphabet.decode(instance.deprels[i]));
+        for (const State* candidate_result: final_results) {
+          (*os) << " " << candidate_result->heads[i] << "/"
+            << (candidate_result->heads[i] == -1? root:
+                deprels_alphabet.decode(candidate_result->deprels[i]));
+        }
+        (*os) << std::endl;
+      }
+      (*os) << std::endl;
     } else if (mode_ext == kPipeEvaluate) {
       std::vector<const State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
 
       bool correct_in_beam = false;
-      bool correct_in_beam_not_best = false;
+      bool correct_in_beam_not_best = true;
       int oracle_recalled_heads = 0;
       int oracle_recalled_deprels = 0;
       int nr_effective_tokens = 0;
@@ -454,8 +716,10 @@ Pipe::run() {
 
         if (0 == loss1) {
           correct_in_beam = true;
-          if (candidate_result != result.first) {
-            correct_in_beam_not_best = true;
+          if (candidate_result == result.first) {
+            // Once the correct is found in the beam, this flag should be
+            // set false.
+            correct_in_beam_not_best = false;
           }
         }
 
@@ -521,23 +785,8 @@ Pipe::run() {
     _INFO << "report: LAS upperbound: " << nr_oracle_recalled_deprels
       << "/" << nr_deprels << "=" << floatval_t(nr_oracle_recalled_deprels)/nr_deprels;
   }
-}
 
-void
-Pipe::write_prepared_data(const State& good, const State& bad, std::ostream& os) {
-  size_t len = good.ref->size();
-  // Format: form postag gold-head gold-deprel predict-head predict-deprel
-  for (size_t i = 0; i < len; ++ i) {
-    os << forms_alphabet.decode(good.ref->forms[i]) << "\t"
-       << postags_alphabet.decode(good.ref->postags[i]) << "\t"
-       << good.heads[i] << "\t";
-    if (good.heads[i] == -1) { os << root << "\t"; }
-    else { os << deprels_alphabet.decode(good.deprels[i]) << "\t"; }
-    os << bad.heads[i] << "\t";
-    if (bad.heads[i] == -1) { os << root << std::endl; }
-    else { os << deprels_alphabet.decode(bad.deprels[i]) << std::endl; }
-  }
-  os << std::endl;
+  if (os != NULL && os != &std::cout) { delete os; }
 }
 
 void

@@ -48,7 +48,13 @@ po::options_description build_phase_two_learn_optparser(const std::string& usage
                                               " >0 - perform s time shuffle (avoid fake shuffle.)")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
     ("phase-two-model", po::value<std::string>(), "The path to the phase two model.")
-    ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
+    ("root",    po::value<std::string>(), "The root tag [default=ROOT].")
+    ("language",po::value<std::string>(), "The language [default=en].")
+    ("margin",  po::value<double>(), "The margin [default=1.].")
+    ("method",  po::value<std::string>(), "The learning method.\n"
+                                           " or: oracle-against-rest [default]\n"
+                                           " ngb: naive-good-against-bad, \n"
+                                           " rgb: smart-good-against-bad, \n")
     ("verbose,v", "Logging every detail.")
     ;
 
@@ -64,8 +70,9 @@ po::options_description build_phase_two_prepare_optparser(const std::string& usa
     ("display,d",   po::value<int>(),         "The display interval [default=1000].")
     ("beam,b",      po::value<int>(),         "The size for beam [default=64].")
     ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
+    ("language",    po::value<std::string>(), "The language [default=en].")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
-    ("oracle", "Specify oracle as ybest [default=false].")
+    //("oracle", "Specify oracle as ybest [default=false].")
     ("verbose,v", "Logging every detail.")
     ;
 
@@ -81,6 +88,7 @@ po::options_description build_test_optparser(const std::string& usage) {
     ("display,d", po::value<int>(),         "The display interval [default=1000].")
     ("beam,b",    po::value<int>(),         "The size for beam [default=64].")
     ("root",      po::value<std::string>(), "The root tag [default=ROOT].")
+    ("language",    po::value<std::string>(), "The language [default=en].")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
     ("phase-two-model", po::value<std::string>(), "The path to the phase two model.")
     ("rerank", "Specify to perform phase two reranking.")
@@ -98,6 +106,7 @@ po::options_description build_evaluate_optparser(const std::string& usage) {
     ("display,d",   po::value<int>(),         "The display interval [default=1000].")
     ("beam,b",      po::value<int>(),         "The size for beam [default=64].")
     ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
+    ("language",    po::value<std::string>(), "The language [default=en].")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
     ("verbose,v", "Logging every detail.")
     ;
@@ -202,6 +211,20 @@ bool parse_phase_two_model_option(const po::variables_map& vm, PhaseTwoModelOpti
   return true;
 }
 
+bool parse_phase_two_language_option(const po::variables_map& vm, PhaseTwoLanguageOption& opts) {
+  opts.language = "en";
+  if (vm.count("language")) {
+    if (vm["language"].as<std::string>() == "en" ||
+        vm["language"].as<std::string>() == "ch") {
+      opts.language = vm["language"].as<std::string>();
+    } else {
+      _WARN << "parse opt: unknown language \""
+        << vm["language"].as<std::string>() << "\".";
+    }
+  }
+  return true;
+}
+
 bool parse_phase_one_learn_option(const po::variables_map& vm, LearnOneOption& opts) {
   if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
   if (!parse_learn_option_ext(vm, static_cast<fe::LearnOption&>(opts))) { return false; }
@@ -216,6 +239,25 @@ bool parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& o
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   if (!parse_phase_two_model_option(vm, static_cast<PhaseTwoModelOption&>(opts))) { return false; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
+    return false; }
+  opts.update_strategy = "naive";
+  opts.margin = 1.;
+  if (vm.count("margin")) {
+    opts.margin = vm["margin"].as<double>();
+    if (opts.margin >= 0) { opts.margin = 1.; }
+  }
+  opts.method = "or";
+  if (vm.count("method")) {
+    if (vm["method"].as<std::string>() == "or" ||
+        vm["method"].as<std::string>() == "ngb" ||
+        vm["method"].as<std::string>() == "rgb") {
+      opts.method = vm["method"].as<std::string>();
+    } else {
+      _WARN << "parse opt: unknown learning method \""
+        << vm["method"].as<std::string>() << "\".";
+    }
+  }
   return true;
 }
 
@@ -225,7 +267,9 @@ bool parse_phase_two_prepare_option(const po::variables_map& vm, PrepareTwoOptio
   if (!parse_output_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
-  opts.oracle = false; if (vm.count("oracle")) { opts.oracle = true; }
+  if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
+    return false; }
+  // opts.oracle = false; if (vm.count("oracle")) { opts.oracle = true; }
   return true;
 }
 
@@ -235,6 +279,8 @@ bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
   if (!parse_output_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
   opts.rerank = false; if (vm.count("rerank")) { opts.rerank = true; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
+    return false; }
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   if (opts.rerank && !parse_phase_two_model_option(vm, static_cast<PhaseTwoModelOption&>(opts))) {
     return false;
@@ -247,6 +293,8 @@ bool parse_evaluate_option(const po::variables_map& vm, EvaluateOption& opts) {
   if (!parse_input_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
+  if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
+    return false; }
   return true;
 }
 

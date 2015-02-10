@@ -9,6 +9,14 @@ namespace ZuoPar {
 
 class Dependency {
 public:
+  Dependency() {}
+
+  Dependency(const std::vector<form_t>& _forms,
+      const std::vector<postag_t>& _postags,
+      const std::vector<int>& _heads,
+      const std::vector<deprel_t>& _deprels)
+    : forms(_forms), postags(_postags), heads(_heads), deprels(_deprels) {}
+
   //! the forms of the dependency tree
   std::vector<form_t> forms;
 

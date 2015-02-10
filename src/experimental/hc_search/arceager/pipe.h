@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <boost/tuple/tuple.hpp>
 #include "types/dependency.h"
 #include "engine/token_alphabet.h"
 #include "frontend/common_opt.h"
@@ -28,18 +29,21 @@ public:
   Pipe(const LearnTwoOption& opts);
   Pipe(const TestOption& opts);
   Pipe(const EvaluateOption& opts);
+  ~Pipe();
   bool setup();
+  bool setup2();
   void run();
-  void learn2();
+  void run2();
   bool phase_one_load_model(const std::string& phase_one_model_path);
   bool phase_two_load_model(const std::string& phase_two_model_path);
   void phase_one_save_model(const std::string& phase_one_model_path);
   void phase_two_save_model(const std::string& phase_two_model_path);
   void build_output(const State& source, Dependency& output);
   void build_knowledge();
-  void write_prepared_data(const State& good, const State& bad, std::ostream& os);
-  bool read_dataset2();
+  // void write_prepared_data(const State& good, const State& bad, std::ostream& os);
 private:
+  void train_one_pair(const Dependency& oracle, const Dependency& good,
+      const Dependency& bad, int timestamp);
   //!
   bool is_punctuation(const form_t& postag);
 
@@ -47,6 +51,46 @@ private:
   int loss(const Dependency& predict, const Dependency& oracle,
       bool labeled, bool ignore_punctuation, int& nr_effective_tokens);
 private:
+  struct DependencyWrapper {
+    DependencyWrapper(const std::vector<form_t>& f,
+        const std::vector<postag_t>& p,
+        const std::vector<int>& h,
+        const std::vector<deprel_t>& d)
+      : forms(f), postags(p), heads(h), deprels(d) {}
+
+    const std::vector<form_t>& forms;
+    const std::vector<postag_t>& postags;
+    const std::vector<int>& heads;
+    const std::vector<deprel_t>& deprels;
+  };
+
+  struct RerankingInstanceParse {
+    int rank;
+    floatval_t score;
+    std::vector<int> heads;
+    std::vector<deprel_t> deprels;
+
+    void resize(size_t N) {
+      heads.resize(N);
+      deprels.resize(N);
+    }
+  };
+
+  struct RerankingInstance {
+    std::vector<form_t>   forms;
+    std::vector<postag_t> postags;
+    RerankingInstanceParse oracle;
+    std::vector< RerankingInstanceParse > good;
+    std::vector< RerankingInstanceParse > bad;
+
+    void init(size_t N, size_t nr_good, size_t nr_bad) {
+      forms.resize(N);  postags.resize(N);  oracle.resize(N);
+      good.resize(nr_good); bad.resize(nr_bad);
+      for (RerankingInstanceParse& item: good) { item.resize(N); }
+      for (RerankingInstanceParse& item: bad) { item.resize(N); }
+    }
+  };
+
   enum PipeModeExt {
     kPipeLearnPhaseOne,
     kPipePreparePhaseTwo,
@@ -54,10 +98,29 @@ private:
     kPipeEvaluate,
     kPipeTest};
 
+  enum PipeLearnTwoMode {
+    kPipeLearnTwoOracleAgainstRest,
+    kPipeLearnTwoNaiveGoodAgainstBad,
+    kPipeLearnTwoRelexedGoodAgainstBad
+  };
+
+  typedef boost::tuple<
+    DependencyWrapper,
+    DependencyWrapper,
+    DependencyWrapper> train_tuple_t;
+
+  void wrapper_to_instance(const DependencyWrapper& wrapper, Dependency& instance);
+  void run2_learn_naive(const std::vector< train_tuple_t >& train_data);
+  void run2_learn_oracle_against_rest();
+  void run2_learn_naive_good_against_bad();
+  void run2_learn_relaxed_good_against_bad();
+
   PipeModeExt mode_ext;
+  PipeLearnTwoMode mode_learn_two;
+  double margin;
   bool rerank;                      //! Use to specify rerank.
-  bool oracle;                      //! Used in preparation phase.
   std::string root;                 //! The root relation string.
+  std::string language;             //! The language.
   std::string phase_one_model_path; //! The path to the phase one model.
   std::string phase_two_model_path; //! The path to the phase two model.
 
@@ -81,7 +144,7 @@ private:
   eg::TokenAlphabet deprels_alphabet;
 
   std::vector<Dependency> dataset;
-  std::vector<std::pair<Dependency, Dependency> > dataset2;
+  std::vector<RerankingInstance> dataset2;
 };
 
 

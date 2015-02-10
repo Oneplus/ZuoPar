@@ -58,9 +58,6 @@ public:
   const std::vector<form_t>& forms;
   const std::vector<postag_t>& postags;
   const deprel_t* deprels;
-  std::vector< int > span_length;
-  std::vector< int > nr_children;
-
   //! Begin singular
   /* 1 */ std::vector< int > H;
   /* 2 */ std::vector< T2 > H_H;
@@ -133,6 +130,13 @@ public:
   std::vector< T4 > G_P_M_nM;
   //! End for 2nd-order sibling.
 
+  //! Begin 2nd-order head bigram.
+  // - relation
+  std::vector< T4 > H1_H_M1_M;
+  std::vector< T5 > H1_H_M1_M_Dir;
+  //! End for 2nd-order head bigram.
+
+
   //! Begin 3rd-order grandgrandparents
   std::vector< T4 > G_P_M_C;
   std::vector< T5 > G_P_M_C_Dir;
@@ -158,18 +162,42 @@ public:
   std::vector< T4 > H_M_T_Dir;
   //! End for 3rd-order tri-sibling
 
+  //! Begin 3rd-order pp attachment.
   std::vector< T2 > PP_H_M;
   std::vector< T3 > PP_H_H_M;
   std::vector< T3 > PP_H_M_M;
+  //! End for 3rd-order pp attachement.
+
+  //! Begin 3rd-order inner-sibling-grandchildren
+  std::vector< T4 > H_S_M_GC;
+  std::vector< T5 > H_S_M_GC_Dir;
+  //! End for 3rd-order inner-sibling-grandchildren
+
+  //! Begin 3rd-order outer-sibling-grandchildren
+  std::vector< T4 > H_S_GC_M;
+  std::vector< T5 > H_S_GC_M_Dir;
+  //! End for 3rd-order outer-sibling-grandchildren
+
+  //! Begin 3rd-order span length
+  std::vector< int > span_length;
+  //! End for 3rd-order span length;
+
+  //! Begin 3rd-order valency
+  std::vector< int > nr_children;
+  std::vector< int > nr_left_children;
+  std::vector< int > nr_right_children;
+  //! End for 3rd-order valency
+
+  //! Begin 3rd-order label set.
+  std::vector< int > label_set;
+  std::vector< int > left_label_set;
+  std::vector< int > right_label_set;
+  //! End for 3rd-order label set.
 
   //! Right branch
   int RB;
 
   //! Coordination
-
-  std::vector< boost::tuple<int, int, int, int> > head_bigrams;
-  std::vector< boost::tuple<int, int, int, int> > outer_sibling_grandchildren;
-  std::vector< boost::tuple<int, int, int, int> > inner_sibling_grandchildren;
 
 private:
   int non_punctuation_span_length(int now,

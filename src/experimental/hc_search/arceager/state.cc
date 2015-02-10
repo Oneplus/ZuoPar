@@ -19,7 +19,7 @@ void
 State::build(const Dependency& r) {
   ref = &r;
   this->buffer = r.size();
-  for (int i = 0; i < r.heads.size(); ++ i) {
+  for (int i = 0; i < r.size(); ++ i) {
     heads[i] = r.heads[i];
     deprels[i] = r.deprels[i];
   }
