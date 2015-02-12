@@ -74,11 +74,16 @@ Decoder::transit(const State& source, const Action& act, const floatval_t& score
 }
 
 void
-Decoder::get_results_in_beam(std::vector<const State*>& results,
+Decoder::get_results_in_beam(std::vector<State*>& results,
     int round) {
   for (int i = 0; i < lattice_size[round]; ++ i) {
     results.push_back(lattice_heads[round]+ i);
   }
+}
+
+int
+Decoder::get_ending_round() {
+  return this->step;
 }
 
 } //  namespace arceager

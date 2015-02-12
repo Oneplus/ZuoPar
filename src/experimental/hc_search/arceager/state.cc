@@ -25,6 +25,13 @@ State::build(const Dependency& r) {
   }
 }
 
+void
+State::build(const Dependency& r, int k, floatval_t s) {
+  this->top0 = k;
+  this->score = s;
+  build(r);
+}
+
 
 bool
 State::complete() const {

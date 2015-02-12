@@ -18,7 +18,9 @@ struct PhaseTwoLanguageOption { std::string language; };
 struct LearnOneOption:
   public fe::LearnOption,
   public RootOption,
-  public PhaseOneModelOption {};
+  public PhaseOneModelOption {
+  std::string method;
+};
 
 struct PrepareTwoOption:
   public fe::TestOption,
@@ -32,7 +34,6 @@ struct LearnTwoOption:
   public PhaseOneModelOption,
   public PhaseTwoModelOption,
   public PhaseTwoLanguageOption {
-  double margin;
   std::string method;
 };
 

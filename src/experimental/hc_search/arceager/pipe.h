@@ -98,7 +98,13 @@ private:
     kPipeEvaluate,
     kPipeTest};
 
-  enum PipeLearnTwoMode {
+  enum PipeLearnOneMethod {
+    kPipeLearnOneRegular,
+    kPipeLearnOneBest,
+    kPipeLearnOneWorst
+  };
+
+  enum PipeLearnTwoMethod {
     kPipeLearnTwoOracleAgainstRest,
     kPipeLearnTwoNaiveGoodAgainstBad,
     kPipeLearnTwoRelexedGoodAgainstBad
@@ -115,9 +121,11 @@ private:
   void run2_learn_naive_good_against_bad();
   void run2_learn_relaxed_good_against_bad();
 
+  //! The global mode control flag.
   PipeModeExt mode_ext;
-  PipeLearnTwoMode mode_learn_two;
-  double margin;
+  PipeLearnOneMethod learn_one_method;
+  PipeLearnTwoMethod learn_two_method;
+
   bool rerank;                      //! Use to specify rerank.
   std::string root;                 //! The root relation string.
   std::string language;             //! The language.

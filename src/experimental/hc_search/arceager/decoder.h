@@ -39,8 +39,10 @@ public:
       State* target);
 
   //! Get the results in beam.
-  void get_results_in_beam(std::vector<const State*>& results, int round);
+  void get_results_in_beam(std::vector<State*>& results, int round);
 
+  //!
+  int get_ending_round();
 private:
   int nr_deprels;
   int root_tag;

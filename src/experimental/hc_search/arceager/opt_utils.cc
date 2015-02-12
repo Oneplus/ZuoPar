@@ -26,6 +26,10 @@ po::options_description build_phase_one_learn_optparser(const std::string& usage
                                               " early - early update (Collins 04) [default]\n"
                                               " max - max violation (Huang 12)")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
+    ("method", po::value<std::string>(),  "The update strategy when oracle fallout.\n"
+                                          " regular - classic beam search style.\n"
+                                          " best - update with the best [default].\n"
+                                          " worst - update with the worst.")
     ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
     ("verbose,v", "Logging every detail.")
     ;
@@ -230,6 +234,17 @@ bool parse_phase_one_learn_option(const po::variables_map& vm, LearnOneOption& o
   if (!parse_learn_option_ext(vm, static_cast<fe::LearnOption&>(opts))) { return false; }
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  opts.method = "best";
+  if (vm.count("method")) {
+    if (vm["method"].as<std::string>() == "best"
+        || vm["method"].as<std::string>() == "worst"
+        || vm["method"].as<std::string>() == "regular") {
+      opts.method = vm["method"].as<std::string>();
+    } else {
+      _WARN << "parse opt: unknown learning method \""
+        << vm["method"].as<std::string>() << "\".";
+    }
+  }
   return true;
 }
 
@@ -242,11 +257,6 @@ bool parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& o
   if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
     return false; }
   opts.update_strategy = "naive";
-  opts.margin = 1.;
-  if (vm.count("margin")) {
-    opts.margin = vm["margin"].as<double>();
-    if (opts.margin >= 0) { opts.margin = 1.; }
-  }
   opts.method = "or";
   if (vm.count("method")) {
     if (vm["method"].as<std::string>() == "or" ||

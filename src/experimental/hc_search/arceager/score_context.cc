@@ -125,6 +125,9 @@ CostScoreContext::CostScoreContext(const State& state)
   RB = RB * 255 / len;
   RB = Math::binned_1_2_3_4_5_6_10[RB+ 1];
 
+  RANK = state.top0;
+  SCORE = int(state.score * 100)+ 1;
+
   span_length.resize(len, 0);
   non_punctuation_span_length(root, postags, tree, span_length);
   /*for (int i = 0; i < len; ++ i) {
@@ -196,32 +199,32 @@ CostScoreContext::CostScoreContext(const State& state)
           Math::binned_1_2_3_4_5_6_10[hid- mid]);
 
       // relation
-      /*7*/  H_M.push_back( __M(hid, mid) );
-      /*8*/  H_H_M.push_back( __M(hid, hid, mid));
-      /*9*/  H_M_M.push_back( __M(hid, mid, mid));
-      /*10*/ H_H_M_M.push_back( __M(hid, hid, mid, mid));
-      /*11*/ H_M_M_M.push_back( __M(hid, mid, mid, mid));
-      /*12*/ H_H_M_M_M.push_back( __M(hid, hid, mid, mid, mid));
-      /*13*/ H_M_Dir.push_back( __M(hid, mid, Dir) );
-      /*14*/ H_M_Dist.push_back( __M(hid, mid, Dist) );
-      /*15*/ H_H_M_Dir.push_back( __M(hid, hid, mid, Dir) );
-      /*16*/ H_H_M_Dist.push_back( __M(hid, hid, mid, Dist) );
-      /*17*/ H_M_M_Dir.push_back( __M(hid, mid, mid, Dir) );
-      /*18*/ H_M_M_Dist.push_back( __M(hid, mid, mid, Dist) );
-      /*19*/ H_H_M_M_Dir.push_back( __M(hid, hid, mid, mid, Dir) );
-      /*20*/ H_H_M_M_Dist.push_back( __M(hid, hid, mid, mid, Dist) );
+      H_M.push_back( __M(hid, mid) );
+      H_H_M.push_back( __M(hid, hid, mid));
+      H_M_M.push_back( __M(hid, mid, mid));
+      H_H_M_M.push_back( __M(hid, hid, mid, mid));
+      H_M_M_M.push_back( __M(hid, mid, mid, mid));
+      H_H_M_M_M.push_back( __M(hid, hid, mid, mid, mid));
+      H_M_Dir.push_back( __M(hid, mid, Dir) );
+      H_M_Dist.push_back( __M(hid, mid, Dist) );
+      H_H_M_Dir.push_back( __M(hid, hid, mid, Dir) );
+      H_H_M_Dist.push_back( __M(hid, hid, mid, Dist) );
+      H_M_M_Dir.push_back( __M(hid, mid, mid, Dir) );
+      H_M_M_Dist.push_back( __M(hid, mid, mid, Dist) );
+      H_H_M_M_Dir.push_back( __M(hid, hid, mid, mid, Dir) );
+      H_H_M_M_Dist.push_back( __M(hid, hid, mid, mid, Dist) );
 
       // context
-      /*21*/ pH_H_M_Mn.push_back(__M(hid- 1, hid, mid, mid+ 1));
-      /*22*/ pH_H_M.push_back(__M(hid- 1, hid, mid));
-      /*23*/ H_M_Mn.push_back(__M(hid, mid, mid+ 1));
-      /*24*/ pH_H_Mn.push_back(__M(hid- 1, hid, mid+ 1));
-      /*25*/ pH_M_Mn.push_back(__M(hid- 1, mid, mid+ 1));
-      /*26*/ H_nH_pM_M.push_back(__M(hid, hid+1, mid-1, mid));
-      /*27*/ H_nH_pM.push_back(__M(hid, hid+1, mid));
-      /*28*/ nH_pM_M.push_back(__M(hid+1, mid-1, mid));
-      /*29*/ H_nH_M.push_back(__M(hid, hid+1, mid));
-      /*30*/ H_pM_M.push_back(__M(hid, mid-1, mid));
+      pH_H_M_Mn.push_back(__M(hid- 1, hid, mid, mid+ 1));
+      pH_H_M.push_back(__M(hid- 1, hid, mid));
+      H_M_Mn.push_back(__M(hid, mid, mid+ 1));
+      pH_H_Mn.push_back(__M(hid- 1, hid, mid+ 1));
+      pH_M_Mn.push_back(__M(hid- 1, mid, mid+ 1));
+      H_nH_pM_M.push_back(__M(hid, hid+1, mid-1, mid));
+      H_nH_pM.push_back(__M(hid, hid+1, mid));
+      nH_pM_M.push_back(__M(hid+1, mid-1, mid));
+      H_nH_M.push_back(__M(hid, hid+1, mid));
+      H_pM_M.push_back(__M(hid, mid-1, mid));
     }
     // End first order
 

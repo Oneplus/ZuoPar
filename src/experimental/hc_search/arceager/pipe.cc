@@ -22,6 +22,12 @@ Pipe::Pipe(const LearnOneOption& opts)
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
   root = opts.root;
+
+  if (opts.method == "best") { learn_one_method = kPipeLearnOneBest; }
+  else if (opts.method == "worst") { learn_one_method = kPipeLearnOneWorst; }
+  else if (opts.method == "regular") { learn_one_method = kPipeLearnOneRegular; }
+  _INFO << "report: learning method = " << opts.method;
+
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
     _INFO << "report(1): model " << phase_one_model_path << " is loaded.";
@@ -39,14 +45,15 @@ Pipe::Pipe(const LearnTwoOption& opts)
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
   root = opts.root;
+
   language = opts.language;
   _INFO << "report: language = " << language;
-  margin = opts.margin;
-  _INFO << "report: margin = " << margin;
-  if (opts.method == "or") { mode_learn_two = kPipeLearnTwoOracleAgainstRest; }
-  else if (opts.method == "ngb") {  mode_learn_two = kPipeLearnTwoNaiveGoodAgainstBad;  }
-  else if (opts.method == "rgb") {  mode_learn_two = kPipeLearnTwoRelexedGoodAgainstBad; }
-  _INFO << "report: training method = " << opts.method;
+
+  if (opts.method == "or") { learn_two_method = kPipeLearnTwoOracleAgainstRest; }
+  else if (opts.method == "ngb") {  learn_two_method = kPipeLearnTwoNaiveGoodAgainstBad;  }
+  else if (opts.method == "rgb") {  learn_two_method = kPipeLearnTwoRelexedGoodAgainstBad; }
+  _INFO << "report: learning method = " << opts.method;
+
   phase_one_model_path = opts.phase_one_model_path;
   phase_two_model_path = opts.phase_two_model_path;
   if (phase_one_load_model(phase_one_model_path) && phase_two_load_model(phase_two_model_path)) {
@@ -345,11 +352,11 @@ Pipe::setup2() {
       ri.init(N, nr_good, nr_bad);
       for (int rank = 0, ig = 0, ib = 0; rank < info.size(); ++ rank) {
         if (info[rank].first) {
-          ri.good[ig].rank = rank;
+          ri.good[ig].rank = rank+ 1;
           ri.good[ig].score = info[rank].second;
           ++ ig;
         } else {
-          ri.bad[ib].rank = rank;
+          ri.bad[ib].rank = rank+ 1;
           ri.bad[ib].score = info[rank].second;
           ++ ib;
         }
@@ -410,8 +417,8 @@ void
 Pipe::train_one_pair(const Dependency& oracle, const Dependency& good,
     const Dependency& bad, int timestamp) {
   State good_state, bad_state;
-  good_state.build(good);
-  bad_state.build(bad);
+  good_state.build(good, 1, 0);
+  bad_state.build(bad, 1, 0);
 
   floatval_t good_score = cost_weight->score(good_state, false);
   floatval_t bad_score = cost_weight->score(bad_state, false);
@@ -523,13 +530,26 @@ Pipe::run2_learn_relaxed_good_against_bad() {
     const RerankingInstance& instance = dataset2[ranks[n]];
 
     int worst_good_position = -1, best_bad_position = -1;
+    floatval_t highest_phase_one_score = -1e20;
+    floatval_t lowest_phase_one_score = 1e20;
+    for (const RerankingInstanceParse& parse: instance.good) {
+      highest_phase_one_score = std::max(highest_phase_one_score, parse.score);
+      lowest_phase_one_score = std::min(lowest_phase_one_score, parse.score);
+    }
+    for (const RerankingInstanceParse& parse: instance.bad) {
+      highest_phase_one_score = std::max(highest_phase_one_score, parse.score);
+      lowest_phase_one_score = std::min(lowest_phase_one_score, parse.score);
+    }
+    floatval_t delta = highest_phase_one_score - lowest_phase_one_score;
+
     floatval_t worst_good_score, best_bad_score;
 
     for (int i = 0; i < instance.good.size(); ++ i) {
       Dependency dependency(instance.forms, instance.postags,
           instance.good[i].heads, instance.good[i].deprels);
       State state;
-      state.build(dependency);
+      state.build(dependency, instance.good[i].rank,
+          (instance.good[i].score- lowest_phase_one_score) / delta);
       floatval_t score = cost_weight->score(state, false);
       if (worst_good_position == -1 || score < worst_good_score) {
         worst_good_position = i;
@@ -541,7 +561,8 @@ Pipe::run2_learn_relaxed_good_against_bad() {
       Dependency dependency(instance.forms, instance.postags,
           instance.bad[i].heads, instance.bad[i].deprels);
       State state;
-      state.build(dependency);
+      state.build(dependency, instance.bad[i].rank,
+          (instance.bad[i].score-lowest_phase_one_score) / delta);
       floatval_t score = cost_weight->score(state, false);
       if (best_bad_position == -1 || score > best_bad_score) {
         best_bad_position = i;
@@ -592,11 +613,11 @@ Pipe::run2() {
     return;
   }
 
-  if (mode_learn_two == kPipeLearnTwoOracleAgainstRest) {
+  if (learn_two_method == kPipeLearnTwoOracleAgainstRest) {
     run2_learn_oracle_against_rest();
-  } else if (mode_learn_two == kPipeLearnTwoNaiveGoodAgainstBad) {
+  } else if (learn_two_method == kPipeLearnTwoNaiveGoodAgainstBad) {
     run2_learn_naive_good_against_bad();
-  } else if (mode_learn_two == kPipeLearnTwoRelexedGoodAgainstBad) {
+  } else if (learn_two_method == kPipeLearnTwoRelexedGoodAgainstBad) {
     run2_learn_relaxed_good_against_bad();
   } else {
     _ERROR << "unknown learning method.";
@@ -631,9 +652,13 @@ Pipe::run() {
 
   int nr_correct_in_beam = 0;
   int nr_correct_in_beam_not_best = 0;
-  int nr_oracle_recalled_heads = 0;
-  int nr_oracle_recalled_deprels = 0;
+  int nr_oracle_positive_recalled_heads = 0;
+  int nr_oracle_negative_recalled_heads = 0;
+  int nr_oracle_positive_recalled_deprels = 0;
+  int nr_oracle_negative_recalled_deprels = 0;
   int nr_deprels = 0;
+  floatval_t avg_uas = 0.;
+  floatval_t avg_las = 0.;
 
   for (size_t n = 0; n < N; ++ n) {
     const Dependency& instance = dataset[ranks[n]];
@@ -651,12 +676,34 @@ Pipe::run() {
         max_nr_actions);
 
     if (mode_ext == kPipeLearnPhaseOne) {
-      if (!result.first->complete()) {
+      if (learn_one_method == kPipeLearnOneRegular) {
         heuristic_learner->set_timestamp(n+ 1);
         heuristic_learner->learn(result.first, result.second);
+      } else {
+        if (!result.first->complete()) {
+          if (learn_one_method == kPipeLearnOneBest) {
+            heuristic_learner->set_timestamp(n+ 1);
+            heuristic_learner->learn(result.first, result.second);
+          } else if (learn_one_method == kPipeLearnOneWorst) {
+            int round = decoder->get_ending_round();
+            std::vector<State*> final_results;
+            decoder->get_results_in_beam(final_results, round);
+
+            const State* worst_state = NULL;
+            floatval_t worst_score = 1e20;
+            for (const State* candidate_result: final_results) {
+              if (worst_state == NULL || worst_score > candidate_result->score) {
+                worst_state = candidate_result;
+                worst_score = candidate_result->score;
+              }
+            }
+            heuristic_learner->set_timestamp(n+ 1);
+            heuristic_learner->learn(worst_state, result.second);
+          }
+        }
       }
     } else if (mode_ext == kPipePreparePhaseTwo) {
-      std::vector<const State*> final_results;
+      std::vector<State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
       int best_loss = instance.size(), dummy;
       for (const State* candidate_result: final_results) {
@@ -700,15 +747,18 @@ Pipe::run() {
       }
       (*os) << std::endl;
     } else if (mode_ext == kPipeEvaluate) {
-      std::vector<const State*> final_results;
+      std::vector<State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
 
       bool correct_in_beam = false;
       bool correct_in_beam_not_best = true;
-      int oracle_recalled_heads = 0;
-      int oracle_recalled_deprels = 0;
+      int oracle_positive_recalled_heads = 0;
+      int oracle_positive_recalled_deprels = 0;
+      int oracle_negative_recalled_heads = instance.size();
+      int oracle_negative_recalled_deprels = instance.size();
       int nr_effective_tokens = 0;
       int loss1, loss2;
+      floatval_t one_avg_uas = 0, one_avg_las = 0;
       for (const State* candidate_result: final_results) {
         Dependency output; build_output((*candidate_result), output);
         loss1 = loss(output, instance, true, true, nr_effective_tokens);
@@ -723,31 +773,62 @@ Pipe::run() {
           }
         }
 
-        if (oracle_recalled_heads < nr_effective_tokens- loss2) {
-          oracle_recalled_heads = nr_effective_tokens- loss2;
+        int recalled_heads = nr_effective_tokens - loss2;
+        int recalled_deprels = nr_effective_tokens - loss1;
+        one_avg_las += floatval_t(recalled_deprels) / nr_effective_tokens;
+        one_avg_uas += floatval_t(recalled_heads) / nr_effective_tokens;
+
+        if (oracle_positive_recalled_heads < recalled_heads) {
+          oracle_positive_recalled_heads = recalled_heads;
         }
 
-        if (oracle_recalled_deprels < nr_effective_tokens- loss1) {
-          oracle_recalled_deprels = nr_effective_tokens- loss1;
+        if (oracle_negative_recalled_heads > recalled_heads) {
+          oracle_negative_recalled_heads = recalled_heads;
+        }
+
+        if (oracle_positive_recalled_deprels < recalled_deprels) {
+          oracle_positive_recalled_deprels = recalled_deprels;
+        }
+
+        if (oracle_negative_recalled_deprels > recalled_deprels) {
+          oracle_negative_recalled_deprels = recalled_deprels;
         }
       }
 
-      nr_oracle_recalled_heads += oracle_recalled_heads;
-      nr_oracle_recalled_deprels += oracle_recalled_deprels;
+      nr_oracle_positive_recalled_heads += oracle_positive_recalled_heads;
+      nr_oracle_negative_recalled_heads += oracle_negative_recalled_heads;
+      nr_oracle_positive_recalled_deprels += oracle_positive_recalled_deprels;
+      nr_oracle_negative_recalled_deprels += oracle_negative_recalled_deprels;
       nr_deprels += nr_effective_tokens;
+      if (one_avg_las > 0 && one_avg_uas > 0) {
+        avg_uas += one_avg_uas / final_results.size();
+        avg_las += one_avg_las / final_results.size();
+      } else {
+        avg_uas += 1.;
+        avg_las += 1.;
+      }
 
       if (correct_in_beam) {
         ++ nr_correct_in_beam;
         if (correct_in_beam_not_best) { ++ nr_correct_in_beam_not_best; }
       }
     } else {
-      std::vector<const State*> final_results;
+      std::vector<State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
 
       const State* best_result = NULL;
       if (rerank) {
+        std::sort(final_results.begin(), final_results.end(),
+          [](const State* x,  const State* y) -> bool { return x->score > y->score; });
+
         floatval_t best_score = -1.;
-        for (const State* candidate_result: final_results) {
+        floatval_t highest_phase_one_score = final_results[0]->score;
+        floatval_t lowest_phase_one_score = final_results.back()->score;
+        floatval_t delta = highest_phase_one_score - lowest_phase_one_score;
+        for (int i = 0; i < final_results.size(); ++ i) {
+          State* candidate_result = final_results[i];
+          candidate_result->score = (candidate_result->score - lowest_phase_one_score)/ delta;
+          candidate_result->top0 = (i+ 1);
           floatval_t score = cost_weight->score((*candidate_result), true);
           if (best_result == NULL || score > best_score) {
             best_score = score;
@@ -780,10 +861,16 @@ Pipe::run() {
     _INFO << "report: correct in beam (not best): " << nr_correct_in_beam_not_best
       << "/" << nr_correct_in_beam
       << "=" << floatval_t(nr_correct_in_beam_not_best)/nr_correct_in_beam;
-    _INFO << "report: UAS upperbound: " << nr_oracle_recalled_heads
-      << "/" << nr_deprels << "=" << floatval_t(nr_oracle_recalled_heads)/nr_deprels;
-    _INFO << "report: LAS upperbound: " << nr_oracle_recalled_deprels
-      << "/" << nr_deprels << "=" << floatval_t(nr_oracle_recalled_deprels)/nr_deprels;
+    _INFO << "report: UAS upperbound: " << nr_oracle_positive_recalled_heads
+      << "/" << nr_deprels << "=" << floatval_t(nr_oracle_positive_recalled_heads)/nr_deprels;
+    _INFO << "report: LAS upperbound: " << nr_oracle_positive_recalled_deprels
+      << "/" << nr_deprels << "=" << floatval_t(nr_oracle_positive_recalled_deprels)/nr_deprels;
+    _INFO << "report: UAS lowerbound: " << nr_oracle_negative_recalled_heads
+      << "/" << nr_deprels << "=" << floatval_t(nr_oracle_negative_recalled_heads)/nr_deprels;
+    _INFO << "report: LAS lowerbound: " << nr_oracle_negative_recalled_deprels
+      << "/" << nr_deprels << "=" << floatval_t(nr_oracle_negative_recalled_deprels)/nr_deprels;
+    _INFO << "report: averaged UAS: " << avg_uas / N;
+    _INFO << "report: averaged LAS: " << avg_las / N;
   }
 
   if (os != NULL && os != &std::cout) { delete os; }

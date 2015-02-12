@@ -59,41 +59,41 @@ public:
   const std::vector<postag_t>& postags;
   const deprel_t* deprels;
   //! Begin singular
-  /* 1 */ std::vector< int > H;
-  /* 2 */ std::vector< T2 > H_H;
-  /* 3 */ std::vector< T3 > H_H_H;
-  /* 4 */ std::vector< T3 > H_pH_H;
-  /* 5 */ std::vector< T3 > H_nH_H;
-  /* 6 */ std::vector< T4 > pH_H_nH_H;
+  std::vector< int > H;
+  std::vector< T2 > H_H;
+  std::vector< T3 > H_H_H;
+  std::vector< T3 > H_pH_H;
+  std::vector< T3 > H_nH_H;
+  std::vector< T4 > pH_H_nH_H;
   //! End singular
 
   //! Begin first-order
   // - relation
-  /* 7 */ std::vector< T2 > H_M;
-  /* 8 */ std::vector< T3 > H_H_M;
-  /* 9 */ std::vector< T3 > H_M_M;
-  /* 10*/ std::vector< T4 > H_M_M_M;
-  /* 11*/ std::vector< T4 > H_H_M_M;
-  /* 12*/ std::vector< T5 > H_H_M_M_M;
-  /* 13*/ std::vector< T3 > H_M_Dir;
-  /* 14*/ std::vector< T3 > H_M_Dist;
-  /* 15*/ std::vector< T4 > H_H_M_Dir;
-  /* 16*/ std::vector< T4 > H_H_M_Dist;
-  /* 17*/ std::vector< T4 > H_M_M_Dir;
-  /* 18*/ std::vector< T4 > H_M_M_Dist;
-  /* 19*/ std::vector< T5 > H_H_M_M_Dir;
-  /* 20*/ std::vector< T5 > H_H_M_M_Dist;
+  std::vector< T2 > H_M;
+  std::vector< T3 > H_H_M;
+  std::vector< T3 > H_M_M;
+  std::vector< T4 > H_M_M_M;
+  std::vector< T4 > H_H_M_M;
+  std::vector< T5 > H_H_M_M_M;
+  std::vector< T3 > H_M_Dir;
+  std::vector< T3 > H_M_Dist;
+  std::vector< T4 > H_H_M_Dir;
+  std::vector< T4 > H_H_M_Dist;
+  std::vector< T4 > H_M_M_Dir;
+  std::vector< T4 > H_M_M_Dist;
+  std::vector< T5 > H_H_M_M_Dir;
+  std::vector< T5 > H_H_M_M_Dist;
   // - context
-  /* 21*/ std::vector< T4 > pH_H_M_Mn;
-  /* 22*/ std::vector< T3 > pH_H_M;
-  /* 23*/ std::vector< T3 > H_M_Mn;
-  /* 24*/ std::vector< T3 > pH_H_Mn;
-  /* 25*/ std::vector< T3 > pH_M_Mn;
-  /* 26*/ std::vector< T4 > H_nH_pM_M;
-  /* 27*/ std::vector< T3 > H_nH_pM;
-  /* 28*/ std::vector< T3 > nH_pM_M;
-  /* 29*/ std::vector< T3 > H_pM_M;
-  /* 30*/ std::vector< T3 > H_nH_M;
+  std::vector< T4 > pH_H_M_Mn;
+  std::vector< T3 > pH_H_M;
+  std::vector< T3 > H_M_Mn;
+  std::vector< T3 > pH_H_Mn;
+  std::vector< T3 > pH_M_Mn;
+  std::vector< T4 > H_nH_pM_M;
+  std::vector< T3 > H_nH_pM;
+  std::vector< T3 > nH_pM_M;
+  std::vector< T3 > H_pM_M;
+  std::vector< T3 > H_nH_M;
   //! End first-order
 
   //! Begin 2nd-order
@@ -197,6 +197,9 @@ public:
   //! Right branch
   int RB;
 
+  int RANK;
+
+  int SCORE;
   //! Coordination
 
 private:

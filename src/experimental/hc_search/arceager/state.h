@@ -25,6 +25,7 @@ public:
 
   //!
   void build(const Dependency& p);
+  void build(const Dependency& p, int r, floatval_t s);
 
   /**
    * This method is needed by @class TransitionSystem.

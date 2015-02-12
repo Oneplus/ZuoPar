@@ -65,6 +65,9 @@ protected:
   //! The size of the beam.
   int beam_size;
 
+  //! The step
+  int step;
+
   //! Use to specify if use averaged parameter.
   bool use_avg;
 
@@ -96,6 +99,7 @@ public:
       _ModelType* model_)
     : beam_size(beam_size_),
     use_avg(use_avg_),
+    step(-1),
     update_strategy(update_strategy_),
     model(model_) {
     candidate_transitions = new scored_transition_t[beam_size];
@@ -142,7 +146,6 @@ public:
     lattice_size.push_back(1);
     correct_state = row;
 
-    int step = 1;
     for (step = 1; step <= max_nr_actions; ++ step) {
       //_TRACE << "sys: round " << step;
 
