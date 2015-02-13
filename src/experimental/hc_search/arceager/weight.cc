@@ -87,36 +87,36 @@ HeuristicWeight::HeuristicWeight() {
 
 CostWeight::CostWeight() {
   /*Begin singular*/ {
-    __REG_1(H, deprels);                  /* lab(H) */
-    __REG_2(H_H, postags, deprels); /* H.p + lab(H) */
-    __REG_2(H_H, forms, deprels);   /* H.w + lab(H) */
-    __REG_3(H_H_H, forms, postags, deprels); /* H.w + H.p + lab(H) */
-    __REG_3(H_pH_H, postags, postags, deprels); /* H.p + pH.p + lab(H) */
-    __REG_3(H_nH_H, postags, postags, deprels); /* H.p + nH.p + lab(H) */
-    __REG_4(pH_H_nH_H, postags, postags, postags, deprels); /* pH.p + H.p + nH.p + lab(H) */
+    __REG_1(H, deprels);
+    __REG_2(H_H, postags, deprels);
+    __REG_2(H_H, forms, deprels);
+    __REG_3(H_H_H, forms, postags, deprels);
+    __REG_3(H_pH_H, postags, postags, deprels);
+    __REG_3(H_nH_H, postags, postags, deprels);
+    __REG_4(pH_H_nH_H, postags, postags, postags, deprels);
   } //! End singular
 
   /* Begin 1st-order */ {
-    __REG_2(H_M, forms, forms);     /* H.w + M.w */
-    __REG_2(H_M, forms, postags);   /* H.w + M.p */
-    __REG_2(H_M, postags, forms);   /* H.p + M.w */
-    __REG_2(H_M, postags, postags); /* H.p + M.p */
+    __REG_2(H_M, forms, forms);
+    __REG_2(H_M, forms, postags);
+    __REG_2(H_M, postags, forms);
+    __REG_2(H_M, postags, postags);
 
-    __REG_3(H_M_M, forms, forms, deprels);      /* H.w + M.w + lab(H, M) */
-    __REG_3(H_M_M, forms, postags, deprels);    /* H.w + M.p + lab(H, M) */
-    __REG_3(H_M_M, postags, forms, deprels);    /* H.p + M.w + lab(H, M) */
-    __REG_3(H_M_M, postags, postags, deprels);  /* H.p + M.p + lab(H, M) */
+    __REG_3(H_M_M, forms, forms, deprels);
+    __REG_3(H_M_M, forms, postags, deprels);
+    __REG_3(H_M_M, postags, forms, deprels);
+    __REG_3(H_M_M, postags, postags, deprels);
 
-    __REG_3(H_M_M, postags, postags, forms);  /* H.p + M.p + M.w */
-    __REG_3(H_M_M, forms, postags, forms);    /* H.w + M.p + M.w */
-    __REG_3(H_H_M, forms, postags, postags);  /* H.w + H.p + M.p */
-    __REG_3(H_H_M, forms, postags, forms);    /* H.w + H.p + M.p */
+    __REG_3(H_M_M, postags, postags, forms);
+    __REG_3(H_M_M, forms, postags, forms);
+    __REG_3(H_H_M, forms, postags, postags);
+    __REG_3(H_H_M, forms, postags, forms);
 
-    __REG_4(H_M_M_M, postags, postags, forms, deprels);  /* H.p + M.p + M.w + lab(H, M) */
-    __REG_4(H_M_M_M, forms, postags, forms, deprels);    /* H.w + M.p + M.w + lab(H, M) */
-    __REG_4(H_H_M_M, forms, postags, postags, deprels);  /* H.w + H.p + M.p + lab(H, M) */
-    __REG_4(H_H_M_M, forms, postags, forms, deprels);    /* H.w + H.p + M.p + lab(H, M) */
-    __REG_4(H_H_M_M, forms, postags, forms, postags);   /* H.w + H.p + M.w + M.p */
+    __REG_4(H_M_M_M, postags, postags, forms, deprels);
+    __REG_4(H_M_M_M, forms, postags, forms, deprels);
+    __REG_4(H_H_M_M, forms, postags, postags, deprels);
+    __REG_4(H_H_M_M, forms, postags, forms, deprels);
+    __REG_4(H_H_M_M, forms, postags, forms, postags);
 
     // distance and dir.
     __REGN_3(H_M_Dist, forms, forms);
@@ -405,7 +405,7 @@ CostWeight::CostWeight() {
             cache.push_back(uf_t(ctx.RB));
           }));
 
-    ufeat_map_repo.push_back(uf_map_t(
+    /*ufeat_map_repo.push_back(uf_map_t(
           [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
             cache.push_back(uf_t(ctx.RANK));
           }));
@@ -413,7 +413,7 @@ CostWeight::CostWeight() {
     ufeat_map_repo.push_back(uf_map_t(
           [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
             cache.push_back(uf_t(ctx.SCORE));
-          }));
+          }));*/
 
 
     // span length

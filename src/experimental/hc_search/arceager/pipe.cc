@@ -680,15 +680,23 @@ Pipe::run() {
         heuristic_learner->set_timestamp(n+ 1);
         heuristic_learner->learn(result.first, result.second);
       } else {
-        if (!result.first->complete()) {
+        int round = decoder->get_ending_round();
+        std::vector<State*> final_results;
+        decoder->get_results_in_beam(final_results, round);
+
+        bool oracle_in_beam = false;
+        for (const State* candidate_result: final_results) {
+          if (candidate_result == result.second) {
+            oracle_in_beam = true;
+            break;
+          }
+        }
+
+        if (!oracle_in_beam) {
           if (learn_one_method == kPipeLearnOneBest) {
             heuristic_learner->set_timestamp(n+ 1);
             heuristic_learner->learn(result.first, result.second);
           } else if (learn_one_method == kPipeLearnOneWorst) {
-            int round = decoder->get_ending_round();
-            std::vector<State*> final_results;
-            decoder->get_results_in_beam(final_results, round);
-
             const State* worst_state = NULL;
             floatval_t worst_score = 1e20;
             for (const State* candidate_result: final_results) {

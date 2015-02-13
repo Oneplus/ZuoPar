@@ -216,7 +216,8 @@ public:
     if (update_strategy == kMaxViolation) {
       return const_decode_result_t(max_violate_predite_state, max_violate_correct_state);
     } else {
-      const _StateType* best_target = search_best_state(row, row + lattice_size[step- 1]);
+      -- step;
+      const _StateType* best_target = search_best_state(row, row + lattice_size[step]);
       return const_decode_result_t(best_target, correct_state);
     }
   }
