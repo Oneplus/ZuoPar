@@ -43,7 +43,8 @@ public:
   // void write_prepared_data(const State& good, const State& bad, std::ostream& os);
 private:
   void train_one_pair(const Dependency& oracle, const Dependency& good,
-      const Dependency& bad, int timestamp);
+      const Dependency& bad, int good_rank, int bad_rank, 
+      floatval_t good_score, floatval_t bad_score, int timestamp);
   //!
   bool is_punctuation(const form_t& postag);
 

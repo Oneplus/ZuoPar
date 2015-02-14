@@ -46,11 +46,12 @@ public:
 
 class CostScoreContext {
 public:
-  typedef boost::tuple<int, int>                      T2;
-  typedef boost::tuple<int, int, int>                 T3;
-  typedef boost::tuple<int, int, int, int>            T4;
-  typedef boost::tuple<int, int, int, int, int>       T5;
-  typedef boost::tuple<int, int, int, int, int, int>  T6;
+  typedef boost::tuple<int, int>                          T2;
+  typedef boost::tuple<int, int, int>                     T3;
+  typedef boost::tuple<int, int, int, int>                T4;
+  typedef boost::tuple<int, int, int, int, int>           T5;
+  typedef boost::tuple<int, int, int, int, int, int>      T6;
+  typedef boost::tuple<int, int, int, int, int, int, int> T7;
 public:
   //! The score context class for extracting the global information.
   CostScoreContext(const State& state);
@@ -72,9 +73,11 @@ public:
   std::vector< T2 > H_M;
   std::vector< T3 > H_H_M;
   std::vector< T3 > H_M_M;
-  std::vector< T4 > H_M_M_M;
   std::vector< T4 > H_H_M_M;
-  std::vector< T5 > H_H_M_M_M;
+  std::vector< T3 > H_M_Rel;
+  std::vector< T4 > H_M_M_Rel;
+  std::vector< T4 > H_H_M_Rel;
+  std::vector< T5 > H_H_M_M_Rel;
   std::vector< T3 > H_M_Dir;
   std::vector< T3 > H_M_Dist;
   std::vector< T4 > H_H_M_Dir;
@@ -101,10 +104,10 @@ public:
   // - relation
   std::vector< T3 > H_S_M;
   std::vector< T4 > H_S_M_Dir; // ! Dir is collasped.
-  std::vector< T5 > H_S_M_S_M;
+  std::vector< T4 > H_S_M_Rel;
   std::vector< T2 > S_M;
   std::vector< T3 > S_M_Dir;
-  std::vector< T4 > S_M_S_M;
+  std::vector< T3 > S_M_Rel;
   // - context
   std::vector< T4 > pH_H_S_M;
   std::vector< T4 > H_nH_S_M;
@@ -117,9 +120,10 @@ public:
   //! Begin 2nd-order grandparent.
   // - relation
   std::vector< T3 > G_P_M;
-  std::vector< T5 > G_P_M_P_M;
+  std::vector< T4 > G_P_M_Rel;
   std::vector< T4 > G_P_M_Dir;
   std::vector< T2 > G_M;
+  std::vector< T3 > G_M_Rel;
   std::vector< T3 > G_M_Dir;
   // - context
   std::vector< T4 > pG_G_P_M;
@@ -136,29 +140,36 @@ public:
   std::vector< T5 > H1_H_M1_M_Dir;
   //! End for 2nd-order head bigram.
 
-
   //! Begin 3rd-order grandgrandparents
   std::vector< T4 > G_P_M_C;
+  std::vector< T5 > G_P_M_C_Rel;
   std::vector< T5 > G_P_M_C_Dir;
   std::vector< T3 > G_P_C;
+  std::vector< T4 > G_P_C_Rel;
   std::vector< T4 > G_P_C_Dir;
   std::vector< T3 > G_M_C;
+  std::vector< T4 > G_M_C_Rel;
   std::vector< T4 > G_M_C_Dir;
   std::vector< T2 > G_C;
+  std::vector< T3 > G_C_Rel;
   std::vector< T3 > G_C_Dir;
   //! End for 3rd-order grandgrandparents
 
   //! Begin 3rd-order grand-sibling
   std::vector< T4 > G_P_M_S;
+  std::vector< T5 > G_P_M_S_Rel;
   std::vector< T5 > G_P_M_S_Dir;
   std::vector< T3 > G_M_S;
+  std::vector< T4 > G_M_S_Rel;
   std::vector< T4 > G_M_S_Dir;
   //! End for 3rd-order grand-sibling
 
   //! Begin 3rd-order tri-sibling
   std::vector< T4 > H_M_S_T;
+  std::vector< T5 > H_M_S_T_Rel;
   std::vector< T5 > H_M_S_T_Dir;
   std::vector< T3 > H_M_T;
+  std::vector< T4 > H_M_T_Rel;
   std::vector< T4 > H_M_T_Dir;
   //! End for 3rd-order tri-sibling
 
@@ -170,11 +181,13 @@ public:
 
   //! Begin 3rd-order inner-sibling-grandchildren
   std::vector< T4 > H_S_M_GC;
+  std::vector< T5 > H_S_M_GC_Rel;
   std::vector< T5 > H_S_M_GC_Dir;
   //! End for 3rd-order inner-sibling-grandchildren
 
   //! Begin 3rd-order outer-sibling-grandchildren
   std::vector< T4 > H_S_GC_M;
+  std::vector< T5 > H_S_GC_M_Rel;
   std::vector< T5 > H_S_GC_M_Dir;
   //! End for 3rd-order outer-sibling-grandchildren
 

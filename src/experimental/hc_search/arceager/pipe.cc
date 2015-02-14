@@ -211,17 +211,15 @@ void
 Pipe::build_knowledge() {
   if (language == "en") {
     // punctuation
-    PUNC_POS.insert(postags_alphabet.encode("."));
+    PUNC_POS.insert(postags_alphabet.encode("``"));
     PUNC_POS.insert(postags_alphabet.encode(","));
-    PUNC_POS.insert(postags_alphabet.encode("?"));
-    PUNC_POS.insert(postags_alphabet.encode("!"));
-    PUNC_POS.insert(postags_alphabet.encode(";"));
+    PUNC_POS.insert(postags_alphabet.encode(":"));
+    PUNC_POS.insert(postags_alphabet.encode("."));
+    PUNC_POS.insert(postags_alphabet.encode("''"));
+    PUNC_POS.insert(postags_alphabet.encode("$"));
+    PUNC_POS.insert(postags_alphabet.encode("#"));
     PUNC_POS.insert(postags_alphabet.encode("-LRB-"));
     PUNC_POS.insert(postags_alphabet.encode("-RRB-"));
-    PUNC_POS.insert(postags_alphabet.encode("`"));
-    PUNC_POS.insert(postags_alphabet.encode("``"));
-    PUNC_POS.insert(postags_alphabet.encode("'"));
-    PUNC_POS.insert(postags_alphabet.encode("''"));
     // Conjunction.
     CONJ_POS.insert(postags_alphabet.encode("CC"));
     // Preposition
@@ -414,11 +412,12 @@ Pipe::wrapper_to_instance(const DependencyWrapper& wrapper, Dependency& instance
 }
 
 void
-Pipe::train_one_pair(const Dependency& oracle, const Dependency& good,
-    const Dependency& bad, int timestamp) {
+Pipe::train_one_pair(const Dependency& oracle, const Dependency& good, const Dependency& bad,
+    int good_rank, int bad_rank,
+    floatval_t good_phase_one_score, floatval_t bad_phase_one_score, int timestamp) {
   State good_state, bad_state;
-  good_state.build(good, 1, 0);
-  bad_state.build(bad, 1, 0);
+  good_state.build(good, good_rank, good_phase_one_score);
+  bad_state.build(bad, bad_rank, bad_phase_one_score);
 
   floatval_t good_score = cost_weight->score(good_state, false);
   floatval_t bad_score = cost_weight->score(bad_state, false);
@@ -452,7 +451,7 @@ Pipe::run2_learn_naive(const std::vector< train_tuple_t >& train_data) {
     wrapper_to_instance(train_data[ranks[n]].get<1>(), good_instance);
     wrapper_to_instance(train_data[ranks[n]].get<2>(), bad_instance);
 
-    train_one_pair(oracle_instance, good_instance, bad_instance, n+ 1);
+    train_one_pair(oracle_instance, good_instance, bad_instance, 1, 1, 0, 0, n+ 1);
     if ((n+ 1) % display_interval == 0) {
       _INFO << "pipe: processed #" << (n+ 1) << " instances.";
     }
@@ -526,7 +525,7 @@ Pipe::run2_learn_relaxed_good_against_bad() {
 
   cost_learner = new CostLearner(cost_weight, this->algorithm);
 
-  for (size_t n = 0; n < dataset2.size(); ++ n) {
+  for (size_t n = 0; n < N; ++ n) {
     const RerankingInstance& instance = dataset2[ranks[n]];
 
     int worst_good_position = -1, best_bad_position = -1;
@@ -587,7 +586,10 @@ Pipe::run2_learn_relaxed_good_against_bad() {
         instance.bad[best_bad_position].heads,
         instance.bad[best_bad_position].deprels);
 
-    train_one_pair(oracle_instance, good_instance, bad_instance, n+ 1);
+    train_one_pair(oracle_instance, good_instance, bad_instance, 
+        instance.good[worst_good_position].rank, instance.good[worst_good_position].score,
+        instance.bad[best_bad_position].rank, instance.bad[best_bad_position].score,
+        n+ 1);
     if ((n+ 1) % display_interval == 0) {
       _INFO << "pipe: processed #" << (n+ 1) << " instances.";
     }
