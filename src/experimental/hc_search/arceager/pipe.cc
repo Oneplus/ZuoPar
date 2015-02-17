@@ -54,6 +54,9 @@ Pipe::Pipe(const LearnTwoOption& opts)
   else if (opts.method == "rgb") {  learn_two_method = kPipeLearnTwoRelexedGoodAgainstBad; }
   _INFO << "report: learning method = " << opts.method;
 
+  ignore_punctuation = opts.ignore_punctuation;
+  _INFO << "report: ignore punctuation = " << (opts.ignore_punctuation ? "true": "false");
+
   phase_one_model_path = opts.phase_one_model_path;
   phase_two_model_path = opts.phase_two_model_path;
   if (phase_one_load_model(phase_one_model_path) && phase_two_load_model(phase_two_model_path)) {
@@ -423,8 +426,8 @@ Pipe::train_one_pair(const Dependency& oracle, const Dependency& good, const Dep
   floatval_t bad_score = cost_weight->score(bad_state, false);
 
   int dummy;
-  int good_loss = loss(good, oracle, true, true, dummy);
-  int bad_loss = loss(bad, oracle, true, true, dummy);
+  int good_loss = loss(good, oracle, true, ignore_punctuation, dummy);
+  int bad_loss = loss(bad, oracle, true, ignore_punctuation, dummy);
   int delta_loss = bad_loss - good_loss;
   //_TRACE << "loss: " << loss1;
 
@@ -837,6 +840,11 @@ Pipe::run() {
         floatval_t delta = highest_phase_one_score - lowest_phase_one_score;
         for (int i = 0; i < final_results.size(); ++ i) {
           State* candidate_result = final_results[i];
+          for (int j = 0; j < candidate_result->ref->size(); ++ j) {
+            if (candidate_result->heads[j] == -1) {
+              candidate_result->deprels[j] = deprels_alphabet.encode(root.c_str());
+            }
+          }
           candidate_result->score = (candidate_result->score - lowest_phase_one_score)/ delta;
           candidate_result->top0 = (i+ 1);
           floatval_t score = cost_weight->score((*candidate_result), true);

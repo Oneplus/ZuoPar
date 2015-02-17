@@ -175,8 +175,9 @@ public:
 
   //! Begin 3rd-order pp attachment.
   std::vector< T2 > PP_H_M;
-  std::vector< T3 > PP_H_H_M;
-  std::vector< T3 > PP_H_M_M;
+  std::vector< T3 > PP_P_H_M;
+  std::vector< T3 > PP_H_M_Dir;
+  std::vector< T4 > PP_P_H_M_Dir;
   //! End for 3rd-order pp attachement.
 
   //! Begin 3rd-order inner-sibling-grandchildren

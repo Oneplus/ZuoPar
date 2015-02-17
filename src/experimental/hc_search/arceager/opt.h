@@ -34,6 +34,7 @@ struct LearnTwoOption:
   public PhaseOneModelOption,
   public PhaseTwoModelOption,
   public PhaseTwoLanguageOption {
+  bool ignore_punctuation;
   std::string method;
 };
 

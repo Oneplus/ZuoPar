@@ -127,6 +127,7 @@ private:
   PipeLearnOneMethod learn_one_method;
   PipeLearnTwoMethod learn_two_method;
 
+  bool ignore_punctuation;
   bool rerank;                      //! Use to specify rerank.
   std::string root;                 //! The root relation string.
   std::string language;             //! The language.

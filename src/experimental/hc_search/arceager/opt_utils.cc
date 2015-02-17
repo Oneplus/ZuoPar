@@ -59,6 +59,7 @@ po::options_description build_phase_two_learn_optparser(const std::string& usage
                                            " or: oracle-against-rest [default]\n"
                                            " ngb: naive-good-against-bad, \n"
                                            " rgb: smart-good-against-bad, \n")
+    ("ignore-punctuation", "Ignore the punctuation when calculating loss.")
     ("verbose,v", "Logging every detail.")
     ;
 
@@ -257,6 +258,8 @@ bool parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& o
   if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
     return false; }
   opts.update_strategy = "naive";
+  opts.ignore_punctuation = false;
+  if (vm.count("ignore-punctuation")) { opts.ignore_punctuation = true; }
   opts.method = "or";
   if (vm.count("method")) {
     if (vm["method"].as<std::string>() == "or" ||

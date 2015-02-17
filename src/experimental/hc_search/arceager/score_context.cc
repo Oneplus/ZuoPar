@@ -112,7 +112,11 @@ CostScoreContext::CostScoreContext(const State& state)
 
   for (int i = 0; i < len; ++ i) {
     int hid = state.heads[i];
-    if (hid != -1) { tree[hid].push_back(i); }
+    if (hid != -1) {
+      if (PUNC_POS.find(postags[i]) == PUNC_POS.end()) {
+        tree[hid].push_back(i);
+      }
+    }
     else { root = i; }
   }
 
@@ -142,7 +146,6 @@ CostScoreContext::CostScoreContext(const State& state)
   right_label_set.resize(len, 0);
 
   for (int i = 0; i < len; ++ i) {
-    nr_children[i] = 0;
     for (int c: tree[i]) {
       if (PUNC_POS.find(postags[c]) == PUNC_POS.end()) {
         //! Non-punctuation.
@@ -166,14 +169,12 @@ CostScoreContext::CostScoreContext(const State& state)
     if (ADP_POS.find(postags[i]) != ADP_POS.end()) {
       int hid = state.heads[i];
       for (int mid: tree[i]) {
-        // int Dir  = ((hid < i) << 1 | (i < mid) << 2);
+        int Dir  = ((hid < i) << 1 | (i < mid) << 2);
         PP_H_M.push_back(__M(hid, mid));
-        PP_H_H_M.push_back(__M(hid, hid, mid));
-        PP_H_M_M.push_back(__M(hid, mid, mid));
+        PP_P_H_M.push_back(__M(i, hid, mid));
 
-        // PP_H_M_Dir.push_back(__M(hid, mid, Dir));
-        // PP_H_H_M_Dir.push_back(__M(hid, hid, mid, Dir));
-        // PP_H_M_M_Dir.push_back(__M(hid, mid, mid, Dir));
+        PP_H_M_Dir.push_back(__M(hid, mid, Dir));
+        PP_P_H_M_Dir.push_back(__M(i, hid, mid, Dir));
       }
     }
   }
@@ -203,14 +204,17 @@ CostScoreContext::CostScoreContext(const State& state)
       H_H_M.push_back( __M(hid, hid, mid));
       H_M_M.push_back( __M(hid, mid, mid));
       H_H_M_M.push_back( __M(hid, hid, mid, mid));
+
       H_M_Rel.push_back( __M(hid, mid, Rel) );
       H_H_M_Rel.push_back( __M(hid, hid, mid, Rel));
       H_M_M_Rel.push_back( __M(hid, mid, mid, Rel));
       H_H_M_M_Rel.push_back( __M(hid, hid, mid, mid, Rel));
+
       H_M_Dir.push_back( __M(hid, mid, Dir) );
       H_H_M_Dir.push_back( __M(hid, hid, mid, Dir) );
       H_M_M_Dir.push_back( __M(hid, mid, mid, Dir) );
       H_H_M_M_Dir.push_back( __M(hid, hid, mid, mid, Dir) );
+
       H_M_Dist.push_back( __M(hid, mid, Dist) );
       H_M_M_Dist.push_back( __M(hid, mid, mid, Dist) );
       H_H_M_Dist.push_back( __M(hid, hid, mid, Dist) );
@@ -278,6 +282,7 @@ CostScoreContext::CostScoreContext(const State& state)
       H_M_S_T.push_back( __M(hid, mid, sid, tid) );
       H_M_S_T_Rel.push_back( __M(hid, mid, sid, tid, Rel) );
       H_M_S_T_Dir.push_back( __M(hid, mid, sid, tid, Dir) );
+
       H_M_T.push_back( __M(hid, mid, tid) );
       H_M_T_Rel.push_back( __M(hid, mid, tid, Rel) );
       H_M_T_Dir.push_back( __M(hid, mid, tid, Dir) );
@@ -353,7 +358,6 @@ CostScoreContext::CostScoreContext(const State& state)
         G_P_M_S.push_back( __M(gid, hid, mid, sid) );
         G_P_M_S_Rel.push_back( __M(gid, hid, mid, sid, Rel) );
         G_P_M_S_Dir.push_back( __M(gid, hid, mid, sid, Dir) );
-
 
         Rel = state.deprels[mid]<<8 | state.deprels[sid];
         G_M_S.push_back( __M(gid, mid, sid) );
