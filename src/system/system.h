@@ -188,7 +188,7 @@ public:
           _StateType* dummy_state = row+ beam_size;
           _ScoreContextType ctx(*correct_state);
           transit((*correct_state), gold_actions[step- 1],
-              model->score(ctx, gold_actions[step- 1], use_avg), dummy_state);
+              correct_state->score + model->score(ctx, gold_actions[step- 1], use_avg), dummy_state);
           correct_state = dummy_state;
           dropout = true;
         } else {
