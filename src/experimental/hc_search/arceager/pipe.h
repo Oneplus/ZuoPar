@@ -102,6 +102,7 @@ private:
   enum PipeLearnOneMethod {
     kPipeLearnOneRegular,
     kPipeLearnOneBest,
+    kPipeLearnOneRandom,
     kPipeLearnOneWorst
   };
 

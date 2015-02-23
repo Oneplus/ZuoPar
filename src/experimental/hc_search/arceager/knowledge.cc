@@ -10,6 +10,8 @@ namespace HCSearchDependencyParser {
   std::set<postag_t> ADP_POS;
   std::set<postag_t> VERB_POS;
 
+  bool extract_punctuation = false;
+
 } //  namespace hcsearchdependencyparser
 } //  namespace experimental
 } //  namespace zuopar

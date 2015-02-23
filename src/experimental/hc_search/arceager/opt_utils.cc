@@ -29,6 +29,7 @@ po::options_description build_phase_one_learn_optparser(const std::string& usage
     ("method", po::value<std::string>(),  "The update strategy when oracle fallout.\n"
                                           " regular - classic beam search style.\n"
                                           " best - update with the best [default].\n"
+                                          " random - update with the random.\n"
                                           " worst - update with the worst.")
     ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
     ("verbose,v", "Logging every detail.")
@@ -44,7 +45,6 @@ po::options_description build_phase_two_learn_optparser(const std::string& usage
     ("algorithm,a", po::value<std::string>(), "The learning algorithm.\n"
                                               " ap - average perceptron [default]\n"
                                               " pa - passive aggressive")
-    ("beam,b",      po::value<int>(),         "The size for beam [default=64].")
     ("display,d",   po::value<int>(),         "The display interval [default=1000].")
     ("reference,r", po::value<std::string>(), "The path to the reference file.")
     ("shuffle,s",   po::value<int>(),         "The flag for shuffling instance.\n"
@@ -54,12 +54,12 @@ po::options_description build_phase_two_learn_optparser(const std::string& usage
     ("phase-two-model", po::value<std::string>(), "The path to the phase two model.")
     ("root",    po::value<std::string>(), "The root tag [default=ROOT].")
     ("language",po::value<std::string>(), "The language [default=en].")
-    ("margin",  po::value<double>(), "The margin [default=1.].")
     ("method",  po::value<std::string>(), "The learning method.\n"
                                            " or: oracle-against-rest [default]\n"
                                            " ngb: naive-good-against-bad, \n"
                                            " rgb: smart-good-against-bad, \n")
     ("ignore-punctuation", "Ignore the punctuation when calculating loss.")
+    ("extract-punctuation", "Extract the punctuation when extracting features.")
     ("verbose,v", "Logging every detail.")
     ;
 
@@ -77,7 +77,6 @@ po::options_description build_phase_two_prepare_optparser(const std::string& usa
     ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
     ("language",    po::value<std::string>(), "The language [default=en].")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
-    //("oracle", "Specify oracle as ybest [default=false].")
     ("verbose,v", "Logging every detail.")
     ;
 
@@ -97,6 +96,7 @@ po::options_description build_test_optparser(const std::string& usage) {
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
     ("phase-two-model", po::value<std::string>(), "The path to the phase two model.")
     ("rerank", "Specify to perform phase two reranking.")
+    ("extract-punctuation", "Extract the punctuation when extracting features.")
     ("verbose,v", "Logging every detail.")
     ;
 
@@ -113,6 +113,7 @@ po::options_description build_evaluate_optparser(const std::string& usage) {
     ("root",        po::value<std::string>(), "The root tag [default=ROOT].")
     ("language",    po::value<std::string>(), "The language [default=en].")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
+    ("ignore-punctuation", "Ignore the punctuation when calculating loss.")
     ("verbose,v", "Logging every detail.")
     ;
 
@@ -231,14 +232,23 @@ bool parse_phase_two_language_option(const po::variables_map& vm, PhaseTwoLangua
 }
 
 bool parse_phase_one_learn_option(const po::variables_map& vm, LearnOneOption& opts) {
-  if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) { return false; }
-  if (!parse_learn_option_ext(vm, static_cast<fe::LearnOption&>(opts))) { return false; }
-  if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
-  if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
+  if (!parse_option_ext(vm, static_cast<fe::Option&>(opts))) {
+    return false;
+  }
+  if (!parse_learn_option_ext(vm, static_cast<fe::LearnOption&>(opts))) {
+    return false;
+  }
+  if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) {
+    return false;
+  }
+  if (!parse_root_option(vm, static_cast<RootOption&>(opts))) {
+    return false;
+  }
   opts.method = "best";
   if (vm.count("method")) {
     if (vm["method"].as<std::string>() == "best"
         || vm["method"].as<std::string>() == "worst"
+        || vm["method"].as<std::string>() == "random"
         || vm["method"].as<std::string>() == "regular") {
       opts.method = vm["method"].as<std::string>();
     } else {
@@ -260,6 +270,8 @@ bool parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& o
   opts.update_strategy = "naive";
   opts.ignore_punctuation = false;
   if (vm.count("ignore-punctuation")) { opts.ignore_punctuation = true; }
+  opts.extract_punctuation = false;
+  if (vm.count("extract-punctuation")) { opts.extract_punctuation = true; }
   opts.method = "or";
   if (vm.count("method")) {
     if (vm["method"].as<std::string>() == "or" ||
@@ -291,6 +303,8 @@ bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
   if (!parse_input_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
   if (!parse_output_ext(vm, static_cast<fe::TestOption&>(opts))) { return false; }
   opts.rerank = false; if (vm.count("rerank")) { opts.rerank = true; }
+  opts.extract_punctuation = false;
+  if (vm.count("extract-punctuation")) { opts.extract_punctuation = true; }
   if (!parse_root_option(vm, static_cast<RootOption&>(opts))) { return false; }
   if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
     return false; }

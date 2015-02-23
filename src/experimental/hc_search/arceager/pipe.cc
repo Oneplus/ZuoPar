@@ -23,16 +23,22 @@ Pipe::Pipe(const LearnOneOption& opts)
   fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
   root = opts.root;
 
-  if (opts.method == "best") { learn_one_method = kPipeLearnOneBest; }
-  else if (opts.method == "worst") { learn_one_method = kPipeLearnOneWorst; }
-  else if (opts.method == "regular") { learn_one_method = kPipeLearnOneRegular; }
-  _INFO << "report: learning method = " << opts.method;
+  if (opts.method == "best") {
+    learn_one_method = kPipeLearnOneBest;
+  } else if (opts.method == "worst") {
+    learn_one_method = kPipeLearnOneWorst;
+  } else if (opts.method == "random") {
+    learn_one_method = kPipeLearnOneRandom;
+  } else if (opts.method == "regular") {
+    learn_one_method = kPipeLearnOneRegular;
+  }
+  _INFO << "report: (phase#1.learn) learning method = " << opts.method;
 
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
-    _INFO << "report(1): model " << phase_one_model_path << " is loaded.";
+    _INFO << "report: (phase#1.learn) model " << phase_one_model_path << " is loaded.";
   } else {
-    _INFO << "report(1): model " << phase_one_model_path << " is not loaded.";
+    _INFO << "report: (phase#1.learn) model " << phase_one_model_path << " is not loaded.";
   }
 }
 
@@ -47,22 +53,27 @@ Pipe::Pipe(const LearnTwoOption& opts)
   root = opts.root;
 
   language = opts.language;
-  _INFO << "report: language = " << language;
+  _INFO << "report: (phase#2.learn) language = " << language;
 
   if (opts.method == "or") { learn_two_method = kPipeLearnTwoOracleAgainstRest; }
   else if (opts.method == "ngb") {  learn_two_method = kPipeLearnTwoNaiveGoodAgainstBad;  }
   else if (opts.method == "rgb") {  learn_two_method = kPipeLearnTwoRelexedGoodAgainstBad; }
-  _INFO << "report: learning method = " << opts.method;
+  _INFO << "report: (phase#2.learn) learning method = " << opts.method;
 
   ignore_punctuation = opts.ignore_punctuation;
-  _INFO << "report: ignore punctuation = " << (opts.ignore_punctuation ? "true": "false");
+  _INFO << "report: (phase#2.learn) " << (opts.ignore_punctuation ? "" : "not ")
+    << "ignore punctuation when calculating loss.";
+
+  extract_punctuation = opts.extract_punctuation;
+  _INFO << "report: (phase#2.learn) " << (opts.extract_punctuation ? "" : "not ")
+    << "extract punctuation when feature extraction.";
 
   phase_one_model_path = opts.phase_one_model_path;
   phase_two_model_path = opts.phase_two_model_path;
   if (phase_one_load_model(phase_one_model_path) && phase_two_load_model(phase_two_model_path)) {
-    _INFO << "report(2): model " << phase_two_model_path << " is loaded.";
+    _INFO << "report: (phase#2.learn) model " << phase_two_model_path << " is loaded.";
   } else {
-    _INFO << "report(2): model " << phase_two_model_path << " is not loaded.";
+    _INFO << "report: (phase#2.learn) model " << phase_two_model_path << " is not loaded.";
   }
 }
 
@@ -76,12 +87,12 @@ Pipe::Pipe(const PrepareTwoOption& opts)
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
   root = opts.root;
   language = opts.language;
-  _INFO << "report: language = " << language;
+  _INFO << "report: (phase#2.prepare) language = " << language;
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
-    _INFO << "report(p): model is loaded.";
+    _INFO << "report: (phase#2.prepare) model is loaded.";
   } else {
-    _INFO << "report(p): model is not loaded.";
+    _INFO << "report: (phase#2.prepare) model is not loaded.";
   }
 }
 
@@ -94,18 +105,26 @@ Pipe::Pipe(const TestOption& opts)
   decoder(0),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
   root = opts.root;
-  language = opts.language;  _INFO << "report: language = " << language;
-  rerank = opts.rerank;  _INFO << "report: rerank = " << (rerank ? "true": "false");
+
+  extract_punctuation = opts.extract_punctuation;
+  _INFO << "report: (phase#2.learn) " << (opts.extract_punctuation ? "" : "not ")
+    << "extract punctuation when feature extraction.";
+
+  language = opts.language;
+  _INFO << "report: (test) language = " << language;
   phase_one_model_path = opts.phase_one_model_path;
   phase_two_model_path = opts.phase_two_model_path;
   if (!rerank && phase_one_load_model(phase_one_model_path)) {
-    _INFO << "report(no-rerank): model is loaded.";
+    _INFO << "report: (test) model is loaded.";
+    _INFO << "report: (test) reranking will not be performed.";
   } else if (rerank
       && phase_one_load_model(phase_one_model_path)
       && phase_two_load_model(phase_two_model_path)) {
-    _INFO << "report(rerank): model is loaded.";
+    _INFO << "report: (test) model is loaded.";
+    _INFO << "report: (test) reranking will be performed.";
   } else {
-    _INFO << "report(t): model is not loaded.";
+    _ERROR << "report: (test) model is not loaded.";
+    exit(1);
   }
 }
 
@@ -119,12 +138,13 @@ Pipe::Pipe(const EvaluateOption& opts)
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
   root = opts.root;
   language = opts.language;
-  _INFO << "report: language = " << language;
+  _INFO << "report: (evaluate) language = " << language;
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
-    _INFO << "report(e): model is loaded.";
+    _ERROR << "report: (evaluate) model is loaded.";
+    exit(1);
   } else {
-    _INFO << "report(e): model is not loaded.";
+    _INFO << "report: (evaluate) model is not loaded.";
   }
 }
 
@@ -142,8 +162,7 @@ Pipe::phase_one_load_model(const std::string& phase_one_model_path) {
 
   std::ifstream mfs(phase_one_model_path);
   if (!mfs.good()) {
-    _WARN << "pipe: phase(1) model doesn't exist.";
-    mfs.close();
+    _WARN << "pipe: Phase#1 model doesn't exist.";
     return false;
   }
   if (!forms_alphabet.load(mfs)) {
@@ -159,7 +178,7 @@ Pipe::phase_one_load_model(const std::string& phase_one_model_path) {
     return false;
   }
   if (!heuristic_weight->load(mfs)) {
-    _WARN << "pipe: failed to load phase one weight.";
+    _WARN << "pipe: failed to load Phase#1 weight.";
     return false;
   }
   mfs.close();
@@ -172,11 +191,11 @@ Pipe::phase_two_load_model(const std::string& phase_two_model_path) {
   std::ifstream mfs(phase_two_model_path);
 
   if (!mfs.good()) {
-    _WARN << "pipe: phase(2) model doesn't exist.";
+    _WARN << "pipe: phase#2 model doesn't exist.";
     return false;
   }
   if (!cost_weight->load(mfs)) {
-    _WARN << "pipe: failed to load phase two weight.";
+    _WARN << "pipe: failed to load Phase#2 weight.";
     return false;
   }
   mfs.close();
@@ -187,13 +206,13 @@ void
 Pipe::phase_one_save_model(const std::string& phase_one_model_path) {
   std::ofstream mfs(phase_one_model_path);
   if (!mfs.good()) {
-    _WARN << "pipe: failed to save phase(1) model.";
+    _WARN << "pipe: failed to save Phase#1 model.";
   } else {
     forms_alphabet.save(mfs);
     postags_alphabet.save(mfs);
     deprels_alphabet.save(mfs);
     heuristic_weight->save(mfs);
-    _INFO << "pipe: phase(1) model saved to " << phase_one_model_path;
+    _INFO << "pipe: Phase#1 model saved to " << phase_one_model_path;
   }
   mfs.close();
 }
@@ -202,10 +221,10 @@ void
 Pipe::phase_two_save_model(const std::string& phase_two_model_path) {
   std::ofstream mfs(phase_two_model_path);
   if (!mfs.good()) {
-    _WARN << "pipe: failed to save phase(2) model.";
+    _WARN << "pipe: failed to save Phase#2 model.";
   } else {
     cost_weight->save(mfs);
-    _INFO << "pipe: phase(2) model saved to " << phase_two_model_path;
+    _INFO << "pipe: Phase#2 model saved to " << phase_two_model_path;
   }
   mfs.close();
 }
@@ -701,6 +720,10 @@ Pipe::run() {
           if (learn_one_method == kPipeLearnOneBest) {
             heuristic_learner->set_timestamp(n+ 1);
             heuristic_learner->learn(result.first, result.second);
+          } else if (learn_one_method == kPipeLearnOneRandom) {
+            const State* random_state = final_results[rand() % final_results.size()];
+            heuristic_learner->set_timestamp(n+ 1);
+            heuristic_learner->learn(random_state, result.second);
           } else if (learn_one_method == kPipeLearnOneWorst) {
             const State* worst_state = NULL;
             floatval_t worst_score = 1e20;
@@ -725,25 +748,12 @@ Pipe::run() {
         if (loss1 < best_loss) { best_loss = loss1; }
       }
 
-      int nr_good = 0;
-      for (const State* candidate_result: final_results) {
-        Dependency output; build_output((*candidate_result), output);
-        int loss1 = loss(output, instance, true, true, dummy);
-        if (loss1 == best_loss) { ++ nr_good; }
-      }
-
       std::sort(final_results.begin(), final_results.end(),
           [](const State* x,  const State* y) -> bool { return x->score > y->score; });
 
-      (*os) << "#forms\tpostags\toracle";
+      (*os) << "#forms\tpostags\t" << result.second->score;
       for (const State* candidate_result: final_results) {
-        Dependency output; build_output((*candidate_result), output);
-        int loss1 = loss(output, instance, true, true, dummy);
-        if (loss1 == best_loss) {
-          (*os) << "\tgood:" << candidate_result->score;
-        } else {
-          (*os) << "\tbad:" << candidate_result->score;
-        }
+        (*os) << "\t" << candidate_result->score;
       }
       (*os) << std::endl;
       for (size_t i = 0; i < instance.size(); ++ i) {

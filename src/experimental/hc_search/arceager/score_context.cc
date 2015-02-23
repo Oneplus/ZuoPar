@@ -113,9 +113,10 @@ CostScoreContext::CostScoreContext(const State& state)
   for (int i = 0; i < len; ++ i) {
     int hid = state.heads[i];
     if (hid != -1) {
-      if (PUNC_POS.find(postags[i]) == PUNC_POS.end()) {
-        tree[hid].push_back(i);
+      if (!extract_punctuation && PUNC_POS.find(postags[i]) != PUNC_POS.end()) {
+        continue;
       }
+      tree[hid].push_back(i);
     }
     else { root = i; }
   }
@@ -236,6 +237,8 @@ CostScoreContext::CostScoreContext(const State& state)
 
     for (int j = 1; j < hnode.size(); ++ j) {
       int sid = hnode[j- 1], mid = hnode[j];
+      if ((hid < sid) != (hid < mid)) { continue; }
+
       int Rel = (state.deprels[mid] << 8 | state.deprels[sid]);
       int Dir = (((hid < sid) << 1) | ((hid < mid) << 2));
 
@@ -277,6 +280,7 @@ CostScoreContext::CostScoreContext(const State& state)
 
     for (int j = 2; j < hnode.size(); ++ j) {
       int mid = hnode[j- 2], sid = hnode[j- 1], tid = hnode[j];
+      if ((mid < hid) != (sid < hid) || (mid < hid) != (tid < hid)) { continue; }
       int Rel = ((state.deprels[mid]<<8 | state.deprels[sid]) << 8 | state.deprels[tid]);
       int Dir = ((hid < mid) << 1 | (hid < sid) << 2 | (hid < tid) << 3);
       H_M_S_T.push_back( __M(hid, mid, sid, tid) );
@@ -352,6 +356,7 @@ CostScoreContext::CostScoreContext(const State& state)
 
       for (int k = 1; k < hnode.size(); ++ k) {
         int mid = hnode[k- 1], sid = hnode[k];
+        if ((hid < mid) != (hid < sid)) { continue; }
         int Rel = ((state.deprels[hid]<< 8 | state.deprels[mid]) << 8| state.deprels[sid]);
         int Dir = (((gid < hid) << 1) | ((hid < mid) << 2) | ((hid < sid) << 3));
 

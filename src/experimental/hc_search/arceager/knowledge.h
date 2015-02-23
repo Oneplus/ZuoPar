@@ -14,8 +14,9 @@ static std::set<postag_t> ADP_POS;
 static std::set<postag_t> VERB_POS;
 //static std::set<postag_t> ;
 
-/*bool non_punctuation;
-bool extract_singleton;
+static bool extract_punctuation;
+
+/*bool extract_singleton;
 bool extract_1st_bare;
 bool extract_1st_direction;
 bool extract_1st_distacne;

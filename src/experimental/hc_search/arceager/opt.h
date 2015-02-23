@@ -35,6 +35,7 @@ struct LearnTwoOption:
   public PhaseTwoModelOption,
   public PhaseTwoLanguageOption {
   bool ignore_punctuation;
+  bool extract_punctuation;
   std::string method;
 };
 
@@ -42,7 +43,9 @@ struct EvaluateOption:
   public fe::TestOption,
   public RootOption,
   public PhaseOneModelOption,
-  public PhaseTwoLanguageOption {};
+  public PhaseTwoLanguageOption {
+  bool ignore_punctuation;
+};
 
 struct TestOption:
   public fe::TestOption,
@@ -50,6 +53,7 @@ struct TestOption:
   public PhaseOneModelOption,
   public PhaseTwoModelOption,
   public PhaseTwoLanguageOption {
+  bool extract_punctuation;
   bool rerank;
 };
 
