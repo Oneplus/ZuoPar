@@ -141,10 +141,10 @@ Pipe::Pipe(const EvaluateOption& opts)
   _INFO << "report: (evaluate) language = " << language;
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
-    _ERROR << "report: (evaluate) model is loaded.";
-    exit(1);
+    _INFO << "report: (evaluate) model is loaded.";
   } else {
-    _INFO << "report: (evaluate) model is not loaded.";
+    _ERROR << "report: (evaluate) model is not loaded.";
+    exit(1);
   }
 }
 
