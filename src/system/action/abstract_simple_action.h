@@ -4,57 +4,37 @@
 #include <iostream>
 #include <boost/assert.hpp>
 #include <boost/functional/hash.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/access.hpp>
 #include "types/common.h"
 
 namespace ZuoPar {
 
 class AbstractSimpleAction {
 public:
-  AbstractSimpleAction(): action_name(0) {}
+  // SimpleAction is designed for sequence labeling, in which the action is relative
+  // simple.
+  AbstractSimpleAction(): seed(0) {}
 
   /**
    * Constructor for simple action.
    *
    *  @param[in]  name  The name for the action.
    */
-  AbstractSimpleAction(int name) : action_name(name) {}
+  AbstractSimpleAction(int name) : seed(name) {}
 
-  AbstractSimpleAction& operator = (const AbstractSimpleAction& a) {
-    action_name = a.action_name;
-    return (*this);
-  }
+  bool operator == (const AbstractSimpleAction& a) const { return (a.seed== seed); }
+  bool operator != (const AbstractSimpleAction& a) const { return (a.seed!= seed); }
+  bool operator <  (const AbstractSimpleAction& a) const { return (seed < a.seed); }
 
-  int code() const {
-    return action_name;
-  }
-
-  bool operator == (const AbstractSimpleAction& a) const {
-    return (a.action_name== action_name);
-  }
-
-  bool operator != (const AbstractSimpleAction& a) const {
-    return !((*this) == a);
-  }
-
-  //! For boost serialization
-  friend class boost::serialization::access;
-
+  inline int name() const { return seed; }
   //! For serialization
-  template<class Archive>
-    void serialize(Archive & ar, const unsigned int /* file_version */) {
-    ar & action_name;
-  }
-
-  //! For boost hash map.
-  friend std::size_t hash_value(const AbstractSimpleAction& a) {
-    return a.action_name;
-  }
-
+  template<class Archive> void serialize(Archive & ar, const unsigned) { ar & seed; }
+  //! For hash
+  friend std::size_t hash_value(const AbstractSimpleAction& a) { return a.seed; }
 protected:
   //! The action name.
-  int action_name;
+  int seed;
+  friend class boost::serialization::access;
 };
 
 } //  end for namespace zuopar

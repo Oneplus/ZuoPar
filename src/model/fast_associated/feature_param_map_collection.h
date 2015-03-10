@@ -31,54 +31,29 @@ public:
   //! The trigram feature type
   typedef std::string  sfp_t;
 
-  //! Instantiate the unigram feature type
-  typedef Feature<UnigramMetaFeature, _ActionType> uf_t;
-
-  //! Instantiate the bigram feature type
-  typedef Feature<BigramMetaFeature, _ActionType>  bf_t;
-
-  //! Instantiate the trigram feature type
-  typedef Feature<TrigramMetaFeature, _ActionType> tf_t;
-
-  //! Instantiate the trigram feature type
-  typedef Feature<QuadgramMetaFeature, _ActionType> qf_t;
-
-  //! Instantiate the string feature type
-  typedef Feature<std::string, _ActionType> sf_t;
-
   //! Instantiate the unigram mapping
   typedef FeatureParameterMap<
-    ufp_t,
-    _ScoreContextType,
-    _ActionType
+    ufp_t, _ScoreContextType, _ActionType
   > uf_map_t;
 
   //! Instantiate the bigram mapping
   typedef FeatureParameterMap<
-    bfp_t,
-    _ScoreContextType,
-    _ActionType
+    bfp_t, _ScoreContextType, _ActionType
   > bf_map_t;
 
   //! Instantiate the trigram mapping
   typedef FeatureParameterMap<
-    tfp_t,
-    _ScoreContextType,
-    _ActionType
+    tfp_t, _ScoreContextType, _ActionType
   > tf_map_t;
 
   //! Instantiate the quadgram mapping
   typedef FeatureParameterMap<
-    qfp_t,
-    _ScoreContextType,
-    _ActionType
+    qfp_t, _ScoreContextType, _ActionType
   > qf_map_t;
 
   //! Instantiate the string mapping
   typedef FeatureParameterMap<
-    std::string,
-    _ScoreContextType,
-    _ActionType
+    std::string, _ScoreContextType, _ActionType
   > sf_map_t;
 
   //! Define the packed score type.
@@ -100,23 +75,23 @@ public:
     _ScoreContextType ctx(state);
     for (uf_map_t& entry: ufeat_map_repo) {
       entry.vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += entry.size();
+      ++ global_id;
     }
     for (bf_map_t& entry: bfeat_map_repo) {
       entry.vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += entry.size();
+      ++ global_id;
     }
     for (tf_map_t& entry: tfeat_map_repo) {
       entry.vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += entry.size();
+      ++ global_id;
     }
     for (qf_map_t& entry: qfeat_map_repo) {
       entry.vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += entry.size();
+      ++ global_id;
     }
     for (sf_map_t& entry: sfeat_map_repo) {
       entry.vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += entry.size();
+      ++ global_id;
     }
   }
 
@@ -128,8 +103,8 @@ public:
    *  @param[in]  scale         Increase the value in sparse_vector by scale.
    *  @param[out] sparse_vector The version 2 sparse vector.
    */
-  void vectorize2(const _StateType& state, const _ActionType& act, floatval_t scale,
-      SparseVector2* sparse_vector) {
+  void vectorize2(const _StateType& state, const _ActionType& act,
+      const floatval_t& scale, SparseVector2* sparse_vector) {
     int global_id = 0;
     _ScoreContextType ctx(state);
     for (uf_map_t& entry: ufeat_map_repo) {
@@ -150,6 +125,40 @@ public:
     }
     for (sf_map_t& entry: sfeat_map_repo) {
       entry.vectorize2(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
+    }
+  }
+
+  /**
+   * Convert the pointwised feature collections into vector.
+   *
+   *  @param[in]  state         The state
+   *  @param[in]  act           The action
+   *  @param[in]  scale         Increase the value in sparse_vector by scale.
+   *  @param[out] sparse_vector The version 3 sparse vector.
+   */
+  void vectorize3(const _StateType& state, const _ActionType& act,
+      const floatval_t& scale, SparseVector3* sparse_vector) {
+    int global_id = 0;
+    _ScoreContextType ctx(state);
+    for (uf_map_t& entry: ufeat_map_repo) {
+      entry.vectorize3(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
+    }
+    for (bf_map_t& entry: bfeat_map_repo) {
+      entry.vectorize3(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
+    }
+    for (tf_map_t& entry: tfeat_map_repo) {
+      entry.vectorize3(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
+    }
+    for (qf_map_t& entry: qfeat_map_repo) {
+      entry.vectorize3(ctx, act, scale, global_id, sparse_vector);
+      ++ global_id;
+    }
+    for (sf_map_t& entry: sfeat_map_repo) {
+      entry.vectorize3(ctx, act, scale, global_id, sparse_vector);
       ++ global_id;
     }
   }
@@ -178,11 +187,11 @@ public:
    */
   floatval_t score(const _ScoreContextType& ctx, const _ActionType& act, bool avg) {
     floatval_t ret = 0;
-    for (uf_map_t& entry: ufeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
-    for (bf_map_t& entry: bfeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
-    for (tf_map_t& entry: tfeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
-    for (qf_map_t& entry: qfeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
-    for (sf_map_t& entry: sfeat_map_repo) { ret += entry.score(ctx, act, avg, 0.); }
+    for (uf_map_t& entry: ufeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (bf_map_t& entry: bfeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (tf_map_t& entry: tfeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (qf_map_t& entry: qfeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (sf_map_t& entry: sfeat_map_repo) { ret += entry.score(ctx, act, avg); }
     return ret;
   }
 
@@ -207,7 +216,7 @@ public:
    *  @param[in]  scale     The updated scale.
    */
   void update(const _StateType& state, const _ActionType& act, int timestamp,
-      floatval_t scale) {
+      const floatval_t& scale) {
     _ScoreContextType ctx(state);
     update(ctx, act, timestamp, scale);
   }
@@ -221,7 +230,7 @@ public:
    *  @param[in]  scale     The updated scale.
    */
   void update(const _ScoreContextType& ctx, const _ActionType& act, int timestamp,
-      floatval_t scale) {
+      const floatval_t& scale) {
     for (uf_map_t& entry: ufeat_map_repo) { entry.update(ctx, act, timestamp, scale); }
     for (bf_map_t& entry: bfeat_map_repo) { entry.update(ctx, act, timestamp, scale); }
     for (tf_map_t& entry: tfeat_map_repo) { entry.update(ctx, act, timestamp, scale); }

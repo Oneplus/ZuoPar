@@ -2,21 +2,18 @@
 #define __ZUOPAR_MODEL_META_FEATURE_H__
 
 #include "settings.h"
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
 #include <boost/functional/hash.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/access.hpp>
 
 namespace ZuoPar {
 
 class AbstractMetaFeature {
 protected:
   std::size_t seed;
+  friend class boost::serialization::access;
 public:
   //! The default constructor.
   AbstractMetaFeature(): seed(0) {}
-  friend class boost::serialization::access;
   //! hash value.
   friend std::size_t hash_value(const AbstractMetaFeature& s) {
     return s.seed;
@@ -26,7 +23,6 @@ public:
 class UnigramMetaFeature: public AbstractMetaFeature {
 private:
   int feat;
-
 public:
   UnigramMetaFeature(): feat(0) { }
   UnigramMetaFeature(int f): feat(f) { seed = f; /*boost::hash_combine(seed, f);*/ }

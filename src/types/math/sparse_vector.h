@@ -9,11 +9,21 @@
 namespace ZuoPar {
 
 //! The most basic sparse vector
-typedef std::unordered_map<int, floatval_t> SparseVector;
+typedef std::unordered_map<std::size_t, floatval_t> SparseVector;
 
 //! The version two sparse vector, with indexed for faster compute.
-typedef std::unordered_map<std::pair<int, std::size_t>, floatval_t,
-        boost::hash<std::pair<int, std::size_t> > > SparseVector2;
+typedef std::pair<std::size_t, std::size_t> SparseVector2Key;
+
+typedef std::unordered_map<
+  SparseVector2Key, floatval_t, boost::hash< SparseVector2Key >
+> SparseVector2;
+
+//! The version 3 sparse vector.
+typedef std::tuple<std::size_t, std::size_t, std::size_t > SparseVector3Key;
+
+typedef std::unordered_map<
+  SparseVector3Key, floatval_t, boost::hash< SparseVector3Key >
+> SparseVector3;
 
 } // end for zuopar
 

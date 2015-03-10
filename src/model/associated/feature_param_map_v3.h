@@ -4,7 +4,7 @@
 #include "settings.h"
 #include "types/math/sparse_vector.h"
 #include "types/internal/packed_scores.h"
-#include "ml/pointwise_param.h"
+#include "model/pointwise_param.h"
 #include "model/feature.h"
 #include "utils/logging.h"
 #include <boost/functional/hash.hpp>

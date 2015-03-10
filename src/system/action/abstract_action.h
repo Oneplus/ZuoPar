@@ -4,16 +4,14 @@
 #include <iostream>
 #include <boost/assert.hpp>
 #include <boost/functional/hash.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/access.hpp>
 #include "types/common.h"
 
 namespace ZuoPar {
 
 class AbstractAction {
 public:
-  AbstractAction()
-    : action_name(0), deprel(0), seed(0) {}
+  AbstractAction(): name(0), rel(0), seed(0) {}
 
   /**
    * Constructor for action.
@@ -21,49 +19,30 @@ public:
    *  @param[in]  name  The name for the action.
    *  @param[in]  rel   The dependency relation.
    */
-  AbstractAction(int name, deprel_t rel)
-    : action_name(name), deprel(rel), seed(0) {
-    boost::hash_combine(seed, name);
-    boost::hash_combine(seed, rel);
+  AbstractAction(int _name, int _rel): name(_name), rel(_rel), seed(0) {
+    boost::hash_combine(seed, _name);
+    boost::hash_combine(seed, _rel);
   }
 
-  AbstractAction& operator = (const AbstractAction& a) {
-    seed = a.seed;
-    action_name = a.action_name;
-    deprel = a.deprel;
-    return (*this);
-  }
-
-  bool operator == (const AbstractAction& a) const {
-    return (a.deprel == deprel && a.action_name == action_name);
-    //return (a.action_name == action_name && a.deprel == deprel);
-  }
-
-  bool operator != (const AbstractAction& a) const {
-    return !((*this) == a);
-  }
+  bool operator == (const AbstractAction& a) const { return (rel == a.rel) && (name == a.name); }
+  bool operator != (const AbstractAction& a) const { return (!(*this) == a); }
+  bool operator <  (const AbstractAction& a) const {
+    return (name == a.name ? rel < a.rel: name < a.name); }
 
   //! For boost serialization
   friend class boost::serialization::access;
 
   //! For serialization
-  template<class Archive>
-    void serialize(Archive & ar, const unsigned int /* file_version */) {
-    ar & seed & action_name & deprel;
-  }
+  template<class Archive> void serialize(Archive & ar, const unsigned) { ar & seed & name & rel; }
 
   //! For boost hash map.
-  friend std::size_t hash_value(const AbstractAction& a) {
-    return a.seed;
-  }
+  friend std::size_t hash_value(const AbstractAction& a) {  return a.seed;  }
 
 protected:
   //! The action name.
-  int action_name;
-
+  int name;
   //! The dependency relation.
-  deprel_t deprel;
-
+  int rel;
   //! The seed for hashing.
   std::size_t seed;
 };

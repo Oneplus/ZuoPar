@@ -3,18 +3,14 @@
 
 #include <iostream>
 #include <boost/assert.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/functional/hash.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
 #include "types/common.h"
-#include "system/action/abstract_action.h"
+#include "system/action/abstract_inexact_action.h"
 
 namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-class Action: public AbstractAction {
+class Action: public AbstractInexactAction {
 public:
   enum {
     kNone = 0,  //! Placeholder for illegal action.
@@ -23,7 +19,7 @@ public:
     kRightArc   //! The index of arc right action.
   };
 
-  Action() : AbstractAction() {}
+  Action(): AbstractInexactAction() {}
 
   /**
    * Constructor for action.
@@ -31,24 +27,10 @@ public:
    *  @param[in]  name  The name for the action.
    *  @param[in]  rel   The dependency relation.
    */
-  Action(int name, deprel_t rel) : AbstractAction(name, rel) {}
+  Action(int name, deprel_t rel): AbstractInexactAction(name, rel) {}
 
   //! Overload the ostream function.
-  friend std::ostream& operator<<(std::ostream& os, const Action& act) {
-    if (act.action_name == kShift) {
-      os << "SH";
-    } else if (act.action_name == kLeftArc) {
-      os << "LA~" << act.deprel;
-    } else if (act.action_name == kRightArc) {
-      os << "RA~" << act.deprel;
-    } else if (act.action_name == kNone) {
-      os << "NO";
-    } else {
-      BOOST_ASSERT_MSG(false, "unknown actions.");
-    }
-
-    return os;
-  }
+  friend std::ostream& operator<<(std::ostream& os, const Action& act);
 
   //! For is_shift, is_left_arc, is_right_arc;
   friend class ActionUtils;

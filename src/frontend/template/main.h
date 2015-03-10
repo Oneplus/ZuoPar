@@ -6,7 +6,6 @@ int main(int argc, char** argv) {                                 \
   std::string usage = "ZuoPar::";                                 \
   usage += USAGE;                                                 \
   usage += ".\n";                                                 \
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";      \
   usage += "Usage: ";                                             \
   usage += EXE;                                                   \
   usage += " [learn|multi-learn|test] [options]";                 \

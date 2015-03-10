@@ -6,15 +6,17 @@
 #include "app/depparser/arcstandard/opt_utils.h"
 #include "app/depparser/arcstandard/pipe.h"
 
+#define APP "arcstandard dependency parser"
+#define EXE "arcstandard_depparser"
+
 namespace dp = ZuoPar::DependencyParser;
 namespace as = ZuoPar::DependencyParser::ArcStandard;
 namespace po = boost::program_options;
 
 int multi_learn(int argc, char** argv) {
-  std::string usage = "Multi-threaded training component of ZuoPar::sequence labeler.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: sequence_labeler multi-learn [options]\n";
-  usage += "OPTIONS";
+  std::string usage = "Multi-threaded training component of ZuoPar::" APP ".\n";
+  usage += "usage: " EXE " multi-learn [options]\n";
+  usage += "options";
   po::options_description optparser = dp::build_multi_learn_optparser(usage);
 
   if (argc == 1) {
@@ -36,7 +38,6 @@ int multi_learn(int argc, char** argv) {
   return 0;
 }
 
-
 /**
  * Perform the learning process of ZuoPar::arcstandard dependency parser.
  *
@@ -45,10 +46,9 @@ int multi_learn(int argc, char** argv) {
  *  @return     int   The status of running learning.
  */
 int learn(int argc, char** argv) {
-  std::string usage = "Training component of ZuoPar::arcstandard dependency parser.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: arcstandard_depparser learn [options]\n";
-  usage += "OPTIONS";
+  std::string usage = "Training component of ZuoPar::" APP ".\n";
+  usage += "usage: " EXE " learn [options]\n";
+  usage += "options";
 
   po::options_description optparser = dp::build_learn_optparser(usage);
 
@@ -79,11 +79,9 @@ int learn(int argc, char** argv) {
  *  @return     int   The status of running test.
  */
 int test(int argc, char** argv) {
-
-  std::string usage = "Testing component of ZuoPar::arcstandard dependency parser.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: arcstandard_depparser test [options]\n";
-  usage += "OPTIONS";
+  std::string usage = "Testing component of ZuoPar::" APP ".\n";
+  usage += "usage: " EXE " test [options]\n";
+  usage += "options";
 
   po::options_description optparser = dp::build_test_optparser(usage);
 
@@ -107,5 +105,5 @@ int test(int argc, char** argv) {
 }
 
 #include "frontend/template/main.h"
-MAIN("arcstandard dependency parser.", "arcstandard_depparser")
+MAIN(APP, EXE)
 

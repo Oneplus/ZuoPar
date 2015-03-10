@@ -6,8 +6,7 @@
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
-#include <boost/serialization/split_member.hpp>
-#include "utils/serialization/unordered_map.h"
+#include <boost/serialization/unordered_map.hpp>
 
 namespace ZuoPar {
 namespace Engine {

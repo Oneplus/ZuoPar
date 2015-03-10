@@ -12,47 +12,30 @@ namespace MachineLearning {
 //! It's a pointwise-parameter facility that support recording the updated time
 //! and averaged parameter.
 struct PointwiseParameter {
-  //!
+  //! The non-averaged parameter.
   floatval_t w;
-
-  //!
+  //! The averaged parameter.
   floatval_t w_sum;
-
-  //!
+  //! The last time this parameter is modified.
   int w_time;
 
-  PointwiseParameter()
-    : w(0),
-    w_sum(0),
-    w_time(0) {}
+  PointwiseParameter(): w(0), w_sum(0), w_time(0) {}
 
-  PointwiseParameter(floatval_t _w, floatval_t _w_sum, floatval_t _w_time)
-    : w(_w),
-    w_sum(_w_sum),
-    w_time(_w_time) {}
-
+  PointwiseParameter(const floatval_t& _w, const floatval_t& _w_sum, int _w_time)
+    : w(_w), w_sum(_w_sum), w_time(_w_time) {}
 
   friend class boost::serialization::access;
 
   template<class Archive>
-  void serialize(Archive & ar, const unsigned int version) {
-    ar & w & w_sum;
-  }
+  void serialize(Archive & ar, const unsigned version) { ar & w & w_sum; }
 
-  floatval_t dot(bool avg) const {
-    if (avg) {
-      return w_sum;
-    } else {
-      return w;
-    }
-  }
+  inline floatval_t dot(bool avg) const { return (avg ? w_sum: w); }
 
-  void add(int now, floatval_t scale) {
+  void add(int now, const floatval_t& scale) {
     int elapsed = now - w_time;
-    floatval_t upd = scale;
     floatval_t cur_val = w;
-    w = cur_val + upd;
-    w_sum += elapsed * cur_val + upd;
+    w += scale;
+    w_sum += elapsed * cur_val + scale;
     w_time = now;
   }
 
@@ -67,8 +50,7 @@ struct PointwiseParameter {
   }
 };
 
-} //  end for namespace Machinelearning
-
-} //  end for namespace ZuoPar
+} //  namespace Machinelearning
+} //  namespace ZuoPar
 
 #endif  //  end for __ZGEN_ML_PERCEPTRON_PARAM_H__

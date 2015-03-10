@@ -129,7 +129,7 @@ public:
       learner = new Learner(weight, this->algorithm);
     } else {
       decoder = new Decoder(deprels_alphabet.size(), root_tag,
-          beam_size, true, update_strategy, weight);
+          beam_size, true, UpdateStrategy::kNaive, weight);
     }
 
     size_t N = dataset.size();
@@ -173,6 +173,8 @@ public:
       _INFO << "pipe: nr errors: " << learner->errors();
       save_model(model_path);
     }
+
+    if (os != &(std::cout) && os != NULL) { delete os; }
   }
 
   /**
@@ -185,25 +187,15 @@ public:
     std::ifstream mfs(model_path);
 
     if (!mfs.good()) {
-      _WARN << "pipe: model doesn't exists.";
-      return false;
-    }
+      _WARN << "pipe: model doesn't exists.";             return false; }
     if (!forms_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load forms alphabet.";
-      return false;
-    }
+      _WARN << "pipe: failed to load forms alphabet.";    return false; }
     if (!postags_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load postags alphabet.";
-      return false;
-    }
+      _WARN << "pipe: failed to load postags alphabet.";  return false; }
     if (!deprels_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load deprels alphabet.";
-      return false;
-    }
+      _WARN << "pipe: failed to load deprels alphabet.";  return false; }
     if (!weight->load(mfs)) {
-      _WARN << "pipe: failed to load weight.";
-      return false;
-    }
+      _WARN << "pipe: failed to load weight.";            return false; }
     return true;
   }
 

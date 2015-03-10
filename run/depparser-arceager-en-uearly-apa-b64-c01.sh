@@ -7,7 +7,7 @@ TEST=${ROOT}/data/dependency/en/testi.tab
 DEVEL_ANS=${ROOT}/data/dependency/en/devr.tab
 TEST_ANS=${ROOT}/data/dependency/en/testr.tab
 
-SIG=`date '+%Y-%m-%d-%H%M%S'`-depparser-arceager-uearly-aap-b64-c01
+SIG=`date '+%Y-%m-%d-%H%M%S'`-depparser-arceager-en-uearly-apa-b64-c01
 WORKSPACE=${ROOT}/workspace/${SIG}
 
 MODEL_DIR=${WORKSPACE}/model
@@ -25,7 +25,7 @@ cp ${ROOT}/bin/arceager_depparser ${EXE}
 
 rm ${MODEL_PREFIX}.*
 
-for i in `seq 1 20`; do
+for i in `seq 1 30`; do
     ${EXE} learn \
         -a pa \
         -s ${i} \
@@ -33,7 +33,7 @@ for i in `seq 1 20`; do
         -r ${TRAIN}
 
     cp ${MODEL_PREFIX} ${MODEL_PREFIX}.${i}
-    bzip2 ${MODEL_PREFIX}.${i}
+    bzip2 ${MODEL_PREFIX}.${i} &
 
     ${EXE} test \
         -m ${MODEL_PREFIX} \
@@ -45,6 +45,6 @@ for i in `seq 1 20`; do
         -i ${TEST} \
         -o ${OUTPUT_DIR}/test.${i}
 
-    ${ROOT}/scripts/dependency/eval.py ${DEVEL_ANS} ${OUTPUT_DIR}/devel.${i}
-    ${ROOT}/scripts/dependency/eval.py ${TEST_ANS}  ${OUTPUT_DIR}/test.${i}
+    ${ROOT}/scripts/dependency/evaluate.py --language en ${DEVEL_ANS} ${OUTPUT_DIR}/devel.${i}
+    ${ROOT}/scripts/dependency/evaluate.py --language en ${TEST_ANS}  ${OUTPUT_DIR}/test.${i}
 done

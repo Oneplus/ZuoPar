@@ -113,7 +113,7 @@ protected:
     double score = 0.;
     double norm = 0.;
 
-    SparseVector2 updated_vector;
+    SparseVector3 updated_vector;
     //SparseVector2 predict_vector;
 
     for (int i = last; i > 0; -- i) {
@@ -121,11 +121,11 @@ protected:
       const _ActionType& correct_action = correct_state_chain[i- 1]->last_action;
       score += model->score((*correct_state_chain[i]), correct_action, false);
       score -= model->score((*predict_state_chain[i]), predict_action, false);
-      model->vectorize2((*correct_state_chain[i]), correct_action, 1., &updated_vector);
-      model->vectorize2((*predict_state_chain[i]), predict_action, -1., &updated_vector);
+      model->vectorize3((*correct_state_chain[i]), correct_action, 1., &updated_vector);
+      model->vectorize3((*predict_state_chain[i]), predict_action, -1., &updated_vector);
     }
 
-    for (SparseVector2::const_iterator i = updated_vector.begin();
+    for (SparseVector3::const_iterator i = updated_vector.begin();
         i != updated_vector.end(); ++ i) {
       norm += (i->second * i->second);
     }

@@ -3,7 +3,7 @@
 
 #include "settings.h"
 #include "types/math/sparse_vector.h"
-#include "ml/pointwise_param.h"
+#include "model/pointwise_param.h"
 #include "utils/logging.h"
 #include <boost/functional/hash.hpp>
 

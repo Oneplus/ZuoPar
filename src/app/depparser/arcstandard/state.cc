@@ -5,13 +5,11 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-State::State()
-  : ref(0) {
+State::State(): ref(0) {
   clear();
 }
 
-State::State(const Dependency* r)
-  : ref(r) {
+State::State(const Dependency* r): ref(r) {
   clear();
 }
 
