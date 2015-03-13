@@ -38,6 +38,7 @@ public:
   void transit(const State& source, const Action& act, const floatval_t& score,
       State* target);
 
+  bool terminated();
 private:
   int nr_deprels; //! The number of dependency relations, NONE, BEGIN, END included.
   int root_tag;   //! The tag of root.

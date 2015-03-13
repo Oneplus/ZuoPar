@@ -71,6 +71,12 @@ protected:
   //! Use to specify if use averaged parameter.
   bool use_avg;
 
+  //! If there is guidance information.
+  bool guided;
+
+  //! Pointer to the correct state.
+  const _StateType* correct_state;
+
   //! Use to specify if use early update strategy.
   UpdateStrategy update_strategy;
 
@@ -100,6 +106,7 @@ public:
     : beam_size(beam_size_),
     use_avg(use_avg_),
     step(-1),
+    guided(false),
     update_strategy(update_strategy_),
     model(model_) {
     candidate_transitions = new scored_transition_t[beam_size];
@@ -135,16 +142,16 @@ public:
     const _StateType* max_violate_predite_state = NULL;
     const _StateType* max_violate_correct_state = NULL;
 
-    //use_avg = (gold_actions.size() == 0);
+    guided= (gold_actions.size() != 0);
     _StateType* row = allocate_lattice(0);
-    const _StateType* correct_state = NULL;
+    correct_state = NULL;
 
     // set the initial state.
     row[0].copy(initial_state);
     // set the lattice size to zero.
     lattice_size.clear();
     lattice_size.push_back(1);
-    correct_state = row;
+    if (guided) { correct_state = row; }
 
     for (step = 1; step <= max_nr_actions; ++ step) {
       //_TRACE << "sys: round " << step;
@@ -172,7 +179,7 @@ public:
             (row+ i));
       }
 
-      if (gold_actions.size() != 0) {
+      if (guided) {
         // Perform training and early update.
         const _StateType* next_correct_state = search_correct_state(
             gold_actions[step- 1], correct_state,
@@ -188,7 +195,8 @@ public:
           _StateType* dummy_state = row+ beam_size;
           _ScoreContextType ctx(*correct_state);
           transit((*correct_state), gold_actions[step- 1],
-              correct_state->score + model->score(ctx, gold_actions[step- 1], use_avg), dummy_state);
+              correct_state->score + model->score(ctx, gold_actions[step- 1], use_avg),
+              dummy_state);
           correct_state = dummy_state;
           dropout = true;
         } else {
@@ -210,6 +218,8 @@ public:
           }
         }
       }
+
+      if (terminated()) { break; }
     }
 
     _TRACE << "sys: decode is done (cond 2).";
@@ -263,13 +273,22 @@ protected:
   }
 
   /**
-   * Get the possible transition actions for the source state.
+   * Get the possible transition actions for the source state. If we formalize
+   * the transition system, get possible actions performs the role of a set of
+   * transitions T.
    *
    *  @param[in]  source    The source state.
    *  @param[out] actions   The output possible actions.
    */
   virtual void get_possible_actions(const _StateType& source,
       action_collection_t& actions) = 0;
+
+  /**
+   * Return if the transition reach the terminal state.
+   *
+   *  @return bool  Return true if reach the terminate state.
+   */
+  virtual bool terminated() = 0;
 
   /**
    * In class function for invoking the score possible actions functions. It's

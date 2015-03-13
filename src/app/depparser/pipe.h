@@ -25,16 +25,17 @@ template <
   class State,
   class Weight,
   class Decoder,
-  class Learner
+  class Learner,
+  class MaxNumberOfActionsFunction
 >
-class CommonDependencyPipe: public fe::CommonPipeConfigure {
+class DependencyPipe: public fe::CommonPipeConfigure {
 protected:
   /**
    * The learning mode constructor.
    *
    *  @param[in]  opts  The learning options.
    */
-  CommonDependencyPipe(const fe::LearnOption& opts)
+  DependencyPipe(const fe::LearnOption& opts)
     : weight(0), decoder(0), learner(0),
     fe::CommonPipeConfigure(opts) {
     if (load_model(opts.model_path)) {
@@ -49,8 +50,7 @@ public:
    *
    *  @param[in]  opts  The learning options.
    */
-  CommonDependencyPipe(const LearnOption& opts)
-    : weight(0), decoder(0), learner(0),
+  DependencyPipe(const LearnOption& opts): weight(0), decoder(0), learner(0),
     fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
     this->root = opts.root;
     if (load_model(opts.model_path)) {
@@ -65,8 +65,7 @@ public:
    *
    *  @param[in]  opts  The testing options.
    */
-  CommonDependencyPipe(const TestOption& opts)
-    : weight(0), decoder(0), learner(0),
+  DependencyPipe(const TestOption& opts): weight(0), decoder(0), learner(0),
     fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
     this->root = opts.root;
     if (load_model(opts.model_path)) {
@@ -76,7 +75,7 @@ public:
     }
   }
 
-  ~CommonDependencyPipe() {
+  ~DependencyPipe() {
     if (weight)  { delete weight;  weight = 0;  }
     if (decoder) { delete decoder; decoder = 0; }
     if (learner) { delete learner; learner = 0; }
@@ -146,13 +145,14 @@ public:
         ActionUtils::get_oracle_actions(instance, actions);
       }
 
-      int max_nr_actions = instance.size() * 2 - 1;
+      int max_nr_actions = MaxNumberOfActionsFunction()(instance);
       State init_state(&instance);
       typename Decoder::const_decode_result_t result = decoder->decode(init_state,
           actions, max_nr_actions);
 
       if (mode == kPipeLearn) {
         learner->set_timestamp(n+ 1);
+        if (result.first != result.second) { _TRACE << "failed at: " << result.first->buffer; }
         learner->learn(result.first, result.second);
       } else {
         Dependency output;

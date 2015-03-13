@@ -14,11 +14,19 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcEager {
 
-typedef CommonDependencyPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner> Pipe;
+struct MaxNunmberActions {
+  int operator ()(const Dependency& instance) {
+    return instance.size()* 2- 1;
+  }
+};
 
-typedef CommonDependencyMultiPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner> MultiPipe;
+typedef DependencyPipe<
+  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
+> Pipe;
+
+typedef DependencyMultiPipe<
+  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
+> MultiPipe;
 
 } //  end for namespace arceager
 } //  end for namespace dependencyparser

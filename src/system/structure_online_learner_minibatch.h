@@ -1,10 +1,10 @@
-#ifndef __ZUOPAR_SYSTEM_STRUCTURE_LEARNER_MINIBATCH_H__
-#define __ZUOPAR_SYSTEM_STRUCTURE_LEARNER_MINIBATCH_H__
+#ifndef __ZUOPAR_SYSTEM_STRUCTURE_ONLINE_LEARNER_MINIBATCH_H__
+#define __ZUOPAR_SYSTEM_STRUCTURE_ONLINE_LEARNER_MINIBATCH_H__
 
 #include <vector>
 #include <boost/thread.hpp>
 #include "utils/logging.h"
-#include "system/structure_learner.h"
+#include "system/structure_online_learner.h"
 
 namespace ZuoPar {
 
@@ -13,15 +13,15 @@ template <
   class _StateType,
   class _ModelType
 >
-class TransitionStructureLearnerMiniBatch
-: public TransitionStructureLearner<
+class TransitionStructureOnlineLearnerMiniBatch
+: public TransitionStructureOnlineLearner<
   _ActionType,
   _StateType,
   _ModelType > {
 public:
   //!
-  TransitionStructureLearnerMiniBatch(_ModelType* model)
-    : TransitionStructureLearner<_ActionType, _StateType, _ModelType>(model) {
+  TransitionStructureOnlineLearnerMiniBatch(_ModelType* model)
+    : TransitionStructureOnlineLearner<_ActionType, _StateType, _ModelType>(model) {
     clear();
   }
 

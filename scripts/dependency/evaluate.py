@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 import sys
 import re
+import unicodedata
 from optparse import OptionParser
+
+UNICODEPUNC = dict.fromkeys(i for i in xrange(sys.maxunicode)
+        if unicodedata.category(unichr(i)).startswith('P'))
 
 usage = "Script for parsing accuracy evaluation on tab file."
 parser = OptionParser(usage)
@@ -35,6 +39,8 @@ elif opts.language == "ch":
             "「", "」", "『", "』", "《", "》", "〈", "〉",
             "一一", "――", "―", 
             )
+elif opts.language == "universal":
+    engine = lambda x: re.match(ur"\p{P}+", x) is not None
 else:
     print >> sys.stderr, "Unknown language"
     sys.exit(1)

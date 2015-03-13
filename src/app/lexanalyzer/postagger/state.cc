@@ -37,7 +37,7 @@ State::clear() {
 }
 
 bool
-State::shift(const State& source, postag_t postag) {
+State::tag(const State& source, postag_t postag) {
   if (source.terminated()) {
     return false;
   }
@@ -46,7 +46,7 @@ State::shift(const State& source, postag_t postag) {
   this->postags[this->buffer] = postag;
   ++ this->buffer;
 
-  this->last_action = ActionFactory::make_shift(postag);
+  this->last_action = ActionFactory::make(postag);
   this->previous = &source;
   return true;
 }

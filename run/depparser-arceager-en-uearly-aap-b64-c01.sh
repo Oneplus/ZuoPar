@@ -20,8 +20,8 @@ mkdir -p ${EXE_DIR}
 
 MODEL_PREFIX=${MODEL_DIR}/model
 
-EXE=${EXE_DIR}/arceager_depparser.${SIG}
-cp ${ROOT}/bin/arceager_depparser ${EXE}
+EXE=${EXE_DIR}/depparser_arceager.${SIG}
+cp ${ROOT}/bin/depparser_arceager ${EXE}
 
 rm ${MODEL_PREFIX}.*
 

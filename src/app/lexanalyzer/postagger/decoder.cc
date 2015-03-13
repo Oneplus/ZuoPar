@@ -11,27 +11,22 @@ Decoder::Decoder(int nr, int beam_size, bool avg, Weight* weight)
       beam_size, avg, UpdateStrategy::kEarlyUpdate, weight) {
 }
 
-void
-Decoder::get_possible_actions(const State& source,
+void Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   for (postag_t p = eg::TokenAlphabet::END+ 1; p < nr_postags; ++ p) {
-    actions.push_back(ActionFactory::make_shift(p));
+    actions.push_back(ActionFactory::make(p));
   }
 }
 
-void
-Decoder::transit(const State& source, const Action& act, const floatval_t& score,
+void Decoder::transit(const State& source, const Action& act, const floatval_t& score,
     State* target) {
-  int postag;
-  if (ActionUtils::is_shift(act, postag)) {
-    target->shift(source, postag);
-  } else {
-    _ERROR << "unknown transition";
-    exit(1);
-  }
+  int postag = act.name();
+  target->tag(source, postag);
   target->score = score;
 }
+
+bool Decoder::terminated() { return false; }
 
 } //  end for namespace postagger
 } //  end for namespace lexicalanalyzer

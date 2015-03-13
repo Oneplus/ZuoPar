@@ -34,6 +34,7 @@ public:
   void transit(const State& source, const Action& act, const floatval_t& score,
       State* target);
 
+  bool terminated();
 private:
   int nr_postags;
 };

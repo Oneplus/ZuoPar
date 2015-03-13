@@ -1,4 +1,4 @@
-add_executable (depparser_arcstandard
+add_executable (depparser_choi2013
     main.cc
     action.cc
     action_utils.cc
@@ -15,7 +15,7 @@ add_executable (depparser_arcstandard
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
     )
 
-target_link_libraries (depparser_arcstandard
+target_link_libraries (depparser_choi2013
     boost_program_options
     boost_log_setup
     boost_log

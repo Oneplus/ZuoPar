@@ -1,4 +1,4 @@
-add_executable (arceager_depparser
+add_executable (depparser_arceager
     main.cc
     action.cc
     action_utils.cc
@@ -15,7 +15,7 @@ add_executable (arceager_depparser
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
     )
 
-target_link_libraries (arceager_depparser
+target_link_libraries (depparser_arceager
     boost_program_options
     boost_log_setup
     boost_log

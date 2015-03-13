@@ -35,7 +35,8 @@ public:
   //! Implement arc standard transition.
   void transit(const State& source, const Action& act, const floatval_t& score,
       State* target);
-
+  //
+  bool terminated();
 private:
   int nr_tags;
   const std::vector< std::vector<bool> >& trans;

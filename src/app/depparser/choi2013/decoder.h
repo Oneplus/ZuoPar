@@ -1,18 +1,18 @@
-#ifndef __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_DECODER_H__
-#define __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_DECODER_H__
+#ifndef __ZUOPAR_APP_DEPPARSER_CHOI2013_DECODER_H__
+#define __ZUOPAR_APP_DEPPARSER_CHOI2013_DECODER_H__
 
 #include "engine/token_alphabet.h"
 #include "system/options.h"
 #include "system/system.h"
-#include "app/depparser/arcstandard/state.h"
-#include "app/depparser/arcstandard/action.h"
-#include "app/depparser/arcstandard/score_context.h"
-#include "app/depparser/arcstandard/action.h"
-#include "app/depparser/arcstandard/weight.h"
+#include "app/depparser/choi2013/state.h"
+#include "app/depparser/choi2013/action.h"
+#include "app/depparser/choi2013/score_context.h"
+#include "app/depparser/choi2013/action.h"
+#include "app/depparser/choi2013/weight.h"
 
 namespace ZuoPar {
 namespace DependencyParser {
-namespace ArcStandard {
+namespace Choi2013 {
 
 namespace eg = ZuoPar::Engine;
 
@@ -22,7 +22,7 @@ public:
    * The decoder constructor.
    *
    *  @param[in]  nr              The number of dependency relations.
-   *  @param[in]  root            The tag for rooot.
+   *  @param[in]  root            The tag for root.
    *  @param[in]  beam_size       The size of beam.
    *  @param[in]  update_strategy The update strategy.
    *  @param[in]  weight          The pointer to the weight.
@@ -40,13 +40,12 @@ public:
 
   bool terminated();
 private:
-  int nr_deprels;
-  int root_tag;
+  int nr_deprels; //! The number of dependency relations, NONE, BEGIN, END included.
+  int root_tag;   //! The tag of root.
 };
 
-} //  end for namespace arcstandard
+} //  end for namespace choi2013
 } //  end for namespace dependencyparser
 } //  end for namespace zuopar
 
-
-#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_DECODER_H__
+#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCEAGER_DECODER_H__

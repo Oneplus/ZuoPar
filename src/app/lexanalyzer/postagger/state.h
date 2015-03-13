@@ -38,7 +38,7 @@ public:
    *  @param[in]  source  The source state.
    *  @param[in]  postag  The postag.
    */
-  bool shift(const State& source, postag_t postag);
+  bool tag(const State& source, postag_t postag);
 
   //! If the state reach the terminating state.
   bool terminated() const;

@@ -5,7 +5,7 @@ namespace ZuoPar {
 namespace SequenceLabeler {
 
 std::ostream& operator<<(std::ostream& os, const Action& act) {
-  os << "TAG~" << act.action_name;
+  os << "TAG~" << act.name();
   return os;
 }
 

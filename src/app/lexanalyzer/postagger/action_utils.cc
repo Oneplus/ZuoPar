@@ -6,22 +6,12 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
 
-bool
-ActionUtils::is_shift(const Action& act, postag_t& postag) {
-  if (act.action_name == Action::kShift) {
-    postag = act.deprel;
-    return true;
-  }
-  return false;
-}
-
-void
-ActionUtils::get_oracle_actions(const Postag& instance,
+void ActionUtils::get_oracle_actions(const Postag& instance,
     std::vector<Action>& actions) {
   actions.clear();
   for (int i = 0; i < instance.size(); ++ i) {
     postag_t postag = instance.postags[i];
-    actions.push_back(ActionFactory::make_shift(postag));
+    actions.push_back(ActionFactory::make(postag));
   }
 }
 

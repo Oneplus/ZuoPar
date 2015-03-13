@@ -51,6 +51,11 @@ Decoder::transit(const State& source, const Action& act, const floatval_t& score
   target->score = score;
 }
 
+bool Decoder::terminated() {
+  // ban the terminate function, totally relay on max number of actions.
+  return false;
+}
+
 } //  end for namespace arcstandard
 } //  end for namespace dependencyparser
 } //  end for namespace zuopar

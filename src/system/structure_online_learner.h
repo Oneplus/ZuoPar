@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_SYSTEM_STRUCTURE_LEARNER_H__
-#define __ZUOPAR_SYSTEM_STRUCTURE_LEARNER_H__
+#ifndef __ZUOPAR_SYSTEM_STRUCTURE_ONLINE_LEARNER_H__
+#define __ZUOPAR_SYSTEM_STRUCTURE_ONLINE_LEARNER_H__
 
 #include <vector>
 #include <cmath>
@@ -14,7 +14,7 @@ template <
   class _StateType,
   class _ModelType
 >
-class TransitionStructureLearner {
+class TransitionStructureOnlineLearner {
 public:
   /**
    * The initializer of transition structure learner
@@ -22,7 +22,7 @@ public:
    *  @param[in]  m     The model
    *  @param[in]  algo  The learning algorithm.
    */
-  TransitionStructureLearner(_ModelType* m,
+  TransitionStructureOnlineLearner(_ModelType* m,
       LearningAlgorithm algo= kAveragePerceptron)
     : model(m),
     nr_errors(0),
@@ -109,21 +109,24 @@ protected:
    * and ther score as loss l_t
    */
   void learn_passive_aggressive(int last) {
-    double error = last; //
+    double error = last;
     double score = 0.;
     double norm = 0.;
 
+    // SparseVector3 provides more precious vectorization result.
     SparseVector3 updated_vector;
-    //SparseVector2 predict_vector;
 
     for (int i = last; i > 0; -- i) {
       const _ActionType& predict_action = predict_state_chain[i- 1]->last_action;
       const _ActionType& correct_action = correct_state_chain[i- 1]->last_action;
-      score += model->score((*correct_state_chain[i]), correct_action, false);
-      score -= model->score((*predict_state_chain[i]), predict_action, false);
       model->vectorize3((*correct_state_chain[i]), correct_action, 1., &updated_vector);
       model->vectorize3((*predict_state_chain[i]), predict_action, -1., &updated_vector);
     }
+
+    // It's tricky to use the score stored in last state as the difference between
+    // two transition sequences, which means the predict and correct action should
+    // both be calcualted before learning.
+    score = predict_state_chain[0]->score - correct_state_chain[0]->score;
 
     for (SparseVector3::const_iterator i = updated_vector.begin();
         i != updated_vector.end(); ++ i) {
@@ -132,10 +135,10 @@ protected:
 
     _TRACE << "learn: norm = " << norm;
     double step = 0.;
-    if (norm < 1e-8) {
+    if (norm < 1e-8 || score + error < 0.) {
       step = 0;
     } else {
-      step = (error - score) /norm;
+      step = (score + error) /norm;
     }
 
     BOOST_ASSERT_MSG(!std::isnan(step), "NaN step is asserted.");
@@ -160,4 +163,4 @@ protected:
 
 } //  end for namespace zuopar
 
-#endif  //  end for __ZUOPAR_SYSTEM_STRUCTURE_LEARNER_H__
+#endif  //  end for __ZUOPAR_SYSTEM_STRUCTURE_ONLINE_LEARNER_H__

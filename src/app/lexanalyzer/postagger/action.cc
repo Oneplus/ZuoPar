@@ -5,9 +5,13 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
 
-Action
-ActionFactory::make_shift(const postag_t& postag) {
-  return Action(Action::kShift, postag);
+Action ActionFactory::make(const postag_t& postag) {
+  return Action(postag);
+}
+
+std::ostream& operator<<(std::ostream& os, const Action& act) {
+  os << act.name();
+  return os;
 }
 
 } //  end for namespace postagger

@@ -1,9 +1,9 @@
 #!/bin/bash
 ROOT=`pwd`
-TRAIN=${ROOT}/data/chunking/train.crfsuite.txt
-TEST=${ROOT}/data/chunking/test.crfsuite.txt
+TRAIN=${ROOT}/data/chunking/conll00/train.crfsuite.txt
+TEST=${ROOT}/data/chunking/conll00/test.crfsuite.txt
 
-TEST_ANS=${ROOT}/data/chunking/test.txt
+TEST_ANS=${ROOT}/data/chunking/conll00/test.txt
 
 SIG=`date '+%Y-%m-%d-%H%M%S'`-seqlabeler-conll00
 WORKSPACE=${ROOT}/workspace/${SIG}
@@ -28,7 +28,8 @@ for i in `seq 1 10`; do
         -m ${MODEL_PREFIX} \
         -r ${TRAIN}
 
-    tar zcvf ${MODEL_PREFIX}.${i}.tgz ${MODEL_PREFIX}
+    cp ${MODEL_PREFIX} ${MODEL_PREFIX}.${i}
+    bzip2 ${MODEL_PREFIX}.${i}
 
     ${EXE} test \
         -m ${MODEL_PREFIX} \

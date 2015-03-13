@@ -23,25 +23,22 @@ template <
   class Weight,
   class Decoder,
   class Learner,
-  class MinibatchLearner
+  class MinibatchLearner,
+  class MaxNumberOfActionsFunction
 >
-class CommonDependencyMultiPipe
-: public CommonDependencyPipe<Action, ActionUtils, State, Weight, Decoder, Learner> {
+class DependencyMultiPipe: public DependencyPipe<
+  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction
+> {
 public:
   /**
    * The learning mode constructor.
    *
    *  @param[in]  opts  The learning options.
    */
-  CommonDependencyMultiPipe(const MultiLearnOption& opts)
+  DependencyMultiPipe(const MultiLearnOption& opts)
     : minibatch_learner(0),
-    CommonDependencyPipe<
-      Action,
-      ActionUtils,
-      State,
-      Weight,
-      Decoder,
-      Learner
+    DependencyPipe<
+      Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction
     >(static_cast<const fe::LearnOption&>(opts)) {
     _INFO << "::MULTI-LEARN:: mode is activated.";
     this->root = opts.root;
@@ -60,12 +57,8 @@ public:
     deprel_t root_tag = this->deprels_alphabet.encode(this->root.c_str());
     for (int i = 0; i < num_threads; ++ i) {
       decoder_pool[i] = new Decoder(
-          this->deprels_alphabet.size(),
-          root_tag,
-          this->beam_size,
-          false,
-          this->update_strategy,
-          this->weight);
+          this->deprels_alphabet.size(), root_tag, this->beam_size, false,
+          this->update_strategy, this->weight);
     }
 
     minibatch_learner = new MinibatchLearner(this->weight);
@@ -86,14 +79,10 @@ public:
       last_free_decoder_id = 0;
       for (int i = 0; i < num_threads; ++ i) {
         decoder_threads.create_thread(
-            boost::bind(&CommonDependencyMultiPipe<
-              Action,
-              ActionUtils,
-              State,
-              Weight,
-              Decoder,
-              Learner,
-              MinibatchLearner>::decode, this));
+            boost::bind(&DependencyMultiPipe<
+              Action, ActionUtils, State, Weight, Decoder, Learner,
+              MinibatchLearner, MaxNumberOfActionsFunction>::decode,
+              this));
       }
       decoder_threads.join_all();
       minibatch_learner->set_timestamp(batch_id+ 1);
@@ -149,7 +138,7 @@ private:
   //! The learner
   MinibatchLearner* minibatch_learner;
 
-  //!
+  //! The job queue
   boost::lockfree::queue<const Dependency*> queue;
 
   //!

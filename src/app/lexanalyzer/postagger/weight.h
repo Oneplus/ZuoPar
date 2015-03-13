@@ -77,12 +77,13 @@ public:
   Weight();
 
   void vectorize(const ScoreContext& ctx, const Action& act, floatval_t scale,
-      SparseVector* sparse_vector) {
-  }
+      SparseVector* sparse_vector) {}
 
   void vectorize2(const ScoreContext& ctx, const Action& act, floatval_t scale,
-      SparseVector2* sparse_vector) {
-  }
+      SparseVector2* sparse_vector) {}
+
+  void vectorize3(const ScoreContext& ctx, const Action& act, floatval_t scale,
+      SparseVector3* sparse_vector) {}
 
   floatval_t score(const ScoreContext& ctx, const Action& act, bool avg) {
     floatval_t ret = 0;

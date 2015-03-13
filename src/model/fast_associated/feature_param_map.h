@@ -107,13 +107,6 @@ public:
     cache_t cache;
     extractor(ctx, cache);
     for (const _MetaFeatureType& c: cache) {
-      typename map_t::const_iterator result1 = rep.find(c);
-      if (result1 == rep.end())   { continue; }
-
-      const entry_t& entry = result1->second;
-      typename entry_t::const_iterator result2 = entry.find(act);
-      if (result2 == entry.end()) { continue; }
-
       std::size_t seed = 0;
       boost::hash_combine(seed, gid);
       boost::hash_combine(seed, c);
@@ -128,13 +121,6 @@ public:
     cache_t cache;
     extractor(ctx, cache);
     for (const _MetaFeatureType& c: cache) {
-      typename map_t::const_iterator result1 = rep.find(c);
-      if (result1 == rep.end())   { continue; }
-
-      const entry_t& entry = result1->second;
-      typename entry_t::const_iterator result2 = entry.find(act);
-      if (result2 == entry.end()) { continue; }
-
       std::size_t seed = 0;
       boost::hash_combine(seed, act);
       boost::hash_combine(seed, c);
@@ -150,13 +136,6 @@ public:
     cache_t cache;
     extractor(ctx, cache);
     for (const _MetaFeatureType& c: cache) {
-      typename map_t::const_iterator result1 = rep.find(c);
-      if (result1 == rep.end())   { continue; }
-
-      const entry_t& entry = result1->second;
-      typename entry_t::const_iterator result2 = entry.find(act);
-      if (result2 == entry.end()) { continue; }
-
       SparseVector3Key key = SparseVector3Key(gid,
           boost::hash_value<_MetaFeatureType>(c),
           boost::hash_value<_ActionType>(act));
@@ -214,7 +193,8 @@ public:
       if (result1 == rep.end()) { continue; }
       const entry_t& entry = result1->second;
       // It's tricky to iterate over all the actions, but it provides faster
-      // speed.
+      // speed. It also take the advantage of ordered iteration, ordered 
+      // insertation.
       for (typename entry_t::const_iterator i = entry.begin();
           i != entry.end(); ++ i) {
         const _ActionType& act = i->first;

@@ -2,11 +2,6 @@
 #define __ZUOPAR_APP_SEQUENCE_LABELER_ACTION_H__
 
 #include <iostream>
-#include <boost/assert.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/functional/hash.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
 #include "types/common.h"
 #include "system/action/abstract_simple_action.h"
 

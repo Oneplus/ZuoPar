@@ -3,24 +3,16 @@
 
 #include <iostream>
 #include <boost/assert.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/functional/hash.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
 #include "types/common.h"
-#include "system/action/abstract_action.h"
+#include "system/action/abstract_simple_action.h"
 
 namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
 
-class Action: public AbstractAction {
+class Action: public AbstractSimpleAction {
 public:
-  enum {
-    kShift,     //! The index of shift action.
-  };
-
-  Action() : AbstractAction() {}
+  Action() : AbstractSimpleAction() {}
 
   /**
    * Constructor for action.
@@ -28,17 +20,10 @@ public:
    *  @param[in]  name    The name for the action.
    *  @param[in]  postag  The postag of this action.
    */
-  Action(int name, postag_t postag) : AbstractAction(name, postag) {}
+  Action(postag_t postag) : AbstractSimpleAction(postag) {}
 
   //! Overload the ostream function.
-  friend std::ostream& operator<<(std::ostream& os, const Action& act) {
-    if (act.action_name == kShift) {
-      os << "SH~" << act.deprel;
-    } else {
-      BOOST_ASSERT_MSG(false, "unknown actions.");
-    }
-    return os;
-  }
+  friend std::ostream& operator<<(std::ostream& os, const Action& act);
 
   //! For is_shift, is_left_arc, is_right_arc;
   friend class ActionUtils;
@@ -51,7 +36,7 @@ public:
    *
    *  @return Action  A shift action.
    */
-  static Action make_shift(const postag_t& postag);
+  static Action make(const postag_t& postag);
 };
 
 } //  end for namespace postagger
