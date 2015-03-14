@@ -7,10 +7,10 @@ from optparse import OptionParser
 
 UNICODEPUNC = dict.fromkeys(i for i in xrange(sys.maxunicode)
         if unicodedata.category(unichr(i)).startswith('P'))
-
 usage = "Script for parsing accuracy evaluation on tab file."
 parser = OptionParser(usage)
 parser.add_option("--punctuation", dest="punctuation", default=False, action="store_true", help="specify to include punctuation in evaluation.")
+parser.add_option("--ignore", dest="ignore", default=None, help="ignore form")
 parser.add_option("--language", dest="language", help="specify language")
 opts, args = parser.parse_args()
 
@@ -27,7 +27,7 @@ if opts.language == "en":
             "\"", "``", "`", # quotation marks
             ";", # semicolon
             "?" # question mark
-            )
+            ) or x == opts.ignore
 elif opts.language == "ch":
     engine = lambda x: x in (
             "（", "）",
@@ -38,9 +38,9 @@ elif opts.language == "ch":
             "“", "”", "‘", "’", 
             "「", "」", "『", "』", "《", "》", "〈", "〉",
             "一一", "――", "―", 
-            )
+            ) or x == opts.ignore
 elif opts.language == "universal":
-    engine = lambda x: re.match(ur"\p{P}+", x) is not None
+    engine = lambda x: len(x.decode("utf-8").translate(UNICODEPUNC)) == 0 or x == opts.ignore
 else:
     print >> sys.stderr, "Unknown language"
     sys.exit(1)

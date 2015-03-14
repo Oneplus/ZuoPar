@@ -152,7 +152,7 @@ public:
 
       if (mode == kPipeLearn) {
         learner->set_timestamp(n+ 1);
-        if (result.first != result.second) { _TRACE << "failed at: " << result.first->buffer; }
+        //if (result.first != result.second) { _TRACE << "failed at: " << result.first->buffer; }
         learner->learn(result.first, result.second);
       } else {
         Dependency output;

@@ -137,10 +137,8 @@ bool State::left_arc(const State& source, deprel_t deprel) {
   _reduce();
   -- nr_empty_heads;
 
-  heads[m] = h;
-  deprels[m] = deprel;
+  heads[m] = h; deprels[m] = deprel;
   left_label_set[h] |= (1<< deprel);
-
   if (-1 == left_most_child[h]) {
     // TP0 is left-isolate node.
     left_most_child[h] = m;
@@ -152,9 +150,8 @@ bool State::left_arc(const State& source, deprel_t deprel) {
     // (LM0, TP1, TP0)
     left_2nd_most_child[h] = m;
   }
-
   ++ nr_left_children[h];
-  refresh_stack_information();
+
   last_action = ActionFactory::make_left_arc(deprel);
   previous = &source;
   return true;
@@ -169,10 +166,9 @@ bool State::right_arc(const State& source, deprel_t deprel) {
   copy(source);
   int h = top0; int m = buffer;
   _shift();
-  heads[m] = h;
-  deprels[m] = deprel;
-  right_label_set[h] |= (1<< deprel);
 
+  heads[m] = h; deprels[m] = deprel;
+  right_label_set[h] |= (1<< deprel);
   if (-1 == right_most_child[h]) {
     // TP1 is right-isolate node.
     right_most_child[h] = m;
@@ -182,8 +178,8 @@ bool State::right_arc(const State& source, deprel_t deprel) {
   } else if (right_2nd_most_child[h] < m) {
     right_2nd_most_child[h] = m;
   }
-
   ++ nr_right_children[h];
+
   last_action = ActionFactory::make_right_arc(deprel);
   previous = &source;
   return true;
@@ -200,10 +196,8 @@ bool State::left_pass(const State& source, deprel_t deprel) {
   _pass();
   -- nr_empty_heads;
 
-  heads[m] = h;
-  deprels[m] = deprel;
+  heads[m] = h; deprels[m] = deprel;
   left_label_set[h] |= (1<< deprel);
-
   if (-1 == left_most_child[h]) {
     // TP0 is left-isolate node.
     left_most_child[h] = m;
@@ -215,8 +209,8 @@ bool State::left_pass(const State& source, deprel_t deprel) {
     // (LM0, TP1, TP0)
     left_2nd_most_child[h] = m;
   }
-
   ++ nr_left_children[h];
+
   last_action = ActionFactory::make_left_pass(deprel);
   previous = &source;
   return true;
@@ -232,10 +226,8 @@ bool State::right_pass(const State& source, deprel_t deprel) {
   int h = top0; int m = buffer;
   _pass();
 
-  heads[m] = h;
-  deprels[m] = deprel;
+  heads[m] = h; deprels[m] = deprel;
   right_label_set[h] |= (1<< deprel);
-
   if (-1 == right_most_child[h]) {
     // TP1 is right-isolate node.
     right_most_child[h] = m;
@@ -245,8 +237,8 @@ bool State::right_pass(const State& source, deprel_t deprel) {
   } else if (right_2nd_most_child[h] < m) {
     right_2nd_most_child[h] = m;
   }
-
   ++ nr_right_children[h];
+
   last_action = ActionFactory::make_right_pass(deprel);
   previous = &source;
   return true;
