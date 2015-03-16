@@ -24,7 +24,8 @@ public:
     S1w(0), S1ldw(0), S1l2dw(0), S1rdw(0), S1r2dw(0), S1ldl(0), S1l2dl(0),
     S1p(0), S1ldp(0), S1l2dp(0), S1rdp(0), S1r2dp(0), S1rdl(0), S1r2dl(0),
     S1la(0), S1ra(0),
-    S0lset(0), S0rset(0), S1lset(0), S1rset(0),
+    S0lsetl(0), S0lseth(0), S0rsetl(0), S0rseth(0),
+    S1lsetl(0), S1lseth(0), S1rsetl(0), S1rseth(0),
     DistS0S1(0),
     N0w(0), N1w(0),
     N0p(0), N1p(0) {
@@ -35,7 +36,8 @@ public:
     if (S0 >= 0) {
       S0w = forms[S0]; S0p = postags[S0];
       S0la = state.nr_left_children[S0]; S0ra = state.nr_right_children[S0];
-      S0lset = state.left_label_set[S0]; S0rset = state.right_label_set[S0];
+      S0lsetl = state.left_label_set_lowbit[S0];  S0lseth = state.left_label_set_highbit[S0];
+      S0rsetl = state.right_label_set_lowbit[S0]; S0rseth = state.right_label_set_highbit[S0];
 
       int S0ld = state.left_most_child[S0];
       if (S0ld >= 0) {
@@ -62,7 +64,8 @@ public:
     if (S1 >= 0) {
       S1w = forms[S1]; S1p = postags[S1];
       S1la = state.nr_left_children[S1]; S1ra = state.nr_right_children[S1];
-      S1lset = state.left_label_set[S1]; S1rset = state.right_label_set[S1];
+      S1lsetl = state.left_label_set_lowbit[S1];  S1lseth = state.left_label_set_highbit[S1];
+      S1rsetl = state.right_label_set_lowbit[S1]; S1rseth = state.right_label_set_highbit[S1];
 
       int S1ld = state.left_most_child[S1];
       if (S1ld >= 0) {
@@ -113,9 +116,10 @@ public:
   deprel_t      S0ldl, S0rdl, S0l2dl, S0r2dl;
   deprel_t      S1ldl, S1rdl, S1l2dl, S1r2dl;
 
-  int           S0la,  S0ra,  S1la,   S1ra;
-  int           S0lset,S0rset,S1lset, S1rset;
-  int           DistS0S1;
+  int S0la,  S0ra,  S1la,   S1ra;
+  int S0lsetl, S0lseth, S0rsetl, S0rseth;
+  int S1lsetl, S1lseth, S1rsetl, S1rseth;
+  int DistS0S1;
 };
 
 } //  end for namespace swap

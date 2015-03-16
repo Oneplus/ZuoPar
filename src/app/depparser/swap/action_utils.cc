@@ -55,11 +55,9 @@ void ActionUtils::get_oracle_actions(const Dependency& instance,
   int timestamp = 0;
   std::vector<int> orders(N, -1);
   get_oracle_actions_calculate_orders(root, tree, orders, timestamp);
-  _TRACE << "!";
 
   std::vector<int> MPC(N, 0);
   get_oracle_actions_calculate_mpc(root, tree, MPC);
-  _TRACE << "!!";
 
   std::vector<int> sigma;
   std::vector<int> beta;
@@ -108,8 +106,8 @@ void ActionUtils::get_oracle_actions_onestep(const Dependency& instance,
   }
 
   int k = beta.empty() ? -1 : beta.back();
-  if ((orders[top1] < orders[top0]) &&
-      (k == -1 || MPC[top1] != MPC[k])) {
+  if ((orders[top0] < orders[top1]) &&
+      (k == -1 || MPC[top0] != MPC[k])) {
     actions.push_back(ActionFactory::make_swap());
     sigma.pop_back(); sigma.back() = top0; beta.push_back(top1);
   } else {

@@ -35,7 +35,7 @@ public:
     S0hl(0),
     S0h2l(0),
     S0la(0), S0ra(0), N0la(0),
-    S0lset(0), S0rset(0), N0lset(0),
+    S0lsetl(0), S0lseth(0), S0rsetl(0), S0rseth(0), N0lsetl(0), N0lseth(0),
     DistS0N0(0) {
     const std::vector<form_t>& forms = state.ref->forms;
     const std::vector<postag_t>& postags = state.ref->postags;
@@ -45,7 +45,10 @@ public:
     if (S0 >= 0) {
       S0w = forms[S0]; S0p = postags[S0];
       S0la = state.nr_left_children[S0]; S0ra = state.nr_right_children[S0];
-      S0lset = state.left_label_set[S0]; S0rset = state.right_label_set[S0];
+      S0lsetl = state.left_label_set_lowbit[S0];
+      S0lseth = state.left_label_set_highbit[S0];
+      S0rsetl = state.right_label_set_lowbit[S0];
+      S0rseth = state.right_label_set_highbit[S0];
       S0hl = state.deprels[S0];
 
       int S0ld = state.left_most_child[S0];
@@ -73,7 +76,8 @@ public:
     if (N0 < len) {
       N0w = forms[N0]; N0p = postags[N0];
       N0la = state.nr_left_children[N0];
-      N0lset = state.left_label_set[N0];
+      N0lsetl = state.left_label_set_lowbit[N0];
+      N0lseth = state.left_label_set_highbit[N0];
 
       int N0ld = state.left_most_child[N0];
       if (N0ld >= 0) {
@@ -125,14 +129,14 @@ public:
   postag_t S0hp;
   postag_t S0h2p;
 
-  deprel_t      S0ldl, S0rdl, S0l2dl, S0r2dl;
-  deprel_t      N0ldl,        N0l2dl;
-  deprel_t      S0hl;
-  deprel_t      S0h2l;
+  deprel_t S0ldl, S0rdl, S0l2dl, S0r2dl;
+  deprel_t N0ldl,        N0l2dl;
+  deprel_t S0hl;
+  deprel_t S0h2l;
 
-  int           S0la,  S0ra,  N0la;
-  int           S0lset,S0rset,N0lset;
-  int           DistS0N0;
+  int S0la,  S0ra,  N0la;
+  int S0lsetl,S0lseth, S0rsetl, S0rseth ,N0lsetl, N0lseth;
+  int DistS0N0;
 };
 
 } //  end for namespace choi2013

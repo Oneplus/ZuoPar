@@ -24,8 +24,10 @@ void State::copy(const State& source) {
   #define _COPY(name) memcpy((name), source.name, sizeof(name));
   _COPY(heads);
   _COPY(deprels);
-  _COPY(left_label_set);
-  _COPY(right_label_set);
+  _COPY(left_label_set_lowbit);
+  _COPY(left_label_set_highbit);
+  _COPY(right_label_set_lowbit);
+  _COPY(right_label_set_highbit);
   _COPY(left_most_child);
   _COPY(left_2nd_most_child);
   _COPY(right_most_child);
@@ -45,43 +47,82 @@ void State::clear() {
   top0 = -1;
   memset(heads, -1, sizeof(heads));
   memset(deprels, 0, sizeof(deprels));
-  memset(left_label_set, 0, sizeof(left_label_set));
-  memset(right_label_set, 0, sizeof(right_label_set));
-  memset(nr_left_children, 0, sizeof(nr_left_children));
+  memset(left_label_set_lowbit,   0, sizeof(left_label_set_lowbit));
+  memset(left_label_set_highbit,  0, sizeof(left_label_set_highbit));
+  memset(right_label_set_lowbit,  0, sizeof(right_label_set_lowbit));
+  memset(right_label_set_highbit, 0, sizeof(right_label_set_highbit));
+  memset(nr_left_children,  0, sizeof(nr_left_children));
   memset(nr_right_children, 0, sizeof(nr_right_children));
-  memset(left_most_child, -1, sizeof(left_most_child));
+  memset(left_most_child,  -1, sizeof(left_most_child));
   memset(right_most_child, -1, sizeof(right_most_child));
-  memset(left_2nd_most_child, -1, sizeof(left_2nd_most_child));
+  memset(left_2nd_most_child,  -1, sizeof(left_2nd_most_child));
   memset(right_2nd_most_child, -1, sizeof(right_2nd_most_child));
 }
 
-void State::refresh_stack_information() {
+void State::_update_stack_information() {
   size_t sz = stack.size();
   if (0 == sz)  { top0 = -1; }
   else          { top0 = stack.at(sz - 1); }
 }
 
+void State::_update_left_children_information(int h, int m) {
+  if (-1 == left_most_child[h]) {             // m is left-isolate node.
+    left_most_child[h] = m;
+  } else if (m < left_most_child[h]) {        // (m, lm0, h)
+    left_2nd_most_child[h] = left_most_child[h];
+    left_most_child[h] = m;
+  } else if (m < left_2nd_most_child[top0]) { // (lm0, m, h)
+    left_2nd_most_child[h] = m;
+  }
+  ++ nr_left_children[h];
+}
+
+void State::_update_right_children_information(int h, int m) {
+  if (-1 == right_most_child[h]) {            // TP1 is right-isolate node.
+    right_most_child[h] = m;
+  } else if (right_most_child[h] < m) {       // (h, rm0, m)
+    right_2nd_most_child[h] = right_most_child[h];
+    right_most_child[h] = m;
+  } else if (right_2nd_most_child[h] < m) {   // (h, m, rm0)
+    right_2nd_most_child[h] = m;
+  }
+  ++ nr_right_children[h];
+}
+
+void State::_update_left_label_set(int h, int deprel) {
+  if (deprel > sizeof(unsigned)) {
+    left_label_set_highbit[h] |= (1<< (deprel - sizeof(unsigned)));
+  } else {
+    left_label_set_lowbit[h]  |= (1<< deprel);
+  }
+}
+
+void State::_update_right_label_set(int h, int deprel) {
+  if (deprel > sizeof(unsigned)) {
+    right_label_set_highbit[h] |= (1<< (deprel - sizeof(unsigned)));
+  } else {
+    right_label_set_lowbit[h]  |= (1<< deprel);
+  }
+}
+
 void State::_shift() {
   while (!deque.empty()) { stack.push_back(deque.back()); deque.pop_back(); }
   stack.push_back(buffer);  ++ buffer;
-  refresh_stack_information();
+  _update_stack_information();
 }
 
 void State::_reduce() {
   stack.pop_back();
-  refresh_stack_information();
+  _update_stack_information();
 }
 
 void State::_pass() {
   deque.push_back(stack.back()); stack.pop_back();
-  refresh_stack_information();
+  _update_stack_information();
 }
 
 bool State::idle(const State& source) {
-  if (!source.is_complete()) {
-    _DEBUG << "IDLE action not permitted!";
-    return false;
-  }
+  if (!source.is_complete()) { return false; }
   copy(source);
   last_action = ActionFactory::make_idle();
   previous = &source;
@@ -89,10 +130,7 @@ bool State::idle(const State& source) {
 }
 
 bool State::shift(const State& source) {
-  if (source.buffer_empty()) {
-    _DEBUG << "SHIFT action not permitted!";
-    return false;
-  }
+  if (source.buffer_empty()) { return false; }
   copy(source);
   if (heads[buffer] == -1) ++ nr_empty_heads;
   _shift();
@@ -102,10 +140,7 @@ bool State::shift(const State& source) {
 }
 
 bool State::reduce(const State& source) {
-  if (source.stack_empty()) {
-    _DEBUG << "REDUCE action not permitted!";
-    return false;
-  }
+  if (source.stack_empty()) { return false; }
   copy(source);
   _reduce();
   last_action = ActionFactory::make_reduce();
@@ -114,10 +149,7 @@ bool State::reduce(const State& source) {
 }
 
 bool State::no_pass(const State& source) {
-  if (source.stack_empty()) {
-    _DEBUG << "REDUCE action not permitted!";
-    return false;
-  }
+  if (source.stack_empty()) { return false; }
   copy(source);
   _pass();
   last_action = ActionFactory::make_no_pass();
@@ -126,11 +158,7 @@ bool State::no_pass(const State& source) {
 }
 
 bool State::left_arc(const State& source, deprel_t deprel) {
-  if (source.stack_empty() || source.stack_top_has_head())  {
-    _DEBUG << "LEFT-ARC action not permitted: "
-      << source.stack.back() << "| " << source.buffer;
-    return false;
-  }
+  if (source.stack_empty() || source.stack_top_has_head()) { return false; }
 
   copy(source);
   int h = buffer; int m = stack.back();
@@ -138,135 +166,65 @@ bool State::left_arc(const State& source, deprel_t deprel) {
   -- nr_empty_heads;
 
   heads[m] = h; deprels[m] = deprel;
-  left_label_set[h] |= (1<< deprel);
-  if (-1 == left_most_child[h]) {
-    // TP0 is left-isolate node.
-    left_most_child[h] = m;
-  } else if (m < left_most_child[h]) {
-    // (TP1, LM0, TP0)
-    left_2nd_most_child[h] = left_most_child[h];
-    left_most_child[h] = m;
-  } else if (m < left_2nd_most_child[top0]) {
-    // (LM0, TP1, TP0)
-    left_2nd_most_child[h] = m;
-  }
-  ++ nr_left_children[h];
-
+  _update_left_label_set(h, deprel);
+  _update_left_children_information(h, m);
   last_action = ActionFactory::make_left_arc(deprel);
   previous = &source;
   return true;
 }
 
 bool State::right_arc(const State& source, deprel_t deprel) {
-  if (source.stack_empty()) {
-    _DEBUG << "RIGHT-ARC action not permitted!";
-    return false;
-  }
+  if (source.stack_empty()) { return false; }
 
   copy(source);
   int h = top0; int m = buffer;
   _shift();
 
   heads[m] = h; deprels[m] = deprel;
-  right_label_set[h] |= (1<< deprel);
-  if (-1 == right_most_child[h]) {
-    // TP1 is right-isolate node.
-    right_most_child[h] = m;
-  } else if (right_most_child[h] < m) {
-    right_2nd_most_child[h] = right_most_child[h];
-    right_most_child[h] = m;
-  } else if (right_2nd_most_child[h] < m) {
-    right_2nd_most_child[h] = m;
-  }
-  ++ nr_right_children[h];
-
+  _update_right_label_set(h, deprel);
+  _update_right_children_information(h, m);
   last_action = ActionFactory::make_right_arc(deprel);
   previous = &source;
   return true;
 }
 
 bool State::left_pass(const State& source, deprel_t deprel) {
-  if (source.stack_empty() || source.heads[source.top0] != -1) {
-    _DEBUG << "LEFT-PASS action not permitted!";
-    return false;
-  }
+  if (source.stack_empty() || source.heads[source.top0] != -1) { return false; }
 
   copy(source);
-  int h = buffer; int m = stack.back();
+  int h = buffer; int m = top0;
   _pass();
   -- nr_empty_heads;
 
   heads[m] = h; deprels[m] = deprel;
-  left_label_set[h] |= (1<< deprel);
-  if (-1 == left_most_child[h]) {
-    // TP0 is left-isolate node.
-    left_most_child[h] = m;
-  } else if (m < left_most_child[h]) {
-    // (TP1, LM0, TP0)
-    left_2nd_most_child[h] = left_most_child[h];
-    left_most_child[h] = m;
-  } else if (m < left_2nd_most_child[top0]) {
-    // (LM0, TP1, TP0)
-    left_2nd_most_child[h] = m;
-  }
-  ++ nr_left_children[h];
-
+  _update_left_label_set(h, deprel);
+  _update_left_children_information(h, m);
   last_action = ActionFactory::make_left_pass(deprel);
   previous = &source;
   return true;
 }
 
 bool State::right_pass(const State& source, deprel_t deprel) {
-  if (source.stack_empty()) {
-    _DEBUG << "LEFT-PASS action not permitted!";
-    return false;
-  }
+  if (source.stack_empty()) { return false; }
 
   copy(source);
   int h = top0; int m = buffer;
   _pass();
 
   heads[m] = h; deprels[m] = deprel;
-  right_label_set[h] |= (1<< deprel);
-  if (-1 == right_most_child[h]) {
-    // TP1 is right-isolate node.
-    right_most_child[h] = m;
-  } else if (right_most_child[h] < m) {
-    right_2nd_most_child[h] = right_most_child[h];
-    right_most_child[h] = m;
-  } else if (right_2nd_most_child[h] < m) {
-    right_2nd_most_child[h] = m;
-  }
-  ++ nr_right_children[h];
-
+  _update_right_label_set(h, deprel);
+  _update_right_children_information(h, m);
   last_action = ActionFactory::make_right_pass(deprel);
   previous = &source;
   return true;
 }
 
-bool State::buffer_empty() const {
-  return (buffer == ref->size());
-}
-
-bool State::stack_empty() const {
-  return stack.empty();
-}
-
-bool State::reach_last_token() const {
-  return (buffer == ref->size() - 1);
-}
-
-bool State::stack_top_has_head() const {
-  return heads[top0] != -1;
-}
-
-bool State::buffer_front_has_head() const {
-  return heads[buffer] != -1;
-}
-
-bool State::is_complete() const {
-  return stack.size() == 1 && buffer == ref->size();
-}
+bool State::buffer_empty() const          { return (buffer == ref->size()); }
+bool State::stack_empty() const           { return stack.empty(); }
+bool State::reach_last_token() const      { return (buffer == ref->size() - 1);}
+bool State::stack_top_has_head() const    { return heads[top0] != -1; }
+bool State::buffer_front_has_head() const { return heads[buffer] != -1; }
+bool State::is_complete() const           { return stack.size() == 1 && buffer == ref->size(); }
 
 bool State::is_descendant(int parent, int child) const {
   while (child != -1) {

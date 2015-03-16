@@ -33,6 +33,13 @@ public:
   void clear();
 
   /**
+   * Perform the IDLE action from source state.
+   *
+   *  @param[in]  source  The source state.
+   */
+  bool idle(const State& source);
+
+  /**
    * Perform the shift action from source state.
    *
    *  @param[in]  source  The source state.
@@ -62,18 +69,24 @@ public:
    */
   bool swap(const State& source);
 
-  bool idle(const State& source);
-
-  //! Return true on the buffer is empty.
-  bool buffer_empty() const;
-
-  bool is_complete() const;
-
-  //! Get the size of the stack.
-  size_t stack_size() const;
+  bool buffer_empty() const;  //! shorthand for buffer.empty()
+  bool is_complete() const;   //! shorthand for stack.size() == 1 && buffer.empty()
+  size_t stack_size() const;  //! shorthand for stack.size()
 
   //! Refresh the value of top0 and top1.
-  void refresh_stack_information();
+  void _update_stack_information();
+
+  //! Refresh left children information
+  void _update_left_children_information(int h, int m);
+
+  //! Refresh right children information
+  void _update_right_children_information(int h, int m);
+
+  //! Update the left label set.
+  void _update_left_label_set(int h, int deprel);
+
+  //! Update the right label set.
+  void _update_right_label_set(int h, int deprel);
 
   //! The pointer to the previous state.
   std::vector<int> stack;
@@ -108,11 +121,13 @@ public:
   //! The dependency relation cached in state.
   deprel_t deprels[kMaxNumberOfWords];
 
-  //!
-  int left_label_set[kMaxNumberOfWords];
+  //! The left label set.
+  unsigned left_label_set_lowbit[kMaxNumberOfWords];
+  unsigned left_label_set_highbit[kMaxNumberOfWords];
 
-  //!
-  int right_label_set[kMaxNumberOfWords];
+  //! The right label set.
+  unsigned right_label_set_lowbit[kMaxNumberOfWords];
+  unsigned right_label_set_highbit[kMaxNumberOfWords];
 
   //! Use to record the number of left children in current state.
   int nr_left_children[kMaxNumberOfWords];

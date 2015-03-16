@@ -92,43 +92,22 @@ public:
    */
   bool right_pass(const State& source, deprel_t deprel);
 
-  void _shift();
-  void _reduce();
-  void _pass();
-  //! Return true on the buffer is empty.
-  bool buffer_empty() const;
-  bool stack_empty() const;
-  bool reach_last_token() const;
+  bool buffer_empty() const;          //! shorthand for buffer == ref->size()
+  bool stack_empty() const;           //! shorthand for stack.empty()
+  bool reach_last_token() const;      //! shorthand for buffer + 1 == ref->size()
+  bool stack_top_has_head() const;    //! shorthand for heads[top0] != -1.
+  bool buffer_front_has_head() const; //! shorthand for heads[buffer] != -1.
+  bool is_complete() const;           //! shorthand for stack.size() == 1 &&
+                                      //! buffer == ref->size()
 
-  bool stack_top_has_head() const;
-
-  bool buffer_front_has_head() const;
-
+  //! Is descendant?
   bool is_descendant(int grandparent, int child) const;
-
-  //! Return this state reach the final state.
-  bool is_complete() const;
 
   //! Get the size of the stack.
   size_t stack_size() const;
 
-  //! Refresh the value of top0 and top1.
-  void refresh_stack_information();
-
-  //! The stack.
-  std::vector<int> stack;
-
-  //! The deque
-  std::vector<int> deque;
-
-  //! The front word in the buffer.
-  int buffer;
-
   //! The pointer to the previous state.
   const State* previous;
-
-  //! The pointer to the dependency tree.
-  const Dependency* ref;
 
   //! The score.
   floatval_t score;
@@ -139,19 +118,53 @@ public:
   //! The top0 element.
   int top0;
 
+  void _shift();    //! auxiliary function to perform *-SHIFT action.
+  void _reduce();   //! auxiliary function to perform *-REDUCE action.
+  void _pass();     //! auxiliary function to perform *-PASS action.
+
+  //! Refresh the value of top0 and top1.
+  void _update_stack_information();
+
+  //! Refresh left children information
+  void _update_left_children_information(int h, int m);
+
+  //! Refresh right children information
+  void _update_right_children_information(int h, int m);
+
+  //! Update the left label set.
+  void _update_left_label_set(int h, int deprel);
+
+  //! Update the right label set.
+  void _update_right_label_set(int h, int deprel);
+
+  //! The stack.
+  std::vector<int> stack;
+
+  //! The deque
+  std::vector<int> deque;
+
+  //! The front word in the buffer.
+  int buffer;
+
+  //! The pointer to the dependency tree.
+  const Dependency* ref;
+
+  //! The number of empty heads in the stack.
   int nr_empty_heads;
 
   //! Use to record the heads in current state.
   int heads[kMaxNumberOfWords];
 
-  //!
+  //! The dependency relations.
   deprel_t deprels[kMaxNumberOfWords];
 
-  //!
-  int left_label_set[kMaxNumberOfWords];
+  //! The left label set.
+  unsigned left_label_set_lowbit[kMaxNumberOfWords];
+  unsigned left_label_set_highbit[kMaxNumberOfWords];
 
-  //!
-  int right_label_set[kMaxNumberOfWords];
+  //! The right label set.
+  unsigned right_label_set_lowbit[kMaxNumberOfWords];
+  unsigned right_label_set_highbit[kMaxNumberOfWords];
 
   //! Use to record the number of left children in current state.
   int nr_left_children[kMaxNumberOfWords];
