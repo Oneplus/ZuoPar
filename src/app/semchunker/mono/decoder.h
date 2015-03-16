@@ -1,28 +1,22 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_DECODER_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_DECODER_H__
+#ifndef __ZUOPAR_APP_SEMCHUNKER_MONO_DECODER_H__
+#define __ZUOPAR_APP_SEMCHUNKER_MONO_DECODER_H__
 
 #include "engine/token_alphabet.h"
 #include "system/system.h"
-#include "experimental/acl2015/mono_predicate_srl/state.h"
-#include "experimental/acl2015/mono_predicate_srl/action.h"
-#include "experimental/acl2015/mono_predicate_srl/score_context.h"
-#include "experimental/acl2015/mono_predicate_srl/action.h"
-#include "experimental/acl2015/mono_predicate_srl/weight.h"
+#include "app/semchunker/mono/state.h"
+#include "app/semchunker/mono/action.h"
+#include "app/semchunker/mono/score_context.h"
+#include "app/semchunker/mono/action.h"
+#include "app/semchunker/mono/weight.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 namespace eg = ZuoPar::Engine;
 
 class Decoder
-: public TransitionSystem<
-  Action,
-  State,
-  ScoreContext,
-  Weight
-> {
+: public TransitionSystem<Action, State, ScoreContext, Weight> {
 public:
   /**
    * The decoder constructor.
@@ -41,15 +35,14 @@ public:
   void transit(const State& source, const Action& act, const floatval_t& score,
       State* target);
 
+  bool terminated();
 private:
   //! number of tags
   int nr_tags;
 };
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
-} //  namespace lexicalanalyzer
+} //  namespace monopredicate
+} //  namespace semanticchunker
 } //  namespace zuopar
 
-
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_DECODER_H__
+#endif  //  end for __ZUOPAR_APP_SEMCHUNKER_MONO_DECODER_H__

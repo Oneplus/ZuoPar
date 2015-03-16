@@ -1,14 +1,13 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ACTION_UTILS_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ACTION_UTILS_H__
+#ifndef __ZUOPAR_APP_SEMCHUNKER_MONO_ACTION_UTILS_H__
+#define __ZUOPAR_APP_SEMCHUNKER_MONO_ACTION_UTILS_H__
 
 #include <vector>
 #include "types/semchunks.h"
-#include "experimental/acl2015/mono_predicate_srl/action.h"
+#include "app/semchunker/mono/action.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 class ActionUtils {
 public:
@@ -38,9 +37,8 @@ public:
   static bool is_I(const Action& act, tag_t& tag);
 };
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
+} //  namespace monopredicate
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ACTION_UTILS_H__
+#endif  //  end for __ZUOPAR_APP_SEMCHUNKER_MONO_ACTION_UTILS_H__

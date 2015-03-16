@@ -1,18 +1,17 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_SCORE_CONTEXT_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_SCORE_CONTEXT_H__
+#ifndef __ZUOPAR_APP_SEMCHUNKER_MONO_SCORE_CONTEXT_H__
+#define __ZUOPAR_APP_SEMCHUNKER_MONO_SCORE_CONTEXT_H__
 
 #include <vector>
 #include <boost/assert.hpp>
 #include "types/common.h"
 #include "types/semchunks.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/mono_predicate_srl/state.h"
-#include "experimental/acl2015/mono_predicate_srl/action_utils.h"
+#include "app/semchunker/mono/state.h"
+#include "app/semchunker/mono/action_utils.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 namespace eg = ZuoPar::Engine;
 
@@ -44,7 +43,7 @@ public:
     if (NULL == state.previous) {
       t_1 = eg::TokenAlphabet::BEGIN;
     } else {
-      t_1 = state.last_action.code();
+      t_1 = boost::hash<Action>()(state.last_action);
     }
 
     if (id >= 2) { w_2 = forms[id- 2]; p_2 = postags[id- 2]; }
@@ -78,9 +77,8 @@ public:
   const std::string& path;
 };
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
-} //  namespace experimental
+} //  namespace monopredicate
+} //  namespace semanticchunker
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_SCORE_CONTEXT_H__
+#endif  //  end for __ZUOPAR_APP_SEMCHUNKER_MONO_SCORE_CONTEXT_H__

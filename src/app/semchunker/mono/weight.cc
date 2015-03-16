@@ -1,11 +1,10 @@
-#include "experimental/acl2015/mono_predicate_srl/weight.h"
-#include "experimental/acl2015/mono_predicate_srl/action.h"
-#include "experimental/acl2015/mono_predicate_srl/score_context.h"
+#include "app/semchunker/mono/weight.h"
+#include "app/semchunker/mono/action.h"
+#include "app/semchunker/mono/score_context.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_U1( w_2 );
@@ -50,7 +49,6 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_T110( p0, p_pred, label_set );
 }
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
-} //  namespace experimental
+} //  namespace monopredicate
+} //  namespace semanticchunker
 } //  namespace zuopar

@@ -1,30 +1,22 @@
 #include <boost/assert.hpp>
-#include "experimental/acl2015/mono_predicate_srl/action.h"
-#include "experimental/acl2015/mono_predicate_srl/action_utils.h"
+#include "app/semchunker/mono/action.h"
+#include "app/semchunker/mono/action_utils.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 bool ActionUtils::is_O(const Action& act) {
-  return (act.action_name == kSemanticChunkOuterTag);
+  return (act.name() == Action::kO);
 }
 
 bool ActionUtils::is_B(const Action& act, tag_t& tag) {
-  if (act.action_name > kSemanticChunkBeginTag &&
-      act.action_name < kSemanticChunkInterTag) {
-    tag = act.action_name - kSemanticChunkBeginTag;
-    return true;
-  }
+  if (act.name() == Action::kB) { tag = act.rel(); return true; }
   return false;
 }
 
 bool ActionUtils::is_I(const Action& act, tag_t& tag) {
-  if (act.action_name > kSemanticChunkInterTag) {
-    tag = act.action_name - kSemanticChunkInterTag;
-    return true;
-  }
+  if (act.name() == Action::kI) { tag = act.rel(); return true; }
   return false;
 }
 
@@ -44,7 +36,6 @@ void ActionUtils::get_oracle_actions(const MonoSemanticChunks& instance,
   }
 }
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
-} //  namespace experimental
+} //  namespace monopredicate
+} //  namespace semanticchunker
 } //  namespace zuopar

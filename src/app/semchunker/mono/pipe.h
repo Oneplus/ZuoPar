@@ -1,19 +1,18 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__
+#ifndef __ZUOPAR_APP_SEMCHUNKER_MONO_PIPE_H__
+#define __ZUOPAR_APP_SEMCHUNKER_MONO_PIPE_H__
 
 #include <unordered_map>
 #include "types/semchunks.h"
 #include "frontend/common_pipe_cfg.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/mono_predicate_srl/opt.h"
-#include "experimental/acl2015/mono_predicate_srl/weight.h"
-#include "experimental/acl2015/mono_predicate_srl/decoder.h"
-#include "experimental/acl2015/mono_predicate_srl/learner.h"
+#include "app/semchunker/mono/opt.h"
+#include "app/semchunker/mono/weight.h"
+#include "app/semchunker/mono/decoder.h"
+#include "app/semchunker/mono/learner.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
@@ -116,9 +115,8 @@ protected:
   std::vector<SemanticChunks> dataset;
 };
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
-} //  namespace experimental
+} //  namespace monopredicate
+} //  namespace semanticchunker
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_PIPE_H__
+#endif  //  end for __ZUOPAR_APP_SEMCHUNKER_MONO_PIPE_H__

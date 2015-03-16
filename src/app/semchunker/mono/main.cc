@@ -1,38 +1,18 @@
 #include <iostream>
 #include <cstring>  // strcmp
 #include "utils/logging.h"
-#include "experimental/acl2015/mono_predicate_srl/opt.h"
-#include "experimental/acl2015/mono_predicate_srl/opt_utils.h"
-#include "experimental/acl2015/mono_predicate_srl/pipe.h"
+#include "app/semchunker/mono/opt.h"
+#include "app/semchunker/mono/opt_utils.h"
+#include "app/semchunker/mono/pipe.h"
+
+#define APP "mono predicate semantic labeler"
+#define EXE "semchunker_mono_predicate"
 
 namespace po = boost::program_options;
 namespace fe = ZuoPar::FrontEnd;
-namespace mono = ZuoPar::Experimental::ACL2015::MonoPredicateSRL;
+namespace mono = ZuoPar::SemanticChunker::MonoPredicate;
 
 int multi_learn(int argc, char** argv) {
-  /*std::string usage = "Multi-threaded training component of ZuoPar::sequence labeler.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: sequence_labeler multi-learn [options]\n";
-  usage += "OPTIONS";
-
-  po::options_description optparser = fe::build_multi_learn_optparser(usage);
-
-  if (argc == 1) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
-
-  fe::MultiLearnOption opts;
-  if (!parse_multi_learn_option_ext(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  //mono::MultiPipe pipe(opts);
-  //pipe.run(); */
   return 1;
 }
 
@@ -44,11 +24,9 @@ int multi_learn(int argc, char** argv) {
  *  @return     int   The status of running learning.
  */
 int learn(int argc, char** argv) {
-
-  std::string usage = "Training component of ZuoPar::acl2015(semantic role labeler).\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: acl2015 learn [options]\n";
-  usage += "OPTIONS";
+  std::string usage = "Training component of ZuoPar::" APP ".\n";
+  usage += "usage: " EXE " learn [options]\n";
+  usage += "options";
 
   po::options_description optparser = fe::build_learn_optparser(usage);
   optparser.add_options()
@@ -83,10 +61,9 @@ int learn(int argc, char** argv) {
  *  @return     int   The status of running test.
  */
 int test(int argc, char** argv) {
-  std::string usage = "Testing component of ZuoPar::acl2015(semantic role labeler).\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: sequence_labeler test [options]\n";
-  usage += "OPTIONS";
+  std::string usage = "Testing component of ZuoPar::" APP ".\n";
+  usage += "usage: " EXE "test [options]\n";
+  usage += "options";
 
   po::options_description optparser = fe::build_test_optparser(usage);
   optparser.add_options()
@@ -117,4 +94,4 @@ int test(int argc, char** argv) {
 }
 
 #include "frontend/template/main.h"
-MAIN("Semantic Role Labeler with Mono Predicate", "experimental/mono_predicate_srl")
+MAIN(APP, EXE)

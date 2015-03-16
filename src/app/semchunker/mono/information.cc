@@ -1,12 +1,11 @@
 #include <boost/lexical_cast.hpp>
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/mono_predicate_srl/information.h"
+#include "app/semchunker/mono/information.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 namespace eg = ZuoPar::Engine;
 
@@ -43,7 +42,6 @@ Information::Information(const MonoSemanticChunks& instance,
   }
 }
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
-} //  namespace experimental
+} //  namespace monopredicate
+} //  namespace semanticchunker
 } //  namespace zuopar

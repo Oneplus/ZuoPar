@@ -1,15 +1,14 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_STATE_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_STATE_H__
+#ifndef __ZUOPAR_APP_SEMCHUNKER_MONO_STATE_H__
+#define __ZUOPAR_APP_SEMCHUNKER_MONO_STATE_H__
 
 #include "types/common.h"
 #include "types/semchunks.h"
-#include "experimental/acl2015/mono_predicate_srl/information.h"
-#include "experimental/acl2015/mono_predicate_srl/action.h"
+#include "app/semchunker/mono/information.h"
+#include "app/semchunker/mono/action.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 class State {
 public:
@@ -76,9 +75,8 @@ public:
   int label_set;
 };
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
-} //  namespace experimental
+} //  namespace monopredicate
+} //  namespace semanticchunker
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_STATE_H__
+#endif  //  end for __ZUOPAR_APP_SEMCHUNKER_MONO_STATE_H__

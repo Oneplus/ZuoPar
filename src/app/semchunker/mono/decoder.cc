@@ -1,12 +1,11 @@
-#include "experimental/acl2015/mono_predicate_srl/decoder.h"
-#include "experimental/acl2015/mono_predicate_srl/action.h"
-#include "experimental/acl2015/mono_predicate_srl/action_utils.h"
+#include "app/semchunker/mono/decoder.h"
+#include "app/semchunker/mono/action.h"
+#include "app/semchunker/mono/action_utils.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 Decoder::Decoder(int nr, int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
   : nr_tags(nr),
@@ -52,19 +51,15 @@ void
 Decoder::transit(const State& source, const Action& act, const floatval_t& score,
     State* target) {
   tag_t tag;
-  if (ActionUtils::is_O(act)) {
-    target->O(source);
-  } else if (ActionUtils::is_B(act, tag)) {
-    target->B(source, tag);
-  } else if (ActionUtils::is_I(act, tag)) {
-    target->I(source, tag);
-  } else {
-    BOOST_ASSERT_MSG(false, "unknown transition");
-  }
+  if (ActionUtils::is_O(act)) { target->O(source); }
+  else if (ActionUtils::is_B(act, tag)) { target->B(source, tag); }
+  else if (ActionUtils::is_I(act, tag)) { target->I(source, tag); }
+  else { BOOST_ASSERT_MSG(false, "unknown transition"); }
   target->score = score;
 }
 
+bool Decoder::terminated() { return false; }
+
 } //  namespace monopredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar

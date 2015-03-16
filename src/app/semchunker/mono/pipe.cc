@@ -10,14 +10,13 @@
 #include "utils/io/stream.h"
 #include "utils/io/dataset/semchunks.h"
 #include "utils/io/instance/semchunks.h"
-#include "experimental/acl2015/mono_predicate_srl/action_utils.h"
-#include "experimental/acl2015/mono_predicate_srl/pipe.h"
-#include "experimental/acl2015/mono_predicate_srl/argument_relation_utils.h"
+#include "app/semchunker/mono/action_utils.h"
+#include "app/semchunker/mono/pipe.h"
+#include "app/semchunker/mono/argument_relation_utils.h"
 
 namespace ZuoPar {
-namespace Experimental {
-namespace ACL2015 {
-namespace MonoPredicateSRL {
+namespace SemanticChunker {
+namespace MonoPredicate {
 
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
@@ -334,7 +333,6 @@ Pipe::build_output(const State& source, SemanticChunks& output) {
   output.predicates.push_back(predicate);
 }
 
-} //  namespace monopredicatesrl
-} //  namespace acl2015
-} //  namespace sequencelabeler
+} //  namespace monopredicate
+} //  namespace semanticchunker
 } //  namespace zuopar

@@ -1,4 +1,4 @@
-add_executable (mono_predicate_srl
+add_executable (semchunker_mono_predicate
     main.cc
     information.cc
     opt_utils.cc
@@ -18,7 +18,7 @@ add_executable (mono_predicate_srl
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (mono_predicate_srl
+target_link_libraries (semchunker_mono_predicate
     boost_program_options
     boost_log_setup
     boost_log
@@ -27,6 +27,3 @@ target_link_libraries (mono_predicate_srl
     boost_thread
     boost_system
     pthread)
-
-set_target_properties(mono_predicate_srl
-    PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)
