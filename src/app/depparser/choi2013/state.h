@@ -20,7 +20,7 @@ public:
    *
    *  @param[in]  r   The pointer to the dependency state.
    */
-  State(const Dependency* r);
+  State(const CoNLLXDependency* r);
 
   /**
    * This method is needed by @class TransitionSystem.
@@ -99,24 +99,16 @@ public:
   bool buffer_front_has_head() const; //! shorthand for heads[buffer] != -1.
   bool is_complete() const;           //! shorthand for stack.size() == 1 &&
                                       //! buffer == ref->size()
+  size_t stack_size() const;          //! shorthand for stack.size()
 
   //! Is descendant?
   bool is_descendant(int grandparent, int child) const;
 
-  //! Get the size of the stack.
-  size_t stack_size() const;
-
-  //! The pointer to the previous state.
-  const State* previous;
-
-  //! The score.
-  floatval_t score;
-
-  //! The last action.
-  Action last_action;
-
-  //! The top0 element.
-  int top0;
+  const State* previous;  //! The pointer to the previous state.
+  floatval_t score;       //! The score.
+  Action last_action;     //! The last action.
+  int top0;               //! The top0 element.
+  int top1;               //! The top1 element.
 
   void _shift();    //! auxiliary function to perform *-SHIFT action.
   void _reduce();   //! auxiliary function to perform *-REDUCE action.
@@ -147,7 +139,7 @@ public:
   int buffer;
 
   //! The pointer to the dependency tree.
-  const Dependency* ref;
+  const CoNLLXDependency* ref;
 
   //! The number of empty heads in the stack.
   int nr_empty_heads;

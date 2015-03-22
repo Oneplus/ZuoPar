@@ -68,7 +68,7 @@ Pipe::run() {
     }
 
     _INFO << "report: loading dataset from reference file.";
-    ioutils::read_postag_with_cache_dataset(ifs, dataset, postags_alphabet, '/', true);
+    ioutils::read_postag_dataset(ifs, dataset, postags_alphabet, '/', true);
     _INFO << "report: dataset is loaded from reference file.";
   } else {
     // not implemented.
@@ -78,7 +78,7 @@ Pipe::run() {
       _ERROR << "#: testing halt";
       return;
     }
-    ioutils::read_postag_with_cache_dataset(ifs, dataset, postags_alphabet, '/', false);
+    ioutils::read_postag_dataset(ifs, dataset, postags_alphabet, '/', false);
   }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
@@ -92,7 +92,7 @@ Pipe::run() {
   size_t N = dataset.size();
   std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
   for (size_t n = 0; n < N; ++ n) {
-    const PostagWithLiteralCache& instance = dataset[n];
+    const Postag& instance = dataset[n];
     // calculate the oracle transition actions.
     std::vector<Action> actions;
     if (mode == kPipeLearn) {
@@ -108,9 +108,9 @@ Pipe::run() {
       learner->set_timestamp(n+ 1);
       learner->learn(result.first, result.second);
     } else {
-      PostagWithLiteralCache output;
+      Postag output;
       build_output((*result.first), output);
-      ioutils::write_postag_with_cache_instance((*os), output, postags_alphabet, '/');
+      ioutils::write_postag_instance((*os), output, postags_alphabet, '/');
     }
 
     if ((n+ 1)% display_interval == 0) {
@@ -137,18 +137,16 @@ Pipe::run() {
 }
 
 void
-Pipe::build_output(const State& source, PostagWithLiteralCache& output) {
+Pipe::build_output(const State& source, Postag& output) {
   size_t len = source.ref->size();
-
-  output.cache.resize(len);
+  output.forms = source.ref->forms;
   output.postags.resize(len);
   for (size_t i = 0; i < len; ++ i) {
-    output.cache[i] = source.ref->cache[i];
     output.postags[i] = source.postags[i];
   }
 }
 
 
-} //  end for namespace arcstandard
-} //  end for namespace dependencyparser
+} //  end for namespace postagger
+} //  end for namespace lexicalanalyzer
 } //  end for namespace zuopar

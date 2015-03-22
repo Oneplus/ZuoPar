@@ -18,19 +18,15 @@ namespace eg = ZuoPar::Engine;
  *  @param[in]  character_alphabet  The character alphabet.
  *  @param[in]  incremental         Use to specify if add new entry into the alphabet.
  */
-void read_segmentation_instance(std::istream& is,
-    Segmentation& output,
-    eg::TokenAlphabet& character_alphabet,
-    bool incremental = true);
+bool read_segmentation_instance(std::istream& is, Segmentation& output,
+    bool segmented = false);
 
 /**
  *
  *
  *
  */
-void write_segmentation_instance(std::ostream& os,
-    const Segmentation& output,
-    const eg::TokenAlphabet& character_alphabet);
+void write_segmentation_instance(std::ostream& os, const Segmentation& output);
 
 } //  end for namespace io
 } //  end for namespace zuopar

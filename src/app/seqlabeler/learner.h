@@ -10,12 +10,22 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
+struct Loss {
+  floatval_t operator ()(const State* predict, const State* correct) {
+    floatval_t retval = 0;
+    for (auto i = 0; i < predict->ref->size(); ++ i) {
+      if (predict->tags[i] != correct->tags[i]) { retval += 1; }
+    }
+    return retval;
+  }
+};
+
 typedef TransitionStructureOnlineLearner<
-  Action, State, Weight
+  Action, State, Weight, Loss
 > Learner;
 
 typedef TransitionStructureOnlineLearnerMiniBatch<
-  Action, State, Weight
+  Action, State, Weight, Loss
 > MinibatchLearner;
 
 } //  end for sequencelabeler

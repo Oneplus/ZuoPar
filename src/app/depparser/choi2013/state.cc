@@ -8,8 +8,7 @@ namespace DependencyParser {
 namespace Choi2013 {
 
 State::State(): ref(0) { clear(); }
-
-State::State(const Dependency* r): ref(r) { clear(); }
+State::State(const CoNLLXDependency* r): ref(r) { clear(); }
 
 void State::copy(const State& source) {
   ref = source.ref;
@@ -21,6 +20,7 @@ void State::copy(const State& source) {
   nr_empty_heads= source.nr_empty_heads;
   last_action = source.last_action;
   top0 = source.top0;
+  top1 = source.top1;
   #define _COPY(name) memcpy((name), source.name, sizeof(name));
   _COPY(heads);
   _COPY(deprels);
@@ -45,6 +45,7 @@ void State::clear() {
   deque.clear();
   nr_empty_heads= 0;
   top0 = -1;
+  top1 = -1;
   memset(heads, -1, sizeof(heads));
   memset(deprels, 0, sizeof(deprels));
   memset(left_label_set_lowbit,   0, sizeof(left_label_set_lowbit));
@@ -61,8 +62,9 @@ void State::clear() {
 
 void State::_update_stack_information() {
   size_t sz = stack.size();
-  if (0 == sz)  { top0 = -1; }
-  else          { top0 = stack.at(sz - 1); }
+  if (0 == sz)      { top0 = -1; top1 = -1; }
+  else if (1 == sz) { top0 = stack.back(); top1 = -1; }
+  else              { top0 = stack.back(); top1 = stack[stack.size() - 2]; }
 }
 
 void State::_update_left_children_information(int h, int m) {
@@ -90,7 +92,7 @@ void State::_update_right_children_information(int h, int m) {
 }
 
 void State::_update_left_label_set(int h, int deprel) {
-  if (deprel > sizeof(unsigned)) {
+  if (deprel >= sizeof(unsigned)) {
     left_label_set_highbit[h] |= (1<< (deprel - sizeof(unsigned)));
   } else {
     left_label_set_lowbit[h]  |= (1<< deprel);
@@ -98,7 +100,7 @@ void State::_update_left_label_set(int h, int deprel) {
 }
 
 void State::_update_right_label_set(int h, int deprel) {
-  if (deprel > sizeof(unsigned)) {
+  if (deprel >= sizeof(unsigned)) {
     right_label_set_highbit[h] |= (1<< (deprel - sizeof(unsigned)));
   } else {
     right_label_set_lowbit[h]  |= (1<< deprel);
@@ -132,7 +134,7 @@ bool State::idle(const State& source) {
 bool State::shift(const State& source) {
   if (source.buffer_empty()) { return false; }
   copy(source);
-  if (heads[buffer] == -1) ++ nr_empty_heads;
+  if (heads[buffer] == -1) { ++ nr_empty_heads; }
   _shift();
   last_action = ActionFactory::make_shift();
   previous = &source;

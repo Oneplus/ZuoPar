@@ -9,9 +9,9 @@
 namespace ZuoPar {
 
 template <
+  class _FeatureMapType,
   class _ScoreContextType,
-  class _ActionType,
-  class _FeatureMapType
+  class _ActionType
 >
 class FeatureParameterCollection {
 public:
@@ -29,27 +29,25 @@ public:
    *  @param[out] sparse_vector The sparse vector.
    */
   void vectorize(const _ScoreContextType& ctx, const _ActionType& act, floatval_t scale,
-      SparseVector* sparse_vector) {
-    int global_id = 0;
+      SparseVector* sparse_vector) const {
     for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].vectorize(ctx, act, scale, global_id, sparse_vector);
-      global_id += repo[i].size();
+      repo[i].vectorize(ctx, act, scale, i, sparse_vector);
     }
   }
 
-  /**
-   * Convert the pointwised feature collections into vector.
-   *
-   *  @param[in]  ctx           The score context
-   *  @param[in]  act           The action
-   *  @param[in]  scale         Increase the value in sparse_vector by scale.
-   *  @param[out] sparse_vector The version 2 sparse vector.
-   */
+  // version 2
   void vectorize2(const _ScoreContextType& ctx, const _ActionType& act, floatval_t scale,
-      SparseVector2* sparse_vector) {
-    int global_id = 0;
-    for (int i = 0; i < repo.size(); ++ i, ++ global_id) {
-      repo[i].vectorize2(ctx, act, scale, global_id, sparse_vector);
+      SparseVector2* sparse_vector) const {
+    for (int i = 0; i < repo.size(); ++ i) {
+      repo[i].vectorize2(ctx, act, scale, i, sparse_vector);
+    }
+  }
+
+  // version 3
+  void vectorize3(const _ScoreContextType& ctx, const _ActionType& act, floatval_t scale,
+      SparseVector3* sparse_vector) const {
+    for (int i = 0; i < repo.size(); ++ i) {
+      repo[i].vectorize3(ctx, act, scale, i, sparse_vector);
     }
   }
 
@@ -62,12 +60,10 @@ public:
    *  @return     floatval_t  The score of applying the action act to the state
    *                           context.
    */
-  floatval_t score(const _ScoreContextType& ctx, const _ActionType& act, bool avg) {
+  floatval_t score(const _ScoreContextType& ctx, const _ActionType& act,
+      bool avg) const {
     floatval_t ret = 0;
-    for (int i = 0; i < repo.size(); ++ i) {
-      ret += repo[i].score(ctx, act, avg, 0.);
-    }
-
+    for (const _FeatureMapType& e: repo) { ret += e.score(ctx, act, avg); }
     return ret;
   }
 
@@ -81,11 +77,8 @@ public:
    */
   void batchly_score(const _ScoreContextType& ctx,
       const std::vector<_ActionType>& actions,
-      bool avg,
-      packed_score_t& result) {
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].batchly_score(ctx, actions, avg, result);
-    }
+      bool avg, packed_score_t& result) const {
+    for (const _FeatureMapType& e: repo) { e.batchly_score(ctx, actions, avg, result); }
   }
 
   /**
@@ -98,18 +91,14 @@ public:
    */
   void update(const _ScoreContextType& ctx, const _ActionType& act, int timestamp,
       floatval_t scale) {
-    for (std::size_t i = 0; i < repo.size(); ++ i) {
-      repo[i].update(ctx, act, timestamp, scale);
-    }
+    for (_FeatureMapType& e: repo) { e.update(ctx, act, timestamp, scale); }
   }
 
   /**
    * flush the score.
    */
   void flush(int timestamp) {
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].flush(timestamp);
-    }
+    for (_FeatureMapType& e: repo) { e.flush(timestamp); }
   }
 
   /**
@@ -119,11 +108,9 @@ public:
    *  @return     bool  If successfully saved, return true; otherwise return
    *                    false.
    */
-  bool save(std::ostream& os) {
+  bool save(std::ostream& os) const {
     boost::archive::text_oarchive oa(os);
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].save(oa);
-    }
+    for (const _FeatureMapType& e: repo) { e.save(oa); }
     return true;
   }
 
@@ -136,9 +123,7 @@ public:
    */
   bool load(std::istream& is) {
     boost::archive::text_iarchive ia(is);
-    for (int i = 0; i < repo.size(); ++ i) {
-      repo[i].load(ia);
-    }
+    for (_FeatureMapType& e: repo) { e.load(ia); }
     return true;
   }
 

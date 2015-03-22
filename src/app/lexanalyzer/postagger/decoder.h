@@ -6,7 +6,6 @@
 #include "app/lexanalyzer/postagger/state.h"
 #include "app/lexanalyzer/postagger/action.h"
 #include "app/lexanalyzer/postagger/score_context.h"
-#include "app/lexanalyzer/postagger/action.h"
 #include "app/lexanalyzer/postagger/weight.h"
 
 namespace ZuoPar {

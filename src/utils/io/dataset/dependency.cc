@@ -1,42 +1,47 @@
+#include "utils/io/dataset/block_iterator.h"
 #include "utils/io/dataset/dependency.h"
 #include "utils/io/instance/dependency.h"
 #include <sstream>
-#include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/split.hpp>
 
 namespace ZuoPar {
 namespace IO {
 
-void
-read_dependency_dataset(
-    std::istream& is,
+void read_dependency_dataset(std::istream& is,
     std::vector<Dependency>& dataset,
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
     eg::TokenAlphabet& deprels_alphabet,
-    size_t flag
-    ) {
-
-  namespace algo = boost::algorithm;
+    size_t flag) {
   dataset.clear();
-  std::string data_context((std::istreambuf_iterator<char>(is)),
-      std::istreambuf_iterator<char>());
-  boost::regex INSTANCE_DELIMITER("\n\n");
-  boost::sregex_token_iterator instance(data_context.begin(),
-      data_context.end(), INSTANCE_DELIMITER, -1);
-  boost::sregex_token_iterator eos;
-
-  // Loop over the instances
-  while (instance != eos) {
-    std::istringstream iss(*instance);
+  for (BlockIterator itx = BlockIterator(is); !itx.end(); ++ itx) {
+    std::istringstream iss(*itx);
     Dependency parse;
     read_dependency_instance(iss, parse, forms_alphabet,
         postags_alphabet, deprels_alphabet, flag);
     dataset.push_back(parse);
-    instance ++;
   }
 }
+
+void read_conllx_dependency_dataset(std::istream& is,
+    std::vector<CoNLLXDependency>& dataset,
+    eg::TokenAlphabet& forms_alphabet,
+    eg::TokenAlphabet& lemmas_alphabet,
+    eg::TokenAlphabet& cpostags_alphabet,
+    eg::TokenAlphabet& postags_alphabet,
+    eg::TokenAlphabet& feat_alphabet,
+    eg::TokenAlphabet& deprels_alphabet,
+    size_t flag) {
+  dataset.clear();
+  for (BlockIterator itx = BlockIterator(is); !itx.end(); ++ itx) {
+    std::istringstream iss(*itx);
+    CoNLLXDependency parse;
+    read_conllx_dependency_instance(iss, parse, forms_alphabet,
+        lemmas_alphabet, cpostags_alphabet, postags_alphabet,
+        feat_alphabet, deprels_alphabet, flag);
+    dataset.push_back(parse);
+  }
+}
+
 
 } //  end for io
 } //  end for zuopar

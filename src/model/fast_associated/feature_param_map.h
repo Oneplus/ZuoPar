@@ -55,10 +55,15 @@ private:
   // ----------
   // According to a benchmark, that std::map performs generally better than 
   // the std::unordered_map when the size of keys is small (less than 100).
-  //typedef std::unordered_map<
-  //  _ActionType, param_t, boost::hash<_ActionType>
-  //> entry_t;
-  typedef std::map<_ActionType, param_t> entry_t;
+  //
+  // 2015-03-19
+  // ----------
+  // Considering the CoNLLX dataset, which has up to 200 actions, I switch
+  // from map to unordered_map.
+  //typedef std::map<_ActionType, param_t> entry_t;
+  typedef std::unordered_map<
+    _ActionType, param_t, boost::hash<_ActionType>
+  > entry_t;
 
 #if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
   typedef google::dense_hash_map<
@@ -144,9 +149,7 @@ public:
   }
 
   //! The size of the feature parameter map.
-  std::size_t size() const {
-    return rep.size();
-  }
+  std::size_t size() const { return rep.size(); }
 
   /**
    * Get the score for the (context, action) pair
@@ -254,7 +257,7 @@ public:
    *
    *  @param[in]  oa    The output archive stream.
    */
-  void save(boost::archive::text_oarchive& oa) {
+  void save(boost::archive::text_oarchive& oa) const {
     oa << rep;
   }
 

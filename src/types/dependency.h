@@ -7,27 +7,13 @@
 
 namespace ZuoPar {
 
-class Dependency {
-public:
+struct Dependency {
   Dependency() {}
 
-  Dependency(const std::vector<form_t>& _forms,
-      const std::vector<postag_t>& _postags,
-      const std::vector<int>& _heads,
-      const std::vector<deprel_t>& _deprels)
-    : forms(_forms), postags(_postags), heads(_heads), deprels(_deprels) {}
-
-  //! the forms of the dependency tree
-  std::vector<form_t> forms;
-
-  //! the part-of-speech tag of dependency tree.
-  std::vector<postag_t> postags;
-
-  //!
-  std::vector<int>  heads;
-
-  //!
-  std::vector<deprel_t> deprels;
+  std::vector<form_t> forms;      //! the forms of the dependency tree
+  std::vector<postag_t> postags;  //! the part-of-speech tag of dependency tree.
+  std::vector<int>  heads;        //! the heads
+  std::vector<deprel_t> deprels;  //! the dependency relation.
 
   /**
    * Push a dependency node into the dependency parse.
@@ -42,12 +28,26 @@ public:
       const int& head,
       const deprel_t& deprel);
 
-  /**
-   * Get number of forms in the dependency.
-   *
-   *  @return size_t  The number of forms in the dependency parse.
-   */
-  size_t size() const;
+  size_t size() const;  // shorthand for forms.size();
+};
+
+typedef int feat_t;
+typedef std::vector<int> feat_list_t;
+
+struct CoNLLXDependency: Dependency {
+  CoNLLXDependency(bool dummy_root = true);
+
+  std::vector<lemma_t>      lemmas;   //! The lemma column.
+  std::vector<postag_t>     cpostags; //! The corase postag.
+  std::vector<feat_list_t>  feats;    //! The CoNLL feat column.
+
+  void push_back(const form_t& form,
+      const lemma_t& lemma,
+      const postag_t& cpostag,
+      const postag_t& postag,
+      const feat_list_t& feat_list,
+      const int& head,
+      const deprel_t& deprel);
 };
 
 } //  end for namespace zuopar

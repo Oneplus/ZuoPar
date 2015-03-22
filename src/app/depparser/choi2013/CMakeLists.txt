@@ -5,6 +5,7 @@ add_executable (depparser_choi2013
     state.cc
     decoder.cc
     weight.cc
+    score_context.cc
     ${SOURCE_DIR}/app/depparser/opt_utils.cc
     ${SOURCE_DIR}/frontend/common_opt_utils.cc
     ${SOURCE_DIR}/types/dependency.cc
@@ -13,6 +14,7 @@ add_executable (depparser_choi2013
     ${SOURCE_DIR}/utils/io/stream.cc
     ${SOURCE_DIR}/utils/io/dataset/dependency.cc
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
+    ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
 target_link_libraries (depparser_choi2013

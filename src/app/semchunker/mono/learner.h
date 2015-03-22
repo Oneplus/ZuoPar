@@ -10,7 +10,21 @@ namespace ZuoPar {
 namespace SemanticChunker {
 namespace MonoPredicate {
 
-typedef TransitionStructureOnlineLearner<Action, State, Weight> Learner;
+struct Loss {
+  floatval_t operator ()(const State* predict, const State* correct) {
+    floatval_t retval = 0.;
+    for(const State *p = predict, *q = correct;
+        p->previous && q->previous;
+        p = p->previous, q = q->previous) {
+      if (p->last_action != q->last_action) { retval += 1.; }
+    }
+    return retval;
+  }
+};
+
+typedef TransitionStructureOnlineLearner<
+  Action, State, Weight, Loss
+> Learner;
 
 } //  namespace monopredicate
 } //  namespace semanticchunker

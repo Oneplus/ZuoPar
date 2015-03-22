@@ -2,19 +2,17 @@
 #define __ZUOPAR_TYPES_SEGMENTATION_H__
 
 #include <vector>
-#include "common.h"
+#include <string>
 
 namespace ZuoPar {
 
 class Segmentation {
 public:
-  enum { kBegin, kIntermediate };
-  //! The characters.
-  std::vector<character_t> chars;
-  //! The bitags.
-  std::vector<tag_t> tags;
-
-  std::size_t size() const { return chars.size(); }
+  std::vector<std::string> chars; //! The characters.
+  std::vector<std::string> words;      //! The words.
+  std::size_t size() const      { return chars.size(); }
+  std::size_t nr_chars() const  { return chars.size(); }
+  std::size_t nr_words() const  { return words.size(); }
 };
 
 } //  end for namespace zuopar

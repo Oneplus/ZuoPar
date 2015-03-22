@@ -8,20 +8,13 @@ namespace ZuoPar {
 
 class Postag {
 public:
-  std::vector<form_t> forms;
+  std::vector<std::string> forms;
   std::vector<postag_t> postags;
-
-  std::size_t size() const { return postags.size(); }
-
-  void push_back(form_t form, postag_t postag) {
+  std::size_t size() const { return forms.size(); }
+  void push_back(const std::string& form, postag_t& postag) {
     forms.push_back(form);
     postags.push_back(postag);
   }
-};
-
-class PostagWithLiteralCache: public Postag {
-public:
-  std::vector<std::string> cache;
 };
 
 } //  end for namespace zuopar

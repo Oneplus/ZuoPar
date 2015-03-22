@@ -16,15 +16,16 @@ namespace Swap {
 
 struct MaxNunmberActions {
   int operator ()(const Dependency& instance) {
-    return instance.size()* instance.size();
+    // According to Nivre (2009), the number of action is bounded by n+n^2
+    return instance.size()* instance.size() + instance.size();
   }
 };
 
-typedef DependencyPipe<
+typedef CoNLLXDependencyPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
 > Pipe;
 
-typedef DependencyMultiPipe<
+typedef CoNLLXDependencyMultiPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
 > MultiPipe;
 

@@ -379,6 +379,14 @@ protected:
   cache.push_back( sfp_t(ctx._1) ); \
 }
 
+#define ZUOPAR_EXTRACTOR_S1(_1) [](const ScoreContext& ctx, \
+    std::vector<sfp_t>& cache) -> void{ \
+  if (ctx._1.size() > 0) { \
+    cache.push_back( sfp_t(ctx._1) ); \
+  } \
+}
+
+
 #define ZUOPAR_FEATURE_MAP_REGIST_U0(_1) do { \
   ufeat_map_repo.push_back( uf_map_t( ZUOPAR_EXTRACTOR_U0(_1) ) ); \
 } while (0);
@@ -425,6 +433,10 @@ protected:
 
 #define ZUOPAR_FEATURE_MAP_REGIST_S0(_1) do { \
   sfeat_map_repo.push_back( sf_map_t( ZUOPAR_EXTRACTOR_S0(_1) ) ); \
+} while (0);
+
+#define ZUOPAR_FEATURE_MAP_REGIST_S1(_1) do { \
+  sfeat_map_repo.push_back( sf_map_t( ZUOPAR_EXTRACTOR_S1(_1) ) ); \
 } while (0);
 
 } //  end for zuopar

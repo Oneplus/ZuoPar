@@ -13,6 +13,7 @@ add_executable (sequence_labeler
     ${SOURCE_DIR}/utils/logging.cc
     ${SOURCE_DIR}/utils/io/dataset/sequence_instance.cc
     ${SOURCE_DIR}/utils/io/instance/sequence_instance.cc
+    ${SOURCE_DIR}/utils/io/instance/csv.cc
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 

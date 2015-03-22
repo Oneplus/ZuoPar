@@ -13,6 +13,7 @@ add_executable (depparser_arceager
     ${SOURCE_DIR}/utils/io/stream.cc
     ${SOURCE_DIR}/utils/io/dataset/dependency.cc
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
+    ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
 target_link_libraries (depparser_arceager

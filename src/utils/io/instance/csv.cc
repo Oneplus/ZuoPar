@@ -1,7 +1,6 @@
 #include "utils/io/instance/csv.h"
 #include "utils/logging.h"
 #include <iostream>
-#include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
@@ -12,7 +11,6 @@ namespace IO {
 void read_csv(std::istream& is,
     std::vector< std::vector<std::string> >& output) {
   namespace algo = boost::algorithm;
-
   std::string line;
   while (std::getline(is, line)) {
     algo::trim(line);
@@ -35,9 +33,7 @@ void write_csv(std::ostream& os,
   for (const std::vector<std::string>& row: output) {
     for (int j = 0; j < N; ++ j) {
       os << row[j];
-      if (j +1 < N) {
-        os << delimiter;
-      }
+      if (j +1 < N) { os << delimiter; }
     }
     os << std::endl;
   }

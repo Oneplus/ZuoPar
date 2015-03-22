@@ -44,7 +44,6 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_T110( p0, p_pred, position );
   ZUOPAR_FEATURE_MAP_REGIST_T100( p0, vc_pred, position);
   ZUOPAR_FEATURE_MAP_REGIST_U0( t_1 );
-  // ZUOPAR_FEATURE_MAP_REGIST_U0( label_set_low );
   ZUOPAR_FEATURE_MAP_REGIST_T110( w0, w_pred, label_set );
   ZUOPAR_FEATURE_MAP_REGIST_T110( p0, p_pred, label_set );
 }

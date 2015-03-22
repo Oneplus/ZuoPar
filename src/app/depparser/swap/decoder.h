@@ -18,6 +18,12 @@ namespace eg = ZuoPar::Engine;
 
 class Decoder: public TransitionSystem<Action, State, ScoreContext, Weight> {
 public:
+  enum RootPosition {
+    kNone,
+    kLeft,
+    kRight
+  };
+
   /**
    * The decoder constructor.
    *
@@ -27,7 +33,7 @@ public:
    *  @param[in]  update_strategy The update strategy.
    *  @param[in]  weight          The pointer to the weight.
    */
-  Decoder(int nr, int root,
+  Decoder(int nr, int root, int position,
       int beam_size, bool avg, UpdateStrategy update_strategy, Weight* weight);
 
   //! Implement arc standard get possible actions.
@@ -42,6 +48,7 @@ public:
 private:
   int nr_deprels;
   int root_tag;
+  int root_position;
 };
 
 } //  end for namespace swap

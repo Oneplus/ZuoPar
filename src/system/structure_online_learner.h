@@ -4,6 +4,7 @@
 #include <vector>
 #include <cmath>
 #include "utils/logging.h"
+#include "types/common.h"
 #include "types/math/sparse_vector.h"
 #include "system/options.h"
 
@@ -12,7 +13,8 @@ namespace ZuoPar {
 template <
   class _ActionType,
   class _StateType,
-  class _ModelType
+  class _ModelType,
+  class _LossFunctionType
 >
 class TransitionStructureOnlineLearner {
 public:
@@ -109,9 +111,9 @@ protected:
    * and ther score as loss l_t
    */
   void learn_passive_aggressive(int last) {
-    double error = last;
-    double score = 0.;
-    double norm = 0.;
+    floatval_t error = _LossFunctionType()(predict_state_chain[0], correct_state_chain[0]);
+    floatval_t score = 0.;
+    floatval_t norm = 0.;
 
     // SparseVector3 provides more precious vectorization result.
     SparseVector3 updated_vector;
@@ -134,7 +136,7 @@ protected:
     }
 
     _TRACE << "learn: norm = " << norm;
-    double step = 0.;
+    floatval_t step = 0.;
     if (norm < 1e-8 || score + error < 0.) {
       step = 0;
     } else {

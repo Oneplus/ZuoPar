@@ -15,16 +15,16 @@ namespace DependencyParser {
 namespace Choi2013 {
 
 struct MaxNunmberActions {
-  int operator ()(const Dependency& instance) {
-    return instance.size()* instance.size() / 4;
+  int operator ()(const CoNLLXDependency& instance) {
+    return instance.size()* instance.size() / 2+ 2* instance.size();
   }
 };
 
-typedef DependencyPipe<
+typedef CoNLLXDependencyPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
 > Pipe;
 
-typedef DependencyMultiPipe<
+typedef CoNLLXDependencyMultiPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
 > MultiPipe;
 

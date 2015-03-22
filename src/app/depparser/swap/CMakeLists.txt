@@ -2,6 +2,7 @@ add_executable (depparser_swap
     main.cc
     action.cc
     action_utils.cc
+    score_context.cc
     state.cc
     decoder.cc
     weight.cc
@@ -13,6 +14,7 @@ add_executable (depparser_swap
     ${SOURCE_DIR}/utils/io/stream.cc
     ${SOURCE_DIR}/utils/io/dataset/dependency.cc
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
+    ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
 target_link_libraries (depparser_swap

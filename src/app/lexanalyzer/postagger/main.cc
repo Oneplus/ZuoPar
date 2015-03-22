@@ -1,10 +1,12 @@
 #include <iostream>
 #include <cstring>  // strcmp
-#include "opt.h"
 #include "utils/logging.h"
 #include "app/lexanalyzer/postagger/opt.h"
 #include "app/lexanalyzer/postagger/pipe.h"
 #include "app/lexanalyzer/postagger/opt_utils.h"
+
+#define APP "transition-based postagger"
+#define EXE "postagger"
 
 namespace po = boost::program_options;
 namespace tagger = ZuoPar::LexicalAnalyzer::Postagger;
@@ -15,18 +17,10 @@ int multi_learn(int argc, char** argv) {
   return 1;
 }
 
-/**
- * Perform the learning process of ZuoPar::arcstandard dependency parser.
- *
- *  @param[in]  argc  The number of arguments.
- *  @param[in]  argv  The arguments.
- *  @return     int   The status of running learning.
- */
 int learn(int argc, char** argv) {
-  std::string usage = "Training component of ZuoPar::transition-based postagger.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: postagger learn [options]\n";
-  usage += "OPTIONS";
+  std::string usage = "Training component of ZuoPar::" APP ".\n";
+  usage += "usage: " EXE " learn [options]\n";
+  usage += "options";
 
   po::options_description optparser = fe::build_learn_optparser(usage);
 
@@ -49,18 +43,10 @@ int learn(int argc, char** argv) {
   return 0;
 }
 
-/**
- * Perform the testing process of ZuoPar::arcstandard dependency parser.
- *
- *  @param[in]  argc  The number of arguments.
- *  @param[in]  argv  The arguments.
- *  @return     int   The status of running test.
- */
 int test(int argc, char** argv) {
-  std::string usage = "Testing component of ZuoPar::transition-based postagger.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: postagger test [options]\n";
-  usage += "OPTIONS";
+  std::string usage = "Testing component of ZuoPar::" APP ".\n";
+  usage += "usage: " EXE " test [options]\n";
+  usage += "options";
 
   po::options_description optparser = fe::build_test_optparser(usage);
 
@@ -84,4 +70,4 @@ int test(int argc, char** argv) {
 }
 
 #include "frontend/template/main.h"
-MAIN("Transition-based postagger.", "postagger")
+MAIN(APP, EXE)

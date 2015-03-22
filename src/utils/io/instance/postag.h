@@ -11,40 +11,6 @@ namespace IO {
 namespace eg = ZuoPar::Engine;
 
 /**
- * Read one segmentation instance from the input stream.
- *
- *  @param[in]  is                The input stream.
- *  @param[out] output            The output stream.
- *  @param[in]  forms_alphabet    The alphabet of forms.
- *  @param[in]  postags_alphabet  The alphabet of postags.
- *  @param[in]  delimiter         The delimiter for separating the form and postag
- *  @param[in]  incremental       Use to specify insert new entry into the alphabet
- *  @return     bool              Return true on successfully load, otherwise
- *                                false.
- */
-bool read_postag_instance(std::istream& is,
-    Postag& output,
-    eg::TokenAlphabet& forms_alphabet,
-    eg::TokenAlphabet& postags_alphabet,
-    char delimiter = '/',
-    bool incremental = true);
-
-/**
- * Write one postag instance to the output stream.
- *
- *  @param[out] os                The output stream
- *  @param[in]  output            The instance.
- *  @param[in]  forms_alphabet    The alphabet for forms
- *  @param[in]  postags_alphabet  The alphabet for postags
- *  @param[in]  delimiter         The delimiter
- */
-void write_postag_instance(std::ostream& os,
-    const Postag& output,
-    const eg::TokenAlphabet& forms_alphabet,
-    const eg::TokenAlphabet& postags_alphabet,
-    char delimiter = '/');
-
-/**
  * Read one postag instance from the input stream.
  *
  *  @param[in]  is                The input stream.
@@ -55,8 +21,8 @@ void write_postag_instance(std::ostream& os,
  *  @return     bool              Return true on successfully load, otherwise
  *                                false.
  */
-bool read_postag_with_cache_instance(std::istream& is,
-    PostagWithLiteralCache& output,
+bool read_postag_instance(std::istream& is,
+    Postag& output,
     eg::TokenAlphabet& postags_alphabet,
     char delimiter = '/',
     bool incremental = true);
@@ -69,8 +35,8 @@ bool read_postag_with_cache_instance(std::istream& is,
  *  @param[in]  postags_alphabet  The alphabet for postags
  *  @param[in]  delimiter         The delimiter
  */
-void write_postag_with_cache_instance(std::ostream& os,
-    const PostagWithLiteralCache& output,
+void write_postag_instance(std::ostream& os,
+    const Postag& output,
     const eg::TokenAlphabet& postags_alphabet,
     char delimiter = '/');
 

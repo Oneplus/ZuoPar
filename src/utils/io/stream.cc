@@ -6,8 +6,7 @@
 namespace ZuoPar {
 namespace IO {
 
-std::istream*
-get_istream(const char* filename,
+std::istream* get_istream(const char* filename,
     std::istream* default_stream) {
   std::istream* is = NULL;
   if (filename!= NULL && strlen(filename) > 0) {
@@ -25,13 +24,13 @@ get_istream(const char* filename,
   return is;
 }
 
-std::istream*
-get_istream(const std::string& filename, std::istream* default_stream) {
+std::istream* get_istream(const std::string& filename,
+    std::istream* default_stream) {
   return get_istream(filename.c_str(), default_stream);
 }
 
-std::ostream*
-get_ostream(const char* filename, std::ostream* default_stream) {
+std::ostream* get_ostream(const char* filename,
+    std::ostream* default_stream) {
   std::ostream* os = NULL;
   if (filename!= NULL && strlen(filename) > 0) {
     os = new std::ofstream(filename);
@@ -48,8 +47,8 @@ get_ostream(const char* filename, std::ostream* default_stream) {
   return os;
 }
 
-std::ostream*
-get_ostream(const std::string& filename, std::ostream* default_stream) {
+std::ostream* get_ostream(const std::string& filename,
+    std::ostream* default_stream) {
   return get_ostream(filename.c_str(), default_stream);
 }
 

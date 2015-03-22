@@ -154,7 +154,7 @@ public:
     if (guided) { correct_state = row; }
 
     for (step = 1; step <= max_nr_actions; ++ step) {
-      //_TRACE << "sys: round " << step;
+      _TRACE << "sys: round " << step;
 
       row = allocate_lattice(step);
       lattice_size.push_back(0);
@@ -175,6 +175,10 @@ public:
 
       for (int i = 0; i < current_beam_size; ++ i) {
         const scored_transition_t& trans = candidate_transitions[i];
+        _TRACE << "sys: apply transition " << trans.template get<1>() 
+          << " from " << (void *)(trans.template get<0>()) 
+          << " to " << (void *)(row+ i)
+          << ", " << trans.template get<2>();
         transit((*trans.template get<0>()), trans.template get<1>(), trans.template get<2>(),
             (row+ i));
       }
@@ -191,7 +195,7 @@ public:
         bool dropout = false;
 
         if (NULL == next_correct_state) {
-          //_TRACE << "sys: error at step =" << step;
+          _TRACE << "sys: error at step =" << step;
           _StateType* dummy_state = row+ beam_size;
           _ScoreContextType ctx(*correct_state);
           transit((*correct_state), gold_actions[step- 1],

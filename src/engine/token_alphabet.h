@@ -30,6 +30,8 @@ public:
    */
   int insert(const char* name);
 
+  int insert(const std::string& name);
+
   /**
    * Get the name for a given index.
    *
@@ -47,6 +49,8 @@ public:
    */
   int encode(const char* name) const;
 
+  int encode(const std::string& name) const;
+  
   /**
    * Save the word alphabet into the output file stream.
    *

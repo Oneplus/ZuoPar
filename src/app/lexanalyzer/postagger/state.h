@@ -20,7 +20,7 @@ public:
    *
    *  @param[in]  r   The pointer to the dependency state.
    */
-  State(const PostagWithLiteralCache* r);
+  State(const Postag* r);
 
   /**
    * This method is needed by @class TransitionSystem.
@@ -40,8 +40,7 @@ public:
    */
   bool tag(const State& source, postag_t postag);
 
-  //! If the state reach the terminating state.
-  bool terminated() const;
+  bool terminated() const;  //! Shorthand for buffer == ref->size()
 
   //! The cached postags. Actually, this attributes is not needed because the
   //! postag sequence can be recovered from decoding matrix.
@@ -54,7 +53,7 @@ public:
   const State* previous;
 
   //! The pointer to the dependency tree.
-  const PostagWithLiteralCache* ref;
+  const Postag* ref;
 
   //! The score.
   floatval_t score;

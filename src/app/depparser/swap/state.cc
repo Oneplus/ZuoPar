@@ -7,7 +7,7 @@ namespace Swap {
 
 State::State(): ref(0) { clear(); }
 
-State::State(const Dependency* r): ref(r) {
+State::State(const CoNLLXDependency* r): ref(r) {
   clear();
   for (int i = ref->size() - 1; i >= 0; -- i) { buffer.push_back(i); }
 }
@@ -99,7 +99,7 @@ void State::_update_right_children_information(int h, int m) {
 }
 
 void State::_update_left_label_set(int h, int deprel) {
-  if (deprel > sizeof(unsigned)) {
+  if (deprel >= sizeof(unsigned)) {
     left_label_set_highbit[h] |= (1<< (deprel - sizeof(unsigned)));
   } else {
     left_label_set_lowbit[h]  |= (1<< deprel);
@@ -107,7 +107,7 @@ void State::_update_left_label_set(int h, int deprel) {
 }
 
 void State::_update_right_label_set(int h, int deprel) {
-  if (deprel > sizeof(unsigned)) {
+  if (deprel >= sizeof(unsigned)) {
     right_label_set_highbit[h] |= (1<< (deprel - sizeof(unsigned)));
   } else {
     right_label_set_lowbit[h]  |= (1<< deprel);

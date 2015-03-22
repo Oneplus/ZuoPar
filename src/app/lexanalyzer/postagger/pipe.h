@@ -51,7 +51,7 @@ public:
    *  @param[in]  source  The last state in state chain.
    *  @param[out] output  The output dependency parse.
    */
-  void build_output(const State& source, PostagWithLiteralCache& output);
+  void build_output(const State& source, Postag& output);
 private:
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.
@@ -63,14 +63,11 @@ private:
   //! The pointer to the decoder.
   Decoder* decoder;
 
-  //! The alphabets of forms.
-  //eg::TokenAlphabet forms_alphabet;
-
   //! The alphabets of postags.
   eg::TokenAlphabet postags_alphabet;
 
   //! The dataset.
-  std::vector<PostagWithLiteralCache> dataset;
+  std::vector<Postag> dataset;
 };
 
 

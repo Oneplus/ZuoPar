@@ -11,17 +11,19 @@ namespace ZuoPar {
 template <
   class _ActionType,
   class _StateType,
-  class _ModelType
+  class _ModelType,
+  class _LossFunctionType
 >
 class TransitionStructureOnlineLearnerMiniBatch
 : public TransitionStructureOnlineLearner<
-  _ActionType,
-  _StateType,
-  _ModelType > {
+  _ActionType, _StateType, _ModelType, _LossFunctionType
+> {
 public:
   //!
   TransitionStructureOnlineLearnerMiniBatch(_ModelType* model)
-    : TransitionStructureOnlineLearner<_ActionType, _StateType, _ModelType>(model) {
+    : TransitionStructureOnlineLearner<
+      _ActionType, _StateType, _ModelType, _LossFunctionType
+    >(model) {
     clear();
   }
 
@@ -33,9 +35,7 @@ public:
   void regist(const _StateType* predict_state, const _StateType* correct_state) {
     boost::lock_guard<boost::mutex> lock(mtx);
 
-    if (predict_state == correct_state) {
-      return;
-    }
+    if (predict_state == correct_state) { return; }
 
     std::vector<const _StateType*> predict_states;
     std::vector<const _StateType*> correct_states;

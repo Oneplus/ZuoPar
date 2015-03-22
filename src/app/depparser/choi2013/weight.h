@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_APP_DEPPARSER_ARCEAGER_MODEL_H__
-#define __ZUOPAR_APP_DEPPARSER_ARCEAGER_MODEL_H__
+#ifndef __ZUOPAR_APP_DEPPARSER_CHOI2013_MODEL_H__
+#define __ZUOPAR_APP_DEPPARSER_CHOI2013_MODEL_H__
 
 #include "types/common.h"
 #include "model/fast_associated/feature_param_map_collection.h"
@@ -22,4 +22,4 @@ public:
 } //  end for namespace dependencyparser
 } //  end for namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCEAGER_MODEL_H__
+#endif  //  end for __ZUOPAR_APP_DEPPARSER_CHOI2013_MODEL_H__

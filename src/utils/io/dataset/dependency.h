@@ -25,11 +25,20 @@ namespace eg = ZuoPar::Engine;
  *  @param[in]  incremental       If incremental is true, insert the token into
  *                                the alphabet, otherwise not perform insertion.
  */
-void read_dependency_dataset(
-    std::istream& is,
+void read_dependency_dataset(std::istream& is,
     std::vector<Dependency>& dataset,
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
+    eg::TokenAlphabet& deprels_alphabet,
+    size_t flag = 0xffff);
+
+void read_conllx_dependency_dataset(std::istream& is,
+    std::vector<CoNLLXDependency>& dataset,
+    eg::TokenAlphabet& forms_alphabet,
+    eg::TokenAlphabet& lemmas_alphabet,
+    eg::TokenAlphabet& cpostags_alphabet,
+    eg::TokenAlphabet& postags_alphabet,
+    eg::TokenAlphabet& feat_alphabet,
     eg::TokenAlphabet& deprels_alphabet,
     size_t flag = 0xffff);
 

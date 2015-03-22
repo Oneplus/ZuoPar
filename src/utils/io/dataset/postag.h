@@ -17,31 +17,12 @@ namespace eg = ZuoPar::Engine;
  *
  *  @param[in]  is                The input stream.
  *  @param[out] dataset           The output dataset.
- *  @param[out] forms_alphabet    The alphabet for forms.
- *  @param[out] postags_alphabet  The alphabet for postags.
- *  @param[in]  delimiter         The delimiter for separating form and postag.
- *  @param[in]  incremental       Specify to insert token into alphabet.
- */
-void read_postag_dataset(
-    std::istream& is,
-    std::vector<Postag>& dataset,
-    eg::TokenAlphabet& forms_alphabet,
-    eg::TokenAlphabet& postags_alphabet,
-    char delimiter = '/',
-    bool incremental = true);
-
-/**
- * Read segmentation dataset. In each instance, words are separated by space.
- *
- *  @param[in]  is                The input stream.
- *  @param[out] dataset           The output dataset.
  *  @param[in]  postags_alphabet  The alphabet for postags.
  *  @param[in]  delimiter         The delimiter for separating form and postag.
  *  @param[in]  incremental       Specify to insert token into alphabet.
  */
-void read_postag_with_cache_dataset(
-    std::istream& is,
-    std::vector<PostagWithLiteralCache>& dataset,
+void read_postag_dataset(std::istream& is,
+    std::vector<Postag>& dataset,
     eg::TokenAlphabet& postags_alphabet,
     char delimiter = '/',
     bool incremental = true);

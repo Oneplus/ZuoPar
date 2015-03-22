@@ -56,10 +56,10 @@ void ActionUtils::get_oracle_actions(const Dependency& instance,
   int beta = 0;
   std::vector<int> heads(len, -1);
   while (!(sigma.size() == 1 && beta == len)) {
-    //std::cout << sigma << ", " << delta << ", " << beta << " *";
     get_oracle_actions_onestep(instance, len, sigma, delta, beta, heads, actions);
-    //std::cout << actions.back() << "* " << sigma << ", " << delta << ", "  << beta << std::endl;
   }
+  int max_len = len* len / 2 + 2 * len;
+  while (actions.size() != max_len) { actions.push_back(ActionFactory::make_idle()); }
 }
 
 void ActionUtils::get_oracle_actions_onestep(const Dependency& instance,

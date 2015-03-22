@@ -6,8 +6,7 @@
 namespace ZuoPar {
 namespace IO {
 
-void
-read_semchunks_instance(std::istream& is,
+void read_semchunks_instance(std::istream& is,
     SemanticChunks& output,
     eg::TokenAlphabet& forms_alphabet,
     eg::TokenAlphabet& postags_alphabet,
@@ -22,17 +21,16 @@ read_semchunks_instance(std::istream& is,
   int N = mat[0].size();
   for (int i = 0; i < M; ++ i) {
     form_t form = (incremental?
-        forms_alphabet.insert(mat[i][0].c_str()):
-        forms_alphabet.encode(mat[i][0].c_str())
-        );
+        forms_alphabet.insert(mat[i][0]):
+        forms_alphabet.encode(mat[i][0]));
+
     postag_t postag = (incremental ?
-        postags_alphabet.insert(mat[i][1].c_str()):
-        postags_alphabet.encode(mat[i][1].c_str())
-        );
+        postags_alphabet.insert(mat[i][1]):
+        postags_alphabet.encode(mat[i][1]));
+
     tag_t sense = (incremental?
-        senses_alphabet.insert(mat[i][3].c_str()):
-        senses_alphabet.encode(mat[i][3].c_str())
-        );
+        senses_alphabet.insert(mat[i][3]):
+        senses_alphabet.encode(mat[i][3]));
 
     output.forms.push_back(form);
     output.postags.push_back(postag);
@@ -61,8 +59,8 @@ read_semchunks_instance(std::istream& is,
 
         std::size_t len = mat[j][i].size();
         tag += (incremental ?
-            chunks_alphabet.insert(mat[j][i].substr(2, len - 2).c_str()):
-            chunks_alphabet.encode(mat[j][i].substr(2, len - 2).c_str())
+            chunks_alphabet.insert(mat[j][i].substr(2, len - 2)):
+            chunks_alphabet.encode(mat[j][i].substr(2, len - 2))
             );
 
         if (mat[j][i].substr(2) == predicate_tag) { predicate.first = j; }
@@ -74,8 +72,7 @@ read_semchunks_instance(std::istream& is,
   }
 }
 
-void
-write_semchunks_instance(std::ostream& os,
+void write_semchunks_instance(std::ostream& os,
     const SemanticChunks& output,
     const eg::TokenAlphabet& forms_alphabet,
     const eg::TokenAlphabet& postags_alphabet,
@@ -118,8 +115,7 @@ write_semchunks_instance(std::ostream& os,
   write_csv(os, mat);
 }
 
-void
-write_props_instance(std::ostream& os,
+void write_props_instance(std::ostream& os,
     const SemanticChunks& output,
     const eg::TokenAlphabet& forms_alphabet,
     const eg::TokenAlphabet& postags_alphabet,

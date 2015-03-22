@@ -4,15 +4,9 @@
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-State::State()
-  : ref(0) {
-  clear();
-}
+State::State(): ref(0) { clear(); }
 
-State::State(const SequenceInstance* r)
-  : ref(r) {
-  clear();
-}
+State::State(const SequenceInstance* r): ref(r) { clear(); }
 
 void
 State::copy(const State& source) {

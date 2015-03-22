@@ -66,6 +66,9 @@ void ActionUtils::get_oracle_actions(const Dependency& instance,
   while (!(sigma.size() == 1 && beta.empty())) {
     get_oracle_actions_onestep(instance, tree, orders, MPC, sigma, beta, heads, actions);
   }
+
+  int max_len = N* N + N;
+  while (actions.size() < max_len) { actions.push_back(ActionFactory::make_idle()); }
 }
 
 void ActionUtils::get_oracle_actions_onestep(const Dependency& instance,

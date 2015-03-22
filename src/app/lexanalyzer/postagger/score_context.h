@@ -4,7 +4,7 @@
 #include <vector>
 #include "types/common.h"
 #include "engine/token_alphabet.h"
-#include "app/depparser/arcstandard/state.h"
+#include "app/lexanalyzer/postagger/state.h"
 
 namespace ZuoPar {
 namespace LexicalAnalyzer {
@@ -21,11 +21,11 @@ public:
    */
   ScoreContext(const State& state) {
     std::size_t len = state.ref->size();
-    W0 = state.ref->cache[state.buffer];
-    W1 = (state.buffer+ 1 < len ? state.ref->cache[state.buffer+ 1]: "__eos__");
-    W2 = (state.buffer+ 2 < len ? state.ref->cache[state.buffer+ 2]: "__eos__");
-    W_1= (state.buffer- 1 >= 0 ? state.ref->cache[state.buffer- 1]: "__bos__");
-    W_2= (state.buffer- 2 >= 0 ? state.ref->cache[state.buffer- 2]: "__bos__");
+    W0 = state.ref->forms[state.buffer];
+    W1 = (state.buffer+ 1 < len ? state.ref->forms[state.buffer+ 1]: "__eos__");
+    W2 = (state.buffer+ 2 < len ? state.ref->forms[state.buffer+ 2]: "__eos__");
+    W_1= (state.buffer- 1 >= 0 ? state.ref->forms[state.buffer- 1]: "__bos__");
+    W_2= (state.buffer- 2 >= 0 ? state.ref->forms[state.buffer- 2]: "__bos__");
     T_1= (state.buffer- 1 >= 0 ? state.postags[state.buffer- 1]: eg::TokenAlphabet::BEGIN);
     T_2= (state.buffer- 2 >= 0 ? state.postags[state.buffer- 2]: eg::TokenAlphabet::BEGIN);
     std::size_t sz = W0.size();
