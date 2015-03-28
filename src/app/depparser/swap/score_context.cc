@@ -43,7 +43,7 @@ ScoreContext::ScoreContext(const State& state):
     int S0r2d = state.right_2nd_most_child[S0];
     if (S0r2d >= 0) { S0r2dw = FORM[S0r2d]; S0r2dp = POS[S0r2d]; S0r2dl = REL[S0r2d]; }
 
-    int S0L2 = S0- 1;
+    int S0L2 = S0- 2;
     if (S0L2 >= 0)  { S0L2w = FORM[S0L2]; S0L2p = POS[S0L2]; } else { S0L2w = S0L2p = 1; }
 
     int S0L1 = S0- 1;
@@ -77,7 +77,7 @@ ScoreContext::ScoreContext(const State& state):
     int S1r2d = state.right_2nd_most_child[S1];
     if (S1r2d >= 0) { S1r2dw = FORM[S1r2d]; S1r2dp = POS[S1r2d]; S1r2dl= REL[S1r2d]; }
 
-    int S1L2 = S1- 1;
+    int S1L2 = S1- 2;
     if (S1L2 >= 0)  { S1L2w = FORM[S1L2]; S1L2p = POS[S1L2]; } else { S1L2w = S1L2p = 1; }
 
     int S1L1 = S1- 1;
@@ -93,15 +93,15 @@ ScoreContext::ScoreContext(const State& state):
 
   if (S0 >= 0 && S1 >= 0) {
     DistS0S1 = Math::binned_1_2_3_4_5_6_10[S0 - S1];
-    S1S0Adjancet = (S1 + 1 == S0? 1: (S0+ 1 == S1? 2: 3));
-  } else { S1S0Adjancet = 4; }
+    S1S0Adjacent = (S1 + 1 == S0? 1: (S0+ 1 == S1? 2: 3));
+  } else { S1S0Adjacent = 4; }
 
   int N0 = state.front0;
   if (N0 >= 0) {
     N0w = FORM[N0]; N0p = POS[N0];
     N0Feat = (&state.ref->feats[N0]);
 
-    int N0L2 = N0- 1;
+    int N0L2 = N0- 2;
     if (N0L2 >= 0)  { N0L2w = FORM[N0L2]; N0L2p = POS[N0L2]; } else { N0L2w = N0L2p = 1; }
 
     int N0L1 = N0- 1;

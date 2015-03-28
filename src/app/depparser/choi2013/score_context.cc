@@ -53,7 +53,7 @@ ScoreContext::ScoreContext(const State& state):
     int S0h2 = (S0h >= 0 ? state.heads[S0h] : -1);
     if (S0h2 >= 0) { S0h2w = FORM[S0h2]; S0h2p = POS[S0h2]; }
 
-    int S0L2 = S0- 1;
+    int S0L2 = S0- 2;
     if (S0L2 >= 0)  { S0L2w = FORM[S0L2]; S0L2p = POS[S0L2]; } else { S0L2w = S0L2p = 1; }
 
     int S0L1 = S0- 1;

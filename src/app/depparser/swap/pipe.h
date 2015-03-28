@@ -15,7 +15,7 @@ namespace DependencyParser {
 namespace Swap {
 
 struct MaxNunmberActions {
-  int operator ()(const Dependency& instance) {
+  int operator ()(const CoNLLXDependency& instance) {
     // According to Nivre (2009), the number of action is bounded by n+n^2
     return instance.size()* instance.size() + instance.size();
   }

@@ -73,18 +73,20 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_Q1111( S0w, S0p, S1w, S1p );
   ZUOPAR_FEATURE_MAP_REGIST_B11( S1w, S0w );
   ZUOPAR_FEATURE_MAP_REGIST_B11( S1p, S0p );
-  ZUOPAR_FEATURE_MAP_REGIST_B11( S0p, N0p );  //  port "from word pairs" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_B11( S0p, N0p );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S1p, S0p, N0p );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0ldp, S1p );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0rdp, S1p );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1ldp, S1p );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1rdp, S1p );  //  port the "from three words" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1rdp, S1p );
+  // Distance feature
   ZUOPAR_FEATURE_MAP_REGIST_B11( S0w, DistS0S1 );
   ZUOPAR_FEATURE_MAP_REGIST_B11( S0p, DistS0S1 );
   ZUOPAR_FEATURE_MAP_REGIST_B11( S1w, DistS0S1 );
   ZUOPAR_FEATURE_MAP_REGIST_B11( S1p, DistS0S1 );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0w, S1w, DistS0S1 );
-  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1p, DistS0S1 ); //  port the "distance" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S1p, DistS0S1 );
+  // Valancy
   ZUOPAR_FEATURE_MAP_REGIST_B10( S0w, S0la );
   ZUOPAR_FEATURE_MAP_REGIST_B10( S0w, S0ra );
   ZUOPAR_FEATURE_MAP_REGIST_B10( S0p, S0la );
@@ -92,7 +94,17 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_B10( S1w, S1la );
   ZUOPAR_FEATURE_MAP_REGIST_B10( S1w, S1ra );
   ZUOPAR_FEATURE_MAP_REGIST_B10( S1p, S1la );
-  ZUOPAR_FEATURE_MAP_REGIST_B10( S1p, S1ra ); //  port the "valency" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_B10( S1p, S1ra );
+  // Label set
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S0w, S0lsetl, S0lseth );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S0p, S0lsetl, S0lseth );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S0w, S0rsetl, S0rseth );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S0p, S0rsetl, S0rseth );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S1w, S1lsetl, S1lseth );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S1p, S1lsetl, S1lseth );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S1w, S1rsetl, S1rseth );
+  ZUOPAR_FEATURE_MAP_REGIST_T100( S1p, S1rsetl, S1rseth );
+  // 2nd-order
   ZUOPAR_FEATURE_MAP_REGIST_U1( S0ldw );
   ZUOPAR_FEATURE_MAP_REGIST_U1( S0ldp );
   ZUOPAR_FEATURE_MAP_REGIST_U1( S0ldl );
@@ -104,7 +116,12 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_U1( S1ldl );
   ZUOPAR_FEATURE_MAP_REGIST_U1( S1rdw );
   ZUOPAR_FEATURE_MAP_REGIST_U1( S1rdp );
-  ZUOPAR_FEATURE_MAP_REGIST_U1( S1rdl );  // port the "unigram" in Z&N (2011)
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1rdl );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0ldp, S0p, S1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S0rdp, S0p, S1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1ldp, S0p, S1p );
+  ZUOPAR_FEATURE_MAP_REGIST_T111( S1rdp, S0p, S1p );
+  // 3rd-order
   ZUOPAR_FEATURE_MAP_REGIST_U1( S0l2dw );
   ZUOPAR_FEATURE_MAP_REGIST_U1( S0l2dp );
   ZUOPAR_FEATURE_MAP_REGIST_U1( S0l2dl );
@@ -121,15 +138,47 @@ Weight::Weight() {
   ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, S0rdp, S0r2dp );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S1p, S1ldp, S1l2dp );
   ZUOPAR_FEATURE_MAP_REGIST_T111( S1p, S1rdp, S1r2dp );
-  // ZUOPAR_FEATURE_MAP_REGIST_T111( S0p, N0p, N1p );  //  port the "third-order" in Z&N (2011)
-  ZUOPAR_FEATURE_MAP_REGIST_T100( S0w, S0lsetl, S0lseth );
-  ZUOPAR_FEATURE_MAP_REGIST_T100( S0p, S0lsetl, S0lseth );
-  ZUOPAR_FEATURE_MAP_REGIST_T100( S0w, S0rsetl, S0rseth );
-  ZUOPAR_FEATURE_MAP_REGIST_T100( S0p, S0rsetl, S0rseth );
-  ZUOPAR_FEATURE_MAP_REGIST_T100( S1w, S1lsetl, S0lseth );
-  ZUOPAR_FEATURE_MAP_REGIST_T100( S1p, S1lsetl, S0lseth );
-  ZUOPAR_FEATURE_MAP_REGIST_T100( S1w, S1rsetl, S0rseth );
-  ZUOPAR_FEATURE_MAP_REGIST_T100( S1p, S1rsetl, S0rseth ); // port the "label-set" in Z&N (2011)
+  // CoNLL feats: so mophological category
+  ufeat_map_repo.push_back( uf_map_t([](const ScoreContext& ctx,
+          std::vector<ufp_t>& cache) -> void {
+        if (ctx.S0Feat) {
+          for (int _: (*ctx.S0Feat)) { cache.push_back( ufp_t(_) ); }
+        }
+      }) );
+  ufeat_map_repo.push_back( uf_map_t([](const ScoreContext& ctx,
+          std::vector<ufp_t>& cache) -> void {
+        if (ctx.S1Feat) {
+          for (int _: (*ctx.S1Feat)) { cache.push_back( ufp_t(_) ); }
+        }
+      }) );
+  ufeat_map_repo.push_back( uf_map_t([](const ScoreContext& ctx,
+          std::vector<ufp_t>& cache) -> void {
+        if (ctx.N0Feat) {
+          for (int _: (*ctx.N0Feat)) { cache.push_back( ufp_t(_) ); }
+        }
+      }) );
+  bfeat_map_repo.push_back( bf_map_t([](const ScoreContext& ctx,
+          std::vector<bfp_t>& cache) -> void {
+        if (ctx.S0Feat && ctx.S1Feat) {
+          for (int _1: (*ctx.S0Feat)) {
+            for (int _2: (*ctx.S1Feat)) { cache.push_back( bfp_t(_1, _2) ); }
+          }
+        }
+      }) );
+  bfeat_map_repo.push_back( bf_map_t([](const ScoreContext& ctx,
+          std::vector<bfp_t>& cache) -> void {
+        if (ctx.S0Feat && ctx.N0Feat) {
+          for (int _1: (*ctx.S0Feat)) {
+            for (int _2: (*ctx.N0Feat)) { cache.push_back( bfp_t(_1, _2) ); }
+          }
+        }
+      }) );
+  // Binary
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1IsBegin );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S0IsEnd );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( N0IsEnd );
+  ZUOPAR_FEATURE_MAP_REGIST_U1( S1S0Adjacent );
+
 }
 
 } //  end for namespace swap

@@ -19,14 +19,14 @@ void Decoder::get_possible_actions(const State& source,
     actions.push_back(ActionFactory::make_idle());
     return;
   }
-  
+
   if (!source.buffer_empty()) {
     actions.push_back(ActionFactory::make_shift());
   }
   if (source.stack_size() >= 2) {
     //
     for (deprel_t l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
-      if (l != root_tag) { continue; }
+      if (l == root_tag) { continue; }
       if (!(root_position == kLeft && source.top1 == 0)) {
         actions.push_back(ActionFactory::make_left_arc(l));
       }

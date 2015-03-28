@@ -30,7 +30,7 @@ public:
   int S1lsetl, S1lseth, S1rsetl, S1rseth;
   int DistS0S1;
 
-  int S1IsBegin, S0IsEnd, N0IsEnd, S1S0Adjancet;
+  int S1IsBegin, S0IsEnd, N0IsEnd, S1S0Adjacent;
   const std::vector<int>* S1Feat;
   const std::vector<int>* S0Feat;
   const std::vector<int>* N0Feat;
