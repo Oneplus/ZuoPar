@@ -25,6 +25,7 @@ workspace/
 debug/
 profiling/
 log/
+run/
 
 ##############
 # data file  #

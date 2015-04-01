@@ -1,5 +1,4 @@
 #include <cstring>
-#include "utils/print/vector.h"
 #include "utils/logging.h"
 #include "app/depparser/choi2013/state.h"
 

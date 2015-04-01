@@ -1,6 +1,5 @@
 #include <boost/assert.hpp>
 #include "utils/logging.h"
-#include "utils/print/vector.h"
 #include "app/depparser/choi2013/action.h"
 #include "app/depparser/choi2013/action_utils.h"
 

@@ -176,7 +176,7 @@ ActionUtils::mpc_result_t ActionUtils::get_oracle_actions_calculate_mpc(int root
     int child = children[i];
     mpc_result_t result = get_oracle_actions_calculate_mpc(child, tree, MPC);
     overall = overall && std::get<0>(result);
-    if (std::get<0>(result) == true && left + 1 == std::get<1>(result)) {
+    if (std::get<0>(result) == true && right + 1 == std::get<1>(result)) {
       right = std::get<2>(result);
     } else {
       overall = false;

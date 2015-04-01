@@ -14,23 +14,23 @@ class ScoreContext {
 public:
   ScoreContext(const State& state);
 
-  form_t   S0w, S0ldw, S0rdw, S0l2dw, S0r2dw, S0L2w, S0L1w, S0R1w, S0R2w;
-  form_t   S1w, S1ldw, S1rdw, S1l2dw, S1r2dw, S1L2w, S1L1w, S1R1w, S1R2w;
-  form_t   N0w, N0L2w, N0L1w, N0R1w, N0R2w;
+  form_t   S0w, S0ldw, S0rdw, S0l2dw, S0r2dw, S0ldldw, S0rdrdw, S0L2w, S0L1w, S0R1w, S0R2w;
+  form_t   S1w, S1ldw, S1rdw, S1l2dw, S1r2dw, S1ldldw, S1rdrdw, S1L2w, S1L1w, S1R1w, S1R2w;
+  form_t   N0w, N0L2w, N0L1w, N0R1w, N0R2w, N1w;
 
-  postag_t S0p, S0ldp, S0rdp, S0l2dp, S0r2dp, S0L2p, S0L1p, S0R1p, S0R2p;
-  postag_t S1p, S1ldp, S1rdp, S1l2dp, S1r2dp, S1L2p, S1L1p, S1R1p, S1R2p;
-  postag_t N0p, N0L2p, N0L1p, N0R1p, N0R2p;
+  postag_t S0p, S0ldp, S0rdp, S0l2dp, S0r2dp, S0ldldp, S0rdrdp, S0L2p, S0L1p, S0R1p, S0R2p;
+  postag_t S1p, S1ldp, S1rdp, S1l2dp, S1r2dp, S1ldldp, S1rdrdp, S1L2p, S1L1p, S1R1p, S1R2p;
+  postag_t N0p, N0L2p, N0L1p, N0R1p, N0R2p, N1p;
 
-  deprel_t      S0ldl, S0rdl, S0l2dl, S0r2dl;
-  deprel_t      S1ldl, S1rdl, S1l2dl, S1r2dl;
+  deprel_t      S0ldl, S0rdl, S0l2dl, S0r2dl, S0ldldl, S0rdrdl;
+  deprel_t      S1ldl, S1rdl, S1l2dl, S1r2dl, S1ldldl, S1rdrdl;
 
   int S0la,  S0ra,  S1la,   S1ra;
   int S0lsetl, S0lseth, S0rsetl, S0rseth;
   int S1lsetl, S1lseth, S1rsetl, S1rseth;
-  int DistS0S1;
+  int DistS0S1, DistS0N0;
 
-  int S1IsBegin, S0IsEnd, N0IsEnd, S1S0Adjacent;
+  int S1IsBegin, S0IsEnd, N0IsEnd, S1S0Adjacent, S0N0Adjacent;
   const std::vector<int>* S1Feat;
   const std::vector<int>* S0Feat;
   const std::vector<int>* N0Feat;

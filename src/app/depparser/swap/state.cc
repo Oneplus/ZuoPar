@@ -10,6 +10,8 @@ State::State(): ref(0) { clear(); }
 State::State(const CoNLLXDependency* r): ref(r) {
   clear();
   for (int i = ref->size() - 1; i >= 0; -- i) { buffer.push_back(i); }
+  front0 = buffer.back();
+  if (buffer.size() >= 2) { front1 = buffer[buffer.size() - 2]; }
 }
 
 void State::copy(const State& source) {
@@ -80,7 +82,7 @@ void State::_update_left_children_information(int h, int m) {
   } else if (m < left_most_child[h]) {        // (m, lm0, h)
     left_2nd_most_child[h] = left_most_child[h];
     left_most_child[h] = m;
-  } else if (m < left_2nd_most_child[top0]) { // (lm0, m, h)
+  } else if (m < left_2nd_most_child[h]) { // (lm0, m, h)
     left_2nd_most_child[h] = m;
   }
   ++ nr_left_children[h];

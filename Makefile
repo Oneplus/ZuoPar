@@ -12,7 +12,7 @@ all: ./build/Makefile
 	@ (cd build >/dev/null 2>&1 && cmake -DCMAKE_BUILD_TYPE=Release ..)
 
 distclean:
-	@- (cd build >/dev/null 2>&1 && cmake .. >/dev/null 2>&1)
+	@- (cd build >/dev/null 2>&1 && cmake -DCMAKE_BUILD_TYPE=Release .. >/dev/null 2>&1)
 	@- $(MAKE) --silent -C build clean || true
 	@- $(RM) ./build/Makefile
 	@- $(RM) ./build/src
