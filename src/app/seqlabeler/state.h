@@ -17,7 +17,7 @@ public:
   /**
    * The constructor for the State.
    *
-   *  @param[in]  r   The pointer to the dependency state.
+   *  @param[in]  r   The pointer to the sequence_instance state.
    */
   State(const SequenceInstance* r);
 
@@ -42,17 +42,10 @@ public:
   //! If the state reach the terminating state.
   bool terminated() const;
 
-  //!
-  tag_t tags[kMaxNumberOfWords];
-
-  //! The front word in the buffer.
-  int buffer;
-
-  //! The pointer to the previous state.
-  const State* previous;
-
-  //! The pointer to the dependency tree.
-  const SequenceInstance* ref;
+  tag_t tags[kMaxNumberOfWords];  //! The cached tags.
+  int buffer;                   //! The front word in the buffer.
+  const State* previous;        //! The pointer to the previous state.
+  const SequenceInstance* ref;  //! The pointer to the sequence instance tree.
 
   //! The score.
   floatval_t score;

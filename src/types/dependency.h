@@ -15,6 +15,11 @@ struct Dependency {
   std::vector<int>  heads;        //! the heads
   std::vector<deprel_t> deprels;  //! the dependency relation.
 
+  void build(const std::vector<form_t>& forms,
+      const std::vector<postag_t>& postags,
+      const std::vector<int>& heads,
+      const std::vector<deprel_t>& deprels);
+
   /**
    * Push a dependency node into the dependency parse.
    *

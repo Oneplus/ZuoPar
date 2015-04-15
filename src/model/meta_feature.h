@@ -25,7 +25,7 @@ private:
   int feat;
 public:
   UnigramMetaFeature(): feat(0) { }
-  UnigramMetaFeature(int f): feat(f) { seed = f; /*boost::hash_combine(seed, f);*/ }
+  UnigramMetaFeature(const int& f): feat(f) { seed = f; /*boost::hash_combine(seed, f);*/ }
 
   //! The equal operator.
   bool operator == (const UnigramMetaFeature& a) const {
@@ -49,7 +49,7 @@ private:
   int feat0, feat1;
 public:
   BigramMetaFeature(): feat0(0), feat1(0) { }
-  BigramMetaFeature(int f0, int f1): feat0(f0), feat1(f1) {
+  BigramMetaFeature(const int& f0, const int& f1): feat0(f0), feat1(f1) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
   }
@@ -66,7 +66,7 @@ public:
 
   friend std::ostream& operator <<(std::ostream& os,
       const BigramMetaFeature& s) {
-    os << s.feat0 << "," << s.feat1;
+    os << "(" << s.feat0 << "," << s.feat1 << ")";
     return os;
   }
 };
@@ -76,7 +76,8 @@ private:
   int feat0, feat1, feat2;
 public:
   TrigramMetaFeature(): feat0(0), feat1(0), feat2(0) { }
-  TrigramMetaFeature(int f0, int f1, int f2): feat0(f0), feat1(f1), feat2(f2) {
+  TrigramMetaFeature(const int& f0, const int& f1, const int& f2)
+    : feat0(f0), feat1(f1), feat2(f2) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
     boost::hash_combine(seed, f2);
@@ -94,7 +95,7 @@ public:
 
   friend std::ostream& operator <<(std::ostream& os,
       const TrigramMetaFeature& s) {
-    os << s.feat0 << "," << s.feat1 << "," << s.feat2;
+    os << "(" << s.feat0 << "," << s.feat1 << "," << s.feat2 << ")";
     return os;
   }
 };
@@ -104,7 +105,7 @@ private:
   int feat0, feat1, feat2, feat3;
 public:
   QuadgramMetaFeature(): feat0(0), feat1(0), feat2(0), feat3(0) { }
-  QuadgramMetaFeature(int f0, int f1, int f2, int f3)
+  QuadgramMetaFeature(const int& f0, const int& f1, const int& f2, const int& f3)
     : feat0(f0), feat1(f1), feat2(f2), feat3(f3) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
@@ -124,7 +125,7 @@ public:
 
   friend std::ostream& operator <<(std::ostream& os,
       const QuadgramMetaFeature& s) {
-    os << s.feat0 << "," << s.feat1 << "," << s.feat2 << "," << s.feat3;
+    os << "(" << s.feat0 << "," << s.feat1 << "," << s.feat2 << "," << s.feat3 << ")";
     return os;
   }
 };
@@ -134,7 +135,8 @@ private:
   int feat0, feat1, feat2, feat3, feat4;
 public:
   QuingramMetaFeature(): feat0(0), feat1(0), feat2(0), feat3(0), feat4(0) {}
-  QuingramMetaFeature(int f0, int f1, int f2, int f3, int f4)
+  QuingramMetaFeature(const int& f0, const int& f1, const int& f2, const int& f3,
+      const int& f4)
     : feat0(f0), feat1(f1), feat2(f2), feat3(f3), feat4(f4) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
@@ -157,8 +159,8 @@ public:
 
   friend std::ostream& operator <<(std::ostream& os,
       const QuingramMetaFeature& s) {
-    os << s.feat0 << "," << s.feat1 << "," << s.feat2 << "," << s.feat3
-       << "," << s.feat4;
+    os << "(" << s.feat0 << "," << s.feat1 << "," << s.feat2 << ","
+      << s.feat3 << "," << s.feat4 << ")";
     return os;
   }
 };
@@ -169,7 +171,8 @@ private:
 public:
   HexgramMetaFeature()
     : feat0(0), feat1(0), feat2(0), feat3(0), feat4(0), feat5(0) {}
-  HexgramMetaFeature(int f0, int f1, int f2, int f3, int f4, int f5)
+  HexgramMetaFeature(const int& f0, const int& f1, const int& f2, const int& f3,
+      const int& f4, const int& f5)
     : feat0(f0), feat1(f1), feat2(f2), feat3(f3), feat4(f4), feat5(f5) {
     boost::hash_combine(seed, f0);
     boost::hash_combine(seed, f1);
@@ -193,8 +196,8 @@ public:
 
   friend std::ostream& operator <<(std::ostream& os,
       const HexgramMetaFeature& s) {
-    os << s.feat0 << "," << s.feat1 << "," << s.feat2 << "," << s.feat3
-       << "," << s.feat4 << "," << s.feat5;
+    os << "(" << s.feat0 << "," << s.feat1 << "," << s.feat2 << ","
+      << s.feat3 << "," << s.feat4 << "," << s.feat5 << ")";
     return os;
   }
 };

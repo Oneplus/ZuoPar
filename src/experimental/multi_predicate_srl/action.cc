@@ -1,10 +1,9 @@
 #include <boost/assert.hpp>
 #include "types/semchunks.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
+#include "experimental/multi_predicate_srl/action.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 std::ostream& operator<<(std::ostream& os, const Action& act) {
@@ -43,6 +42,5 @@ Action ActionFactory::make_I(const tag_t& tag) {
 }
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar

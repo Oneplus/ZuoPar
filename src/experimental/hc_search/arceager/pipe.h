@@ -24,7 +24,10 @@ namespace eg = ZuoPar::Engine;
 
 class Pipe: public fe::CommonPipeConfigure {
 public:
+  //! Build pipe for training first type data.
   Pipe(const LearnOneOption& opts);
+
+  //! Build pipe for preparing data for phase2.
   Pipe(const PrepareTwoOption& opts);
   Pipe(const LearnTwoOption& opts);
   Pipe(const TestOption& opts);

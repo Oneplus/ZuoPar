@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_EXTRA_INFORMATION_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_EXTRA_INFORMATION_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_EXTRA_INFORMATION_H__
+#define __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_EXTRA_INFORMATION_H__
 
 #include <vector>
 #include <unordered_map>
@@ -8,7 +8,6 @@
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 struct Information {
@@ -38,8 +37,7 @@ struct Information {
 };
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_EXTRA_INFORMATION_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_EXTRA_INFORMATION_H__

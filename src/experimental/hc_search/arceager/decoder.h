@@ -43,6 +43,8 @@ public:
 
   //!
   int get_ending_round();
+
+  bool terminated();
 private:
   int nr_deprels;
   int root_tag;

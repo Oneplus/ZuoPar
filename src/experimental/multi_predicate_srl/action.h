@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_ACTION_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_ACTION_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_ACTION_H__
+#define __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_ACTION_H__
 
 #include <iostream>
 #include <boost/assert.hpp>
@@ -12,7 +12,6 @@
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 class Action: public AbstractSimpleAction {
@@ -63,8 +62,7 @@ public:
 };
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_ACTION_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_ACTION_H__

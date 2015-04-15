@@ -10,13 +10,12 @@
 #include "utils/io/stream.h"
 #include "utils/io/dataset/semchunks.h"
 #include "utils/io/instance/semchunks.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action_utils.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/pipe.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/argument_relation_utils.h"
+#include "experimental/multi_predicate_srl/action_utils.h"
+#include "experimental/multi_predicate_srl/pipe.h"
+#include "experimental/multi_predicate_srl/argument_relation_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
@@ -52,6 +51,12 @@ Pipe::Pipe(const TestOption& opts)
   } else {
     _INFO << "report: model is not loaded.";
   }
+}
+
+Pipe::~Pipe() {
+  if (weight)   { delete weight;  weight = 0; }
+  if (decoder)  { delete decoder; decoder = 0; }
+  if (learner)  { delete learner; learner = 0; }
 }
 
 bool
@@ -278,6 +283,9 @@ Pipe::run() {
 
     int max_nr_actions = instance.size();
     Information information(instance, verb_classes);
+
+    decoder->reset_beam_size(instance.nr_predicates()* beam_size);
+
     State init_state(instance, information);
     Decoder::const_decode_result_t result = decoder->decode(init_state,
         actions, max_nr_actions);
@@ -348,6 +356,5 @@ Pipe::build_output(const State& source, SemanticChunks& output) {
 }
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace sequencelabeler
 } //  namespace zuopar

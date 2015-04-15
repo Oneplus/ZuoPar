@@ -1,14 +1,13 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_STATE_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_STATE_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_STATE_H__
+#define __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_STATE_H__
 
 #include "types/common.h"
 #include "types/semchunks.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/information.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
+#include "experimental/multi_predicate_srl/information.h"
+#include "experimental/multi_predicate_srl/action.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 class State {
@@ -62,8 +61,7 @@ public:
 };
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_STATE_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_STATE_H__

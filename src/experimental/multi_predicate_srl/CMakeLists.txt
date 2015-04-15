@@ -1,4 +1,4 @@
-add_executable (multi_predicate_srl_v2
+add_executable (multi_predicate_srl
     main.cc
     opt_utils.cc
     pipe.cc
@@ -19,7 +19,7 @@ add_executable (multi_predicate_srl_v2
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (multi_predicate_srl_v2
+target_link_libraries (multi_predicate_srl
     boost_program_options
     boost_log_setup
     boost_log
@@ -29,5 +29,5 @@ target_link_libraries (multi_predicate_srl_v2
     boost_system
     pthread)
 
-set_target_properties (multi_predicate_srl_v2
+set_target_properties (multi_predicate_srl
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

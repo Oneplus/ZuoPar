@@ -1,2 +1,2 @@
 add_subdirectory (app)
-#add_subdirectory (experimental)
+add_subdirectory (experimental)

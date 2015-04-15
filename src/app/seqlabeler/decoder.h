@@ -19,7 +19,7 @@ public:
   /**
    * The decoder constructor.
    *
-   *  @param[in]  nr        The number of dependency relations.
+   *  @param[in]  nr        The number of tags.
    *  @param[in]  trans_    The transition constrain.
    *  @param[in]  beam_size The size of beam.
    *  @param[in]  strategy  The update strategy: none, early update or max vilation.

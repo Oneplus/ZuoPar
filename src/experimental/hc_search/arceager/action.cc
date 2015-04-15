@@ -6,15 +6,15 @@ namespace Experimental {
 namespace HCSearchDependencyParser {
 
 std::ostream& operator<<(std::ostream& os, const Action& act) {
-  if (act.action_name == Action::kShift) {
+  if (act.name() == Action::kShift) {
     os << "SH";
-  } else if (act.action_name == Action::kReduce) {
+  } else if (act.name() == Action::kReduce) {
     os << "RD";
-  } else if (act.action_name == Action::kLeftArc) {
-    os << "LA~" << act.deprel;
-  } else if (act.action_name == Action::kRightArc) {
-    os << "RA~" << act.deprel;
-  } else if (act.action_name == Action::kNone) {
+  } else if (act.name() == Action::kLeftArc) {
+    os << "LA~" << act.rel();
+  } else if (act.name() == Action::kRightArc) {
+    os << "RA~" << act.rel();
+  } else if (act.name() == Action::kNone) {
     os << "NO";
   } else {
     BOOST_ASSERT_MSG(false, "unknown actions.");

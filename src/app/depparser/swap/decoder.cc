@@ -65,6 +65,10 @@ bool Decoder::terminated() {
   return all_terminated;
 }
 
+void Decoder::report() {
+  _INFO << "steps token: " << step;
+}
+
 } //  end for namespace swap
 } //  end for namespace dependencyparser
 } //  end for namespace zuopar

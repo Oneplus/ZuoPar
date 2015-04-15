@@ -1,11 +1,10 @@
 #include <boost/lexical_cast.hpp>
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/information.h"
+#include "experimental/multi_predicate_srl/information.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
@@ -55,6 +54,5 @@ Information::Information(const SemanticChunks& instance,
 }
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar

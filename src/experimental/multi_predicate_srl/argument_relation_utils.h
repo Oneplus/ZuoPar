@@ -1,12 +1,11 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ARG_REL_UTILS_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ARG_REL_UTILS_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_ARG_REL_UTILS_H__
+#define __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_ARG_REL_UTILS_H__
 
 #include <vector>
 #include "types/common.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 class ArgumentRelationUtils {
@@ -19,8 +18,7 @@ public:
 };
 
 } //  namespace multipredicatesrl
-} //  namespace acl
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MONO_PREDICATE_SRL_ARG_REL_UTILS_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_ARG_REL_UTILS_H__

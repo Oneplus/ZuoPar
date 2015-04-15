@@ -1,12 +1,11 @@
 #include <cstring>
-#include "experimental/acl2015/multi_predicate_srl_v2/state.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action_utils.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/argument_relation_utils.h"
+#include "experimental/multi_predicate_srl/state.h"
+#include "experimental/multi_predicate_srl/action_utils.h"
+#include "experimental/multi_predicate_srl/argument_relation_utils.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 State::State()
@@ -62,6 +61,5 @@ State::terminated() const {
 }
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace sequencelabeler
 } //  namespace zuopar

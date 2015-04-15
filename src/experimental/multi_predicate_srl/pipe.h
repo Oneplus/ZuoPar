@@ -1,18 +1,17 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_PIPE_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_PIPE_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_PIPE_H__
+#define __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_PIPE_H__
 
 #include <unordered_map>
 #include "types/semchunks.h"
 #include "frontend/common_pipe_cfg.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/opt.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/weight.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/decoder.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/learner.h"
+#include "experimental/multi_predicate_srl/opt.h"
+#include "experimental/multi_predicate_srl/weight.h"
+#include "experimental/multi_predicate_srl/decoder.h"
+#include "experimental/multi_predicate_srl/learner.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
@@ -33,6 +32,8 @@ public:
    *  @param[in]  opts  The testing options.
    */
   Pipe(const TestOption& opts);
+
+  ~Pipe();
 
   /**
    * Perform learning or testing according to the configuration.
@@ -119,8 +120,7 @@ protected:
 };
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_PIPE_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_PIPE_H__

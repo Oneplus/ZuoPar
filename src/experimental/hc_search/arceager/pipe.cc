@@ -566,8 +566,9 @@ Pipe::run2_learn_relaxed_good_against_bad() {
     floatval_t worst_good_score, best_bad_score;
 
     for (int i = 0; i < instance.good.size(); ++ i) {
-      Dependency dependency(instance.forms, instance.postags,
-          instance.good[i].heads, instance.good[i].deprels);
+      Dependency dependency;
+      dependency.build(instance.forms, instance.postags,
+          instance.oracle.heads, instance.oracle.deprels);
       State state;
       state.build(dependency, instance.good[i].rank,
           (instance.good[i].score- lowest_phase_one_score) / delta);
@@ -579,7 +580,8 @@ Pipe::run2_learn_relaxed_good_against_bad() {
     }
 
     for (int i = 0; i < instance.bad.size(); ++ i) {
-      Dependency dependency(instance.forms, instance.postags,
+      Dependency dependency;
+      dependency.build(instance.forms, instance.postags,
           instance.bad[i].heads, instance.bad[i].deprels);
       State state;
       state.build(dependency, instance.bad[i].rank,
@@ -599,12 +601,13 @@ Pipe::run2_learn_relaxed_good_against_bad() {
       continue;
     }
 
-    Dependency oracle_instance(instance.forms, instance.postags,
+    Dependency oracle_instance, good_instance, bad_instance;
+    oracle_instance.build(instance.forms, instance.postags,
         instance.oracle.heads, instance.oracle.deprels);
-    Dependency good_instance(instance.forms, instance.postags,
+    good_instance.build(instance.forms, instance.postags,
         instance.good[worst_good_position].heads,
         instance.good[worst_good_position].deprels);
-    Dependency bad_instance(instance.forms, instance.postags,
+    bad_instance.build(instance.forms, instance.postags,
         instance.bad[best_bad_position].heads,
         instance.bad[best_bad_position].deprels);
 

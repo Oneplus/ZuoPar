@@ -51,8 +51,7 @@ protected:
   bool save_model(const std::string& model_path);
 
   /**
-   * Build the dependency output for the state chain which ends with the source
-   * state.
+   * Build the tag result for the state chain which ends with the source state.
    *
    *  @param[in]  source  The last state in state chain.
    *  @param[out] output  The output dependency parse.

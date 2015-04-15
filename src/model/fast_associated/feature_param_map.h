@@ -200,8 +200,8 @@ public:
       // insertation.
       for (typename entry_t::const_iterator i = entry.begin();
           i != entry.end(); ++ i) {
-        const _ActionType& act = i->first;
-        result[act] += i->second.dot(avg);
+        const _ActionType& a = i->first;
+        result[a] += i->second.dot(avg);
       }
     }
   }

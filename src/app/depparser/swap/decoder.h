@@ -45,6 +45,8 @@ public:
       State* target);
 
   bool terminated();
+
+  void report();
 private:
   int nr_deprels;
   int root_tag;

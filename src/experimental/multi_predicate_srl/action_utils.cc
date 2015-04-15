@@ -1,11 +1,10 @@
 #include <boost/assert.hpp>
 #include "types/semchunks.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action_utils.h"
+#include "experimental/multi_predicate_srl/action.h"
+#include "experimental/multi_predicate_srl/action_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 bool ActionUtils::is_O(const Action& act) {
@@ -96,6 +95,5 @@ void ActionUtils::get_oracle_actions(const SemanticChunks& instance,
 }
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar

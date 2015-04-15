@@ -1,16 +1,15 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_SCORE_CONTEXT_H__
-#define __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_SCORE_CONTEXT_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_SCORE_CONTEXT_H__
+#define __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_SCORE_CONTEXT_H__
 
 #include <vector>
 #include "types/common.h"
 #include "types/semchunks.h"
 #include "engine/token_alphabet.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/state.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action_utils.h"
+#include "experimental/multi_predicate_srl/state.h"
+#include "experimental/multi_predicate_srl/action_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 namespace eg = ZuoPar::Engine;
@@ -50,8 +49,7 @@ public:
 };
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_ACL2015_MULTI_PREDICATE_SRL_SCORE_CONTEXT_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_MULTI_PREDICATE_SRL_SCORE_CONTEXT_H__

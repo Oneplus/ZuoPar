@@ -6,34 +6,16 @@ namespace ZuoPar {
 namespace Experimental {
 namespace HCSearchDependencyParser {
 
-bool
-ActionUtils::is_shift(const Action& act) {
-  return (act.action_name == Action::kShift);
+bool ActionUtils::is_shift(const Action& act)  { return (act.name() == Action::kShift);  }
+bool ActionUtils::is_reduce(const Action& act) { return (act.name() == Action::kReduce); }
+bool ActionUtils::is_left_arc(const Action& act, int& deprel) {
+  if (act.name() == Action::kLeftArc) { deprel = act.rel(); return true; }
+  deprel = 0; return false;
 }
 
-bool
-ActionUtils::is_reduce(const Action& act) {
-  return (act.action_name == Action::kReduce);
-}
-
-bool
-ActionUtils::is_left_arc(const Action& act, int& deprel) {
-  if (act.action_name == Action::kLeftArc) {
-    deprel = act.deprel;
-    return true;
-  }
-  deprel = 0;
-  return false;
-}
-
-bool
-ActionUtils::is_right_arc(const Action& act, int& deprel) {
-  if (act.action_name == Action::kRightArc) {
-    deprel = act.deprel;
-    return true;
-  }
-  deprel = 0;
-  return false;
+bool ActionUtils::is_right_arc(const Action& act, int& deprel) {
+  if (act.name() == Action::kRightArc) { deprel = act.rel(); return true; }
+  deprel = 0; return false;
 }
 
 void

@@ -14,6 +14,7 @@ add_executable (hc_arceager_depparser
     ${SOURCE_DIR}/utils/logging.cc
     ${SOURCE_DIR}/utils/io/stream.cc
     ${SOURCE_DIR}/utils/io/dataset/dependency.cc
+    ${SOURCE_DIR}/utils/io/instance/csv.cc
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
     )
 

@@ -165,8 +165,7 @@ public:
         get_possible_actions((*source));
         score_possible_actions((*source));
 
-        for (int i = 0; i < possible_actions.size(); ++ i) {
-          const _ActionType& act = possible_actions[i];
+        for (const _ActionType& act: possible_actions) {
           current_beam_size += extend_candidate_transition(
               scored_transition_t(source, act, source->score+ packed_scores[act]),
               current_beam_size);

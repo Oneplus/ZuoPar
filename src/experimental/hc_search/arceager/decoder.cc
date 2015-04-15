@@ -17,8 +17,7 @@ Decoder::Decoder(int nr, int root,
   >(beam_size, avg, strategy, weight) {
 }
 
-void
-Decoder::get_possible_actions(const State& source,
+void Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   int len = source.ref->size();
@@ -54,8 +53,7 @@ Decoder::get_possible_actions(const State& source,
   }
 }
 
-void
-Decoder::transit(const State& source, const Action& act, const floatval_t& score,
+void Decoder::transit(const State& source, const Action& act, const floatval_t& score,
     State* target) {
   int deprel;
   if (ActionUtils::is_shift(act)) {
@@ -73,18 +71,15 @@ Decoder::transit(const State& source, const Action& act, const floatval_t& score
   target->score = score;
 }
 
-void
-Decoder::get_results_in_beam(std::vector<State*>& results,
+void Decoder::get_results_in_beam(std::vector<State*>& results,
     int round) {
   for (int i = 0; i < lattice_size[round]; ++ i) {
     results.push_back(lattice_heads[round]+ i);
   }
 }
 
-int
-Decoder::get_ending_round() {
-  return this->step;
-}
+int Decoder::get_ending_round() { return this->step; }
+bool Decoder::terminated()      { return false; }
 
 } //  namespace arceager
 } //  namespace dependencyparser

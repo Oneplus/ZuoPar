@@ -6,7 +6,6 @@
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 namespace fe = ZuoPar::FrontEnd;
@@ -25,7 +24,6 @@ struct TestOption: public fe::TestOption, public ExtraOption {
 };
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
 

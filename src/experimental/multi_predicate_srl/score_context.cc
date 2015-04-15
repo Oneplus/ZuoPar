@@ -1,8 +1,7 @@
-#include "experimental/acl2015/multi_predicate_srl_v2/score_context.h"
+#include "experimental/multi_predicate_srl/score_context.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 ScoreContext::ScoreContext(const State& state_)
@@ -89,6 +88,5 @@ ScoreContext::reset_predicate_rank(int rank) {
 }
 
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar

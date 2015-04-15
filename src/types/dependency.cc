@@ -2,6 +2,16 @@
 
 namespace ZuoPar {
 
+void Dependency::build(const std::vector<form_t>& _forms,
+    const std::vector<postag_t>& _postags,
+    const std::vector<int>& _heads,
+    const std::vector<deprel_t>& _deprels) {
+  forms = _forms;
+  postags = _postags;
+  heads = _heads;
+  deprels = _deprels;
+}
+
 void Dependency::push_back(const form_t& form, const postag_t& tag,
     const int& head, const deprel_t& deprel) {
   forms.push_back(form);

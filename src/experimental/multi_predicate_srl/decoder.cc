@@ -1,11 +1,10 @@
-#include "experimental/acl2015/multi_predicate_srl_v2/decoder.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action.h"
-#include "experimental/acl2015/multi_predicate_srl_v2/action_utils.h"
+#include "experimental/multi_predicate_srl/decoder.h"
+#include "experimental/multi_predicate_srl/action.h"
+#include "experimental/multi_predicate_srl/action_utils.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
 namespace Experimental {
-namespace ACL2015 {
 namespace MultiPredicateSRL {
 
 void cube_make(std::vector<std::vector<std::vector<CubeItem> > >& cube,
@@ -187,14 +186,16 @@ Decoder::get_possible_actions(const State& source,
   }
 }
 
-void
-Decoder::transit(const State& source, const ActionCollection& act, const floatval_t& score,
+void Decoder::transit(const State& source, const ActionCollection& act, const floatval_t& score,
     State* target) {
   target->take(source, act);
   target->score = score;
 }
 
+bool decoder::terminated() {
+  return false;
+}
+
 } //  namespace multipredicatesrl
-} //  namespace acl2015
 } //  namespace experimental
 } //  namespace zuopar
