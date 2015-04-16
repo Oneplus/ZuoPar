@@ -228,7 +228,7 @@ void Pipe::build_knowledge() {
     PUNC_POS.insert(postags_alphabet.encode(":"));
     PUNC_POS.insert(postags_alphabet.encode("."));
     PUNC_POS.insert(postags_alphabet.encode("''"));
-    PUNC_POS.insert(postags_alphabet.encode("$"));
+    // PUNC_POS.insert(postags_alphabet.encode("$"));
     PUNC_POS.insert(postags_alphabet.encode("#"));
     PUNC_POS.insert(postags_alphabet.encode("-LRB-"));
     PUNC_POS.insert(postags_alphabet.encode("-RRB-"));
@@ -659,7 +659,9 @@ void Pipe::run() {
   if (mode_ext == kPipeLearnPhaseOne) {
     decoder = new Decoder(deprels_alphabet.size(), root_tag,
         beam_size, false, update_strategy, heuristic_weight);
-  } else if (mode_ext == kPipeEvaluate || mode_ext == kPipeTest){
+  } else if (mode_ext == kPipeEvaluate
+      || mode_ext == kPipeTest
+      || mode_ext == kPipePreparePhaseTwo) {
     decoder = new Decoder(deprels_alphabet.size(), root_tag,
         beam_size, true, UpdateStrategy::kNaive, heuristic_weight);
   }
