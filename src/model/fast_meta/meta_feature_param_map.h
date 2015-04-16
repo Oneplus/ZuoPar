@@ -67,21 +67,16 @@ public:
    *  @param[in]  offset        The offset for counting vector.
    *  @param[out] sparse_vector The sparse vector.
    */
-  void vectorize(const _ScoreContextType& ctx, floatval_t scale,
-      int offset, SparseVector* sparse_vector) const {
+  void vectorize(const _ScoreContextType& ctx, const floatval_t& scale,
+      int gid, SparseVector* sparse_vector) const {
     //! Use to cache extracted features.
     cache_t cache;
     extractor(ctx, cache);
     for (const feature_t& entry: cache) {
-      int id = offset;
-      for (typename map_t::const_iterator itx = payload.begin();
-          itx != payload.end();
-          ++ itx, ++ id) {
-        if (itx->first == entry) {
-          (*sparse_vector)[id] += scale;
-          break;
-        }
-      }
+      std::size_t seed = 0;
+      boost::hash_combine(seed, gid);
+      boost::hash_combine(seed, entry);
+      (*sparse_vector)[seed] += scale;
     }
   }
 
@@ -94,16 +89,11 @@ public:
    *  @param[in]  gid           The offset for counting vector.
    *  @param[out] sparse_vector The sparse vector.
    */
-  void vectorize2(const _ScoreContextType& ctx, floatval_t scale,
+  void vectorize2(const _ScoreContextType& ctx, const floatval_t& scale,
       int gid, SparseVector2* sparse_vector) const {
     cache_t cache;
     extractor(ctx, cache);
     for (const feature_t& entry: cache) {
-      typename map_t::const_iterator itx = payload.find(entry);
-      if (itx == payload.end()) {
-        continue;
-      }
-
       const std::pair<int, std::size_t>& key =
         std::make_pair(gid, boost::hash_value<feature_t>(entry));
       (*sparse_vector)[key] += scale;

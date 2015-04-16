@@ -27,7 +27,7 @@ po::options_description build_phase_one_learn_optparser(const std::string& usage
                                               " max - max violation (Huang 12)")
     ("phase-one-model", po::value<std::string>(), "The path to the phase one model.")
     ("method", po::value<std::string>(),  "The update strategy when oracle fallout.\n"
-                                          " regular - classic beam search style.\n"
+                                          " baseline - using baseline model for the first phase.\n"
                                           " best - update with the best [default].\n"
                                           " random - update with the random.\n"
                                           " worst - update with the worst.")
@@ -55,9 +55,9 @@ po::options_description build_phase_two_learn_optparser(const std::string& usage
     ("root",    po::value<std::string>(), "The root tag [default=ROOT].")
     ("language",po::value<std::string>(), "The language [default=en].")
     ("method",  po::value<std::string>(), "The learning method.\n"
-                                           " or: oracle-against-rest [default]\n"
-                                           " ngb: naive-good-against-bad, \n"
-                                           " rgb: smart-good-against-bad, \n")
+                                           " gold - The gold ranker [default]\n"
+                                           " coarse - The coarse ranker, \n"
+                                           " fine - The find ranker \n")
     ("ignore-punctuation", "Ignore the punctuation when calculating loss.")
     ("extract-punctuation", "Extract the punctuation when extracting features.")
     ("verbose,v", "Logging every detail.")
@@ -249,7 +249,7 @@ bool parse_phase_one_learn_option(const po::variables_map& vm, LearnOneOption& o
     if (vm["method"].as<std::string>() == "best"
         || vm["method"].as<std::string>() == "worst"
         || vm["method"].as<std::string>() == "random"
-        || vm["method"].as<std::string>() == "regular") {
+        || vm["method"].as<std::string>() == "baseline") {
       opts.method = vm["method"].as<std::string>();
     } else {
       _WARN << "parse opt: unknown learning method \""
@@ -274,9 +274,9 @@ bool parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& o
   if (vm.count("extract-punctuation")) { opts.extract_punctuation = true; }
   opts.method = "or";
   if (vm.count("method")) {
-    if (vm["method"].as<std::string>() == "or" ||
-        vm["method"].as<std::string>() == "ngb" ||
-        vm["method"].as<std::string>() == "rgb") {
+    if (vm["method"].as<std::string>() == "gold" ||
+        vm["method"].as<std::string>() == "coarse" ||
+        vm["method"].as<std::string>() == "fine") {
       opts.method = vm["method"].as<std::string>();
     } else {
       _WARN << "parse opt: unknown learning method \""

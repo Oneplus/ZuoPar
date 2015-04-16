@@ -102,7 +102,7 @@ HeuristicScoreContext::HeuristicScoreContext(const State& state)
 
 #define __M boost::make_tuple
 
-CostScoreContext::CostScoreContext(const State& state) 
+CostScoreContext::CostScoreContext(const State& state)
   : forms(state.ref->forms),
   postags(state.ref->postags),
   deprels(state.deprels) {
@@ -373,8 +373,7 @@ CostScoreContext::CostScoreContext(const State& state)
   }
 }
 
-int
-CostScoreContext::non_punctuation_span_length(int now,
+int CostScoreContext::non_punctuation_span_length(int now,
     const std::vector<postag_t>& postags,
     const std::vector<std::vector<int> >& tree,
     std::vector<int>& result) {

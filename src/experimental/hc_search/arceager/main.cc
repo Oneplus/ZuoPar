@@ -14,9 +14,8 @@ namespace po = boost::program_options;
 
 int prepare_phase_two(int argc, char** argv) {
   std::string usage = "ZuoPar::HC-search arceager depparser #2 Preparing component.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: " __EXE__ " prepare-phase-two [options]\n";
-  usage += "OPTIONS";
+  usage += "Usage: " __EXE__ " prepare-phase-two [options]\n\n";
+  usage += "options";
 
   po::options_description optparser = hc::build_phase_two_prepare_optparser(usage);
   if (argc == 1) {
@@ -46,9 +45,8 @@ int prepare_phase_two(int argc, char** argv) {
  */
 int learn_phase_one(int argc, char** argv) {
   std::string usage = "ZuoPar::HC-search arceager depparser #1 Training component.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: " __EXE__ " learn-phase-one [options]\n";
-  usage += "OPTIONS";
+  usage += "Usage: " __EXE__ " learn-phase-one [options]\n\n";
+  usage += "options";
 
   po::options_description optparser = hc::build_phase_one_learn_optparser(usage);
 
@@ -73,9 +71,8 @@ int learn_phase_one(int argc, char** argv) {
 
 int learn_phase_two(int argc, char** argv) {
   std::string usage = "ZuoPar::HC-search arceager depparser #2 Training component.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: " __EXE__ " learn-phase-two [options]\n";
-  usage += "OPTIONS";
+  usage += "Usage: " __EXE__ " learn-phase-two [options]\n\n";
+  usage += "options";
 
   po::options_description optparser = hc::build_phase_two_learn_optparser(usage);
   if (argc == 1) {
@@ -92,15 +89,14 @@ int learn_phase_two(int argc, char** argv) {
   }
 
   hc::Pipe pipe(opts);
-  pipe.run2();
+  pipe.learn2();
   return 0;
 }
 
 int evaluate(int argc, char** argv) {
   std::string usage = "ZuoPar::HC-search arceager depparser # Evaluating component.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: " __EXE__ " evaluate [options]\n";
-  usage += "OPTIONS";
+  usage += "Usage: " __EXE__ " evaluate [options]\n\n";
+  usage += "options";
 
   po::options_description optparser = hc::build_evaluate_optparser(usage);
   if (argc == 1) {
@@ -129,9 +125,8 @@ int evaluate(int argc, char** argv) {
  */
 int test(int argc, char** argv) {
   std::string usage = "ZuoPar::HC-search arceager depparser # Test component.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
-  usage += "Usage: " __EXE__ " test [options]\n";
-  usage += "OPTIONS";
+  usage += "Usage: " __EXE__ " test [options]\n\n";
+  usage += "options";
 
   po::options_description optparser = hc::build_test_optparser(usage);
 
@@ -156,7 +151,6 @@ int test(int argc, char** argv) {
 
 int main(int argc, char** argv) {
   std::string usage = "ZuoPar::HC-search arceager depparser.\n";
-  usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
   usage += "Usage: " __EXE__ " [target] [options]\n\n";
   usage += "targets: \n";
   usage += " - learn-phase-one:   learning phase one model, without final update.\n"

@@ -453,10 +453,10 @@ CostWeight::CostWeight() {
             cache.push_back(uf_t(ctx.RANK));
           }));*/
 
-    ufeat_map_repo.push_back(uf_map_t(
+    /*ufeat_map_repo.push_back(uf_map_t(
           [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
             cache.push_back(uf_t(ctx.SCORE));
-          }));
+          }));*/
 
     // span length
     __REG_2(H_H, postags, span_length);
