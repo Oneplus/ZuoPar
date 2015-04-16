@@ -101,6 +101,7 @@ HeuristicScoreContext::HeuristicScoreContext(const State& state)
 }
 
 #define __M boost::make_tuple
+#define __R(name) (name).reserve(len)
 
 CostScoreContext::CostScoreContext(const State& state)
   : forms(state.ref->forms),
@@ -150,6 +151,7 @@ CostScoreContext::CostScoreContext(const State& state)
     }
   }
 
+  __R( PP_H_M ); __R( PP_H_M_Dir ); __R( PP_P_H_M ); __R( PP_P_H_M_Dir );
   for (int i = 0; i < len; ++ i) {
     if (ADP_POS.find(postags[i]) != ADP_POS.end()) {
       int hid = state.heads[i];
@@ -163,6 +165,14 @@ CostScoreContext::CostScoreContext(const State& state)
       }
     }
   }
+
+  __R( H ); __R( H_H ); __R( H_H_H ); __R( H_pH_H ); __R( H_nH_H ); __R( pH_H_nH_H );
+  __R( H_M );     __R( H_H_M );     __R( H_M_M );     __R( H_H_M_M );
+  __R( H_M_Rel ); __R( H_H_M_Rel ); __R( H_M_M_Rel ); __R( H_H_M_M_Rel );
+  __R( H_M_Dist); __R( H_H_M_Dist); __R( H_M_M_Dist); __R( H_H_M_M_Dist);
+  __R( H_M_Dir ); __R( H_H_M_Dir ); __R( H_M_M_Dir ); __R( H_H_M_M_Dir );
+  __R( pH_H_M_Mn ); __R( pH_H_Mn ); __R( pH_M_Mn );
+  __R( H_M_Mn );  __R( pH_H_M );    __R( H_pM_M );
 
   for (int hid = 0; hid < len; ++ hid) {
     // Begin singular
@@ -278,6 +288,7 @@ CostScoreContext::CostScoreContext(const State& state)
     }
   }
 
+  __R( H1_H_M1_M ); __R( H1_H_M1_M_Dir );
   for (int mid = 1; mid < len; ++ mid) {
     int mid1 = mid - 1;
     int hid = state.heads[mid];

@@ -418,6 +418,8 @@ void Pipe::wrapper_to_instance(const DependencyWrapper& wrapper, Dependency& ins
 void Pipe::learn2_learn_from_pair(const Dependency& oracle,
     const Dependency& good,
     const Dependency& bad,
+    const floatval_t& good_score,
+    const floatval_t& bad_score,
     const int& good_rank,
     const int& bad_rank,
     const floatval_t& good_phase_one_score,
@@ -426,9 +428,6 @@ void Pipe::learn2_learn_from_pair(const Dependency& oracle,
   State good_state, bad_state;
   good_state.build(good, good_rank, good_phase_one_score);
   bad_state.build(bad, bad_rank, bad_phase_one_score);
-
-  floatval_t good_score = cost_weight->score(good_state, false);
-  floatval_t bad_score = cost_weight->score(bad_state, false);
 
   int dummy;
   int good_loss = loss(good, oracle, true, ignore_punctuation, dummy);
@@ -522,7 +521,8 @@ void Pipe::learn2() {
         instance.bad[best_bad_position].heads,
         instance.bad[best_bad_position].deprels);
 
-    learn2_learn_from_pair(oracle_instance, good_instance, bad_instance, 
+    learn2_learn_from_pair(oracle_instance, good_instance, bad_instance,
+        worst_good_score, best_bad_score,
         instance.good[worst_good_position].rank, instance.good[worst_good_position].score,
         instance.bad[best_bad_position].rank, instance.bad[best_bad_position].score,
         n+ 1);

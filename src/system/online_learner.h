@@ -31,7 +31,7 @@ public:
 
   void learn(const _StateType* predict_state,
       const _StateType* correct_state,
-      floatval_t margin,
+      const floatval_t& margin,
       const floatval_t* predict_score = NULL,
       const floatval_t* correct_score = NULL) {
     if (predict_state == correct_state) { return; }
@@ -65,7 +65,7 @@ public:
 
       _TRACE << "learn: norm = " << norm;
       floatval_t step = 0.;
-      if (norm < 1e-8) {
+      if (norm < 1e-8 || (error - score) < 0.) {
         step = 0;
       } else {
         step = (error - score) / norm;
@@ -78,13 +78,8 @@ public:
     }
   }
 
-  void flush() {
-    model->flush(timestamp);
-  }
-
-  int errors() const {
-    return nr_errors;
-  }
+  void flush() { model->flush(timestamp); }
+  int errors() const { return nr_errors; }
 
 protected:
   int timestamp;

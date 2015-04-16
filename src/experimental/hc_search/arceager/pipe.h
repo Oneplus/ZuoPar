@@ -112,10 +112,12 @@ private:
   void learn2_learn_from_pair(const Dependency& oracle,
       const Dependency& good,
       const Dependency& bad,
-      const int& good_rank,
-      const int& bad_rank, 
       const floatval_t& good_score,
       const floatval_t& bad_score,
+      const int& good_rank,
+      const int& bad_rank, 
+      const floatval_t& good_phase_one_score,
+      const floatval_t& bad_phase_one_score,
       int timestamp);
 
   enum PipeModeExt {
