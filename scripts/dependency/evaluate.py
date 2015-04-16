@@ -12,6 +12,7 @@ parser = OptionParser(usage)
 parser.add_option("--punctuation", dest="punctuation", default=False, action="store_true", help="specify to include punctuation in evaluation.")
 parser.add_option("--ignore", dest="ignore", default=None, help="ignore form")
 parser.add_option("--language", dest="language", help="specify language")
+parser.add_option("--quite", dest="quite", default=False, action="store_true", help="specify not out details.")
 opts, args = parser.parse_args()
 
 if opts.language == "en":
@@ -72,9 +73,10 @@ for reference_data, answer_data in zip(reference_dataset, answer_dataset):
                 details[reference_postag][1] += 1
 
 print "%10s%10s%10s%10s" % ("postag", "corr.hed", "corr.rel", "tot.rel")
-print "".join('-' for i in xrange(60))
-for postag, detail in sorted(details.iteritems()):
-    print "%10s%10d%10d%10d %f %f" % (postag, detail[0], detail[1], detail[2], float(detail[0]) /detail[2], float(detail[1])/detail[2])
+if not opts.quite:
+    print "".join('-' for i in xrange(60))
+    for postag, detail in sorted(details.iteritems()):
+        print "%10s%10d%10d%10d %f %f" % (postag, detail[0], detail[1], detail[2], float(detail[0]) /detail[2], float(detail[1])/detail[2])
 
 corr_head = sum([int(val[0]) for key, val in details.iteritems()])
 corr_rel = sum([int(val[1]) for key, val in details.iteritems()])

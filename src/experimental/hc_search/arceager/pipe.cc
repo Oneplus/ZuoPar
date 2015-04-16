@@ -286,7 +286,7 @@ bool Pipe::setup() {
       return false;
     }
     ioutils::read_dependency_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, deprels_alphabet, ((1<<1)|(1<<2)));
+        postags_alphabet, deprels_alphabet, 0x03);
   }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << forms_alphabet.size() << " form(s) is loaded.";
