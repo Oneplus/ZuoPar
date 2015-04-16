@@ -192,18 +192,21 @@ CostWeight::CostWeight() {
     __REG_4(H_S_nS_M, postags, postags, postags, postags);
     __REG_4(H_S_pM_M, postags, postags, postags, postags);
     __REG_4(H_S_M_nM, postags, postags, postags, postags);
+
     __REG_4(pH_H_S_M, postags, forms, postags, postags);
     __REG_4(H_nH_S_M, forms, postags, postags, postags);
     __REG_4(H_pS_S_M, forms, postags, postags, postags);
     __REG_4(H_S_nS_M, forms, postags, postags, postags);
     __REG_4(H_S_pM_M, forms, postags, postags, postags);
     __REG_4(H_S_M_nM, forms, postags, postags, postags);
+
     __REG_4(pH_H_S_M, postags, postags, forms, postags);
     __REG_4(H_nH_S_M, postags, postags, forms, postags);
     __REG_4(H_pS_S_M, postags, postags, forms, postags);
     __REG_4(H_S_nS_M, postags, forms, postags, postags);
     __REG_4(H_S_pM_M, postags, forms, postags, postags);
     __REG_4(H_S_M_nM, postags, forms, postags, postags);
+
     __REG_4(pH_H_S_M, postags, postags, postags, forms);
     __REG_4(H_nH_S_M, postags, postags, postags, forms);
     __REG_4(H_pS_S_M, postags, postags, postags, forms);
@@ -478,7 +481,7 @@ CostWeight::CostWeight() {
     __REG_2(H_H, forms, left_label_set);
     __REG_2(H_H, forms, right_label_set);
 
-    //
+    // PP attachment
     __REG_2(PP_H_M, postags, postags);
     __REG_2(PP_H_M, forms, postags);
     __REG_2(PP_H_M, postags, forms);

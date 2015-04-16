@@ -55,7 +55,7 @@ public:
   MetaFeatureParameterMap(extractor_t extractor_)
     : extractor(extractor_) {
 #if defined(UNORDERED_MAP_IMPL) and (UNORDERED_MAP_IMPL == dense_hash_map)
-    payload.set_empty_key(feature_t());
+    rep.set_empty_key(feature_t());
 #endif
   }
 
@@ -101,9 +101,7 @@ public:
   }
 
   //! The size of the feature parameter map.
-  std::size_t size() const {
-    return payload.size();
-  }
+  std::size_t size() const { return rep.size(); }
 
   /**
    * Get the score for the (context, action) pair
@@ -114,19 +112,14 @@ public:
    *  @param[in]  default_return_value  The default return value.
    *  @return     floatval_t  The score.
    */
-  floatval_t score(const _ScoreContextType& ctx, bool avg,
-      floatval_t default_return_value = 0.) const {
+  floatval_t score(const _ScoreContextType& ctx, bool avg) const {
     cache_t cache;
     extractor(ctx, cache);
     floatval_t ret = 0.;
     for (const feature_t& entry: cache) {
-      typename map_t::const_iterator itx = payload.find(entry);
-      if (itx != payload.end()) {
-        if (avg) {
-          ret += itx->second.w_sum;
-        } else {
-          ret += itx->second.w;
-        }
+      typename map_t::const_iterator itx = rep.find(entry);
+      if (itx != rep.end()) {
+        ret += itx->second.dot(avg);
       }
     }
     return ret;
@@ -143,7 +136,7 @@ public:
     cache_t cache;
     extractor(ctx, cache);
     for (const feature_t& entry: cache) {
-      param_t& param = payload[entry];
+      param_t& param = rep[entry];
       param.add(now, scale);
     }
   }
@@ -154,8 +147,8 @@ public:
    *  @param[in]  now   The timestamp.
    */
   void flush(int now) {
-    for (typename map_t::iterator itx = payload.begin();
-        itx != payload.end(); ++ itx) {
+    for (typename map_t::iterator itx = rep.begin();
+        itx != rep.end(); ++ itx) {
       itx->second.flush(now);
     }
   }
@@ -166,7 +159,7 @@ public:
    *  @param[in]  oa    The output archive stream.
    */
   void save(boost::archive::text_oarchive& oa) const {
-    oa << payload;
+    oa << rep;
   }
 
   /**
@@ -175,12 +168,12 @@ public:
    *  @param[in] ia   The input archive stream.
    */
   void load(boost::archive::text_iarchive& ia) {
-    ia >> payload;
+    ia >> rep;
   }
 
 private:
   //! The mapping facility.
-  map_t payload;
+  map_t rep;
 
   //! The feature extracting functor.
   extractor_t extractor;

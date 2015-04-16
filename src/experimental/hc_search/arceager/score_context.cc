@@ -113,9 +113,7 @@ CostScoreContext::CostScoreContext(const State& state)
   for (int i = 0; i < len; ++ i) {
     int hid = state.heads[i];
     if (hid != -1) {
-      if (!extract_punctuation && PUNC_POS.find(postags[i]) != PUNC_POS.end()) {
-        continue;
-      }
+      if (!extract_punctuation && PUNC_POS.find(postags[i]) != PUNC_POS.end()) { continue; }
       tree[hid].push_back(i);
     }
     else { root = i; }
@@ -123,10 +121,7 @@ CostScoreContext::CostScoreContext(const State& state)
 
   // Calculate right branch.
   RB = 0; int now = root;
-  while (tree[now].size() != 0) {
-    ++ RB;
-    now = tree[now].back();
-  }
+  while (tree[now].size() != 0) { ++ RB; now = tree[now].back(); }
   RB = RB * 255 / len;
   RB = Math::binned_1_2_3_4_5_6_10[RB]+ 1;
 
@@ -135,9 +130,6 @@ CostScoreContext::CostScoreContext(const State& state)
 
   span_length.resize(len, 0);
   non_punctuation_span_length(root, postags, tree, span_length);
-  /*for (int i = 0; i < len; ++ i) {
-    span_length[i] = Math::binned_1_2_3_4_5_6_10[span_length[i]];
-  }*/
 
   nr_children.resize(len, 0);
   nr_left_children.resize(len, 0);
@@ -152,18 +144,10 @@ CostScoreContext::CostScoreContext(const State& state)
         //! Non-punctuation.
         ++ nr_children[i];
         label_set[i] |= deprels[c];
-        if (c < i) {
-          ++ nr_left_children[i];
-          left_label_set[i] |= deprels[c];
-        } else {
-          ++ nr_right_children[i];
-          right_label_set[i] |= deprels[c];
-        }
+        if (c < i) { ++ nr_left_children[i];  left_label_set[i] |= deprels[c];  }
+        else       { ++ nr_right_children[i]; right_label_set[i] |= deprels[c]; }
       }
     }
-    //nr_children[i] = Math::binned_1_2_3_4_5_6_10[nr_children[i]];
-    //nr_left_children[i] = Math::binned_1_2_3_4_5_6_10[nr_left_children[i]];
-    //nr_right_children[i] = Math::binned_1_2_3_4_5_6_10[nr_right_children[i]];
   }
 
   for (int i = 0; i < len; ++ i) {
@@ -185,15 +169,14 @@ CostScoreContext::CostScoreContext(const State& state)
     H.push_back(hid);
     H_H.push_back( __M(hid, hid) );
     H_H_H.push_back( __M(hid, hid, hid) );
-    H_pH_H.push_back( __M(hid, hid- 1, hid) );
-    H_nH_H.push_back( __M(hid, hid+ 1, hid) );
-    pH_H_nH_H.push_back( __M(hid- 1, hid, hid+ 1, hid) );
+    if (hid > 0)      H_pH_H.push_back( __M(hid, hid- 1, hid) );
+    if (hid+ 1 < len) H_nH_H.push_back( __M(hid, hid+ 1, hid) );
+    if (hid> 0 && hid+ 1 < len) pH_H_nH_H.push_back( __M(hid- 1, hid, hid+ 1, hid) );
     // End singular
 
     // Begin first-order
     const std::vector<int>& hnode = tree[hid];
-    for (int j = 0; j < hnode.size(); ++ j) {
-      int mid = hnode[j];
+    for (int mid: hnode) {
       int Rel = state.deprels[mid];
       int Dir  = (hid < mid? 0: 1);
       int Dist = (hid < mid?
@@ -222,22 +205,27 @@ CostScoreContext::CostScoreContext(const State& state)
       H_H_M_M_Dist.push_back( __M(hid, hid, mid, mid, Dist) );
 
       // context
-      pH_H_M_Mn.push_back(__M(hid- 1, hid, mid, mid+ 1));
-      pH_H_M.push_back(__M(hid- 1, hid, mid));
-      H_M_Mn.push_back(__M(hid, mid, mid+ 1));
-      pH_H_Mn.push_back(__M(hid- 1, hid, mid+ 1));
-      pH_M_Mn.push_back(__M(hid- 1, mid, mid+ 1));
-      H_nH_pM_M.push_back(__M(hid, hid+1, mid-1, mid));
-      H_nH_pM.push_back(__M(hid, hid+1, mid));
-      nH_pM_M.push_back(__M(hid+1, mid-1, mid));
-      H_nH_M.push_back(__M(hid, hid+1, mid));
-      H_pM_M.push_back(__M(hid, mid-1, mid));
+      if (hid > 0 && mid+ 1 < len) {
+        pH_H_M_Mn.push_back(__M(hid- 1, hid, mid, mid+ 1));
+        pH_H_Mn.push_back(__M(hid- 1, hid, mid+ 1));
+        pH_M_Mn.push_back(__M(hid- 1, mid, mid+ 1));
+      }
+      if (hid+ 1 < len && mid > 0) {
+        H_nH_pM_M.push_back(__M(hid, hid+1, mid-1, mid));
+        nH_pM_M.push_back(__M(hid+1, mid-1, mid));
+      }
+      if (hid+ 1 < len) {
+        H_nH_pM.push_back(__M(hid, hid+1, mid));
+        H_nH_M.push_back(__M(hid, hid+1, mid));
+      }
+      if (mid+ 1 < len) H_M_Mn.push_back(__M(hid, mid, mid+ 1));
+      if (hid > 0)      pH_H_M.push_back(__M(hid- 1, hid, mid));
+      if (mid > 0)      H_pM_M.push_back(__M(hid, mid-1, mid));
     }
     // End first order
 
     for (int j = 1; j < hnode.size(); ++ j) {
       int sid = hnode[j- 1], mid = hnode[j];
-      if ((hid < sid) != (hid < mid)) { continue; }
 
       int Rel = (state.deprels[mid] << 8 | state.deprels[sid]);
       int Dir = (((hid < sid) << 1) | ((hid < mid) << 2));
@@ -250,16 +238,15 @@ CostScoreContext::CostScoreContext(const State& state)
       S_M_Rel.push_back( __M(sid, mid, Rel) );
       S_M_Dir.push_back( __M(sid, mid, Dir) );
 
-      pH_H_S_M.push_back( __M(hid- 1, hid, sid, mid) );
-      H_nH_S_M.push_back( __M(hid, hid+ 1, sid, mid) );
-      H_pS_S_M.push_back( __M(hid, sid- 1, sid, mid) );
-      H_S_nS_M.push_back( __M(hid, sid, sid+ 1, mid) );
-      H_S_pM_M.push_back( __M(hid, sid, mid- 1, mid) );
-      H_S_M_nM.push_back( __M(hid, sid, mid, mid+ 1) );
+      if (hid > 0)      pH_H_S_M.push_back( __M(hid- 1, hid, sid, mid) );
+      if (hid+ 1 < len) H_nH_S_M.push_back( __M(hid, hid+ 1, sid, mid) );
+      if (sid > 0)      H_pS_S_M.push_back( __M(hid, sid- 1, sid, mid) );
+      if (sid+ 1 < len) H_S_nS_M.push_back( __M(hid, sid, sid+ 1, mid) );
+      if (mid > 0)      H_S_pM_M.push_back( __M(hid, sid, mid- 1, mid) );
+      if (mid+ 1 < len) H_S_M_nM.push_back( __M(hid, sid, mid, mid+ 1) );
 
       const std::vector<int>& snode = tree[sid];
-      for (int l = 0; l < snode.size(); ++ l) {
-        int gcid = snode[l];
+      for (int gcid: snode) {
         int Rel = (((state.deprels[mid] << 8) | state.deprels[sid]) << 8)| state.deprels[gcid];
         int Dir = (((hid < mid) << 1) | ((hid < sid) << 2) | ((sid < gcid) << 3));
         H_S_GC_M.push_back(__M(hid, sid, gcid, mid));
@@ -268,8 +255,7 @@ CostScoreContext::CostScoreContext(const State& state)
       }
 
       const std::vector<int>& mnode = tree[mid];
-      for (int l = 0; l < mnode.size(); ++ l) {
-        int gcid = mnode[l];
+      for (int gcid: mnode) {
         int Rel = (((state.deprels[mid] << 8) | state.deprels[sid]) << 8) |state.deprels[gcid];
         int Dir = (((hid < mid) << 1) | ((hid < sid) << 2) | ((mid < gcid) << 3));
         H_S_M_GC.push_back(__M(hid, sid, mid, gcid));
@@ -280,7 +266,6 @@ CostScoreContext::CostScoreContext(const State& state)
 
     for (int j = 2; j < hnode.size(); ++ j) {
       int mid = hnode[j- 2], sid = hnode[j- 1], tid = hnode[j];
-      if ((mid < hid) != (sid < hid) || (mid < hid) != (tid < hid)) { continue; }
       int Rel = ((state.deprels[mid]<<8 | state.deprels[sid]) << 8 | state.deprels[tid]);
       int Dir = ((hid < mid) << 1 | (hid < sid) << 2 | (hid < tid) << 3);
       H_M_S_T.push_back( __M(hid, mid, sid, tid) );
@@ -297,6 +282,7 @@ CostScoreContext::CostScoreContext(const State& state)
     int mid1 = mid - 1;
     int hid = state.heads[mid];
     int hid1 = state.heads[mid1];
+    if (hid == -1 || hid1 == -1) { continue; }
     int Dir = ((hid < mid) << 1 | (hid1 < mid1) << 2);
     H1_H_M1_M.push_back( __M(hid1, hid, mid1, mid) );
     H1_H_M1_M_Dir.push_back( __M(hid1, hid, mid1, mid, Dir) );
@@ -304,12 +290,9 @@ CostScoreContext::CostScoreContext(const State& state)
 
   for (int gid = 0; gid < len; ++ gid) {
     const std::vector<int>& gnode = tree[gid];
-    for (int j = 0; j < gnode.size(); ++ j) {
-      int hid = gnode[j];
-
+    for (int hid: gnode) {
       const std::vector<int>& hnode = tree[hid];
-      for (int k = 0; k < hnode.size(); ++ k) {
-        int mid = hnode[k];
+      for (int mid: hnode) {
         int Rel = (state.deprels[hid]<<8 | state.deprels[mid]);
         int Dir = ((gid < hid) << 1 | (hid < mid) << 2);
 
@@ -321,16 +304,15 @@ CostScoreContext::CostScoreContext(const State& state)
         G_M_Rel.push_back( __M(gid, mid, state.deprels[mid]) );
         G_M_Dir.push_back( __M(gid, mid, Dir) );
 
-        pG_G_P_M.push_back( __M(gid- 1, gid, hid, mid) );
-        G_nG_P_M.push_back( __M(gid, gid+ 1, hid, mid) );
-        G_pP_P_M.push_back( __M(gid, hid- 1, hid, mid) );
-        G_P_nP_M.push_back( __M(gid, hid, hid+ 1, mid) );
-        G_P_pM_M.push_back( __M(gid, hid, mid- 1, mid) );
-        G_P_M_nM.push_back( __M(gid, hid, mid, mid+ 1) );
+        if (gid > 0)       pG_G_P_M.push_back( __M(gid- 1, gid, hid, mid) );
+        if (gid+ 1 < len)  G_nG_P_M.push_back( __M(gid, gid+ 1, hid, mid) );
+        if (hid > 0)       G_pP_P_M.push_back( __M(gid, hid- 1, hid, mid) );
+        if (hid+ 1 < len)  G_P_nP_M.push_back( __M(gid, hid, hid+ 1, mid) );
+        if (mid > 0)       G_P_pM_M.push_back( __M(gid, hid, mid- 1, mid) );
+        if (mid+ 1 < len)  G_P_M_nM.push_back( __M(gid, hid, mid, mid+ 1) );
 
         const std::vector<int>& mnode = tree[mid];
-        for (int l = 0; l < mnode.size(); ++ l) {
-          int cid = mnode[l];
+        for (int cid: mnode) {
           int Rel = ((state.deprels[hid]<<8| state.deprels[mid])<< 8| state.deprels[cid]);
           int Dir = (((gid < hid) << 1) | ((hid < mid) << 2) | ((mid < cid) << 3));
 
@@ -356,7 +338,6 @@ CostScoreContext::CostScoreContext(const State& state)
 
       for (int k = 1; k < hnode.size(); ++ k) {
         int mid = hnode[k- 1], sid = hnode[k];
-        if ((hid < mid) != (hid < sid)) { continue; }
         int Rel = ((state.deprels[hid]<< 8 | state.deprels[mid]) << 8| state.deprels[sid]);
         int Dir = (((gid < hid) << 1) | ((hid < mid) << 2) | ((hid < sid) << 3));
 

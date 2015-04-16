@@ -464,8 +464,7 @@ void Pipe::learn2() {
     const RerankingInstance& instance = dataset2[ranks[n]];
 
     int worst_good_position = -1, best_bad_position = -1;
-    floatval_t highest_phase_one_score = -1e20;
-    floatval_t lowest_phase_one_score = 1e20;
+    floatval_t highest_phase_one_score = -1e20, lowest_phase_one_score = 1e20;
     for (const RerankingInstanceParse& parse: instance.good) {
       highest_phase_one_score = std::max(highest_phase_one_score, parse.score);
       lowest_phase_one_score = std::min(lowest_phase_one_score, parse.score);
@@ -475,13 +474,12 @@ void Pipe::learn2() {
       lowest_phase_one_score = std::min(lowest_phase_one_score, parse.score);
     }
     floatval_t delta = highest_phase_one_score - lowest_phase_one_score;
-
     floatval_t worst_good_score, best_bad_score;
 
     for (int i = 0; i < instance.good.size(); ++ i) {
       Dependency dependency;
       dependency.build(instance.forms, instance.postags,
-          instance.oracle.heads, instance.oracle.deprels);
+          instance.good[i].heads, instance.good[i].deprels);
       State state;
       state.build(dependency, instance.good[i].rank,
           (instance.good[i].score- lowest_phase_one_score) / delta);

@@ -14,6 +14,10 @@ parser.add_option("--ignore-punctuation", dest="ignore_punctuation", default=Fal
         help="specify to include punctuation when calculating loss [default=False].")
 opts, args = parser.parse_args()
 
+if opts.method not in ("gold", "coarse", "fine"):
+    print >> sys.stderr, "unknown method!"
+    sys.exit(1)
+
 if opts.language == "en":
     punc = ("``", ",", ":", ".", "''", "#", "-LRB-", "-RRB-")
 elif opts.language == "ch":

@@ -26,7 +26,7 @@ public:
   CostWeight();
 };
 
-#define G(id, _W) (((id) < 0) ? 1: (((id) >= ctx.len) ? 2: ctx._W[(id)]))
+#define G(id, _W) (ctx._W[(id)])
 
 #define __REGN_1(name) do {                                                 \
   ufeat_map_repo.push_back(uf_map_t(                                        \

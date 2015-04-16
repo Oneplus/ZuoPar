@@ -38,35 +38,14 @@ public:
    */
   void vectorize(const _ScoreContextType& ctx, floatval_t scale,
       SparseVector* sparse_vector) const {
-    int global_id = 0;
-    for (const uf_map_t& repo: ufeat_map_repo) {
-      repo.vectorize(ctx, scale, global_id, sparse_vector);
-      global_id += repo.size();
-    }
-    for (const bf_map_t& repo: bfeat_map_repo) {
-      repo.vectorize(ctx, scale, global_id, sparse_vector);
-      global_id += repo.size();
-    }
-    for (const tf_map_t& repo: tfeat_map_repo) {
-      repo.vectorize(ctx, scale, global_id, sparse_vector);
-      global_id += repo.size();
-    }
-    for (const qf_map_t& repo: qfeat_map_repo) {
-      repo.vectorize(ctx, scale, global_id, sparse_vector);
-      global_id += repo.size();
-    }
-    for (const q5f_map_t& repo: q5feat_map_repo) {
-      repo.vectorize(ctx, scale, global_id, sparse_vector);
-      global_id += repo.size();
-    }
-    for (const hf_map_t& repo: hfeat_map_repo) {
-      repo.vectorize(ctx, scale, global_id, sparse_vector);
-      global_id += repo.size();
-    }
-    for (const sf_map_t& repo: sfeat_map_repo) {
-      repo.vectorize(ctx, scale, global_id, sparse_vector);
-      global_id += repo.size();
-    }
+    int gid = 0;
+    for (const uf_map_t& repo: ufeat_map_repo) { repo.vectorize(ctx, scale, gid++, sparse_vector); }
+    for (const bf_map_t& repo: bfeat_map_repo) { repo.vectorize(ctx, scale, gid++, sparse_vector); }
+    for (const tf_map_t& repo: tfeat_map_repo) { repo.vectorize(ctx, scale, gid++, sparse_vector); }
+    for (const qf_map_t& repo: qfeat_map_repo) { repo.vectorize(ctx, scale, gid++, sparse_vector); }
+    for (const q5f_map_t& repo: q5feat_map_repo){ repo.vectorize(ctx, scale, gid++, sparse_vector);}
+    for (const hf_map_t& repo: hfeat_map_repo) { repo.vectorize(ctx, scale, gid++, sparse_vector); }
+    for (const sf_map_t& repo: sfeat_map_repo) { repo.vectorize(ctx, scale, gid++, sparse_vector); }
   }
 
   /**
@@ -79,35 +58,14 @@ public:
    */
   void vectorize2(const _ScoreContextType& ctx, floatval_t scale,
       SparseVector2* sparse_vector) const {
-    int global_id = 0;
-    for (const uf_map_t& repo: ufeat_map_repo) {
-      repo.vectorize2(ctx, scale, global_id, sparse_vector);
-      ++ global_id;
-    }
-    for (const bf_map_t& repo: bfeat_map_repo) {
-      repo.vectorize2(ctx, scale, global_id, sparse_vector);
-      ++ global_id;
-    }
-    for (const tf_map_t& repo: tfeat_map_repo) {
-      repo.vectorize2(ctx, scale, global_id, sparse_vector);
-      ++ global_id;
-    }
-    for (const qf_map_t& repo: qfeat_map_repo) {
-      repo.vectorize2(ctx, scale, global_id, sparse_vector);
-      ++ global_id;
-    }
-    for (const q5f_map_t& repo: q5feat_map_repo) {
-      repo.vectorize2(ctx, scale, global_id, sparse_vector);
-      ++ global_id;
-    }
-    for (const hf_map_t& repo: hfeat_map_repo) {
-      repo.vectorize2(ctx, scale, global_id, sparse_vector);
-      ++ global_id;
-    }
-    for (const sf_map_t& repo: sfeat_map_repo) {
-      repo.vectorize2(ctx, scale, global_id, sparse_vector);
-      ++ global_id;
-    }
+    int gid = 0;
+    for (const uf_map_t& repo: ufeat_map_repo) { repo.vectorize2(ctx, scale, gid++, sparse_vector); }
+    for (const bf_map_t& repo: bfeat_map_repo) { repo.vectorize2(ctx, scale, gid++, sparse_vector); }
+    for (const tf_map_t& repo: tfeat_map_repo) { repo.vectorize2(ctx, scale, gid++, sparse_vector); }
+    for (const qf_map_t& repo: qfeat_map_repo) { repo.vectorize2(ctx, scale, gid++, sparse_vector); }
+    for (const q5f_map_t& repo: q5feat_map_repo){ repo.vectorize2(ctx, scale, gid++, sparse_vector);}
+    for (const hf_map_t& repo: hfeat_map_repo) { repo.vectorize2(ctx, scale, gid++, sparse_vector); }
+    for (const sf_map_t& repo: sfeat_map_repo) { repo.vectorize2(ctx, scale, gid++, sparse_vector); }
   }
 
   /**
@@ -120,13 +78,13 @@ public:
    */
   floatval_t score(const _ScoreContextType& ctx, bool avg) const {
     floatval_t ret = 0;
-    for (const uf_map_t& repo: ufeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (const bf_map_t& repo: bfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (const tf_map_t& repo: tfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (const qf_map_t& repo: qfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (const q5f_map_t& repo:q5feat_map_repo){ ret += repo.score(ctx, avg, 0.); }
-    for (const hf_map_t& repo: hfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
-    for (const sf_map_t& repo: sfeat_map_repo) { ret += repo.score(ctx, avg, 0.); }
+    for (const uf_map_t& repo: ufeat_map_repo) { ret += repo.score(ctx, avg); }
+    for (const bf_map_t& repo: bfeat_map_repo) { ret += repo.score(ctx, avg); }
+    for (const tf_map_t& repo: tfeat_map_repo) { ret += repo.score(ctx, avg); }
+    for (const qf_map_t& repo: qfeat_map_repo) { ret += repo.score(ctx, avg); }
+    for (const q5f_map_t& repo:q5feat_map_repo){ ret += repo.score(ctx, avg); }
+    for (const hf_map_t& repo: hfeat_map_repo) { ret += repo.score(ctx, avg); }
+    for (const sf_map_t& repo: sfeat_map_repo) { ret += repo.score(ctx, avg); }
     return ret;
   }
 
