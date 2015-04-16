@@ -8,16 +8,16 @@ from optparse import OptionParser
 usage = "generate the pairwised training instance for phase two."
 parser = OptionParser(usage)
 parser.add_option("--language", dest="language", default="en", help="specify the language [default=en]")
-parser.add_option("--include-oracle", dest="include_oracle", default=False, action="store_true",
-        help="specify to include oracle as training instance [default=False]")
+parser.add_option("--method", dest="method", default="fine",
+        help="specify to generating method [default=fine]")
 parser.add_option("--ignore-punctuation", dest="ignore_punctuation", default=False, action="store_true",
         help="specify to include punctuation when calculating loss [default=False].")
 opts, args = parser.parse_args()
 
 if opts.language == "en":
-    punc = ("``", ",", ":", ".", "''", "$", "#", "-LRB-", "-RRB-")
+    punc = ("``", ",", ":", ".", "''", "#", "-LRB-", "-RRB-")
 elif opts.language == "ch":
-    punc = ("WP")
+    punc = ("PU")
 else:
     print >> sys.stderr, "unknown language!"
     sys.exit(1)
@@ -41,31 +41,42 @@ for data in dataset:
     postags = [mat[r][1] for r in xrange(M)]
     oracle = [mat[r][2].rsplit("/", 1) for r in xrange(M)]
     retval = []
-    if opts.include_oracle:
-        retval.append(0)
 
     for i in xrange(3, N):
         predict = [mat[r][i].rsplit("/", 1) for r in xrange(M)]
         retval.append( loss(oracle, predict, postags, opts.ignore_punctuation) )
     ranks = {v: 1 for v in retval}.keys()
-    #print ranks
 
-    first_position = 2 if opts.include_oracle else 3
-
-    for l in sorted(ranks)[:-1]:
+    if opts.method == "gold":
         tokens = header.split()
-        new_header = tokens[:2] + ["oracle"]
+        new_header = tokens[:2] + ["oracle:%s" % tokens[2]]
         mat2 = [line[:3] for line in mat]
-        for i, token in enumerate(tokens[first_position:]):
-            if retval[i] == l:
-                new_header.append("good:%s" % token)
-                for j, row in enumerate(mat2):
-                    row.append(mat[j][i+ first_position])
-            elif retval[i] > l:
+        new_header.append("good:%s" % tokens[2])
+        for j, row in enumerate(mat2): row.append(mat[j][2])
+        for i, token in enumerate(tokens[3:]):
+            if retval[i] > 0:
                 new_header.append("bad:%s" % token)
                 for j, row in enumerate(mat2):
-                    row.append(mat[j][i+ first_position])
+                    row.append(mat[j][i+ 3])
         print " ".join(new_header)
         print "\n".join([" ".join(row) for row in mat2])
         print
-    #sys.exit(1)
+    else:
+        for l in sorted(ranks)[:-1]:
+            tokens = header.split()
+            new_header = tokens[:2] + ["oracle:%s" % tokens[2]]
+            mat2 = [line[:3] for line in mat]
+            for i, token in enumerate(tokens[3:]):
+                if retval[i] == l:
+                    new_header.append("good:%s" % token)
+                    for j, row in enumerate(mat2):
+                        row.append(mat[j][i+ 3])
+                elif retval[i] > l:
+                    new_header.append("bad:%s" % token)
+                    for j, row in enumerate(mat2):
+                        row.append(mat[j][i+ 3])
+            print " ".join(new_header)
+            print "\n".join([" ".join(row) for row in mat2])
+            print
+            if opts.method == "coarse":
+                break

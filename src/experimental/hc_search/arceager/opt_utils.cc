@@ -54,10 +54,6 @@ po::options_description build_phase_two_learn_optparser(const std::string& usage
     ("phase-two-model", po::value<std::string>(), "The path to the phase two model.")
     ("root",    po::value<std::string>(), "The root tag [default=ROOT].")
     ("language",po::value<std::string>(), "The language [default=en].")
-    ("method",  po::value<std::string>(), "The learning method.\n"
-                                           " gold - The gold ranker [default]\n"
-                                           " coarse - The coarse ranker, \n"
-                                           " fine - The find ranker \n")
     ("ignore-punctuation", "Ignore the punctuation when calculating loss.")
     ("extract-punctuation", "Extract the punctuation when extracting features.")
     ("verbose,v", "Logging every detail.")
@@ -272,17 +268,6 @@ bool parse_phase_two_learn_option(const po::variables_map& vm, LearnTwoOption& o
   if (vm.count("ignore-punctuation")) { opts.ignore_punctuation = true; }
   opts.extract_punctuation = false;
   if (vm.count("extract-punctuation")) { opts.extract_punctuation = true; }
-  opts.method = "or";
-  if (vm.count("method")) {
-    if (vm["method"].as<std::string>() == "gold" ||
-        vm["method"].as<std::string>() == "coarse" ||
-        vm["method"].as<std::string>() == "fine") {
-      opts.method = vm["method"].as<std::string>();
-    } else {
-      _WARN << "parse opt: unknown learning method \""
-        << vm["method"].as<std::string>() << "\".";
-    }
-  }
   return true;
 }
 

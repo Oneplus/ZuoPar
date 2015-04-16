@@ -36,7 +36,6 @@ struct LearnTwoOption:
   public PhaseTwoLanguageOption {
   bool ignore_punctuation;
   bool extract_punctuation;
-  std::string method;
 };
 
 struct EvaluateOption:

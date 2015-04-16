@@ -118,15 +118,6 @@ private:
       const floatval_t& bad_score,
       int timestamp);
 
-  //
-  void learn2_gold_ranker();
-
-  //
-  void learn2_coarse_ranker();
-
-  //!
-  void learn2_fine_ranker();
-
   enum PipeModeExt {
     kPipeLearnPhaseOne,
     kPipePreparePhaseTwo,
@@ -141,12 +132,6 @@ private:
     kPipeLearnOneWorst
   };
 
-  enum PipeLearnTwoMethod {
-    kPipeLearnTwoGoldRanker,
-    kPipeLearnTwoCoarseRanker,
-    kPipeLearnTwoFineRanker
-  };
-
   typedef boost::tuple<
     DependencyWrapper,
     DependencyWrapper,
@@ -154,7 +139,6 @@ private:
 
   PipeModeExt mode_ext;                 //! The global mode flag.
   PipeLearnOneMethod learn_one_method;  //! The learning method for 1st phase.
-  PipeLearnTwoMethod learn_two_method;  //! The learning method for 2nd phase.
 
   bool ignore_punctuation;
   bool rerank;                      //! Use to specify rerank.

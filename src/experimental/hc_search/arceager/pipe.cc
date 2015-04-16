@@ -50,11 +50,6 @@ Pipe::Pipe(const LearnTwoOption& opts)
   language = opts.language;
   _INFO << "report: (phase#2.learn) language = " << language;
 
-  if      (opts.method == "gold")   { learn_two_method = kPipeLearnTwoGoldRanker; }
-  else if (opts.method == "coarse") { learn_two_method = kPipeLearnTwoCoarseRanker; }
-  else if (opts.method == "fine")   { learn_two_method = kPipeLearnTwoFineRanker; }
-  _INFO << "report: (phase#2.learn) learning method = " << opts.method;
-
   ignore_punctuation = opts.ignore_punctuation;
   _INFO << "report: (phase#2.learn) " << (opts.ignore_punctuation ? "" : "not ")
     << "ignore punctuation when calculating loss.";
@@ -448,100 +443,15 @@ void Pipe::learn2_learn_from_pair(const Dependency& oracle,
   }
 }
 
-
-void Pipe::learn2_gold_ranker() {
-  std::vector< train_tuple_t > train_data;
-
-  for (const RerankingInstance& instance: dataset2) {
-    DependencyWrapper oracle(instance.forms, instance.postags,
-        instance.oracle.heads, instance.oracle.deprels);
-
-    for (const RerankingInstanceParse& parse: instance.good) {
-      train_data.push_back( boost::make_tuple(
-            oracle,
-            oracle,
-            DependencyWrapper(instance.forms, instance.postags, parse.heads, parse.deprels)
-            ) );
-    }
-
-    for (const RerankingInstanceParse& parse: instance.bad) {
-      train_data.push_back( boost::make_tuple(
-            oracle,
-            oracle,
-            DependencyWrapper(instance.forms, instance.postags, parse.heads, parse.deprels)
-            ) );
-    }
+void Pipe::learn2() {
+  namespace ioutils = ZuoPar::IO;
+  if (mode_ext != kPipeLearnPhaseTwo) {
+    _WARN << "Pipe: learn phase two not specified.";
+    return;
   }
 
-  int N = train_data.size();
-  _INFO << "report: generate #" << N << " training pairs.";
+  if (!setup2()) { return; }
 
-  std::vector<std::size_t> ranks; for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
-  while (shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
-
-  cost_learner = new CostLearner(cost_weight, this->algorithm);
-
-  for (size_t n = 0; n < N; ++ n) {
-    Dependency oracle_instance, good_instance, bad_instance;
-    wrapper_to_instance(train_data[ranks[n]].get<0>(), oracle_instance);
-    wrapper_to_instance(train_data[ranks[n]].get<1>(), good_instance);
-    wrapper_to_instance(train_data[ranks[n]].get<2>(), bad_instance);
-
-    learn2_learn_from_pair(oracle_instance, good_instance, bad_instance, 1, 1, 0, 0, n+ 1);
-    if ((n+ 1) % display_interval == 0) {
-      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
-    }
-  }
-  _INFO << "pipe: processed #" << N << " instances.";
-  cost_learner->set_timestamp(N);
-  cost_learner->flush();
-  _INFO << "pipe: nr errors: " << cost_learner->errors() << "/" << N;
-  phase_two_save_model(phase_two_model_path);
-};
-
-void Pipe::learn2_coarse_ranker() {
-  std::vector< train_tuple_t > train_data;
-
-  for (const RerankingInstance& instance: dataset2) {
-    DependencyWrapper oracle(instance.forms, instance.postags,
-        instance.oracle.heads, instance.oracle.deprels);
-    for (const RerankingInstanceParse& good: instance.good) {
-      for (const RerankingInstanceParse& bad: instance.bad) {
-        train_data.push_back( boost::make_tuple(
-              oracle,
-              DependencyWrapper(instance.forms, instance.postags, good.heads, good.deprels),
-              DependencyWrapper(instance.forms, instance.postags, bad.heads, bad.deprels)
-              ) );
-      }
-    }
-  }
-  int N = train_data.size();
-  _INFO << "report: generate #" << N << " training pairs.";
-
-  std::vector<std::size_t> ranks; for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
-  while (shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
-
-  cost_learner = new CostLearner(cost_weight, this->algorithm);
-  for (size_t n = 0; n < N; ++ n) {
-    Dependency oracle_instance, good_instance, bad_instance;
-    wrapper_to_instance(train_data[ranks[n]].get<0>(), oracle_instance);
-    wrapper_to_instance(train_data[ranks[n]].get<1>(), good_instance);
-    wrapper_to_instance(train_data[ranks[n]].get<2>(), bad_instance);
-
-    learn2_learn_from_pair(oracle_instance, good_instance, bad_instance, 1, 1, 0, 0, n+ 1);
-    if ((n+ 1) % display_interval == 0) {
-      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
-    }
-  }
-  _INFO << "pipe: processed #" << N << " instances.";
-  cost_learner->set_timestamp(N);
-  cost_learner->flush();
-  _INFO << "pipe: nr errors: " << cost_learner->errors() << "/" << N;
-  phase_two_save_model(phase_two_model_path);
-
-};
-
-void Pipe::learn2_fine_ranker() {
   size_t N = dataset2.size();
 
   std::vector<std::size_t> ranks;
@@ -629,26 +539,6 @@ void Pipe::learn2_fine_ranker() {
 
   _INFO << "pipe: nr errors: " << cost_learner->errors() << "/" << N;
   phase_two_save_model(phase_two_model_path);
-}
-
-void Pipe::learn2() {
-  namespace ioutils = ZuoPar::IO;
-  if (mode_ext != kPipeLearnPhaseTwo) {
-    _WARN << "Pipe: learn phase two not specified.";
-    return;
-  }
-
-  if (!setup2()) { return; }
-
-  if (learn_two_method == kPipeLearnTwoGoldRanker) {
-    learn2_gold_ranker();
-  } else if (learn_two_method == kPipeLearnTwoCoarseRanker) {
-    learn2_coarse_ranker();
-  } else if (learn_two_method == kPipeLearnTwoFineRanker) {
-    learn2_fine_ranker();
-  } else {
-    _ERROR << "unknown learning method.";
-  }
 }
 
 void Pipe::run() {
