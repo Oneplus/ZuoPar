@@ -19,7 +19,7 @@ if opts.method not in ("gold", "coarse", "fine"):
     sys.exit(1)
 
 if opts.language == "en":
-    punc = ("``", ",", ":", ".", "''", "#", "-LRB-", "-RRB-")
+    punc = ("``", ",", ":", ".", "''", "-LRB-", "-RRB-")
 elif opts.language == "ch":
     punc = ("PU")
 else:
@@ -31,8 +31,11 @@ def loss(oracle, predict, postags, ignore_punctuation):
     for i, (o, p) in enumerate(zip(oracle, predict)):
         if ignore_punctuation and postags[i] in punc:
             continue
-        if o[0] != p[0] or o[1] != p[1]:
-            retval += 1
+        if o[0] != p[0]:
+            retval += 2
+        else:
+            if o[1] != p[1]:
+                retval += 1
     return retval
 
 dataset = open(args[0], "r").read().strip().split("\n\n")

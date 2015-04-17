@@ -221,9 +221,9 @@ CostWeight::CostWeight() {
     __REG_3(G_P_M, postags, forms, postags);
     __REG_3(G_P_M, postags, postags, forms);
 
-    __REG_2(G_M, postags, postags);
-    __REG_2(G_M, forms, postags);
-    __REG_2(G_M, postags, forms);
+    // __REG_2(G_M, postags, postags);
+    // __REG_2(G_M, forms, postags);
+    // __REG_2(G_M, postags, forms);
 
     // direction
     __REGN_4(G_P_M_Dir, postags, postags, postags);
@@ -234,6 +234,7 @@ CostWeight::CostWeight() {
     __REGN_3(G_M_Dir, postags, postags);
     __REGN_3(G_M_Dir, forms, postags);
     __REGN_3(G_M_Dir, postags, forms);
+    __REGN_3(G_M_Dir, forms, forms);
 
     // deprels
     __REGN_4(G_P_M_Rel, postags, postags, postags);
@@ -241,12 +242,12 @@ CostWeight::CostWeight() {
     __REGN_4(G_P_M_Rel, postags, forms, postags);
     __REGN_4(G_P_M_Rel, postags, postags, forms);
 
-    __REGN_3(G_M_Rel, postags, postags);
-    __REGN_3(G_M_Rel, forms, postags);
-    __REGN_3(G_M_Rel, postags, forms);
+    // __REGN_3(G_M_Rel, postags, postags);
+    // __REGN_3(G_M_Rel, forms, postags);
+    // __REGN_3(G_M_Rel, postags, forms);
 
     // context
-    __REG_4(pG_G_P_M, postags, postags, postags, postags);
+    /*__REG_4(pG_G_P_M, postags, postags, postags, postags);
     __REG_4(G_nG_P_M, postags, postags, postags, postags);
     __REG_4(G_pP_P_M, postags, postags, postags, postags);
     __REG_4(G_P_nP_M, postags, postags, postags, postags);
@@ -272,7 +273,7 @@ CostWeight::CostWeight() {
     __REG_4(G_pP_P_M, postags, postags, postags, forms);
     __REG_4(G_P_nP_M, postags, postags, postags, forms);
     __REG_4(G_P_pM_M, postags, postags, postags, forms);
-    __REG_4(G_P_M_nM, postags, postags, forms, postags);
+    __REG_4(G_P_M_nM, postags, postags, forms, postags);*/
 
     __REG_4(H1_H_M1_M, postags, postags, postags, postags);
     __REGN_5(H1_H_M1_M_Dir, postags, postags, postags, postags);

@@ -93,13 +93,15 @@ Pipe::Pipe(const TestOption& opts)
   cost_weight(0),
   cost_learner(0),
   decoder(0),
+  rerank(false),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
   root = opts.root;
 
   extract_punctuation = opts.extract_punctuation;
-  _INFO << "report: (phase#2.learn) " << (opts.extract_punctuation ? "" : "not ")
+  _INFO << "report: (test) " << (opts.extract_punctuation ? "" : "not ")
     << "extract punctuation when feature extraction.";
 
+  rerank = opts.rerank;
   language = opts.language;
   _INFO << "report: (test) language = " << language;
   phase_one_model_path = opts.phase_one_model_path;
@@ -224,7 +226,7 @@ void Pipe::build_knowledge() {
     PUNC_POS.insert(postags_alphabet.encode("."));
     PUNC_POS.insert(postags_alphabet.encode("''"));
     // PUNC_POS.insert(postags_alphabet.encode("$"));
-    PUNC_POS.insert(postags_alphabet.encode("#"));
+    // PUNC_POS.insert(postags_alphabet.encode("#"));
     PUNC_POS.insert(postags_alphabet.encode("-LRB-"));
     PUNC_POS.insert(postags_alphabet.encode("-RRB-"));
     // Conjunction.
@@ -418,20 +420,18 @@ void Pipe::wrapper_to_instance(const DependencyWrapper& wrapper, Dependency& ins
 void Pipe::learn2_learn_from_pair(const Dependency& oracle,
     const Dependency& good,
     const Dependency& bad,
+    const State& good_state,
+    const State& bad_state,
     const floatval_t& good_score,
     const floatval_t& bad_score,
-    const int& good_rank,
-    const int& bad_rank,
-    const floatval_t& good_phase_one_score,
-    const floatval_t& bad_phase_one_score,
     int timestamp) {
-  State good_state, bad_state;
-  good_state.build(good, good_rank, good_phase_one_score);
-  bad_state.build(bad, bad_rank, bad_phase_one_score);
-
   int dummy;
-  int good_loss = loss(good, oracle, true, ignore_punctuation, dummy);
-  int bad_loss = loss(bad, oracle, true, ignore_punctuation, dummy);
+  int good_loss =
+    (wrong(good, oracle, false, ignore_punctuation, dummy) +
+     wrong(good, oracle, true, ignore_punctuation, dummy));
+  int bad_loss =
+    (wrong(bad, oracle, false, ignore_punctuation, dummy) +
+     wrong(bad, oracle, true, ignore_punctuation, dummy));
   int delta_loss = bad_loss - good_loss;
   //_TRACE << "loss: " << loss1;
 
@@ -474,7 +474,8 @@ void Pipe::learn2() {
     }
     floatval_t delta = highest_phase_one_score - lowest_phase_one_score;
     floatval_t worst_good_score, best_bad_score;
-
+    State worst_good_state, best_bad_state;
+    
     for (int i = 0; i < instance.good.size(); ++ i) {
       Dependency dependency;
       dependency.build(instance.forms, instance.postags,
@@ -486,6 +487,7 @@ void Pipe::learn2() {
       if (worst_good_position == -1 || score < worst_good_score) {
         worst_good_position = i;
         worst_good_score = score;
+        worst_good_state.copy(state);
       }
     }
 
@@ -500,6 +502,7 @@ void Pipe::learn2() {
       if (best_bad_position == -1 || score > best_bad_score) {
         best_bad_position = i;
         best_bad_score = score;
+        best_bad_state.copy(state);
       }
     }
 
@@ -511,21 +514,20 @@ void Pipe::learn2() {
       continue;
     }
 
-    Dependency oracle_instance, good_instance, bad_instance;
+    Dependency oracle_instance, worst_good_instance, best_bad_instance;
     oracle_instance.build(instance.forms, instance.postags,
         instance.oracle.heads, instance.oracle.deprels);
-    good_instance.build(instance.forms, instance.postags,
+    worst_good_instance.build(instance.forms, instance.postags,
         instance.good[worst_good_position].heads,
         instance.good[worst_good_position].deprels);
-    bad_instance.build(instance.forms, instance.postags,
+    best_bad_instance.build(instance.forms, instance.postags,
         instance.bad[best_bad_position].heads,
         instance.bad[best_bad_position].deprels);
+    worst_good_state.ref = &worst_good_instance;
+    best_bad_state.ref = &best_bad_instance;
 
-    learn2_learn_from_pair(oracle_instance, good_instance, bad_instance,
-        worst_good_score, best_bad_score,
-        instance.good[worst_good_position].rank, instance.good[worst_good_position].score,
-        instance.bad[best_bad_position].rank, instance.bad[best_bad_position].score,
-        n+ 1);
+    learn2_learn_from_pair(oracle_instance, worst_good_instance, best_bad_instance,
+        worst_good_state, best_bad_state, worst_good_score, best_bad_score, n+ 1);
     if ((n+ 1) % display_interval == 0) {
       _INFO << "pipe: processed #" << (n+ 1) << " instances.";
     }
@@ -629,13 +631,6 @@ void Pipe::run() {
     } else if (mode_ext == kPipePreparePhaseTwo) {
       std::vector<State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
-      int best_loss = instance.size(), dummy;
-      for (const State* candidate_result: final_results) {
-        Dependency output; build_output((*candidate_result), output);
-        int loss1 = loss(output, instance, true, true, dummy);
-        if (loss1 < best_loss) { best_loss = loss1; }
-      }
-
       std::sort(final_results.begin(), final_results.end(),
           [](const State* x,  const State* y) -> bool { return x->score > y->score; });
 
@@ -672,8 +667,8 @@ void Pipe::run() {
       floatval_t one_avg_uas = 0, one_avg_las = 0;
       for (const State* candidate_result: final_results) {
         Dependency output; build_output((*candidate_result), output);
-        loss1 = loss(output, instance, true, true, nr_effective_tokens);
-        loss2 = loss(output, instance, false, true, nr_effective_tokens);
+        loss1 = wrong(output, instance, true, ignore_punctuation, nr_effective_tokens);
+        loss2 = wrong(output, instance, false, ignore_punctuation, nr_effective_tokens);
 
         if (0 == loss1) {
           correct_in_beam = true;
@@ -803,7 +798,7 @@ void Pipe::build_output(const State& source, Dependency& output) {
   }
 }
 
-int Pipe::loss(const Dependency& predict, const Dependency& oracle,
+int Pipe::wrong(const Dependency& predict, const Dependency& oracle,
     bool labeled, bool ignore_punctuation, int& nr_effective_tokens) {
   int N = predict.size();
   int err = 0;

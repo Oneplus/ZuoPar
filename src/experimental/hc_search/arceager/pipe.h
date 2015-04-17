@@ -102,7 +102,7 @@ private:
   bool is_punctuation(const form_t& postag);
 
   //! Calculate the loss of the predicted dependency tree
-  int loss(const Dependency& predict, const Dependency& oracle,
+  int wrong(const Dependency& predict, const Dependency& oracle,
       bool labeled, bool ignore_punctuation, int& nr_effective_tokens);
 
   //
@@ -112,12 +112,10 @@ private:
   void learn2_learn_from_pair(const Dependency& oracle,
       const Dependency& good,
       const Dependency& bad,
+      const State& good_state,
+      const State& bad_state,
       const floatval_t& good_score,
       const floatval_t& bad_score,
-      const int& good_rank,
-      const int& bad_rank, 
-      const floatval_t& good_phase_one_score,
-      const floatval_t& bad_phase_one_score,
       int timestamp);
 
   enum PipeModeExt {
@@ -134,15 +132,10 @@ private:
     kPipeLearnOneWorst
   };
 
-  typedef boost::tuple<
-    DependencyWrapper,
-    DependencyWrapper,
-    DependencyWrapper> train_tuple_t;
-
   PipeModeExt mode_ext;                 //! The global mode flag.
   PipeLearnOneMethod learn_one_method;  //! The learning method for 1st phase.
 
-  bool ignore_punctuation;
+  bool ignore_punctuation;          //! Use to specify to ignore punctuation
   bool rerank;                      //! Use to specify rerank.
   std::string root;                 //! The root relation string.
   std::string language;             //! The language.
