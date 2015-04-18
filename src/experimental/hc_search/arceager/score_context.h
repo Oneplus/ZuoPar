@@ -106,7 +106,7 @@ public:
   std::vector< T4 > H_S_M_Dir; // ! Dir is collasped.
   std::vector< T4 > H_S_M_Rel;
   std::vector< T2 > S_M;
-  std::vector< T3 > S_M_Dir;
+  std::vector< T3 > S_M_Dist;
   std::vector< T3 > S_M_Rel;
   // - context
   std::vector< T4 > pH_H_S_M;
@@ -171,7 +171,10 @@ public:
   std::vector< T3 > H_M_T;
   std::vector< T4 > H_M_T_Rel;
   std::vector< T4 > H_M_T_Dir;
-  //! End for 3rd-order tri-sibling
+  std::vector< T3 > M_S_T;
+  std::vector< T4 > M_S_T_Rel;
+  std::vector< T4 > M_S_T_Dir;
+ //! End for 3rd-order tri-sibling
 
   //! Begin 3rd-order pp attachment.
   std::vector< T2 > PP_H_M;

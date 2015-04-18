@@ -131,6 +131,9 @@ Pipe::Pipe(const EvaluateOption& opts)
   root = opts.root;
   language = opts.language;
   _INFO << "report: (evaluate) language = " << language;
+  ignore_punctuation = opts.ignore_punctuation;
+  _INFO << "report: (phase#2.learn) " << (opts.ignore_punctuation ? "" : "not ")
+    << "ignore punctuation when calculating loss.";
   phase_one_model_path = opts.phase_one_model_path;
   if (phase_one_load_model(phase_one_model_path)) {
     _INFO << "report: (evaluate) model is loaded.";
@@ -607,12 +610,11 @@ void Pipe::run() {
         }
 
         if (!oracle_in_beam) {
+          heuristic_learner->set_timestamp(n+ 1);
           if (learn_one_method == kPipeLearnOneBest) {
-            heuristic_learner->set_timestamp(n+ 1);
             heuristic_learner->learn(result.first, result.second);
           } else if (learn_one_method == kPipeLearnOneRandom) {
             const State* random_state = final_results[rand() % final_results.size()];
-            heuristic_learner->set_timestamp(n+ 1);
             heuristic_learner->learn(random_state, result.second);
           } else if (learn_one_method == kPipeLearnOneWorst) {
             const State* worst_state = NULL;
@@ -623,7 +625,6 @@ void Pipe::run() {
                 worst_score = candidate_result->score;
               }
             }
-            heuristic_learner->set_timestamp(n+ 1);
             heuristic_learner->learn(worst_state, result.second);
           }
         }

@@ -70,7 +70,7 @@ public:
   void vectorize(const _ScoreContextType& ctx, const floatval_t& scale,
       int gid, SparseVector* sparse_vector) const {
     //! Use to cache extracted features.
-    cache_t cache;
+    cache_t cache; cache.reserve(128);
     extractor(ctx, cache);
     for (const feature_t& entry: cache) {
       std::size_t seed = 0;
@@ -91,7 +91,7 @@ public:
    */
   void vectorize2(const _ScoreContextType& ctx, const floatval_t& scale,
       int gid, SparseVector2* sparse_vector) const {
-    cache_t cache;
+    cache_t cache; cache.reserve(128);
     extractor(ctx, cache);
     for (const feature_t& entry: cache) {
       const std::pair<int, std::size_t>& key =
@@ -113,7 +113,7 @@ public:
    *  @return     floatval_t  The score.
    */
   floatval_t score(const _ScoreContextType& ctx, bool avg) const {
-    cache_t cache;
+    cache_t cache; cache.reserve(128);
     extractor(ctx, cache);
     floatval_t ret = 0.;
     for (const feature_t& entry: cache) {
@@ -133,7 +133,7 @@ public:
    *  @param[in]  scale The updated scale.
    */
   void update(const _ScoreContextType& ctx, int now, floatval_t scale = 1.) {
-    cache_t cache;
+    cache_t cache; cache.reserve(128);
     extractor(ctx, cache);
     for (const feature_t& entry: cache) {
       param_t& param = rep[entry];
@@ -172,11 +172,9 @@ public:
   }
 
 private:
-  //! The mapping facility.
-  map_t rep;
+  map_t rep;              //! The mapping facility.
+  extractor_t extractor;  //! The feature extracting functor.
 
-  //! The feature extracting functor.
-  extractor_t extractor;
 };
 
 }

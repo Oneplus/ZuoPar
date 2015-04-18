@@ -169,10 +169,10 @@ CostWeight::CostWeight() {
     __REGN_4(H_S_M_Dir, postags, forms, postags);
     __REGN_4(H_S_M_Dir, postags, postags, forms);
 
-    __REGN_3(S_M_Dir, postags, postags);
-    __REGN_3(S_M_Dir, forms, forms);
-    __REGN_3(S_M_Dir, postags, forms);
-    __REGN_3(S_M_Dir, forms, postags);
+    __REGN_3(S_M_Dist, postags, postags);
+    __REGN_3(S_M_Dist, forms, forms);
+    __REGN_3(S_M_Dist, postags, forms);
+    __REGN_3(S_M_Dist, forms, postags);
 
     // deprels
     __REGN_4(H_S_M_Rel, postags, postags, postags);
@@ -180,13 +180,13 @@ CostWeight::CostWeight() {
     __REGN_4(H_S_M_Rel, postags, forms, postags);
     __REGN_4(H_S_M_Rel, postags, postags, forms);
 
-    __REGN_3(S_M_Rel, postags, postags);
+    /*__REGN_3(S_M_Rel, postags, postags);
     __REGN_3(S_M_Rel, forms, forms);
     __REGN_3(S_M_Rel, postags, forms);
-    __REGN_3(S_M_Rel, forms, postags);
+    __REGN_3(S_M_Rel, forms, postags);*/
 
     // - Context
-    __REG_4(pH_H_S_M, postags, postags, postags, postags);
+    /*__REG_4(pH_H_S_M, postags, postags, postags, postags);
     __REG_4(H_nH_S_M, postags, postags, postags, postags);
     __REG_4(H_pS_S_M, postags, postags, postags, postags);
     __REG_4(H_S_nS_M, postags, postags, postags, postags);
@@ -212,7 +212,7 @@ CostWeight::CostWeight() {
     __REG_4(H_pS_S_M, postags, postags, postags, forms);
     __REG_4(H_S_nS_M, postags, postags, postags, forms);
     __REG_4(H_S_pM_M, postags, postags, postags, forms);
-    __REG_4(H_S_M_nM, postags, postags, forms, postags);
+    __REG_4(H_S_M_nM, postags, postags, forms, postags);*/
   } // end for 2nd-order sibling
 
   /*begin 2nd-order: grandparent*/ {
@@ -400,6 +400,16 @@ CostWeight::CostWeight() {
     __REGN_4(H_M_T_Dir, forms, postags, postags);
     __REGN_4(H_M_T_Dir, postags, forms, postags);
     __REGN_4(H_M_T_Dir, postags, postags, forms);
+
+    __REG_3(M_S_T, postags, postags, postags);
+    __REG_3(M_S_T, forms, postags, postags);
+    __REG_3(M_S_T, postags, forms, postags);
+    __REG_3(M_S_T, postags, postags, forms);
+
+    __REGN_4(M_S_T_Dir, postags, postags, postags);
+    __REGN_4(M_S_T_Dir, forms, postags, postags);
+    __REGN_4(M_S_T_Dir, postags, forms, postags);
+    __REGN_4(M_S_T_Dir, postags, postags, forms);
 
     //__REGN_4(H_M_T_Rel, postags, postags, postags);
     //__REGN_4(H_M_T_Rel, forms, postags, postags);

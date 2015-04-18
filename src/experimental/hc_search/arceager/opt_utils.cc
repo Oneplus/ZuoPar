@@ -279,7 +279,6 @@ bool parse_phase_two_prepare_option(const po::variables_map& vm, PrepareTwoOptio
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
     return false; }
-  // opts.oracle = false; if (vm.count("oracle")) { opts.oracle = true; }
   return true;
 }
 
@@ -307,6 +306,8 @@ bool parse_evaluate_option(const po::variables_map& vm, EvaluateOption& opts) {
   if (!parse_phase_one_model_option(vm, static_cast<PhaseOneModelOption&>(opts))) { return false; }
   if (!parse_phase_two_language_option(vm, static_cast<PhaseTwoLanguageOption&>(opts))) {
     return false; }
+  opts.ignore_punctuation = false;
+  if (vm.count("ignore-punctuation")) { opts.ignore_punctuation = true; }
   return true;
 }
 

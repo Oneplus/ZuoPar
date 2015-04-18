@@ -236,6 +236,7 @@ CostScoreContext::CostScoreContext(const State& state)
 
     for (int j = 1; j < hnode.size(); ++ j) {
       int sid = hnode[j- 1], mid = hnode[j];
+      if ((sid - hid) * (mid- hid) < 0) { continue; }
 
       int Rel = (state.deprels[mid] << 8 | state.deprels[sid]);
       int Dir = (((hid < sid) << 1) | ((hid < mid) << 2));
@@ -244,9 +245,10 @@ CostScoreContext::CostScoreContext(const State& state)
       H_S_M_Rel.push_back( __M(hid, sid, mid, Rel) );
       H_S_M_Dir.push_back( __M(hid, sid, mid, Dir) );
 
+      int Dist = Math::binned_1_2_3_4_5_6_10[mid- sid];
       S_M.push_back( __M(sid, mid) );
       S_M_Rel.push_back( __M(sid, mid, Rel) );
-      S_M_Dir.push_back( __M(sid, mid, Dir) );
+      S_M_Dist.push_back( __M(sid, mid, Dist) );
 
       if (hid > 0)      pH_H_S_M.push_back( __M(hid- 1, hid, sid, mid) );
       if (hid+ 1 < len) H_nH_S_M.push_back( __M(hid, hid+ 1, sid, mid) );
@@ -258,7 +260,7 @@ CostScoreContext::CostScoreContext(const State& state)
       const std::vector<int>& snode = tree[sid];
       for (int gcid: snode) {
         int Rel = (((state.deprels[mid] << 8) | state.deprels[sid]) << 8)| state.deprels[gcid];
-        int Dir = (((hid < mid) << 1) | ((hid < sid) << 2) | ((sid < gcid) << 3));
+        int Dir = (((hid < sid) << 1) | ((sid < gcid) << 2));
         H_S_GC_M.push_back(__M(hid, sid, gcid, mid));
         H_S_GC_M_Rel.push_back(__M(hid, sid, gcid, mid, Rel));
         H_S_GC_M_Dir.push_back(__M(hid, sid, gcid, mid, Dir));
@@ -267,7 +269,7 @@ CostScoreContext::CostScoreContext(const State& state)
       const std::vector<int>& mnode = tree[mid];
       for (int gcid: mnode) {
         int Rel = (((state.deprels[mid] << 8) | state.deprels[sid]) << 8) |state.deprels[gcid];
-        int Dir = (((hid < mid) << 1) | ((hid < sid) << 2) | ((mid < gcid) << 3));
+        int Dir = (((hid < mid) << 1) | ((mid < gcid) << 2));
         H_S_M_GC.push_back(__M(hid, sid, mid, gcid));
         H_S_M_GC_Rel.push_back(__M(hid, sid, mid, gcid, Rel));
         H_S_M_GC_Dir.push_back(__M(hid, sid, mid, gcid, Dir));
@@ -276,8 +278,9 @@ CostScoreContext::CostScoreContext(const State& state)
 
     for (int j = 2; j < hnode.size(); ++ j) {
       int mid = hnode[j- 2], sid = hnode[j- 1], tid = hnode[j];
+      if ((mid - hid) * (tid- hid) < 0) { continue; }
       int Rel = ((state.deprels[mid]<<8 | state.deprels[sid]) << 8 | state.deprels[tid]);
-      int Dir = ((hid < mid) << 1 | (hid < sid) << 2 | (hid < tid) << 3);
+      int Dir = (hid < sid);
       H_M_S_T.push_back( __M(hid, mid, sid, tid) );
       H_M_S_T_Rel.push_back( __M(hid, mid, sid, tid, Rel) );
       H_M_S_T_Dir.push_back( __M(hid, mid, sid, tid, Dir) );
@@ -285,6 +288,10 @@ CostScoreContext::CostScoreContext(const State& state)
       H_M_T.push_back( __M(hid, mid, tid) );
       H_M_T_Rel.push_back( __M(hid, mid, tid, Rel) );
       H_M_T_Dir.push_back( __M(hid, mid, tid, Dir) );
+
+      M_S_T.push_back( __M(mid, sid, tid) );
+      M_S_T_Rel.push_back( __M(mid, sid, tid, Rel) );
+      M_S_T_Dir.push_back( __M(mid, sid, tid, Dir) );
     }
   }
 
@@ -349,8 +356,10 @@ CostScoreContext::CostScoreContext(const State& state)
 
       for (int k = 1; k < hnode.size(); ++ k) {
         int mid = hnode[k- 1], sid = hnode[k];
+        if ((sid - hid) * (mid- hid) < 0) { continue; }
+
         int Rel = ((state.deprels[hid]<< 8 | state.deprels[mid]) << 8| state.deprels[sid]);
-        int Dir = (((gid < hid) << 1) | ((hid < mid) << 2) | ((hid < sid) << 3));
+        int Dir = (((gid < hid) << 1) | ((hid < mid) << 2));
 
         G_P_M_S.push_back( __M(gid, hid, mid, sid) );
         G_P_M_S_Rel.push_back( __M(gid, hid, mid, sid, Rel) );

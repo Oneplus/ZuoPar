@@ -5,15 +5,8 @@ namespace ZuoPar {
 namespace Experimental {
 namespace HCSearchDependencyParser {
 
-State::State()
-  : ref(0) {
-  clear();
-}
-
-State::State(const Dependency& r)
-  : ref(&r) {
-  clear();
-}
+State::State(): ref(0) { clear(); }
+State::State(const Dependency& r): ref(&r) { clear(); }
 
 void State::build(const Dependency& r) {
   ref = &r;
