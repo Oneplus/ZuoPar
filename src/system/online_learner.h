@@ -55,13 +55,14 @@ public:
         score += (*correct_score);
         score -= (*predict_score);
       }
-      model->vectorize2((*correct_state), 1., &updated_vector);
+      /*model->vectorize2((*correct_state), 1., &updated_vector);
       model->vectorize2((*predict_state), -1., &updated_vector);
 
       for (SparseVector2::const_iterator i = updated_vector.begin();
           i != updated_vector.end(); ++ i) {
         norm += (i->second * i->second);
-      }
+      }*/
+      norm = model->diff_norm((*correct_state), (*predict_state));
 
       _TRACE << "learn: norm = " << norm;
       floatval_t step = 0.;

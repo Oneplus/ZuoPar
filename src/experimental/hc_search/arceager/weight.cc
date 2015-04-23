@@ -86,7 +86,7 @@ HeuristicWeight::HeuristicWeight() {
 }
 
 CostWeight::CostWeight() {
-  /*Begin singular*/ {
+  /*Begin singular*/ /*{
     __REG_1(H, deprels);
     __REG_2(H_H, postags, deprels);
     __REG_2(H_H, forms, deprels);
@@ -94,7 +94,7 @@ CostWeight::CostWeight() {
     __REG_3(H_pH_H, postags, postags, deprels);
     __REG_3(H_nH_H, postags, postags, deprels);
     __REG_4(pH_H_nH_H, postags, postags, postags, deprels);
-  } //! End singular
+  }*/ //! End singular
 
   /* Begin 1st-order */ {
     __REG_2(H_M, forms, forms);

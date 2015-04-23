@@ -68,6 +68,18 @@ public:
     for (const sf_map_t& repo: sfeat_map_repo) { repo.vectorize2(ctx, scale, gid++, sparse_vector); }
   }
 
+  int diff_norm(const _ScoreContextType& ctx1, const _ScoreContextType& ctx2) const {
+    int retval = 0;
+    for (const uf_map_t& repo: ufeat_map_repo) { retval += repo.diff_norm(ctx1, ctx2); }
+    for (const bf_map_t& repo: bfeat_map_repo) { retval += repo.diff_norm(ctx1, ctx2); }
+    for (const tf_map_t& repo: tfeat_map_repo) { retval += repo.diff_norm(ctx1, ctx2); }
+    for (const qf_map_t& repo: qfeat_map_repo) { retval += repo.diff_norm(ctx1, ctx2); }
+    for (const q5f_map_t& repo: q5feat_map_repo){ retval += repo.diff_norm(ctx1, ctx2); }
+    for (const hf_map_t& repo: hfeat_map_repo) { retval += repo.diff_norm(ctx1, ctx2); }
+    for (const sf_map_t& repo: sfeat_map_repo) { retval += repo.diff_norm(ctx1, ctx2); }
+    return retval;
+  }
+
   /**
    * Get score for the state context.
    *

@@ -6,6 +6,7 @@
 #include "model/pointwise_param.h"
 #include "utils/logging.h"
 #include <boost/functional/hash.hpp>
+#include <unordered_map>
 
 #if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
 # include <google/dense_hash_map>
@@ -27,21 +28,21 @@ private:
   //! Define the parameter type.
   typedef MachineLearning::PointwiseParameter param_t;
 
-  //! Define the mapping type.
-#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
-  typedef google::dense_hash_map<
-    _MetaFeatureType, param_t, boost::hash<_MetaFeatureType>
-  > map_t;
-#else
-  typedef std::unordered_map<
-    _MetaFeatureType, param_t, boost::hash<_MetaFeatureType>
-  > map_t;
-#endif
   //! Define the feature type.
   typedef _MetaFeatureType feature_t;
 
+  //! Define the mapping type.
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+  typedef google::dense_hash_map< feature_t, param_t, boost::hash<feature_t> > map_t;
+#else
+  typedef std::unordered_map< feature_t, param_t, boost::hash<feature_t> > map_t;
+#endif
+
+  //! Define the set type.
+  typedef std::unordered_map< feature_t, int, boost::hash<feature_t> > diff_t;
+
   //! Define the cache type.
-  typedef std::vector<_MetaFeatureType> cache_t;
+  typedef std::vector<feature_t> cache_t;
 
   //! Define the functor type.
   typedef std::function<void(const _ScoreContextType&, cache_t&)> extractor_t;
@@ -99,6 +100,22 @@ public:
       (*sparse_vector)[key] += scale;
     }
   }
+
+  int diff_norm(const _ScoreContextType& ctx1, const _ScoreContextType& ctx2) const {
+    cache_t cache1; cache1.reserve(128); extractor(ctx1, cache1);
+    cache_t cache2; cache2.reserve(128); extractor(ctx2, cache2);
+
+    diff_t pay;
+    for (const feature_t& e: cache1) { pay[e] += 1; }
+    for (const feature_t& e: cache2) { pay[e] -= 1; }
+
+    int retval = 0;
+    for (typename diff_t::const_iterator itx = pay.begin(); itx != pay.end();
+        ++ itx) { retval += itx->second * itx->second; }
+
+    return retval;
+  }
+
 
   //! The size of the feature parameter map.
   std::size_t size() const { return rep.size(); }
