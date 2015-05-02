@@ -10,6 +10,7 @@ typedef int lemma_t;          //! The internal representation of lemmas.
 typedef int postag_t;         //! The internal representation of part-of-speech tag.
 typedef int deprel_t;         //! The internal representation of dependency relation.
 typedef int tag_t;            //!
+typedef int label_t;          //!
 typedef int attribute_t;      //! The internal representation of the feature attribute.
 typedef double floatval_t;
 

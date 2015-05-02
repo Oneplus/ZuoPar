@@ -5,13 +5,15 @@
 #include <boost/archive/text_oarchive.hpp>
 
 namespace ZuoPar {
-
 namespace Engine {
 
-TokenAlphabet::TokenAlphabet(): global_id(0) {
-  insert("-NONE-");
-  insert("-BEGIN-");
-  insert("-END-");
+TokenAlphabet::TokenAlphabet(bool initialize_with_default)
+  : global_id(0) {
+  if (initialize_with_default) {
+    insert("-NONE-");
+    insert("-BEGIN-");
+    insert("-END-");
+  }
 }
 
 TokenAlphabet::~TokenAlphabet() {}

@@ -28,6 +28,9 @@ void read_dependency_instance(std::istream& is,
     eg::TokenAlphabet& deprels_alphabet,
     size_t flag = 0xffff);
 
+void read_raw_dependency_instance(std::istream& is,
+    RawDependency& output);
+
 /**
  * Write one dependency instance to the output stream.
  *
@@ -52,6 +55,9 @@ void read_conllx_dependency_instance(std::istream& is,
     eg::TokenAlphabet& feat_alphabet,
     eg::TokenAlphabet& deprels_alphabet,
     size_t flag = 0xffff);
+
+void read_raw_conllx_dependency_instance(std::istream& is,
+    RawCoNLLXDependency& output);
 
 void write_conllx_dependency_instance(std::ostream& os,
     const CoNLLXDependency& output,

@@ -36,6 +36,8 @@ std::ostream* get_ostream(const char* filename,
 std::ostream* get_ostream(const std::string& filename,
     std::ostream* default_stream = (&(std::cout)));
 
+size_t number_of_lines(std::istream& is);
+
 } //  end for io
 } //  end for zuopar
 

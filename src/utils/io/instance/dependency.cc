@@ -31,6 +31,15 @@ void read_dependency_instance(std::istream& is,
   }
 }
 
+void read_raw_dependency_instance(std::istream& is,
+    RawDependency& output) {
+  std::vector< std::vector<std::string> > mat;
+  read_csv(is, mat);
+  for (const std::vector<std::string>& items: mat) {
+    output.push_back(items[0], items[1], atoi(items[2].c_str()), items[3]);
+  }
+}
+
 void write_dependency_instance(std::ostream& os,
     const Dependency& output,
     const eg::TokenAlphabet& forms_alphabet,
@@ -98,6 +107,21 @@ void read_conllx_dependency_instance(std::istream& is,
     }
 
     output.push_back(form, lemma, cpostag, postag, feat_list, head, deprel);
+  }
+}
+
+void read_raw_conllx_dependency_instance(std::istream& is,
+    RawCoNLLXDependency& output) {
+  std::vector< std::vector<std::string> > mat;
+  read_csv(is, mat);
+  for (const std::vector<std::string>& items: mat) {
+    std::vector<std::string> feat_list;
+    if (items[5] != "_") {
+      boost::algorithm::split(feat_list, items[5], boost::is_any_of("|"),
+          boost::token_compress_on);
+    }
+    output.push_back(items[1], items[2], items[3], items[4], feat_list,
+        atoi(items[6].c_str()), items[7]);
   }
 }
 

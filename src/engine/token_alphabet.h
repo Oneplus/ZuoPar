@@ -16,7 +16,7 @@ class TokenAlphabet {
 //! int->string.
 public:
   //! Constructor
-  TokenAlphabet();
+  TokenAlphabet(bool initialize_with_default = true);
 
   //! Destructor
   ~TokenAlphabet();
@@ -50,7 +50,7 @@ public:
   int encode(const char* name) const;
 
   int encode(const std::string& name) const;
-  
+ 
   /**
    * Save the word alphabet into the output file stream.
    *
@@ -93,6 +93,16 @@ private:
   }
 };
 
+class TokenAlphabetUtils {
+public:
+  static void show(std::ostream& os, const std::string& name,
+      const TokenAlphabet& alphabet) {
+    for (int i = 3; i < alphabet.size(); ++ i) {
+      os << (i == 3 ? (name + " = {"): "  ") << "#" << i << "="
+        << alphabet.decode(i) << ((i+ 1 == alphabet.size())? "}": ",");
+    }
+  }
+};
 
 } //  end for namespace Engine
 } //  end for namespace ZuoPar

@@ -42,6 +42,12 @@ void read_conllx_dependency_dataset(std::istream& is,
     eg::TokenAlphabet& deprels_alphabet,
     size_t flag = 0xffff);
 
+void read_raw_dependency_dataset(std::istream& is,
+    std::vector<RawDependency>& dataset);
+
+void read_raw_conllx_dependency_dataset(std::istream& is,
+    std::vector<RawCoNLLXDependency>& dataset);
+
 }
 }
 

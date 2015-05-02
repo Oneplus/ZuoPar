@@ -20,6 +20,10 @@ public:
   static void get_oracle_actions(const Dependency& instance,
       std::vector<Action>& actions);
 
+  static void get_oracle_actions(const std::vector<int>& heads,
+      const std::vector<deprel_t>& deprels,
+      std::vector<Action>& actions);
+
   /**
    * Judge if the input action is a shift action.
    *
@@ -63,7 +67,8 @@ private:
    *  @param[out] actions   The actions.
    */
   static void get_oracle_actions_travel(int root,
-      const Dependency& instance,
+      const std::vector<int>& heads,
+      const std::vector<int>& deprels,
       const tree_t& tree,
       std::vector<Action>& actions);
 };

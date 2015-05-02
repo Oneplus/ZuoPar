@@ -52,5 +52,19 @@ std::ostream* get_ostream(const std::string& filename,
   return get_ostream(filename.c_str(), default_stream);
 }
 
+size_t number_of_lines(std::istream& is) {
+  const int size = 1024*1024;
+  char buffer[1024*1024];
+  size_t retval = 0;
+
+  while (true) {
+    is.read(buffer, 1024*1024);
+    auto cc = is.gcount();
+    if (0 == cc) { break; }
+    for (auto i = 0; i < cc; ++ i) { if (buffer[i] == '\n') { ++ retval; } }
+  }
+  return retval;
+}
+
 } //  end for io
 } //  end for zuopar

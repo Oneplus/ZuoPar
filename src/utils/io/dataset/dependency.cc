@@ -42,6 +42,28 @@ void read_conllx_dependency_dataset(std::istream& is,
   }
 }
 
+void read_raw_dependency_dataset(std::istream& is,
+    std::vector<RawDependency>& dataset) {
+  dataset.clear();
+  for (BlockIterator itx = BlockIterator(is); !itx.end(); ++ itx) {
+    std::istringstream iss(*itx);
+    RawDependency parse;
+    read_raw_dependency_instance(iss, parse);
+    dataset.push_back(parse);
+  }
+}
+
+void read_raw_conllx_dependency_dataset(std::istream& is,
+    std::vector<RawCoNLLXDependency>& dataset) {
+  dataset.clear();
+  for (BlockIterator itx = BlockIterator(is); !itx.end(); ++ itx) {
+    std::istringstream iss(*itx);
+    RawCoNLLXDependency parse;
+    read_raw_conllx_dependency_instance(iss, parse);
+    dataset.push_back(parse);
+  }
+}
+
 
 } //  end for io
 } //  end for zuopar
