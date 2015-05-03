@@ -11,9 +11,12 @@ namespace NeuralNetwork {
 class Decoder {
 private:
   size_t L;
+  int R;
 public:
   //
   Decoder();
+
+  void set_root_relation(int r);
 
   void set_number_of_relations(size_t l);
 

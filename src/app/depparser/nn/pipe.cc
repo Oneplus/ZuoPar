@@ -10,9 +10,11 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/timer/timer.hpp>
+#include <boost/timer.hpp>
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 namespace ZuoPar {
 namespace DependencyParser {
@@ -30,6 +32,7 @@ Pipe::Pipe(const LearnOption& opts)
   devel_file = opts.devel_file;
   model_file = opts.model_file;
   embedding_file = opts.embedding_file;
+  root = opts.root;
 
   _INFO << "LEARN:: mode is activated.";
   _INFO << "report: reference file: " << reference_file;
@@ -51,13 +54,13 @@ Pipe::Pipe(const TestOption& opts)
   input_file = opts.input_file;
   output_file = opts.output_file;
   model_file = opts.model_file;
-  embedding_file = opts.embedding_file;
 
   _INFO << "TEST:: mode is activated.";
   _INFO << "report: input file: " << input_file;
   _INFO << "report: output file: " << output_file;
   _INFO << "report: model file: " << model_file;
-  _INFO << "report: embedding file: " << embedding_file;
+
+  load_model(model_file);
 }
 
 void Pipe::display_learning_parameters() {
@@ -129,12 +132,36 @@ void Pipe::check_dataset(const std::vector<RawCoNLLXDependency>& dataset) {
   _INFO << "report: " << nr_non_projective_trees << " tree(s) are legal but not projective.";
 }
 
+void Pipe::info() {
+  _INFO << "report: " << forms_alphabet.size() << " forms(s) are detected.";
+  _INFO << "report: " << postags_alphabet.size() << " postag(s) are detected.";
+  _INFO << "report: " << deprels_alphabet.size() << " deprel(s) are detected.";
+  _INFO << "report: form located at: [" << kFormInFeaturespace << " ... "
+    << kPostagInFeaturespace- 1 << "]";
+  _INFO << "report: postags located at: [" << kPostagInFeaturespace << " ... "
+    << kDeprelInFeaturespace- 1 << "]";
+  _INFO << "report: deprels located at: [" << kDeprelInFeaturespace << " ... "
+    << kDeprelInFeaturespace+ deprels_alphabet.size() - 1 << "]";
+  _INFO << "report: form nil=" << kNilForm;
+  _INFO << "report: postag nil=" << kNilPostag;
+  _INFO << "report: deprel nil=" << kNilDeprel;
+  _INFO << "report: root rel(str)=" << root;
+  _INFO << "report: root rel(index)=" << deprels_alphabet.encode(root);
+
+  decoder.set_root_relation(deprels_alphabet.encode(root));
+  decoder.set_number_of_relations(deprels_alphabet.size()- 1);
+}
+
+
 void Pipe::build_alphabet() {
   std::unordered_map<std::string, int> frequencies;
   for (const auto& data: train_dataset) {
-    for (const auto& form: data.forms) { frequencies[form] += 1; }
-    for (const auto& postag: data.postags) { postags_alphabet.insert(postag); }
-    for (const auto& deprel: data.deprels) { deprels_alphabet.insert(deprel); }
+    for (auto i = 1; i < data.forms.size(); ++ i) {
+      // Ignore the leading dummy root.
+      postags_alphabet.insert(data.postags[i]);
+      deprels_alphabet.insert(data.deprels[i]);
+      frequencies[data.forms[i]] += 1;
+    }
   }
   for (auto& entry: frequencies) {
     if (entry.second >= learn_opt->word_cutoff) { forms_alphabet.insert(entry.first); }
@@ -153,20 +180,7 @@ void Pipe::build_alphabet() {
   kDeprelInFeaturespace = forms_alphabet.size()+ postags_alphabet.size();
   kNilDeprel = deprels_alphabet.insert(SpecialOption::NIL) + kDeprelInFeaturespace;
 
-  _INFO << "report: " << forms_alphabet.size() << " forms(s) are detected.";
-  _INFO << "report: " << postags_alphabet.size() << " postag(s) are detected.";
-  _INFO << "report: " << deprels_alphabet.size() << " deprel(s) are detected.";
-  _INFO << "report: form located at: [" << kFormInFeaturespace << " ... "
-    << kPostagInFeaturespace- 1 << "]";
-  _INFO << "report: postags located at: [" << kPostagInFeaturespace << " ... "
-    << kDeprelInFeaturespace- 1 << "]";
-  _INFO << "report: deprels located at: [" << kDeprelInFeaturespace << " ... "
-    << kDeprelInFeaturespace+ deprels_alphabet.size() - 1 << "]";
-  _INFO << "report: form nil=" << kNilForm;
-  _INFO << "report: postag nil=" << kNilPostag;
-  _INFO << "report: deprel nil=" << kNilDeprel;
-
-  decoder.set_number_of_relations(deprels_alphabet.size());
+  info();
 }
 
 void Pipe::initialize_classifier() {
@@ -351,48 +365,6 @@ void Pipe::get_features(const State& s, std::vector<int>& features) {
 #undef PUSH
 }
 
-void Pipe::learn() {
-  if (!setup()) { return; }
-  build_alphabet();
-  generate_training_samples();
-  initialize_classifier();
-
-  for (size_t iter = 0; iter < learn_opt->max_iter; ++ iter) {
-    boost::timer::cpu_timer timer;
-    classifier.compute_ada_gradient_step();
-    _INFO << "pipe (iter#" << (iter+ 1) << "): cost=" << classifier.get_cost()
-      << ", accuracy(%)=" << classifier.get_accuracy()
-      << " (" << timer.elapsed().user << ")";
-
-    classifier.take_ada_gradient_step();
-
-    if (devel_dataset.size() > 0 && (iter+1) % learn_opt->evaluation_stops == 0) {
-      _INFO << "start evaluating ...";
-      classifier.precomputing();
-
-      std::vector<int> heads;
-      std::vector<std::string> deprels;
-      auto corr_heads = 0, corr_deprels = 0, nr_tokens = 0;
-      for (auto data: devel_dataset) {
-        predict(data, heads, deprels);
-        auto L = heads.size();
-        for (auto i = 0; i < L; ++ i) {
-          if (boost::u32regex_match(data.forms[i], boost::make_u32regex("[[:P*:]]"))) {
-            continue;
-          }
-          ++ nr_tokens;
-          if (heads[i] == data.heads[i]) {
-            ++ corr_heads;
-            if (deprels[i] == data.deprels[i]) { ++ corr_deprels; }
-          }
-        }
-      }
-      _INFO << "evaluating done. UAS=" << (floatval_t)corr_heads/ nr_tokens
-        << " LAS=" << (floatval_t)corr_deprels/nr_tokens;
-    }
-  }
-}
-
 void Pipe::predict(const RawCoNLLXDependency& data,
     std::vector<int>& heads,
     std::vector<std::string>& deprels) {
@@ -436,14 +408,129 @@ void Pipe::predict(const RawCoNLLXDependency& data,
   }
 }
 
+void Pipe::learn() {
+  if (!setup()) { return; }
+  build_alphabet();
+  generate_training_samples();
+  initialize_classifier();
+
+  floatval_t best_uas = -1;
+  for (size_t iter = 0; iter < learn_opt->max_iter; ++ iter) {
+    boost::timer t;
+    classifier.compute_ada_gradient_step();
+    _INFO << "pipe (iter#" << (iter+ 1) << "): cost=" << classifier.get_cost()
+      << ", accuracy(%)=" << classifier.get_accuracy()
+      << " (" << t.elapsed() << ")";
+
+    classifier.take_ada_gradient_step();
+
+    if (devel_dataset.size() > 0 && (iter+1) % learn_opt->evaluation_stops == 0) {
+      _INFO << "eval: start evaluating ...";
+      classifier.precomputing();
+
+      std::vector<int> heads;
+      std::vector<std::string> deprels;
+      auto corr_heads = 0, corr_deprels = 0, nr_tokens = 0;
+
+      t.restart();
+      for (auto data: devel_dataset) {
+        predict(data, heads, deprels);
+
+        auto L = heads.size();
+        for (auto i = 1; i < L; ++ i) { // ignore dummy root
+          if (boost::u32regex_match(data.forms[i], boost::make_u32regex("[[:P*:]]"))) {
+            continue;
+          }
+          ++ nr_tokens;
+          if (heads[i] == data.heads[i]) {
+            ++ corr_heads;
+            if (deprels[i] == data.deprels[i]) { ++ corr_deprels; }
+          }
+        }
+      }
+      auto uas = (floatval_t)corr_heads/nr_tokens;
+      auto las = (floatval_t)corr_deprels/nr_tokens;
+      _INFO << "eval: evaluating done. UAS=" << uas << " LAS=" << las << " (" << t.elapsed() << ")";
+
+      if (best_uas < uas && learn_opt->save_intermediate) {
+        best_uas = uas;
+        save_model(model_file);
+        _INFO << "report: model saved to " << model_file;
+      }
+    }
+  }
+}
+
 
 void Pipe::test() {
+  if (!setup()) { return; }
+  classifier.precomputing();
+
+  std::vector<int> heads;
+  std::vector<std::string> deprels;
+
+  std::ostream* os = IO::get_ostream(output_file);
+  boost::timer t;
+  for (auto data: test_dataset) {
+    predict(data, heads, deprels);
+
+    auto L = heads.size();
+    for (auto i = 1; i < L; ++ i) {
+      (*os) << i << "\t"
+        << data.forms[i] << "\t"
+        << data.forms[i] << "\t"
+        << data.cpostags[i] << "\t"
+        << data.postags[i] << "\t";
+      if (data.feats[i].size()) {
+        (*os) << boost::algorithm::join(data.feats[i], "|") << "\t"; }
+      else { (*os) << "_\t"; }
+      (*os) << heads[i] << "\t" << deprels[i] << std::endl;
+    }
+    (*os) << std::endl;
+  }
+  _INFO << "#: elapsed " << t.elapsed();
 }
 
 void Pipe::load_model(const std::string& model_path) {
+  std::ifstream mfs(model_path);
+  if (!mfs.good()) {
+    _WARN << "#: failed to open file.";
+    return;
+  }
+  boost::archive::text_iarchive ia(mfs);
+  ia >> root;
+  classifier.load(mfs);
+  forms_alphabet.load(mfs);
+  postags_alphabet.load(mfs);
+  deprels_alphabet.load(mfs);
+  kFormInFeaturespace = 0;
+  forms_alphabet.encode(SpecialOption::UNKNOWN);
+  kNilForm = forms_alphabet.encode(SpecialOption::NIL);
+  forms_alphabet.encode(SpecialOption::ROOT);
+
+  kPostagInFeaturespace = forms_alphabet.size();
+  postags_alphabet.encode(SpecialOption::UNKNOWN);
+  kNilPostag = postags_alphabet.encode(SpecialOption::NIL) + kPostagInFeaturespace;
+  postags_alphabet.encode(SpecialOption::ROOT);
+
+  kDeprelInFeaturespace = forms_alphabet.size()+ postags_alphabet.size();
+  kNilDeprel = deprels_alphabet.encode(SpecialOption::NIL) + kDeprelInFeaturespace;
+
+  info();
 }
 
 void Pipe::save_model(const std::string& model_path) {
+  std::ofstream mfs(model_path);
+  if (!mfs.good()) {
+    _WARN << "#: failed to open file.";
+    return;
+  }
+  boost::archive::text_oarchive oa(mfs);
+  oa << root;
+  classifier.save(mfs);
+  forms_alphabet.save(mfs);
+  postags_alphabet.save(mfs);
+  deprels_alphabet.save(mfs);
 }
 
 } //  namespace neuralnetwork

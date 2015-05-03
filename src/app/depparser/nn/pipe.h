@@ -28,6 +28,7 @@ private:
   std::string embedding_file; //! The path to the embedding file.
   std::string input_file;     //! The path to the input file.
   std::string output_file;    //! The path to the output file.
+  std::string root;           //! The root
   //
   int kNilForm;
   int kNilPostag;
@@ -72,6 +73,7 @@ private:
       std::vector<std::string>& deprels);
   void load_model(const std::string& model_path);
   void save_model(const std::string& model_path);
+  void info();
 };
 
 } //  namespace neuralnetwork

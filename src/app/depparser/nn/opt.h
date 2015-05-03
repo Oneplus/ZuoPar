@@ -20,7 +20,7 @@ struct SpecialOption {
 
 struct BasicOption {
   std::string model_file;     //! The path to the model.
-  std::string embedding_file; //! The path to the embedding.
+  std::string root;           //! The root.
 };
 
 struct AdaOption {
@@ -39,6 +39,9 @@ struct LearnOption:
   public BasicOption,
   public AdaOption,
   public NetworkOption {
+  std::string reference_file;   //! The path to the reference file.
+  std::string devel_file;       //! The path to the devel file.
+  std::string embedding_file;   //! The path to the embedding.
   int nr_threads;               //! Number of threads.
   int word_cutoff;              //! The frequency of rare word, word lower than that
                                 //! will be cut off.
@@ -48,12 +51,10 @@ struct LearnOption:
   int nr_feature_types;         //! The number of features, including word, POS and label.
   int nr_precomputed;           //! The number of precomputed features
   int evaluation_stops;         //!
-  int clear_gradient_per_iter;  //! TODO (?);
+  int clear_gradient_per_iter;  //! clear gradient each iteration.
   bool save_intermediate;       //! Save model whenever see an improved UAS.
   bool fix_embeddings;          //! Not tune the embedding when learning the parameters
   bool debug;                   //! Perform debug when training.
-  std::string reference_file;   //! The path to the reference file.
-  std::string devel_file;       //! The path to the devel file.
 };
 
 struct TestOption:

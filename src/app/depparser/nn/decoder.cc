@@ -6,21 +6,33 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace NeuralNetwork {
 
-Decoder::Decoder(): L(0) {}
+Decoder::Decoder(): L(0), R(-1) {}
 
+void Decoder::set_root_relation(int r) { R = r; }
+
+// l should include ROOT but exclude NIL
 void Decoder::set_number_of_relations(size_t l) { L = l; }
 
 void Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
+  if (0 == L || -1 == R) { _ERROR << "decoder: not initialized."; }
   actions.clear();
+
   if (!source.buffer_empty()) {
     actions.push_back(ActionFactory::make_shift());
   }
 
   if (source.stack_size() >= 2) {
-    for (size_t l = 0; l < L; ++ l) {
-      actions.push_back(ActionFactory::make_left_arc(l));
-      actions.push_back(ActionFactory::make_right_arc(l));
+    if (source.stack_size() == 2 && source.buffer_empty()) {
+      actions.push_back(ActionFactory::make_right_arc(R));
+    } else {
+      for (size_t l = 0; l < L; ++ l) {
+        if (l == R) { continue; }
+        if (source.top1 != 0) {
+          actions.push_back(ActionFactory::make_left_arc(l));
+        }
+        actions.push_back(ActionFactory::make_right_arc(l));
+      }
     }
   }
 }
@@ -53,8 +65,8 @@ void Decoder::transform(const std::vector<Action>& actions,
 int Decoder::transform(const Action& act) {
   int deprel;
   if (ActionUtils::is_shift(act)) { return 0; }
-  else if (ActionUtils::is_left_arc(act, deprel))  { return 1 + deprel; }
-  else if (ActionUtils::is_right_arc(act, deprel)) { return L + 1 + deprel; }
+  else if (ActionUtils::is_left_arc(act, deprel))  { return 1+ deprel; }
+  else if (ActionUtils::is_right_arc(act, deprel)) { return L+ 1+ deprel; }
   else { _ERROR << "unknown transition in transform(Action&): " << act; }
   return -1;
 }

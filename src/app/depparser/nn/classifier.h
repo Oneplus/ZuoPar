@@ -20,16 +20,14 @@ namespace NeuralNetwork {
 
 class Cost {
 public:
+  typedef std::vector<std::vector<int> > history_t;
+
   floatval_t loss;
   floatval_t accuracy;
-
   arma::mat grad_W1;
   arma::vec grad_b1;
   arma::mat grad_W2;
   arma::mat grad_E;
-
-  typedef std::vector<std::vector<int> > history_t;
-
   history_t dropout_histories;
 
   Cost();
@@ -54,10 +52,18 @@ private:
   arma::mat E;          // Mat: nr_objects X embedding_size
   arma::vec b1;         // Vec: hidden_layer_size
 
+  arma::mat grad_W1;
+  arma::vec grad_b1;
+  arma::mat grad_W2;
+  arma::mat grad_E;
+
   arma::mat eg2W1;
   arma::mat eg2W2;
   arma::mat eg2E;
   arma::vec eg2b1;
+
+  floatval_t loss;
+  floatval_t accuracy;
 
   // Precomputed matrix
   arma::mat saved;      // Mat: encoder.size() X hidden_layer_size
@@ -114,6 +120,7 @@ public:
    */
   void score(const std::vector<int>& attributes, std::vector<floatval_t>& retval);
 
+  void info();
   //!
   void compute_ada_gradient_step();
 
@@ -144,12 +151,16 @@ public:
 
   void compute_gradient(std::vector<Sample>::const_iterator& begin,
       std::vector<Sample>::const_iterator& end,
-      size_t batch_size, Cost& retval);
+      size_t batch_size);
 
   void compute_saved_gradient(
       const std::unordered_set<int>& precomputed_indices);
 
   void add_l2_regularization();
+
+  void save(std::ofstream& mfs);
+
+  void load(std::ifstream& mfs);
 };
 
 } //  namespace neuralnetwork

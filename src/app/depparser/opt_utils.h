@@ -34,14 +34,6 @@ po::options_description build_learn_optparser(const std::string& usage);
 po::options_description build_test_optparser(const std::string& usage);
 
 /**
- * Parse commonly shared options.
- *
- *  @param[in]    vm    The variables map
- *  @param[out]   opts  The options.
- */
-bool parse_root_option(const po::variables_map& vm, RootOption& opts);
-
-/**
  * Parse the learning options.
  *
  *  @param[in]    vm    The variables map

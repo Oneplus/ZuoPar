@@ -35,6 +35,7 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("dropout-probability", po::value<double>(), "The probability for dropout. [default=0.5]")
     ("save-intermediate", po::value<bool>(), "Save the intermediate. [default=false]")
     ("fix-embeddings", po::value<bool>(), "Fix the embeddings. [default=true]")
+    ("root", po::value<std::string>(), "The root tag. [default=ROOT]")
     ("verbose", "Logging more details")
     ;
   return optparser;
@@ -45,7 +46,6 @@ po::options_description build_test_optparser(const std::string& usage) {
   optparser.add_options()
     ("model", po::value<std::string>(), "The path to the model.")
     ("input", po::value<std::string>(), "The path to the reference.")
-    ("embedding", po::value<std::string>(), "The path to the embedding file.")
     ("output", po::value<std::string>(), "The path to the output file.")
     ;
   return optparser;
@@ -64,12 +64,6 @@ bool parse_basic_option(const po::variables_map& vm, BasicOption& opts) {
     opts.model_file = vm["model"].as<std::string>();
   }
 
-  if (!vm.count("embedding")) {
-    _ERROR << "parse opt: embedding file must be specified [--embedding].";
-    return false;
-  } else {
-    opts.embedding_file = vm["embedding"].as<std::string>();
-  }
   return true;
 }
 
@@ -102,6 +96,13 @@ bool parse_network_option(const po::variables_map& vm, NetworkOption& opts) {
 bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   if (!parse_basic_option(vm, static_cast<BasicOption&>(opts))) { return false; }
 
+  if (!vm.count("embedding")) {
+    _ERROR << "parse opt: embedding file must be specified [--embedding].";
+    return false;
+  } else {
+    opts.embedding_file = vm["embedding"].as<std::string>();
+  }
+
   if (!vm.count("reference")) {
     _ERROR << "parse opt: reference file must be specified [--reference].";
     return false;
@@ -118,7 +119,7 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   if (!parse_network_option(vm, static_cast<NetworkOption&>(opts))) { return false; }
 
   opts.max_iter = 20000;
-  if (vm.count("max-iter")) { opts.max_iter = vm["max-iter"].as<double>(); }
+  if (vm.count("max-iter")) { opts.max_iter = vm["max-iter"].as<int>(); }
 
   opts.init_range = .01;
   if (vm.count("init-range")) { opts.init_range = vm["init-range"].as<double>(); }
@@ -151,6 +152,9 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
 
   opts.fix_embeddings = false;
   if (vm.count("fix-embeddings")) { opts.fix_embeddings = vm["fix-embeddings"].as<bool>(); }
+
+  opts.root = "ROOT";
+  if (vm.count("root")) { opts.root = vm["root"].as<std::string>(); } 
   return true;
 }
 
@@ -164,7 +168,7 @@ bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
   }
 
   opts.output_file = "";
-  if (!vm.count("output")) { opts.output_file = vm["output"].as<std::string>(); }
+  if (vm.count("output")) { opts.output_file = vm["output"].as<std::string>(); }
 
   return true;
 }
