@@ -107,9 +107,9 @@ struct RawCoNLLXDependency: public RawDependency {
 
   RawCoNLLXDependency(bool dummy_root = true) {
     if (dummy_root) {
-      forms.push_back("$ROOT$");    lemmas.push_back("$ROOT$");
-      cpostags.push_back("$ROOT$"); postags.push_back("$ROOT$");
-      heads.push_back(-1);          deprels.push_back("$ROOT$");
+      forms.push_back("-ROOT-");    lemmas.push_back("-ROOT-");
+      cpostags.push_back("-ROOT-"); postags.push_back("-ROOT-");
+      heads.push_back(-1);          deprels.push_back("-ROOT-");
       feats.push_back(std::vector<std::string>());
     }
   }
@@ -158,16 +158,15 @@ public:
   static bool is_non_projective(const std::vector<int>& heads) {
     for (int modifier = 0; modifier < heads.size(); ++ modifier) {
       int head = heads[modifier];
-      if (head == -1) { continue; }
       if (head < modifier) {
         for (int from = head+ 1; from < modifier; ++ from) {
           int to = heads[from];
-          if (to < head || to > from) { return false; }
+          if (to < head || to > modifier) { return true; }
         }
       } else {
         for (int from = modifier+ 1; from < head; ++ from) {
-          int to = heads[to];
-          if (to < modifier || to > head) { return false; }
+          int to = heads[from];
+          if (to < modifier || to > head) { return true; }
         }
       }
     }

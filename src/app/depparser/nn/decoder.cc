@@ -22,17 +22,15 @@ void Decoder::get_possible_actions(const State& source,
     actions.push_back(ActionFactory::make_shift());
   }
 
-  if (source.stack_size() >= 2) {
-    if (source.stack_size() == 2 && source.buffer_empty()) {
+  if (source.stack_size() == 2) {
+    if (source.buffer_empty()) {
       actions.push_back(ActionFactory::make_right_arc(R));
-    } else {
-      for (size_t l = 0; l < L; ++ l) {
-        if (l == R) { continue; }
-        if (source.top1 != 0) {
-          actions.push_back(ActionFactory::make_left_arc(l));
-        }
-        actions.push_back(ActionFactory::make_right_arc(l));
-      }
+    }
+  } else if (source.stack_size() > 2) {
+    for (size_t l = 0; l < L; ++ l) {
+      if (l == R) { continue; }
+      actions.push_back(ActionFactory::make_left_arc(l));
+      actions.push_back(ActionFactory::make_right_arc(l));
     }
   }
 }
@@ -52,14 +50,14 @@ void Decoder::transit(const State& source, const Action& act, State* target) {
 
 std::vector<int> Decoder::transform(const std::vector<Action>& actions) {
   std::vector<int> classes;
-  for (auto act: actions) { classes.push_back( transform(act) ); }
+  for (auto& act: actions) { classes.push_back( transform(act) ); }
   return classes;
 }
 
 void Decoder::transform(const std::vector<Action>& actions,
     std::vector<int>& classes) {
   classes.clear();
-  for (auto act: actions) { classes.push_back( transform(act) ); }
+  for (auto& act: actions) { classes.push_back( transform(act) ); }
 }
 
 int Decoder::transform(const Action& act) {

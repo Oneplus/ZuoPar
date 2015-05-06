@@ -211,7 +211,7 @@ void Pipe::initialize_classifier() {
       // TODO to lower fails with utf8 input
       // int transformed_form = forms_alphabet.encode(items[0].tolower());
       if (form == -1) {
-        _TRACE << "report: form\'" << items[0] << "\' not occur in training data, ignore.";
+        //_TRACE << "report: form\'" << items[0] << "\' not occur in training data, ignore.";
         continue;
       }
 
@@ -243,11 +243,15 @@ void Pipe::initialize_classifier() {
 
 void Pipe::generate_training_samples() {
   dataset.initialize(learn_opt->nr_feature_types, decoder.number_of_transitions());
-  std::unordered_map<int, int> encoded_position_frequencies;
+  std::unordered_map<int, int> features_frequencies;
 
   auto nr_processed = 0;
   auto interval = train_dataset.size() / 10; if (interval == 0) { interval = 10; }
-  for (auto data: train_dataset) {
+  for (const auto& data: train_dataset) {
+    if (!DependencyUtils::is_tree(data.heads) ||
+        !DependencyUtils::is_projective(data.heads)) {
+      continue;
+    }
     Dependency dependency;
     size_t L = data.forms.size();
     for (size_t i = 0; i < L; ++ i) {
@@ -259,15 +263,18 @@ void Pipe::generate_training_samples() {
     }
 
     std::vector<Action> oracle_actions;
-    ActionUtils::get_oracle_actions(dependency, oracle_actions);
+    ActionUtils::get_oracle_actions2(dependency, oracle_actions);
 
     std::vector<State> states(oracle_actions.size()+ 1);
     states[0].copy(State(&dependency));
-
-    for (auto step = 0; step < oracle_actions.size(); ++ step) {
-      auto oracle_action = oracle_actions[step];
+    decoder.transit(states[0], ActionFactory::make_shift(), &states[1]);
+    for (auto step = 1; step < oracle_actions.size(); ++ step) {
+      auto& oracle_action = oracle_actions[step];
       std::vector<int> attributes;
       get_features(states[step], attributes);
+      if (attributes.size() != learn_opt->nr_feature_types) {
+        _WARN << "#: number of feature types unequal to configed number";
+      }
 
       std::vector<Action> possible_actions;
       decoder.get_possible_actions(states[step], possible_actions);
@@ -282,7 +289,7 @@ void Pipe::generate_training_samples() {
 
       for (auto j = 0; j < attributes.size(); ++ j) {
         auto fid = attributes[j] * attributes.size() + j;
-        encoded_position_frequencies[fid] += 1;
+        features_frequencies[fid] += 1;
       }
 
       decoder.transit(states[step], oracle_action, &states[step+ 1]);
@@ -295,18 +302,19 @@ void Pipe::generate_training_samples() {
   _INFO << "#: generated " <<dataset.size() << " training samples.";
 
   std::vector<std::pair<int, int> > top;
-  if (encoded_position_frequencies.size() < learn_opt->nr_precomputed) {
-    for (auto& rep: encoded_position_frequencies) { top.push_back(rep); }
+  if (features_frequencies.size() < learn_opt->nr_precomputed) {
+    for (auto& rep: features_frequencies) { top.push_back(rep); }
   } else {
     top.resize(learn_opt->nr_precomputed);
-    std::partial_sort_copy(encoded_position_frequencies.begin(),
-        encoded_position_frequencies.end(), top.begin(), top.end(),
+    std::partial_sort_copy(features_frequencies.begin(),
+        features_frequencies.end(), top.begin(), top.end(),
         [](std::pair<int, int> const& l, std::pair<int, int> const& r) {
-          return l.second > r.second;
+          if (l.second != r.second) { return l.second > r.second; }
+          return l.first < r.first;
         });
   }
 
-  for (auto t: top) { precomputed_features.push_back(t.first); }
+  for (auto& t: top) { precomputed_features.push_back(t.first); }
 }
 
 void Pipe::get_features(const State& s, std::vector<int>& features) {
@@ -322,8 +330,6 @@ void Pipe::get_features(const State& s, std::vector<int>& features) {
   int S0L2 = (S0 >= 0  ? s.left_2nd_most_child[S0]:  -1);
   int S0R2 = (S0 >= 0  ? s.right_2nd_most_child[S0]: -1);
   int S0LL = (S0L >= 0 ? s.left_most_child[S0L]:  -1);
-  int S0LR = (S0L >= 0 ? s.right_most_child[S0L]: -1);
-  int S0RL = (S0R >= 0 ? s.left_most_child[S0R]:  -1);
   int S0RR = (S0R >= 0 ? s.right_most_child[S0R]: -1);
 
   int S1L  = (S1 >= 0  ? s.left_most_child[S1]:  -1);
@@ -331,8 +337,6 @@ void Pipe::get_features(const State& s, std::vector<int>& features) {
   int S1L2 = (S1 >= 0  ? s.left_2nd_most_child[S1]:  -1);
   int S1R2 = (S1 >= 0  ? s.right_2nd_most_child[S1]: -1);
   int S1LL = (S1L >= 0 ? s.left_most_child[S1L]:  -1);
-  int S1LR = (S1L >= 0 ? s.right_most_child[S1L]: -1);
-  int S1RL = (S1R >= 0 ? s.left_most_child[S1R]:  -1);
   int S1RR = (S1R >= 0 ? s.right_most_child[S1R]: -1);
 
 #define FORM(id)    ((id != -1) ? (s.ref->forms[id]): kNilForm)
@@ -381,19 +385,20 @@ void Pipe::predict(const RawCoNLLXDependency& data,
 
   std::vector<State> states(L*2);
   states[0].copy(State(&dependency));
-  for (auto step = 0; step < L*2-1; ++ step) {
+  decoder.transit(states[0], ActionFactory::make_shift(), &states[1]);
+  for (auto step = 1; step < L*2-1; ++ step) {
     std::vector<int> attributes;
     get_features(states[step], attributes);
 
-    std::vector<floatval_t> classes(decoder.number_of_transitions(), 0.);
-    classifier.score(attributes, classes);
+    std::vector<floatval_t> scores(decoder.number_of_transitions(), 0);
+    classifier.score(attributes, scores);
 
     std::vector<Action> possible_actions;
     decoder.get_possible_actions(states[step], possible_actions);
 
     auto best = -1;
     for (auto l: decoder.transform(possible_actions)) {
-      if (best == -1 || classes[best] < classes[l]) { best = l; }
+      if (best == -1 || scores[best] < scores[l]) { best = l; }
     }
 
     auto act = decoder.transform(best);
@@ -433,7 +438,7 @@ void Pipe::learn() {
       auto corr_heads = 0, corr_deprels = 0, nr_tokens = 0;
 
       t.restart();
-      for (auto data: devel_dataset) {
+      for (const auto& data: devel_dataset) {
         predict(data, heads, deprels);
 
         auto L = heads.size();
@@ -471,14 +476,14 @@ void Pipe::test() {
 
   std::ostream* os = IO::get_ostream(output_file);
   boost::timer t;
-  for (auto data: test_dataset) {
+  for (const auto& data: test_dataset) {
     predict(data, heads, deprels);
 
     auto L = heads.size();
     for (auto i = 1; i < L; ++ i) {
       (*os) << i << "\t"
         << data.forms[i] << "\t"
-        << data.forms[i] << "\t"
+        << "_" << "\t"
         << data.cpostags[i] << "\t"
         << data.postags[i] << "\t";
       if (data.feats[i].size()) {
@@ -504,14 +509,10 @@ void Pipe::load_model(const std::string& model_path) {
   postags_alphabet.load(mfs);
   deprels_alphabet.load(mfs);
   kFormInFeaturespace = 0;
-  forms_alphabet.encode(SpecialOption::UNKNOWN);
   kNilForm = forms_alphabet.encode(SpecialOption::NIL);
-  forms_alphabet.encode(SpecialOption::ROOT);
 
   kPostagInFeaturespace = forms_alphabet.size();
-  postags_alphabet.encode(SpecialOption::UNKNOWN);
   kNilPostag = postags_alphabet.encode(SpecialOption::NIL) + kPostagInFeaturespace;
-  postags_alphabet.encode(SpecialOption::ROOT);
 
   kDeprelInFeaturespace = forms_alphabet.size()+ postags_alphabet.size();
   kNilDeprel = deprels_alphabet.encode(SpecialOption::NIL) + kDeprelInFeaturespace;

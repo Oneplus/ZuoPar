@@ -42,8 +42,8 @@ void
 State::clear() {
   this->score = 0;
   this->previous = 0;
-  this->top0 = 0;
-  this->top1 = 0;
+  this->top0 = -1;
+  this->top1 = -1;
   this->buffer = 0;
   stack.clear();
 

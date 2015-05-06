@@ -19,17 +19,16 @@ TokenAlphabet::TokenAlphabet(bool initialize_with_default)
 TokenAlphabet::~TokenAlphabet() {}
 
 int TokenAlphabet::insert(const char * name) {
-  std::string key(name);
-  map_t::const_iterator itx = name2id.find(key);
-  if (itx != name2id.end()) { return itx->second; }
-
-  id2name.push_back(key);
-  name2id[key] = global_id;
-  return global_id ++;
+  return insert(std::string(name));
 }
 
 int TokenAlphabet::insert(const std::string& name) {
-  return insert(name.c_str());
+  map_t::const_iterator itx = name2id.find(name);
+  if (itx != name2id.end()) { return itx->second; }
+
+  id2name.push_back(name);
+  name2id[name] = global_id;
+  return global_id ++;
 }
 
 const char * TokenAlphabet::decode(int id) const {
@@ -38,13 +37,13 @@ const char * TokenAlphabet::decode(int id) const {
 }
 
 int TokenAlphabet::encode(const char* name) const {
-  map_t::const_iterator itx = name2id.find(std::string(name));
-  if (itx != name2id.end()) { return itx->second; }
-  return -1;
+  return encode(std::string(name));
 }
 
 int TokenAlphabet::encode(const std::string& name) const {
-  return encode(name.c_str());
+  map_t::const_iterator itx = name2id.find(name);
+  if (itx != name2id.end()) { return itx->second; }
+  return -1;
 }
 
 size_t TokenAlphabet::size() const { return name2id.size(); }

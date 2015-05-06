@@ -1,6 +1,7 @@
 #include <boost/assert.hpp>
 #include "app/depparser/arcstandard/action.h"
 #include "app/depparser/arcstandard/action_utils.h"
+#include "utils/logging.h"
 
 namespace ZuoPar {
 namespace DependencyParser {
@@ -73,6 +74,62 @@ void ActionUtils::get_oracle_actions_travel(int root,
   for (int j = i - 1; j >= 0; -- j) {
     int child = children[j];
     actions.push_back(ActionFactory::make_left_arc(deprels[child]));
+  }
+}
+
+void ActionUtils::get_oracle_actions2(const Dependency& instance,
+    std::vector<Action>& actions) {
+  get_oracle_actions2(instance.heads, instance.deprels, actions);
+}
+
+void ActionUtils::get_oracle_actions2(const std::vector<int>& heads,
+    const std::vector<int>& deprels,
+    std::vector<Action>& actions) {
+  actions.clear();
+  auto len = heads.size();
+  std::vector<int> sigma;
+  int beta = 0;
+  std::vector<int> output(len, -1);
+
+  int step = 0;
+  while (!(sigma.size() ==1 && beta == len)) {
+    get_oracle_actions_onestep(heads, deprels, sigma, beta, output, actions);
+    // if (step++ < 2* len-1) { _INFO << actions.back(); }
+  }
+  // exit(1);
+}
+
+void ActionUtils::get_oracle_actions_onestep(const std::vector<int>& heads,
+    const std::vector<int>& deprels,
+    std::vector<int>& sigma,
+    int& beta,
+    std::vector<int>& output,
+    std::vector<Action>& actions) {
+  int top0 = (sigma.size() > 0 ? sigma.back(): -1);
+  int top1 = (sigma.size() > 1 ? sigma[sigma.size()- 2]: -1);
+
+  bool all_descendents_reduced = true;
+  if (top0 >= 0) {
+    for (auto i = 0; i < heads.size(); ++ i) {
+      if (heads[i] == top0 && output[i] != top0) {
+        // _INFO << i << " " << output[i];
+        all_descendents_reduced = false; break; }
+    }
+  }
+
+  if (top1 >= 0 && heads[top1] == top0) {
+    actions.push_back(ActionFactory::make_left_arc(deprels[top1]));
+    output[top1] = top0;
+    sigma.pop_back();
+    sigma.back() = top0;
+  } else if (top1 >= 0 && heads[top0] == top1 && all_descendents_reduced) {
+    actions.push_back(ActionFactory::make_right_arc(deprels[top0]));
+    output[top0] = top1;
+    sigma.pop_back();
+  } else if (beta < heads.size()) {
+    actions.push_back(ActionFactory::make_shift());
+    sigma.push_back(beta);
+    ++ beta;
   }
 }
 

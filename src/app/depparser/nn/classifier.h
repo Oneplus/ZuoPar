@@ -18,32 +18,6 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace NeuralNetwork {
 
-class Cost {
-public:
-  typedef std::vector<std::vector<int> > history_t;
-
-  floatval_t loss;
-  floatval_t accuracy;
-  arma::mat grad_W1;
-  arma::vec grad_b1;
-  arma::mat grad_W2;
-  arma::mat grad_E;
-  history_t dropout_histories;
-
-  Cost();
-
-  void emplace(const floatval_t& loss,
-      const floatval_t& accuracy,
-      const arma::mat& grad_W1,
-      const arma::vec& grad_b1,
-      const arma::mat& grad_W2,
-      const arma::mat& grad_E,
-      const history_t& dropout_histories
-      );
-
-  void merge(const Cost& other, bool debug = false);
-};
-
 class NeuralNetworkClassifier {
 private:
   // The weight group.
@@ -68,8 +42,6 @@ private:
   // Precomputed matrix
   arma::mat saved;      // Mat: encoder.size() X hidden_layer_size
   arma::mat grad_saved; // Mat: encoder.size() X hidden_layer_size
-
-  Cost cost;  // The cost in each iteration
 
   // The configuration
   size_t embedding_size;      //! The size of the embedding.

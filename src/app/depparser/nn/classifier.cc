@@ -10,38 +10,6 @@ namespace NeuralNetwork {
 
 // using namespace arma;
 
-Cost::Cost(): loss(0), accuracy(0) {}
-
-void Cost::emplace(const floatval_t& _loss,
-    const floatval_t& _accuracy,
-    const arma::mat& _grad_W1,
-    const arma::vec& _grad_b1,
-    const arma::mat& _grad_W2,
-    const arma::mat& _grad_E,
-    const history_t& _histories) {
-  loss = _loss;
-  accuracy = _accuracy;
-  grad_W1 = _grad_W1;
-  grad_b1 = _grad_b1;
-  grad_W2 = _grad_W2;
-  grad_E = _grad_E;
-  dropout_histories = _histories;
-}
-
-void Cost::merge(const Cost& other, bool debug) {
-  loss += other.loss;
-  accuracy += other.accuracy;
-  grad_W1 += other.grad_W1;
-  grad_b1 += other.grad_b1;
-  grad_W2 += other.grad_W2;
-  grad_E += other.grad_E;
-
-  if (debug) {
-    dropout_histories.insert(dropout_histories.end(),
-        other.dropout_histories.begin(), other.dropout_histories.end());
-  }
-}
-
 NeuralNetworkClassifier::NeuralNetworkClassifier()
   : initialized(false),
   dataset(nullptr),
@@ -86,18 +54,18 @@ void NeuralNetworkClassifier::initialize(
   // Initialize the network
   int nrows = hidden_layer_size;
   int ncols = embedding_size * nr_feature_types;
-  W1 = (2. * arma::randu<arma::mat>(nrows, ncols)- 1.) * sqrt(6./ (nrows + ncols));
-  b1 = (2. * arma::randu<arma::vec>(nrows)- 1.) * sqrt(6./ (nrows + ncols));
+  W1 = (2.* arma::randu<arma::mat>(nrows, ncols)- 1.) * sqrt(6./ (nrows+ ncols));
+  b1 = (2.* arma::randu<arma::vec>(nrows)- 1.) * sqrt(6./ (nrows+ ncols));
 
   nrows = nr_classes;  //
   ncols = hidden_layer_size;
-  W2 = (2. * arma::randu<arma::mat>(nrows, ncols)- 1.) * sqrt(6./ (nrows+ ncols));
+  W2 = (2.* arma::randu<arma::mat>(nrows, ncols)- 1.) * sqrt(6./ (nrows+ ncols));
 
   // Initialized the embedding
   nrows = embedding_size;
   ncols= (nr_forms + nr_postags + nr_deprels);
 
-  E = (2 * arma::randu<arma::mat>(nrows, ncols) - 1) * opt.init_range;
+  E = (2.* arma::randu<arma::mat>(nrows, ncols) - 1.) * opt.init_range;
   for (auto& embedding: embeddings) {
     int id = embedding[0];
     for (unsigned j = 1; j < embedding.size(); ++ j) {
@@ -122,6 +90,7 @@ void NeuralNetworkClassifier::initialize(
 
   //
   initialize_gradient_histories();
+  // arma::arma_rng::set_seed_random();
 
   initialized = true;
 
@@ -151,7 +120,7 @@ void NeuralNetworkClassifier::score(const std::vector<int>& attributes,
     }
   }
 
-  hidden_layer = hidden_layer + b1;
+  hidden_layer += b1;
   hidden_layer = hidden_layer % hidden_layer % hidden_layer;
 
   arma::vec output = W2 * hidden_layer;
@@ -201,17 +170,17 @@ void NeuralNetworkClassifier::initialize_gradient_histories() {
 
 void NeuralNetworkClassifier::take_ada_gradient_step() {
   eg2W1 += grad_W1 % grad_W1;
-  W1 -= ada_alpha * grad_W1 / arma::sqrt(eg2W1 + ada_eps);
+  W1 -= ada_alpha * (grad_W1 / arma::sqrt(eg2W1 + ada_eps));
 
   eg2b1 += grad_b1 % grad_b1;
-  b1 -= ada_alpha * grad_b1 / arma::sqrt(eg2b1 + ada_eps);
+  b1 -= ada_alpha * (grad_b1 / arma::sqrt(eg2b1 + ada_eps));
 
   eg2W2 += grad_W2 % grad_W2;
-  W2 -= ada_alpha * grad_W2 / arma::sqrt(eg2W2 + ada_eps);
+  W2 -= ada_alpha * (grad_W2 / arma::sqrt(eg2W2 + ada_eps));
 
   if (!fix_embeddings) {
     eg2E += grad_E % grad_E;
-    E -= ada_alpha * grad_E / arma::sqrt(eg2E + ada_eps);
+    E -= ada_alpha * (grad_E / arma::sqrt(eg2E + ada_eps));
   }
 }
 
@@ -242,6 +211,7 @@ void NeuralNetworkClassifier::precomputing() {
 
 void NeuralNetworkClassifier::precomputing(
     const std::unordered_set<int>& features) {
+  saved.zeros();
   for (auto fid: features) {
     auto rank = precomputation_id_encoder[fid];
     auto aid = fid / nr_feature_types;
@@ -249,7 +219,7 @@ void NeuralNetworkClassifier::precomputing(
     saved.col(rank) =
       W1.submat(0, off, hidden_layer_size-1, off+embedding_size-1) * E.col(aid);
   }
-  // _INFO << "classifier: precomputed " << features.size();
+  _TRACE << "classifier: precomputed " << features.size();
 }
 
 void NeuralNetworkClassifier::compute_gradient(
@@ -265,15 +235,15 @@ void NeuralNetworkClassifier::compute_gradient(
 
   loss = 0; accuracy = 0;
 
-  Cost::history_t histories;
+  std::vector<std::vector<int> > histories;
   for (std::vector<Sample>::const_iterator sample = begin; sample != end; ++ sample) {
-    auto& attributes = sample->attributes;
-    auto& classes = sample->classes;
+    const auto& attributes = sample->attributes;
+    const auto& classes = sample->classes;
 
     arma::vec Y(classes);
 
     arma::uvec dropout_mask = arma::find(
-        arma::randu<arma::vec>(hidden_layer_size) < dropout_probability );
+        arma::randu<arma::vec>(hidden_layer_size) > dropout_probability );
 
     if (debug) {
       std::vector<int> history;
@@ -282,6 +252,7 @@ void NeuralNetworkClassifier::compute_gradient(
     }
 
     arma::vec hidden_layer = arma::zeros<arma::vec>(dropout_mask.n_rows);
+    if (attributes.size() != nr_feature_types) { _ERROR << "!!!"; }
 
     for (auto i = 0, off = 0; i < attributes.size(); ++ i, off += embedding_size) {
       auto& aid = attributes[i];
@@ -291,22 +262,22 @@ void NeuralNetworkClassifier::compute_gradient(
         arma::uvec _ = { rep->second };
         hidden_layer += saved.submat(dropout_mask, _);
       } else {
-        hidden_layer += (W1.submat(dropout_mask,
-              arma::linspace<arma::uvec>(off, off+embedding_size-1, embedding_size)) *
-            E.col(aid)
-           );
+        arma::uvec __ = arma::linspace<arma::uvec>(off, off+embedding_size-1, embedding_size);
+        hidden_layer += (W1.submat(dropout_mask, __)* E.col(aid));
       }
     }
 
     hidden_layer += b1(dropout_mask);
-    arma::vec cubic_hidden_layer = hidden_layer % hidden_layer % hidden_layer;
+    // arma::vec cubic_hidden_layer = hidden_layer % hidden_layer % hidden_layer;
+    arma::vec cubic_hidden_layer = arma::clamp(arma::pow(hidden_layer, 3), -50., 50);
 
     // Mat(nr_classes, hidden_layer_size) * Vec(hidden_layer_size)
     // arma::vec output = W2.cols(dropout_mask) * cubic_hidden_layer(dropout_mask);
     arma::vec output = W2.cols(dropout_mask) * cubic_hidden_layer;
     int opt_class = -1, correct_class = -1;
     for (auto i = 0; i < nr_classes; ++ i) {
-      if (opt_class < 0 || output(i) > output(opt_class)) { opt_class = i; }
+      if (classes[i] >= 0 && (opt_class < 0 || output(i) > output(opt_class))) {
+        opt_class = i; }
       if (classes[i] == 1) { correct_class = i; }
     }
 
@@ -376,10 +347,7 @@ void NeuralNetworkClassifier::compute_saved_gradient(
 }
 
 void NeuralNetworkClassifier::add_l2_regularization() {
-  loss += (lambda * .5 * (
-        arma::dot(W1, W1) +
-        arma::dot(b1, b1) +
-        arma::dot(W2, W2)));
+  loss += (lambda * .5 * (arma::dot(W1, W1)+ arma::dot(b1, b1)+ arma::dot(W2, W2)));
   if (!fix_embeddings) { loss += (lambda * .5 * arma::dot(E, E)); }
 
   grad_W1 += lambda * W1;

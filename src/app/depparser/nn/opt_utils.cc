@@ -33,8 +33,8 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("ada-alpha", po::value<double>(), "The Alpha in AdaGrad. [default=0.01]")
     ("lambda", po::value<double>(), "The regularizer parameter. [default=1e-8]")
     ("dropout-probability", po::value<double>(), "The probability for dropout. [default=0.5]")
-    ("save-intermediate", po::value<bool>(), "Save the intermediate. [default=false]")
-    ("fix-embeddings", po::value<bool>(), "Fix the embeddings. [default=true]")
+    ("save-intermediate", po::value<bool>(), "Save the intermediate. [default=true]")
+    ("fix-embeddings", po::value<bool>(), "Fix the embeddings. [default=false]")
     ("root", po::value<std::string>(), "The root tag. [default=ROOT]")
     ("verbose", "Logging more details")
     ;
@@ -86,10 +86,10 @@ bool parse_ada_option(const po::variables_map& vm, AdaOption& opts) {
 
 bool parse_network_option(const po::variables_map& vm, NetworkOption& opts) {
   opts.hidden_layer_size = 200;
-  if (vm.count("hidden-size")) { opts.hidden_layer_size = vm["hidden_size"].as<double>(); }
+  if (vm.count("hidden-size")) { opts.hidden_layer_size = vm["hidden-size"].as<int>(); }
 
   opts.embedding_size = 50;
-  if (vm.count("embedding-size")) { opts.embedding_size = vm["embedding-size"].as<double>(); }
+  if (vm.count("embedding-size")) { opts.embedding_size = vm["embedding-size"].as<int>(); }
   return true;
 }
 

@@ -24,6 +24,13 @@ public:
       const std::vector<deprel_t>& deprels,
       std::vector<Action>& actions);
 
+  static void get_oracle_actions2(const Dependency& instance,
+      std::vector<Action>& actions);
+
+  static void get_oracle_actions2(const std::vector<int>& heads,
+      const std::vector<deprel_t>& deprels,
+      std::vector<Action>& actions);
+
   /**
    * Judge if the input action is a shift action.
    *
@@ -70,6 +77,14 @@ private:
       const std::vector<int>& heads,
       const std::vector<int>& deprels,
       const tree_t& tree,
+      std::vector<Action>& actions);
+
+  static void get_oracle_actions_onestep(
+      const std::vector<int>& heads,
+      const std::vector<int>& deprels,
+      std::vector<int>& sigma,
+      int& beta,
+      std::vector<int>& output,
       std::vector<Action>& actions);
 };
 
