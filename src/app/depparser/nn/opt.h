@@ -42,7 +42,6 @@ struct LearnOption:
   std::string reference_file;   //! The path to the reference file.
   std::string devel_file;       //! The path to the devel file.
   std::string embedding_file;   //! The path to the embedding.
-  int nr_threads;               //! Number of threads.
   int word_cutoff;              //! The frequency of rare word, word lower than that
                                 //! will be cut off.
   int max_iter;                 //! The maximum iteration.
@@ -52,6 +51,7 @@ struct LearnOption:
   int nr_precomputed;           //! The number of precomputed features
   int evaluation_stops;         //!
   int clear_gradient_per_iter;  //! clear gradient each iteration.
+  bool use_dynamic_oracle;      //! Specify to use dynamic oracle.
   bool save_intermediate;       //! Save model whenever see an improved UAS.
   bool fix_embeddings;          //! Not tune the embedding when learning the parameters
   bool debug;                   //! Perform debug when training.

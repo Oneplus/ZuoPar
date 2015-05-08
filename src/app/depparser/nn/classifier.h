@@ -59,11 +59,9 @@ private:
   floatval_t ada_eps;
   floatval_t ada_alpha;
 
-  const Dataset* dataset;
   std::unordered_map<int, size_t> precomputation_id_encoder;
 
   bool initialized;
-  size_t cursor;
 public:
   NeuralNetworkClassifier();
 
@@ -80,7 +78,6 @@ public:
   void initialize(int nr_forms, int nr_postags, int nr_deprels,
       const LearnOption& opt,
       const std::vector< std::vector<floatval_t> >& embeddings,
-      const Dataset* dataset,
       const std::vector<int>& precomputed_features
       );
 
@@ -93,8 +90,12 @@ public:
   void score(const std::vector<int>& attributes, std::vector<floatval_t>& retval);
 
   void info();
+
   //!
-  void compute_ada_gradient_step();
+  void compute_ada_gradient_step(
+      std::vector<Sample>::const_iterator begin,
+      std::vector<Sample>::const_iterator end
+      );
 
   //!
   void initialize_gradient_histories();

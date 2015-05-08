@@ -1,20 +1,23 @@
 #include <cstring>
+#include <climits>
+#include <bitset>
+#include <boost/multi_array.hpp>
+#include "utils/logging.h"
 #include "app/depparser/arcstandard/state.h"
+#include "app/depparser/arcstandard/action_utils.h"
 
 namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-State::State(): ref(0) {
-  clear();
-}
+State::State(): ref(0) { clear(); }
+State::State(const Dependency* r): ref(r) { clear(); }
 
-State::State(const Dependency* r): ref(r) {
-  clear();
-}
+bool State::can_shift() const     { return !buffer_empty(); }
+bool State::can_left_arc() const  { return stack_size() >= 2; }
+bool State::can_right_arc() const { return stack_size() >= 2; }
 
-void
-State::copy(const State& source) {
+void State::copy(const State& source) {
   this->ref = source.ref;
   this->score = source.score;
   this->previous = source.previous;
@@ -38,8 +41,7 @@ State::copy(const State& source) {
   #undef _COPY
 }
 
-void
-State::clear() {
+void State::clear() {
   this->score = 0;
   this->previous = 0;
   this->top0 = -1;
@@ -59,8 +61,7 @@ State::clear() {
   memset(right_2nd_most_child, -1, sizeof(right_2nd_most_child));
 }
 
-void
-State::refresh_stack_information() {
+void State::refresh_stack_information() {
   size_t sz = stack.size();
   if (0 == sz) {
     top0 = -1;
@@ -74,11 +75,8 @@ State::refresh_stack_information() {
   }
 }
 
-bool
-State::shift(const State& source) {
-  if (source.buffer_empty()) {
-    return false;
-  }
+bool State::shift(const State& source) {
+  if (!source.can_shift()) { return false; }
 
   this->copy(source);
   stack.push_back(this->buffer);
@@ -90,11 +88,8 @@ State::shift(const State& source) {
   return true;
 }
 
-bool
-State::left_arc(const State& source, deprel_t deprel) {
-  if (source.stack.size() < 2) {
-    return false;
-  }
+bool State::left_arc(const State& source, deprel_t deprel) {
+  if (!source.can_left_arc()) { return false; }
 
   this->copy(source);
   stack.pop_back();
@@ -123,11 +118,8 @@ State::left_arc(const State& source, deprel_t deprel) {
   return true;
 }
 
-bool
-State::right_arc(const State& source, deprel_t deprel) {
-  if (source.stack.size() < 2) {
-    return false;
-  }
+bool State::right_arc(const State& source, deprel_t deprel) {
+  if (!source.can_right_arc()) { return false; }
 
   this->copy(source);
   stack.pop_back();
@@ -151,15 +143,101 @@ State::right_arc(const State& source, deprel_t deprel) {
   return true;
 }
 
-bool
-State::buffer_empty() const {
-  return (this->buffer == this->ref->size());
+int State::cost(const std::vector<int>& gold_heads,
+    const std::vector<int>& gold_deprels) {
+  std::vector< std::vector<int> > tree(gold_heads.size());
+  for (auto i = 0; i < gold_heads.size(); ++ i) {
+    auto h = gold_heads[i]; if (h >= 0) { tree[h].push_back(i); }
+  }
+
+  const std::vector<int>& sigma_l = stack;
+  std::vector<int> sigma_r; sigma_r.push_back(stack.back());
+
+  std::bitset<kMaxNumberOfWords> sigma_l_mask;
+  std::bitset<kMaxNumberOfWords> sigma_r_mask;
+  for (auto s: sigma_l) { sigma_l_mask.set(s); }
+
+  for (int i = buffer; i < ref->size(); ++ i) {
+    if (gold_heads[i] < buffer) {
+      sigma_r.push_back(i);
+      sigma_r_mask.set(i);
+      continue;
+    }
+
+    for (auto d: tree[i]) {
+      if (sigma_l_mask.test(d) || sigma_r_mask.test(d)) {
+        sigma_r.push_back(i);
+        sigma_r_mask.set(i);
+        break;
+      }
+    }
+  }
+
+  int len_l = sigma_l.size();
+  int len_r = sigma_r.size();
+
+  typedef boost::multi_array<int, 3> array_t;
+  array_t T(boost::extents[len_l][len_r][len_l+len_r-1]);
+  std::fill( T.origin(), T.origin()+ T.num_elements(), 1024);
+
+  T[0][0][len_l-1]= 0;
+  for (int d = 0; d < len_l+len_r- 1; ++ d) {
+    for (int j = std::max(0, d-len_l+1); j < std::min(d+1, len_r); ++ j) {
+      int i = d-j;
+      if (i < len_l-1) {
+        int i_1 = sigma_l[len_l-i-2];
+        int i_1_rank = len_l-i-2;
+        for (auto rank = len_l-i-1; rank < len_l; ++ rank) {
+          auto h = sigma_l[rank];
+          auto h_rank = rank;
+          T[i+1][j][h_rank] = std::min(T[i+1][j][h_rank],
+              T[i][j][h_rank] + (gold_heads[i_1] == h ? 0: 2));
+          T[i+1][j][i_1_rank] = std::min(T[i+1][j][i_1_rank],
+              T[i][j][h_rank] + (gold_heads[h] == i_1 ? 0: 2));
+        }
+        for (auto rank = 1; rank < j+1; ++ rank) {
+          auto h =sigma_r[rank];
+          auto h_rank = len_l+rank-1;
+          T[i+1][j][h_rank] = std::min(T[i+1][j][h_rank],
+              T[i][j][h_rank] + (gold_heads[i_1] == h ? 0: 2));
+          T[i+1][j][i_1_rank] = std::min(T[i+1][j][i_1_rank],
+              T[i][j][h_rank] + (gold_heads[h] == i_1 ? 0: 2));
+        }
+      }
+      if (j < len_r-1) {
+        int j_1 = sigma_r[j+1];
+        int j_1_rank = len_l+j;
+        for (auto rank = len_l-i-1; rank < len_l; ++ rank) {
+          auto h = sigma_l[rank];
+          auto h_rank = rank;
+          T[i][j+1][h_rank] = std::min(T[i][j+1][h_rank],
+              T[i][j][h_rank] + (gold_heads[j_1] == h ? 0: 2));
+          T[i][j+1][j_1_rank] = std::min(T[i][j+1][j_1_rank],
+              T[i][j][h_rank] + (gold_heads[h] == j_1 ? 0: 2));
+        }
+        for (auto rank = 1; rank < j+1; ++ rank) {
+          auto h =sigma_r[rank];
+          auto h_rank = len_l+rank-1;
+          T[i][j+1][h_rank] = std::min(T[i][j+1][h_rank],
+              T[i][j][h_rank] + (gold_heads[j_1] == h ? 0: 2));
+          T[i][j+1][j_1_rank] = std::min(T[i][j+1][j_1_rank],
+              T[i][j][h_rank] + (gold_heads[h] == j_1 ? 0: 2));
+        }
+      }
+    }
+  }
+  auto penalty = 0;
+  for (int i = 0; i < buffer; ++ i) {
+    if (heads[i] != -1) {
+      if (heads[i] != gold_heads[i]) { penalty += 2; }
+      else if (deprels[i] != gold_deprels[i]) { penalty += 1; }
+    }
+  }
+  return T[len_l-1][len_r-1][0]+ penalty;
 }
 
-size_t
-State::stack_size() const {
-  return (this->stack.size());
-}
+bool State::buffer_empty() const { return (this->buffer == this->ref->size()); }
+size_t State::stack_size() const { return (this->stack.size()); }
 
 } //  end for namespace arcstandard
 } //  end for namespace dependencyparser

@@ -67,7 +67,6 @@ void Pipe::display_learning_parameters() {
   if (learn_opt == nullptr) { _WARN << "pipe: learning parameter is not set."; return; }
 
   const LearnOption& _ = (*learn_opt);
-  _INFO << "report: (Misc) training threads = " << _.nr_threads << ".";
   _INFO << "report: (Misc) word cutoff frequency = " << _.word_cutoff << ".";
   _INFO << "report: (Misc) init range = " << _.init_range << ".";
   _INFO << "report: (Misc) max iteration = " << _.max_iter << ".";
@@ -79,7 +78,10 @@ void Pipe::display_learning_parameters() {
   _INFO << "report: (Network) embedding size = " << _.embedding_size << ".";
   _INFO << "report: (Misc) evaluate on each " << _.evaluation_stops << " iterations.";
   _INFO << "report: (Misc) clear gradient per iteration " << _.clear_gradient_per_iter <<".";
-  _INFO << "report: (Misc) save intermediate " << _.save_intermediate << ".";
+  _INFO << "report: (Misc) save intermediate = " << _.save_intermediate << ".";
+  _INFO << "report: (Misc) fix embedding = " << _.fix_embeddings << ".";
+  _INFO << "report: (Misc) use dynamic oracle = " << _.use_dynamic_oracle << ".";
+
 }
 
 bool Pipe::setup() {
@@ -235,7 +237,6 @@ void Pipe::initialize_classifier() {
       deprels_alphabet.size(),
       (*learn_opt),
       embeddings,
-      (&dataset),
       precomputed_features
       );
   _INFO << "report: classifier is initialized.";
@@ -276,22 +277,23 @@ void Pipe::generate_training_samples() {
         _WARN << "#: number of feature types unequal to configed number";
       }
 
-      std::vector<Action> possible_actions;
-      decoder.get_possible_actions(states[step], possible_actions);
-
-      std::vector<floatval_t> classes(decoder.number_of_transitions(), -1.);
-      for (auto l: decoder.transform(possible_actions)) {
-        if (l == decoder.transform(oracle_action)) { classes[l] = 1.; }
-        else { classes[l] = 0.; }
+      if (!learn_opt->use_dynamic_oracle) {
+        // If not using the dynamic oracle mode, caching all the training instances
+        // in the dataset
+        std::vector<Action> possible_actions;
+        decoder.get_possible_actions(states[step], possible_actions);
+        std::vector<floatval_t> classes(decoder.number_of_transitions(), -1.);
+        for (auto l: decoder.transform(possible_actions)) {
+          if (l == decoder.transform(oracle_action)) { classes[l] = 1.; }
+          else { classes[l] = 0.; }
+        }
+        dataset.add(attributes, classes);
       }
-
-      dataset.add(attributes, classes);
 
       for (auto j = 0; j < attributes.size(); ++ j) {
         auto fid = attributes[j] * attributes.size() + j;
         features_frequencies[fid] += 1;
       }
-
       decoder.transit(states[step], oracle_action, &states[step+ 1]);
     }
 
@@ -413,16 +415,105 @@ void Pipe::predict(const RawCoNLLXDependency& data,
   }
 }
 
+std::pair<
+  std::vector<Sample>::const_iterator,
+  std::vector<Sample>::const_iterator
+> Pipe::generate_training_samples_one_batch() {
+  std::vector<Sample>::const_iterator begin;
+  std::vector<Sample>::const_iterator end;
+
+  if (learn_opt->use_dynamic_oracle) {
+    dataset.samples.clear();
+
+    while (dataset.samples.size() < learn_opt->batch_size) {
+      const RawCoNLLXDependency& data = train_dataset[cursor ++];
+      if (cursor == train_dataset.size()) { cursor = 0; }
+
+      if (!DependencyUtils::is_tree(data.heads) ||
+          !DependencyUtils::is_projective(data.heads)) {
+        continue;
+      }
+      Dependency dependency;
+      size_t L = data.forms.size();
+      for (size_t i = 0; i < L; ++ i) {
+        dependency.push_back(
+            forms_alphabet.encode(data.forms[i]),
+            postags_alphabet.encode(data.postags[i]),
+            data.heads[i],
+            deprels_alphabet.encode(data.deprels[i]));
+      }
+
+      std::vector<State> states(L*2);
+      states[0].copy(State(&dependency));
+      decoder.transit(states[0], ActionFactory::make_shift(), &states[1]);
+      for (auto step = 1; step < L*2-1; ++ step) {
+        std::vector<int> attributes;
+        get_features(states[step], attributes);
+        if (attributes.size() != learn_opt->nr_feature_types) {
+          _WARN << "#: number of feature types unequal to configed number";
+        }
+
+        std::vector<floatval_t> scores;
+        classifier.score(attributes, scores);
+
+        std::vector<Action> possible_actions;
+        decoder.get_possible_actions(states[step], possible_actions);
+ 
+        std::vector<floatval_t> classes(decoder.number_of_transitions(), -1.);
+        auto oracle = -1;
+        auto best_score = 0;
+        for (auto& act: possible_actions) {
+          auto l = decoder.transform(act);
+          classes[l] = 0.;
+          decoder.transit(states[step], act, &states[step+1]);
+          auto c = states[step+1].cost(dependency.heads, dependency.deprels);
+          // if (c == 0) _INFO << act << " " << c;
+          if (c == 0 && (oracle == -1 || scores[l] > scores[oracle])) {
+            oracle = l;
+          }
+        }
+        if (oracle == -1) {
+          _ERROR << "nani! " << step << " " << cursor;
+          exit(1);
+        }
+        classes[oracle] = 1.;
+
+        dataset.add(attributes, classes);
+        decoder.transit(states[step], decoder.transform(oracle), &states[step+ 1]);
+      }
+    }
+    begin = dataset.samples.begin();
+    end = dataset.samples.end();
+  } else {
+    const std::vector<Sample>& entire_samples = dataset.samples;
+    begin = entire_samples.begin() + cursor;
+    end = entire_samples.end();
+    if (cursor + learn_opt->batch_size < entire_samples.size()) {
+      end = entire_samples.begin() + cursor + learn_opt->batch_size;
+      cursor += learn_opt->batch_size;
+    } else {
+      cursor = 0;
+    }
+  }
+  return std::make_pair(begin, end);
+}
+
 void Pipe::learn() {
   if (!setup()) { return; }
   build_alphabet();
   generate_training_samples();
   initialize_classifier();
 
+  cursor = 0;
   floatval_t best_uas = -1;
   for (size_t iter = 0; iter < learn_opt->max_iter; ++ iter) {
     boost::timer t;
-    classifier.compute_ada_gradient_step();
+
+    std::vector<Sample>::const_iterator begin;
+    std::vector<Sample>::const_iterator end;
+    std::tie(begin, end) = generate_training_samples_one_batch();
+
+    classifier.compute_ada_gradient_step(begin, end);
     _INFO << "pipe (iter#" << (iter+ 1) << "): cost=" << classifier.get_cost()
       << ", accuracy(%)=" << classifier.get_accuracy()
       << " (" << t.elapsed() << ")";

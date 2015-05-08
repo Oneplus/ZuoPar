@@ -19,7 +19,6 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("embedding", po::value<std::string>(), "The path to the embedding file.")
     ("reference", po::value<std::string>(), "The path to the reference file.")
     ("development", po::value<std::string>(), "The path to the development file.\n")
-    ("threads-number", po::value<int>(), "The number of training threads. [default=1]")
     ("init-range", po::value<double>(), "The initialization range. [default=0.01]")
     ("word-cutoff", po::value<int>(), "The frequency of rare word. [default=1]")
     ("max-iter", po::value<int>(), "The number of max iteration. [default=20000]")
@@ -33,6 +32,8 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("ada-alpha", po::value<double>(), "The Alpha in AdaGrad. [default=0.01]")
     ("lambda", po::value<double>(), "The regularizer parameter. [default=1e-8]")
     ("dropout-probability", po::value<double>(), "The probability for dropout. [default=0.5]")
+    ("use-dynamic-oracle", po::value<bool>(),
+     "Use dynamic oracle instead of static oracle. [default=false]")
     ("save-intermediate", po::value<bool>(), "Save the intermediate. [default=true]")
     ("fix-embeddings", po::value<bool>(), "Fix the embeddings. [default=false]")
     ("root", po::value<std::string>(), "The root tag. [default=ROOT]")
@@ -124,9 +125,6 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   opts.init_range = .01;
   if (vm.count("init-range")) { opts.init_range = vm["init-range"].as<double>(); }
 
-  opts.nr_threads = 1;
-  if (vm.count("threads-number")) { opts.nr_threads = vm["threads-number"].as<int>(); }
-
   opts.word_cutoff = 1;
   if (vm.count("word-cutoff")) { opts.word_cutoff = vm["word-cutoff"].as<int>(); }
 
@@ -147,8 +145,15 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   if (vm.count("clear-gradient-per-iter")) {
     opts.clear_gradient_per_iter = vm["clear-gradient-per-iter"].as<int>(); }
 
+  opts.use_dynamic_oracle = false;
+  if (vm.count("use-dynamic-oracle")) {
+    opts.use_dynamic_oracle = vm["use-dynamic-oracle"].as<bool>();
+  }
+
   opts.save_intermediate = true;
-  if (vm.count("save-intermediate")) { opts.save_intermediate = vm["save-intermediate"].as<bool>(); }
+  if (vm.count("save-intermediate")) {
+    opts.save_intermediate = vm["save-intermediate"].as<bool>();
+  }
 
   opts.fix_embeddings = false;
   if (vm.count("fix-embeddings")) { opts.fix_embeddings = vm["fix-embeddings"].as<bool>(); }

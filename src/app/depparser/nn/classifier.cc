@@ -12,8 +12,6 @@ namespace NeuralNetwork {
 
 NeuralNetworkClassifier::NeuralNetworkClassifier()
   : initialized(false),
-  dataset(nullptr),
-  cursor(0),
   embedding_size(0),
   hidden_layer_size(0),
   nr_objects(0),
@@ -26,7 +24,6 @@ void NeuralNetworkClassifier::initialize(
     int nr_forms, int nr_postags, int nr_deprels,
     const LearnOption& opt,
     const std::vector< std::vector<floatval_t> >& embeddings,
-    const Dataset* _dataset,
     const std::vector<int>& precomputed_features
     ) {
   if (initialized) {
@@ -35,7 +32,6 @@ void NeuralNetworkClassifier::initialize(
   }
 
   batch_size = opt.batch_size;
-  nr_threads = opt.nr_threads;
   fix_embeddings = opt.fix_embeddings;
   // debug = opt.debug;
   dropout_probability = opt.dropout_probability;
@@ -85,9 +81,6 @@ void NeuralNetworkClassifier::initialize(
   saved.zeros(hidden_layer_size, encoder.size());
   grad_saved.zeros(hidden_layer_size, encoder.size());
 
-  // Config the dataset.
-  dataset = _dataset;
-
   //
   initialize_gradient_histories();
   // arma::arma_rng::set_seed_random();
@@ -128,23 +121,13 @@ void NeuralNetworkClassifier::score(const std::vector<int>& attributes,
   for (int i = 0; i < nr_classes; ++ i) { retval[i] = output(i); }
 }
 
-void NeuralNetworkClassifier::compute_ada_gradient_step() {
+void NeuralNetworkClassifier::compute_ada_gradient_step(
+    std::vector<Sample>::const_iterator begin,
+    std::vector<Sample>::const_iterator end) {
   if (!initialized) {
     _ERROR << "classifier: should not run the learning algorithm"
       " with un-initialized classifier.";
     return;
-  }
-
-  const std::vector<Sample>& entire_samples = dataset->samples;
-  // Get a batch of samples.
-
-  std::vector<Sample>::const_iterator begin = entire_samples.begin() + cursor;
-  std::vector<Sample>::const_iterator end = entire_samples.end();
-  if (cursor + batch_size < entire_samples.size()) {
-    end = entire_samples.begin() + cursor + batch_size;
-    cursor += batch_size;
-  } else {
-    cursor = 0;
   }
 
   // precomputing

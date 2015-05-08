@@ -44,6 +44,7 @@ private:
 
   // The internal data
   Dataset dataset;
+  int cursor;
   std::vector<int> precomputed_features;
 
   // The alphabet
@@ -74,6 +75,10 @@ private:
   void load_model(const std::string& model_path);
   void save_model(const std::string& model_path);
   void info();
+  std::pair<
+    std::vector<Sample>::const_iterator,
+    std::vector<Sample>::const_iterator
+  > generate_training_samples_one_batch();
 };
 
 } //  namespace neuralnetwork

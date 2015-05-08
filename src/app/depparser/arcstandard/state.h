@@ -55,14 +55,14 @@ public:
    */
   bool right_arc(const State& source, deprel_t deprel);
 
+  //! Used in dynamic oracle, should only be performed on gold state.
+  int cost(const std::vector<int>& heads, const std::vector<int>& deprels);
+
   //! Return true on the buffer is empty.
   bool buffer_empty() const;
 
   //! Get the size of the stack.
   size_t stack_size() const;
-
-  //! Refresh the value of top0 and top1.
-  void refresh_stack_information();
 
   //! The pointer to the previous state.
   std::vector<int> stack;
@@ -117,6 +117,12 @@ public:
 
   //! Use to record the right 2nd-most child for each word in current state.
   int right_2nd_most_child[kMaxNumberOfWords];
+
+private:
+  void refresh_stack_information();   //! Refresh the value of top0 and top1.
+  bool can_shift() const;             //! Return can perform shift action.
+  bool can_left_arc() const;          //! Return can perform left arc action.
+  bool can_right_arc() const;         //! Return can perform right arc action.
 };
 
 } //  end for namespace arcstandard

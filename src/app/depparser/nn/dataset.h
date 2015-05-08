@@ -10,8 +10,8 @@ namespace DependencyParser {
 namespace NeuralNetwork {
 
 struct Sample {
-  std::vector<int> attributes;  // sparse vector of attributes
-  std::vector<floatval_t> classes;     // dense vector of classes
+  std::vector<int> attributes;      //! sparse vector of attributes
+  std::vector<floatval_t> classes;  //! dense vector of classes
 
   Sample();
   Sample(const std::vector<int>& attributes,
