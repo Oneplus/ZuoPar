@@ -75,7 +75,9 @@ public:
    *  @param[in]  embedding_size  The size of embeddings
    *  @param[in]  hidden_size     The size of hidden layer
    */
-  void initialize(int nr_forms, int nr_postags, int nr_deprels,
+  void initialize(int nr_objects,
+      int nr_classes,
+      int nr_feature_types,
       const LearnOption& opt,
       const std::vector< std::vector<floatval_t> >& embeddings,
       const std::vector<int>& precomputed_features

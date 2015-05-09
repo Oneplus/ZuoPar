@@ -42,19 +42,21 @@ struct LearnOption:
   std::string reference_file;   //! The path to the reference file.
   std::string devel_file;       //! The path to the devel file.
   std::string embedding_file;   //! The path to the embedding.
+  std::string cluster_file;     //! The path to the cluster file, actived in use-cluster.
   int word_cutoff;              //! The frequency of rare word, word lower than that
                                 //! will be cut off.
   int max_iter;                 //! The maximum iteration.
   floatval_t init_range;        //!
   int batch_size;               //! The Size of batch.
-  int nr_feature_types;         //! The number of features, including word, POS and label.
   int nr_precomputed;           //! The number of precomputed features
   int evaluation_stops;         //!
   int clear_gradient_per_iter;  //! clear gradient each iteration.
-  bool use_dynamic_oracle;      //! Specify to use dynamic oracle.
+  std::string oracle;           //! The oracle type.
   bool save_intermediate;       //! Save model whenever see an improved UAS.
   bool fix_embeddings;          //! Not tune the embedding when learning the parameters
-  bool debug;                   //! Perform debug when training.
+  bool use_distance;            //! Specify to use distance feature.
+  bool use_valency;             //! Specify to use valency feature.
+  bool use_cluster;             //! Specify to use cluster feature.
 };
 
 struct TestOption:

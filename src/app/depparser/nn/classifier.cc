@@ -21,7 +21,9 @@ NeuralNetworkClassifier::NeuralNetworkClassifier()
 }
 
 void NeuralNetworkClassifier::initialize(
-    int nr_forms, int nr_postags, int nr_deprels,
+    int _nr_objects,
+    int _nr_classes,
+    int _nr_feature_types,
     const LearnOption& opt,
     const std::vector< std::vector<floatval_t> >& embeddings,
     const std::vector<int>& precomputed_features
@@ -40,9 +42,9 @@ void NeuralNetworkClassifier::initialize(
   ada_alpha = opt.ada_alpha;
 
   // Initialize the parameter.
-  nr_feature_types = opt.nr_feature_types;
-  nr_objects = nr_forms + nr_postags + nr_deprels;
-  nr_classes = nr_deprels*2-1; // nr_deprels*2+1-NIL
+  nr_feature_types = _nr_feature_types;
+  nr_objects = _nr_objects;
+  nr_classes = _nr_classes; // nr_deprels*2+1-NIL
 
   embedding_size = opt.embedding_size;
   hidden_layer_size = opt.hidden_layer_size;
@@ -53,13 +55,13 @@ void NeuralNetworkClassifier::initialize(
   W1 = (2.* arma::randu<arma::mat>(nrows, ncols)- 1.) * sqrt(6./ (nrows+ ncols));
   b1 = (2.* arma::randu<arma::vec>(nrows)- 1.) * sqrt(6./ (nrows+ ncols));
 
-  nrows = nr_classes;  //
+  nrows = _nr_classes;  //
   ncols = hidden_layer_size;
   W2 = (2.* arma::randu<arma::mat>(nrows, ncols)- 1.) * sqrt(6./ (nrows+ ncols));
 
   // Initialized the embedding
   nrows = embedding_size;
-  ncols= (nr_forms + nr_postags + nr_deprels);
+  ncols= _nr_objects;
 
   E = (2.* arma::randu<arma::mat>(nrows, ncols) - 1.) * opt.init_range;
   for (auto& embedding: embeddings) {

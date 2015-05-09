@@ -24,7 +24,6 @@ struct Dataset {
   std::vector<Sample> samples;
 
   Dataset();
-  void initialize(size_t nr_attributes, size_t nr_classes);
   void add(const std::vector<int>& attributes, const std::vector<floatval_t>& classes);
   void shuffle();
   size_t size() const;

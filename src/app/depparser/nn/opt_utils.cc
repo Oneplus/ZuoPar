@@ -25,17 +25,23 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("batch-size", po::value<int>(), "The size of batch. [default=10000]")
     ("hidden-size", po::value<int>(), "The size of hidden layer. [default=200]")
     ("embedding-size", po::value<int>(), "The size of embedding. [default=50]")
-    ("features-number", po::value<int>(), "The number of features. [default=48]")
     ("precomputed-number", po::value<int>(), "The number of precomputed. [default=100000]")
     ("evaluation-stops", po::value<int>(), "Evaluation on per-iteration. [default=100]")
     ("ada-eps", po::value<double>(), "The EPS in AdaGrad. [defautl=1e-6]")
     ("ada-alpha", po::value<double>(), "The Alpha in AdaGrad. [default=0.01]")
     ("lambda", po::value<double>(), "The regularizer parameter. [default=1e-8]")
     ("dropout-probability", po::value<double>(), "The probability for dropout. [default=0.5]")
-    ("use-dynamic-oracle", po::value<bool>(),
-     "Use dynamic oracle instead of static oracle. [default=false]")
+    ("oracle", po::value<std::string>(),
+     "The oracle type\n"
+     " - static: The static oracle [default]\n"
+     " - nondet: The non-deterministic oracle\n"
+     " - explore: The explore oracle.")
     ("save-intermediate", po::value<bool>(), "Save the intermediate. [default=true]")
     ("fix-embeddings", po::value<bool>(), "Fix the embeddings. [default=false]")
+    ("use-distance", po::value<bool>(), "Specify to use distance feature. [default=false]")
+    ("use-valency", po::value<bool>(), "Specify to use valency feature. [default=false]")
+    ("use-cluster", po::value<bool>(), "Specify to use cluster feature. [default=false]")
+    ("cluster", po::value<std::string>(), "Specify the path to the cluster file.")
     ("root", po::value<std::string>(), "The root tag. [default=ROOT]")
     ("verbose", "Logging more details")
     ;
@@ -131,9 +137,6 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   opts.batch_size = 10000;
   if (vm.count("batch-size")) { opts.batch_size = vm["batch-size"].as<int>(); }
 
-  opts.nr_feature_types = 48;
-  if (vm.count("features-number")) { opts.nr_feature_types = vm["features-number"].as<int>(); }
-
   opts.nr_precomputed = 100000;
   if (vm.count("precomputed-number")) {
     opts.nr_precomputed = vm["precomputed-number"].as<int>(); }
@@ -145,9 +148,12 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   if (vm.count("clear-gradient-per-iter")) {
     opts.clear_gradient_per_iter = vm["clear-gradient-per-iter"].as<int>(); }
 
-  opts.use_dynamic_oracle = false;
-  if (vm.count("use-dynamic-oracle")) {
-    opts.use_dynamic_oracle = vm["use-dynamic-oracle"].as<bool>();
+  opts.oracle = "static";
+  if (vm.count("oracle")) {
+    opts.oracle = vm["oracle"].as<std::string>();
+    if (opts.oracle != "static" && opts.oracle != "nondet" && opts.oracle != "explore") {
+      opts.oracle = "static";
+    }
   }
 
   opts.save_intermediate = true;
@@ -160,6 +166,20 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
 
   opts.root = "ROOT";
   if (vm.count("root")) { opts.root = vm["root"].as<std::string>(); } 
+
+  opts.use_distance = false;
+  if (vm.count("use-distance")) { opts.use_distance = vm["use-distance"].as<bool>(); }
+
+  opts.use_valency = false;
+  if (vm.count("use-valency")) { opts.use_valency = vm["use-valency"].as<bool>(); }
+
+  opts.use_cluster = false;
+  if (vm.count("use-cluster")) { opts.use_cluster = vm["use-cluster"].as<bool>(); }
+
+  if (opts.use_cluster) {
+    if (vm.count("cluster")) { opts.cluster_file = vm["cluster"].as<std::string>(); }
+  }
+
   return true;
 }
 
