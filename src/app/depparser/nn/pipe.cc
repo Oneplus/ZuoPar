@@ -95,6 +95,7 @@ void Pipe::display_learning_parameters() {
   _INFO << "report: (AdaGrad) alpha = " << _.ada_alpha << ".";
   _INFO << "report: (AdaGrad) lambda = " << _.lambda << ".";
   _INFO << "report: (AdaGrad) dropout probability = " << _.dropout_probability << ".";
+  _INFO << "report: (Network) activation function = " << _.activation << ".";
   _INFO << "report: (Network) hidden size = " << _.hidden_layer_size << ".";
   _INFO << "report: (Network) embedding size = " << _.embedding_size << ".";
   _INFO << "report: (Misc) evaluate on each " << _.evaluation_stops << " iterations.";
@@ -151,7 +152,7 @@ void Pipe::check_dataset(const std::vector<RawCoNLLXDependency>& dataset) {
       ++ nr_non_projective_trees;
     }
   }
-  _INFO << "report: " << nr_non_trees << " tree(s) are illeagl.";
+  _INFO << "report: " << nr_non_trees << " tree(s) are illegal.";
   _INFO << "report: " << nr_non_projective_trees << " tree(s) are legal but not projective.";
 }
 
@@ -278,7 +279,7 @@ void Pipe::build_feature_space() {
 
 void Pipe::build_cluster() {
   namespace algo = boost::algorithm;
-  if (forms_alphabet.size()) {
+  if (!forms_alphabet.size()) {
     _ERROR << "#: should not load cluster before constructing forms alphabet.";
     return;
   }
@@ -286,64 +287,55 @@ void Pipe::build_cluster() {
   if (!ifs.good()) {
     _ERROR << "#: cluster file open failed, cluster is not loaded.";
     return;
-  } else {
-    std::string line;
-    auto interval = IO::number_of_lines(ifs) / 10;
-    auto nr_lines = 1;
-    ifs.close(); ifs.clear(); ifs.open(cluster_file);
-
-    while (std::getline(ifs, line)) {
-      if (nr_lines++ % interval == 0) {
-        _INFO << "#: loaded " << nr_lines / interval << "0% clusters.";
-      }
-
-      algo::trim(line);
-      if (line.size() == 0) { continue; }
-      std::vector<std::string> items;
-      algo::split(items, line, boost::is_any_of("\t "), boost::token_compress_on);
-      int form = forms_alphabet.encode(items[0]);
-      // TODO to lower fails with utf8 input
-      // int transformed_form = forms_alphabet.encode(items[0].tolower());
-      if (form == -1) {
-        //_TRACE << "report: form\'" << items[0] << "\' not occur in training data, ignore.";
-        continue;
-      }
-      if (items.size() < 2) {
-        _WARN << "cluster file in ill format.";
-        continue;
-      }
-
-      form_to_cluster4[form] = cluster4_types_alphabet.insert(items[1].substr(4));
-      form_to_cluster6[form] = cluster6_types_alphabet.insert(items[1].substr(6));
-      form_to_cluster[form] = cluster_types_alphabet.insert(items[1]);
-    }
-
-    // Insert nil cluster.
-    cluster4_types_alphabet.insert(SpecialOption::UNKNOWN);
-    kNilCluster4 = cluster4_types_alphabet.insert(SpecialOption::NIL);
-    cluster4_types_alphabet.insert(SpecialOption::ROOT);
-
-    cluster6_types_alphabet.insert(SpecialOption::UNKNOWN);
-    kNilCluster6 = cluster6_types_alphabet.insert(SpecialOption::NIL);
-    cluster6_types_alphabet.insert(SpecialOption::ROOT);
-
-    cluster_types_alphabet.insert(SpecialOption::UNKNOWN);
-    kNilCluster = cluster_types_alphabet.insert(SpecialOption::NIL);
-    cluster6_types_alphabet.insert(SpecialOption::ROOT);
-
-    _INFO << "#: loaded " << cluster4_types_alphabet.size() << " cluster(4)";
-    _INFO << "#: loaded " << cluster6_types_alphabet.size() << " cluster(6)";
-    _INFO << "#: loaded " << cluster_types_alphabet.size() << " cluster";
   }
 
-  // if (use_cluster) { kClusterInFeaturespace += ; }
+  std::string line;
+  auto interval = IO::number_of_lines(ifs) / 10;
+  auto nr_lines = 1;
+  ifs.close(); ifs.clear(); ifs.open(cluster_file);
+
+  while (std::getline(ifs, line)) {
+    if (nr_lines++ % interval == 0) {
+      _INFO << "#: loaded " << nr_lines / interval << "0% clusters.";
+    }
+
+    algo::trim(line);
+    if (line.size() == 0) { continue; }
+    std::vector<std::string> items;
+    algo::split(items, line, boost::is_any_of("\t "), boost::token_compress_on);
+    if (items.size() < 2) {  _WARN << "cluster file in ill format."; continue; }
+
+    int form = forms_alphabet.encode(items[1]);
+    if (form == -1) { continue; }
+    form_to_cluster4[form] = cluster4_types_alphabet.insert(items[0].substr(0, 4));
+    form_to_cluster6[form] = cluster6_types_alphabet.insert(items[0].substr(0, 6));
+    form_to_cluster[form] = cluster_types_alphabet.insert(items[0]);
+  }
+
+  // Insert nil cluster.
+  form_to_cluster4[-1] = cluster4_types_alphabet.insert(SpecialOption::UNKNOWN);
+  kNilCluster4 = cluster4_types_alphabet.insert(SpecialOption::NIL);
+  cluster4_types_alphabet.insert(SpecialOption::ROOT);
+
+  form_to_cluster6[-1] = cluster6_types_alphabet.insert(SpecialOption::UNKNOWN);
+  kNilCluster6 = cluster6_types_alphabet.insert(SpecialOption::NIL);
+  cluster6_types_alphabet.insert(SpecialOption::ROOT);
+
+  form_to_cluster[-1] = cluster_types_alphabet.insert(SpecialOption::UNKNOWN);
+  kNilCluster = cluster_types_alphabet.insert(SpecialOption::NIL);
+  cluster_types_alphabet.insert(SpecialOption::ROOT);
+
+  _INFO << "#: loaded " << cluster4_types_alphabet.size() << " cluster(4)";
+  _INFO << "#: loaded " << cluster6_types_alphabet.size() << " cluster(6)";
+  _INFO << "#: loaded " << cluster_types_alphabet.size() << " cluster";
+  _INFO << "#: form to cluster mapping size=" << form_to_cluster.size();
 }
 
 void Pipe::initialize_classifier() {
   namespace algo = boost::algorithm;
 
   _INFO << "#: start to load embedding";
-  std::vector< std::vector<floatval_t> > embeddings;
+  std::unordered_map< std::string, std::vector<floatval_t> > raw_embeddings;
   std::ifstream ifs(embedding_file);
   if (!ifs.good()) {
     _WARN << "#: failed to open embedding file, embedding will be randomly initialized.";
@@ -359,17 +351,9 @@ void Pipe::initialize_classifier() {
         _INFO << "#: loaded " << nr_lines / interval << "0% embeddings.";
       }
 
-      algo::trim(line);
-      if (line.size() == 0) { continue; }
+      algo::trim(line); if (line.size() == 0) { continue; }
       std::vector<std::string> items;
       algo::split(items, line, boost::is_any_of("\t "), boost::token_compress_on);
-      int form = forms_alphabet.encode(items[0]);
-      // TODO to lower fails with utf8 input
-      // int transformed_form = forms_alphabet.encode(items[0].tolower());
-      if (form == -1) {
-        //_TRACE << "report: form\'" << items[0] << "\' not occur in training data, ignore.";
-        continue;
-      }
 
       if (items.size() != learn_opt->embedding_size + 1) {
         _WARN << "report: embedding dimension not match to configuration.";
@@ -377,21 +361,37 @@ void Pipe::initialize_classifier() {
       }
 
       std::vector<floatval_t> embedding;
-      embedding.push_back(form);
       for (unsigned i = 1; i < items.size(); ++ i) {
         embedding.push_back( boost::lexical_cast<floatval_t>(items[i]) );
       }
-      embeddings.push_back( embedding );
+      raw_embeddings[items[0]] = embedding;
     }
+  }
+
+  std::vector< std::vector<floatval_t> > embeddings;
+  for (auto i = 0; i < forms_alphabet.size(); ++ i) {
+    std::string token = forms_alphabet.decode(i);
+    auto result = raw_embeddings.find(token);
+    std::vector<floatval_t> embedding;
+    if (result != raw_embeddings.end()) {
+      embedding.push_back(i);
+      for (const floatval_t& v: result->second) { embedding.push_back(v); }
+    } else {
+      result = raw_embeddings.find(boost::algorithm::to_lower_copy(token));
+      if (result != raw_embeddings.end()) {
+        embedding.push_back(i);
+        for (const floatval_t& v: result->second) { embedding.push_back(v); }
+      }
+    }
+
+    if (embedding.size() > 0) embeddings.push_back( embedding );
   }
   _INFO << "report: " << embeddings.size() << " embedding is loaded.";
 
-  classifier.initialize(kFeatureSpaceEnd,
-      deprels_alphabet.size()*2-1,
-      nr_feature_types,
-      (*learn_opt),
-      embeddings,
-      precomputed_features
+  NeuralNetworkClassifier::ActivationType activation = NeuralNetworkClassifier::kCube;
+  if (learn_opt->activation == "relu") activation = NeuralNetworkClassifier::kReLU;
+  classifier.initialize(kFeatureSpaceEnd, deprels_alphabet.size()*2-1,
+      nr_feature_types, (*learn_opt), embeddings, precomputed_features, activation
       );
   _INFO << "report: classifier is initialized.";
 }
@@ -407,38 +407,10 @@ void Pipe::generate_training_samples() {
       continue;
     }
     Dependency dependency;
-    std::vector<int> cluster4;
-    std::vector<int> cluster6;
-    std::vector<int> cluster;
+    std::vector<int> cluster4, cluster6, cluster;
     size_t L = data.forms.size();
-    for (size_t i = 0; i < L; ++ i) {
-      int form = forms_alphabet.encode(data.forms[i]);
-
-      dependency.push_back(form,
-          postags_alphabet.encode(data.postags[i]),
-          data.heads[i],
-          deprels_alphabet.encode(data.deprels[i]));
-
-      if (use_cluster) {
-        if (i == 0) {
-          cluster4.push_back(cluster4_types_alphabet.encode(SpecialOption::ROOT));
-          cluster6.push_back(cluster6_types_alphabet.encode(SpecialOption::ROOT));
-          cluster.push_back(cluster_types_alphabet.encode(SpecialOption::ROOT));
-        } else {
-          auto itx4 = form_to_cluster4.find(form);
-          cluster4.push_back( itx4 == form_to_cluster4.end()?
-              cluster4_types_alphabet.encode(SpecialOption::UNKNOWN): itx4->second);
-
-          auto itx6 = form_to_cluster6.find(form);
-          cluster6.push_back( itx6 == form_to_cluster6.end()?
-              cluster6_types_alphabet.encode(SpecialOption::UNKNOWN): itx6->second);
-
-          auto itx = form_to_cluster.find(form);
-          cluster.push_back( itx == form_to_cluster.end()?
-              cluster_types_alphabet.encode(SpecialOption::UNKNOWN): itx->second);
-        }
-      }
-    }
+    transduce_instance_to_dependency(data, dependency, true);
+    get_cluster_from_dependency(dependency, cluster4, cluster6, cluster);
 
     std::vector<Action> oracle_actions;
     ActionUtils::get_oracle_actions2(dependency, oracle_actions);
@@ -561,9 +533,7 @@ void Pipe::get_basic_feature(const Context& ctx,
 }
 
 void Pipe::get_distance_features(const Context& ctx, std::vector<int>& features) {
-  if (!use_distance) {
-    return;
-  }
+  if (!use_distance) { return; }
 
   auto dist = 8;
   if (ctx.S0 >= 0 && ctx.S1 >= 0) {
@@ -577,9 +547,7 @@ void Pipe::get_valency_features(const Context& ctx,
     const int* nr_left_children,
     const int* nr_right_children,
     std::vector<int>& features) {
-  if (!use_valency) {
-    return;
-  }
+  if (!use_valency) { return; }
 
   auto lvc = 8;
   auto rvc = 8;
@@ -609,13 +577,11 @@ void Pipe::get_cluster_features(const Context& ctx,
     const std::vector<int>& cluster6,
     const std::vector<int>& cluster,
     std::vector<int>& features) {
-  if (!use_cluster) {
-    return;
-  }
+  if (!use_cluster) { return; }
 
-#define CLUSTER(id)  (ctx.id >= 0 ? cluster[ctx.id]+kClusterInFeaturespace: kNilCluster)
-#define CLUSTER4(id) (ctx.id >= 0 ? cluster4[ctx.id]+kCluster4InFeaturespace: kNilCluster4)
-#define CLUSTER6(id) (ctx.id >= 0 ? cluster6[ctx.id]+kCluster6InFeaturespace: kNilCluster6)
+#define CLUSTER(id)  (ctx.id >= 0 ? (cluster[ctx.id]+kClusterInFeaturespace): kNilCluster)
+#define CLUSTER4(id) (ctx.id >= 0 ? (cluster4[ctx.id]+kCluster4InFeaturespace): kNilCluster4)
+#define CLUSTER6(id) (ctx.id >= 0 ? (cluster6[ctx.id]+kCluster6InFeaturespace): kNilCluster6)
 #define PUSH(feat)  do { features.push_back( feat ); } while (0);
   PUSH( CLUSTER(S0) );    PUSH( CLUSTER4(S0) );     PUSH( CLUSTER6(S0) );
   PUSH( CLUSTER(S1) );
@@ -662,50 +628,57 @@ void Pipe::get_features(const State& s,
   get_cluster_features(ctx, cluster4, cluster6, cluster, features);
 }
 
-void Pipe::predict(const RawCoNLLXDependency& data,
-    std::vector<int>& heads,
-    std::vector<std::string>& deprels) {
-  Dependency dependency;
-  size_t L = data.forms.size();
-
-  std::vector<int> cluster;
-  std::vector<int> cluster4;
-  std::vector<int> cluster6;
+void Pipe::transduce_instance_to_dependency(const RawCoNLLXDependency& data,
+    Dependency& dependency, bool with_reference) {
+  auto L = data.size();
   for (size_t i = 0; i < L; ++ i) {
-    auto form = forms_alphabet.encode(data.forms[i]);
-    auto postag = postags_alphabet.encode(data.postags[i]);
+    auto form = (i == 0? 
+        forms_alphabet.encode(SpecialOption::ROOT):
+        forms_alphabet.encode(data.forms[i])
+        );
+    auto postag = (i == 0?
+        postags_alphabet.encode(SpecialOption::ROOT):
+        postags_alphabet.encode(data.postags[i])
+        );
     dependency.push_back(
         (form >= 0 ? form: forms_alphabet.encode(SpecialOption::UNKNOWN)),
         postag,
-        -1, -1);
+        with_reference? data.heads[i]: -1,
+        with_reference? deprels_alphabet.encode(data.deprels[i]): -1);
+  }
+}
+
+void Pipe::get_cluster_from_dependency(const Dependency& data,
+    std::vector<int>& cluster4, std::vector<int>& cluster6, std::vector<int>& cluster) {
+  auto L = data.size();
+  for (size_t i = 0; i < L; ++ i) {
+    auto form = data.forms[i];
     if (use_cluster) {
-      if (i == 0) {
-        cluster4.push_back(cluster4_types_alphabet.encode(SpecialOption::ROOT));
-        cluster6.push_back(cluster6_types_alphabet.encode(SpecialOption::ROOT));
-        cluster.push_back(cluster_types_alphabet.encode(SpecialOption::ROOT));
-      } else {
-        auto itx4 = form_to_cluster4.find(form);
-        cluster4.push_back( itx4 == form_to_cluster4.end()?
-            cluster4_types_alphabet.encode(SpecialOption::UNKNOWN): itx4->second);
-
-        auto itx6 = form_to_cluster6.find(form);
-        cluster6.push_back( itx6 == form_to_cluster6.end()?
-            cluster6_types_alphabet.encode(SpecialOption::UNKNOWN): itx6->second);
-
-        auto itx = form_to_cluster.find(form);
-        cluster.push_back( itx == form_to_cluster.end()?
-            cluster_types_alphabet.encode(SpecialOption::UNKNOWN): itx->second);
-      }
+      cluster4.push_back(i == 0?
+          cluster4_types_alphabet.encode(SpecialOption::ROOT): form_to_cluster4[form]);
+      cluster6.push_back(i == 0?
+          cluster6_types_alphabet.encode(SpecialOption::ROOT): form_to_cluster6[form]);
+      cluster.push_back(i == 0?
+          cluster_types_alphabet.encode(SpecialOption::ROOT): form_to_cluster[form]);
     }
   }
+}
 
+void Pipe::predict(const RawCoNLLXDependency& data,
+    std::vector<int>& heads,
+    std::vector<std::string>& deprels) {
+  size_t L = data.forms.size();
+  Dependency dependency;
+  std::vector<int> cluster, cluster4, cluster6;
+  transduce_instance_to_dependency(data, dependency, false);
+  get_cluster_from_dependency(dependency, cluster4, cluster6, cluster);
   std::vector<State> states(L*2);
   states[0].copy(State(&dependency));
   decoder.transit(states[0], ActionFactory::make_shift(), &states[1]);
   for (auto step = 1; step < L*2-1; ++ step) {
     std::vector<int> attributes;
     if (use_cluster) {
-      get_features(states[step], cluster, cluster4, cluster6, attributes);
+      get_features(states[step], cluster4, cluster6, cluster, attributes);
     } else {
       get_features(states[step], attributes);
     }
@@ -762,36 +735,10 @@ std::pair<
         continue;
       }
       Dependency dependency;
-      std::vector<int> cluster;
-      std::vector<int> cluster4;
-      std::vector<int> cluster6;
+      std::vector<int> cluster, cluster4, cluster6;
       size_t L = data.forms.size();
-      for (size_t i = 0; i < L; ++ i) {
-        int form = forms_alphabet.encode(data.forms[i]);
-        dependency.push_back(form,
-            postags_alphabet.encode(data.postags[i]),
-            data.heads[i],
-            deprels_alphabet.encode(data.deprels[i]));
-        if (use_cluster) {
-          if (i == 0) {
-            cluster4.push_back(cluster4_types_alphabet.encode(SpecialOption::ROOT));
-            cluster6.push_back(cluster6_types_alphabet.encode(SpecialOption::ROOT));
-            cluster.push_back(cluster_types_alphabet.encode(SpecialOption::ROOT));
-          } else {
-            auto itx4 = form_to_cluster4.find(form);
-            cluster4.push_back( itx4 == form_to_cluster4.end()?
-                cluster4_types_alphabet.encode(SpecialOption::UNKNOWN): itx4->second);
-
-            auto itx6 = form_to_cluster6.find(form);
-            cluster6.push_back( itx6 == form_to_cluster6.end()?
-                cluster6_types_alphabet.encode(SpecialOption::UNKNOWN): itx6->second);
-
-            auto itx = form_to_cluster.find(form);
-            cluster.push_back( itx == form_to_cluster.end()?
-                cluster_types_alphabet.encode(SpecialOption::UNKNOWN): itx->second);
-          }
-        }
-      }
+      transduce_instance_to_dependency(data, dependency, true);
+      get_cluster_from_dependency(dependency, cluster4, cluster6, cluster);
 
       auto prev_cost = 0;
       std::vector<State> states(L*2);
@@ -861,7 +808,7 @@ void Pipe::learn() {
   if (use_cluster) {
     build_cluster();  //! alphabet should be built before cluster
   }
-  build_feature_space();  
+  build_feature_space();
   generate_training_samples();
   initialize_classifier();
 
@@ -895,7 +842,7 @@ void Pipe::learn() {
 
         auto L = heads.size();
         for (auto i = 1; i < L; ++ i) { // ignore dummy root
-          if (boost::u32regex_match(data.forms[i], boost::make_u32regex("[[:P*:]]"))) {
+          if (boost::u32regex_match(data.forms[i], boost::make_u32regex("[[:P*:]]*"))) {
             continue;
           }
           ++ nr_tokens;
@@ -955,21 +902,19 @@ void Pipe::load_model(const std::string& model_path) {
   }
   boost::archive::text_iarchive ia(mfs);
   ia >> root;
+  ia >> use_distance;
+  ia >> use_valency;
+  ia >> use_cluster;
+  if (use_cluster) {
+    ia >> form_to_cluster4;
+    ia >> form_to_cluster6;
+    ia >> form_to_cluster;
+  }
+
   classifier.load(mfs);
   forms_alphabet.load(mfs);
   postags_alphabet.load(mfs);
   deprels_alphabet.load(mfs);
-
-  try {
-    ia >> use_distance;
-    ia >> use_valency;
-    ia >> use_cluster;
-  } catch (...) {
-    use_distance = false;
-    use_valency = false;
-    use_cluster = false;
-    _INFO << "#: old version model";
-  }
 
   kFormInFeaturespace = 0;
   kNilForm = forms_alphabet.encode(SpecialOption::NIL);
@@ -997,7 +942,6 @@ void Pipe::load_model(const std::string& model_path) {
   kCluster4InFeaturespace = kFeatureSpaceEnd;
   if (use_cluster) {
     cluster4_types_alphabet.load(mfs);
-    ia >> form_to_cluster4;
     kNilCluster4 = kCluster4InFeaturespace + cluster4_types_alphabet.encode(SpecialOption::NIL);
     kFeatureSpaceEnd += cluster4_types_alphabet.size();
   }
@@ -1005,7 +949,6 @@ void Pipe::load_model(const std::string& model_path) {
   kCluster6InFeaturespace = kFeatureSpaceEnd;
   if (use_cluster) {
     cluster6_types_alphabet.load(mfs);
-    ia >> form_to_cluster6;
     kNilCluster6 = kCluster6InFeaturespace + cluster6_types_alphabet.encode(SpecialOption::NIL);
     kFeatureSpaceEnd += cluster6_types_alphabet.size();
   }
@@ -1013,8 +956,7 @@ void Pipe::load_model(const std::string& model_path) {
   kClusterInFeaturespace = kFeatureSpaceEnd;
   if (use_cluster) {
     cluster6_types_alphabet.load(mfs);
-    ia >> form_to_cluster;
-    kNilCluster = kClusterInFeaturespace + cluster6_types_alphabet.encode(SpecialOption::NIL);
+    kNilCluster = kClusterInFeaturespace + cluster_types_alphabet.encode(SpecialOption::NIL);
     kFeatureSpaceEnd += cluster_types_alphabet.size();
   }
   info();
@@ -1028,22 +970,25 @@ void Pipe::save_model(const std::string& model_path) {
   }
   boost::archive::text_oarchive oa(mfs);
   oa << root;
-  classifier.save(mfs);
-  forms_alphabet.save(mfs);
-  postags_alphabet.save(mfs);
-  deprels_alphabet.save(mfs);
-
   oa << use_distance;
   oa << use_valency;
   oa << use_cluster;
 
   if (use_cluster) {
-    cluster4_types_alphabet.save(mfs);
     oa << form_to_cluster4;
-    cluster6_types_alphabet.save(mfs);
     oa << form_to_cluster6;
-    cluster_types_alphabet.save(mfs);
     oa << form_to_cluster;
+  }
+
+  classifier.save(mfs);
+  forms_alphabet.save(mfs);
+  postags_alphabet.save(mfs);
+  deprels_alphabet.save(mfs);
+
+  if (use_cluster) {
+    cluster4_types_alphabet.save(mfs);
+    cluster6_types_alphabet.save(mfs);
+    cluster_types_alphabet.save(mfs);
   }
 }
 

@@ -134,6 +134,10 @@ private:
     std::vector<Sample>::const_iterator,
     std::vector<Sample>::const_iterator
   > generate_training_samples_one_batch();
+  void transduce_instance_to_dependency(const RawCoNLLXDependency& data,
+      Dependency& output, bool with_reference);
+  void get_cluster_from_dependency(const Dependency& data,
+      std::vector<int>& cluster4, std::vector<int>& cluster6, std::vector<int>& cluster);
 };
 
 } //  namespace neuralnetwork

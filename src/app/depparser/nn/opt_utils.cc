@@ -19,6 +19,10 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("embedding", po::value<std::string>(), "The path to the embedding file.")
     ("reference", po::value<std::string>(), "The path to the reference file.")
     ("development", po::value<std::string>(), "The path to the development file.\n")
+    ("activation", po::value<std::string>(),
+     "The activation function\n"
+     " - cube: cube in Chen 2014 [default]\n"
+     " - relu: rectifier")
     ("init-range", po::value<double>(), "The initialization range. [default=0.01]")
     ("word-cutoff", po::value<int>(), "The frequency of rare word. [default=1]")
     ("max-iter", po::value<int>(), "The number of max iteration. [default=20000]")
@@ -42,8 +46,9 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("use-valency", po::value<bool>(), "Specify to use valency feature. [default=false]")
     ("use-cluster", po::value<bool>(), "Specify to use cluster feature. [default=false]")
     ("cluster", po::value<std::string>(), "Specify the path to the cluster file.")
-    ("root", po::value<std::string>(), "The root tag. [default=ROOT]")
+    ("root", po::value<std::string>(), "The root tag, case sensative. [default=ROOT]")
     ("verbose", "Logging more details")
+    ("help,h", "Show help information.")
     ;
   return optparser;
 }
@@ -54,6 +59,7 @@ po::options_description build_test_optparser(const std::string& usage) {
     ("model", po::value<std::string>(), "The path to the model.")
     ("input", po::value<std::string>(), "The path to the reference.")
     ("output", po::value<std::string>(), "The path to the output file.")
+    ("help,h", "Show help information.")
     ;
   return optparser;
 }
@@ -147,6 +153,14 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   opts.clear_gradient_per_iter = 0;
   if (vm.count("clear-gradient-per-iter")) {
     opts.clear_gradient_per_iter = vm["clear-gradient-per-iter"].as<int>(); }
+
+  opts.activation = "cube";
+  if (vm.count("activation")) {
+    opts.activation = vm["activation"].as<std::string>();
+    if (opts.activation != "cube" && opts.activation != "relu") {
+      opts.activation = "cube";
+    }
+  }
 
   opts.oracle = "static";
   if (vm.count("oracle")) {

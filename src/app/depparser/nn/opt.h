@@ -43,6 +43,7 @@ struct LearnOption:
   std::string devel_file;       //! The path to the devel file.
   std::string embedding_file;   //! The path to the embedding.
   std::string cluster_file;     //! The path to the cluster file, actived in use-cluster.
+  std::string activation;       //! The activation function.
   int word_cutoff;              //! The frequency of rare word, word lower than that
                                 //! will be cut off.
   int max_iter;                 //! The maximum iteration.

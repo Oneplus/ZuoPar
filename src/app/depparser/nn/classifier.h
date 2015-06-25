@@ -19,22 +19,31 @@ namespace DependencyParser {
 namespace NeuralNetwork {
 
 class NeuralNetworkClassifier {
+public:
+  enum ActivationType { kCube, kReLU };
+
 private:
   // The weight group.
-  arma::mat W1;         // Mat: hidden_layer_size X (nr_feature_types * embedding_size)
-  arma::mat W2;         // Mat: nr_classes X hidden_layer_size
   arma::mat E;          // Mat: nr_objects X embedding_size
+  arma::mat W1;         // Mat: hidden_layer_size X (nr_feature_types * embedding_size)
+  arma::mat W10;        // Mat: hidden_layer_size X hidden_layer_size (for ReLu)
   arma::vec b1;         // Vec: hidden_layer_size
+  arma::vec b10;        // Vec: hidden_layer_size
+  arma::mat W2;         // Mat: nr_classes X hidden_layer_size
 
-  arma::mat grad_W1;
-  arma::vec grad_b1;
-  arma::mat grad_W2;
   arma::mat grad_E;
+  arma::mat grad_W1;
+  arma::mat grad_W10;
+  arma::vec grad_b1;
+  arma::vec grad_b10;
+  arma::mat grad_W2;
 
-  arma::mat eg2W1;
-  arma::mat eg2W2;
   arma::mat eg2E;
+  arma::mat eg2W1;
+  arma::mat eg2W10;
   arma::vec eg2b1;
+  arma::vec eg2b10;
+  arma::mat eg2W2;
 
   floatval_t loss;
   floatval_t accuracy;
@@ -53,7 +62,7 @@ private:
   size_t batch_size;
   size_t nr_threads;
   bool fix_embeddings;
-  bool debug;
+
   floatval_t dropout_probability;
   floatval_t lambda;
   floatval_t ada_eps;
@@ -62,6 +71,7 @@ private:
   std::unordered_map<int, size_t> precomputation_id_encoder;
 
   bool initialized;
+  ActivationType activation;
 public:
   NeuralNetworkClassifier();
 
@@ -80,7 +90,8 @@ public:
       int nr_feature_types,
       const LearnOption& opt,
       const std::vector< std::vector<floatval_t> >& embeddings,
-      const std::vector<int>& precomputed_features
+      const std::vector<int>& precomputed_features,
+      const ActivationType& activation = kCube
       );
 
   /**

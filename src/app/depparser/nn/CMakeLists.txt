@@ -31,6 +31,7 @@ target_link_libraries (nndepparser_arcstandard
     boost_system
     # armadillo
     openblas
+    #/usr/local/cuda-7.0/lib64/libnvblas.so
     lapack
     icuuc
     pthread)

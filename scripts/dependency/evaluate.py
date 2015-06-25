@@ -7,8 +7,9 @@ from optparse import OptionParser
 
 UNICODEPUNC = dict.fromkeys(i for i in xrange(sys.maxunicode)
         if unicodedata.category(unichr(i)).startswith('P'))
-usage = "Script for parsing accuracy evaluation on tab file."
+usage = "Script for parsing accuracy evaluation on tab file.\n ./%s [options] reference answer" % sys.argv[0]
 parser = OptionParser(usage)
+parser.add_option("--conllx", dest="conllx", default=False, action="store_true", help="specify the conllx data format.")
 parser.add_option("--punctuation", dest="punctuation", default=False, action="store_true", help="specify to include punctuation in evaluation.")
 parser.add_option("--ignore", dest="ignore", default=None, help="ignore form")
 parser.add_option("--language", dest="language", help="specify language")
@@ -17,7 +18,7 @@ opts, args = parser.parse_args()
 
 if opts.language == "en":
     # English punctuation list is obtained from http://en.wikipedia.org/wiki/Punctuation_of_English
-    engine = lambda x: x in ("'", "''", # apostrophe
+    engine = lambda x, y: x in ("'", "''", # apostrophe
             "(", ")", "[", "]", "{", "}", "-LRB-", "-RRB-", "-LSB-", "-RSB-", "-LCB-", "-RCB-", # brackets
             ":", # colon
             ",", # comma
@@ -30,7 +31,7 @@ if opts.language == "en":
             "?" # question mark
             ) or x == opts.ignore
 elif opts.language == "ch":
-    engine = lambda x: x in (
+    engine = lambda x, y: x in (
             "（", "）",
             "、", "。", "．",
             "！",
@@ -41,7 +42,11 @@ elif opts.language == "ch":
             "一一", "――", "―", 
             ) or x == opts.ignore
 elif opts.language == "universal":
-    engine = lambda x: len(x.decode("utf-8").translate(UNICODEPUNC)) == 0 or x == opts.ignore
+    engine = lambda x, y: len(x.decode("utf-8").translate(UNICODEPUNC)) == 0 or x == opts.ignore
+elif opts.language == "chen2014-en":
+    engine = lambda x, y: y in set(["''", "``", ",", ".", ":"])
+elif opts.language == "chen2014-ch":
+    engine = lambda x, y: y in set(['PU'])
 else:
     print >> sys.stderr, "Unknown language"
     sys.exit(1)
@@ -59,10 +64,16 @@ for reference_data, answer_data in zip(reference_dataset, answer_dataset):
 
     assert len(reference_lines) == len(answer_lines), "Number of words unequal."
     for reference_line, answer_line in zip(reference_lines, answer_lines):
-        reference_word, reference_postag, reference_head, reference_deprel = reference_line.strip().split()
-        answer_word, answer_postag, answer_head, answer_deprel = answer_line.strip().split()
+        if opts.conllx:
+            payload = reference_line.strip().split()
+            reference_word, reference_postag, reference_head, reference_deprel = payload[1], payload[3], payload[6], payload[7]
+            payload = answer_line.strip().split()
+            answer_word, answer_postag, answer_head, answer_deprel = payload[1], payload[3], payload[6], payload[7]
+        else:
+            reference_word, reference_postag, reference_head, reference_deprel = reference_line.strip().split()
+            answer_word, answer_postag, answer_head, answer_deprel = answer_line.strip().split()
         assert reference_word == answer_word, "Word not equal."
-        if not opts.punctuation and engine(reference_word):
+        if not opts.punctuation and engine(reference_word, reference_postag):
             continue
         if reference_postag not in details:
             details[reference_postag] = [0, 0, 0]
