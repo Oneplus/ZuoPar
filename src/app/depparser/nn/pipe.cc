@@ -1,5 +1,6 @@
 #include <fstream>
 #include <algorithm>
+#include "app/depparser/utils.h"
 #include "app/depparser/nn/pipe.h"
 #include "app/depparser/nn/action.h"
 #include "app/depparser/nn/action_utils.h"
@@ -12,8 +13,6 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/timer.hpp>
-#include <boost/regex.hpp>
-#include <boost/regex/icu.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
@@ -91,15 +90,15 @@ void Pipe::display_learning_parameters() {
   _INFO << "report: (Misc) word cutoff frequency = " << _.word_cutoff << ".";
   _INFO << "report: (Misc) init range = " << _.init_range << ".";
   _INFO << "report: (Misc) max iteration = " << _.max_iter << ".";
+  _INFO << "report: (Misc) algorithm = " << _.algorithm << ".";
   _INFO << "report: (AdaGrad) eps = " << _.ada_eps << ".";
-  _INFO << "report: (AdaGrad) alpha = " << _.ada_alpha << ".";
-  _INFO << "report: (AdaGrad) lambda = " << _.lambda << ".";
+  _INFO << "report: (AdaGrad) alpha = " << _.ada_lr << ".";
   _INFO << "report: (AdaGrad) dropout probability = " << _.dropout_probability << ".";
   _INFO << "report: (Network) activation function = " << _.activation << ".";
   _INFO << "report: (Network) hidden size = " << _.hidden_layer_size << ".";
   _INFO << "report: (Network) embedding size = " << _.embedding_size << ".";
+  _INFO << "report: (Network) lambda = " << _.lambda << ".";
   _INFO << "report: (Misc) evaluate on each " << _.evaluation_stops << " iterations.";
-  _INFO << "report: (Misc) clear gradient per iteration " << _.clear_gradient_per_iter <<".";
   _INFO << "report: (Misc) save intermediate = " << _.save_intermediate << ".";
   _INFO << "report: (Misc) fix embedding = " << _.fix_embeddings << ".";
   _INFO << "report: (Misc) oracle = " << _.oracle << ".";
@@ -117,7 +116,7 @@ bool Pipe::setup() {
       return false;
     }
     _INFO << "#: loading dataset from reference file.";
-    ioutils::read_raw_conllx_dependency_dataset(ifs, train_dataset);
+    ioutils::read_raw_conllx_dependency_dataset(ifs, train_dataset, true, SpecialOption::ROOT);
     _INFO << "report: " << train_dataset.size() << " training instance(s) is loaded.";
     check_dataset(train_dataset);
 
@@ -125,7 +124,7 @@ bool Pipe::setup() {
     if (!ifs2.good()) {
       _WARN << "#: development file is not loaded.";
     } else {
-      ioutils::read_raw_conllx_dependency_dataset(ifs2, devel_dataset);
+      ioutils::read_raw_conllx_dependency_dataset(ifs2, devel_dataset, true, SpecialOption::ROOT);
       _INFO << "report: " << devel_dataset.size() << " developing instance(s) is loaded.";
       check_dataset(devel_dataset);
     }
@@ -136,7 +135,7 @@ bool Pipe::setup() {
       _ERROR << "#: failed to open input file, testing halted.";
       return false;
     }
-    ioutils::read_raw_conllx_dependency_dataset(ifs, test_dataset);
+    ioutils::read_raw_conllx_dependency_dataset(ifs, test_dataset, true, SpecialOption::ROOT);
     _INFO << "report: " << test_dataset.size() << " testing instance(s) is loaded.";
   }
   return true;
@@ -388,10 +387,8 @@ void Pipe::initialize_classifier() {
   }
   _INFO << "report: " << embeddings.size() << " embedding is loaded.";
 
-  NeuralNetworkClassifier::ActivationType activation = NeuralNetworkClassifier::kCube;
-  if (learn_opt->activation == "relu") activation = NeuralNetworkClassifier::kReLU;
   classifier.initialize(kFeatureSpaceEnd, deprels_alphabet.size()*2-1,
-      nr_feature_types, (*learn_opt), embeddings, precomputed_features, activation
+      nr_feature_types, (*learn_opt), embeddings, precomputed_features
       );
   _INFO << "report: classifier is initialized.";
 }
@@ -781,9 +778,6 @@ std::pair<
           }
         }
 
-        if (oracle == -1) {
-          _ERROR << "nani!";
-        }
         classes[oracle] = 1.;
 
         dataset.add(attributes, classes);
@@ -821,12 +815,13 @@ void Pipe::learn() {
     std::vector<Sample>::const_iterator end;
     std::tie(begin, end) = generate_training_samples_one_batch();
 
-    classifier.compute_ada_gradient_step(begin, end);
+    classifier.compute_cost_and_gradient(begin, end, learn_opt->debug);
+    classifier.take_adagrad_step();
+    // classifier.take_momentum_sgd_step();
+
     _INFO << "pipe (iter#" << (iter+ 1) << "): cost=" << classifier.get_cost()
       << ", accuracy(%)=" << classifier.get_accuracy()
       << " (" << t.elapsed() << ")";
-
-    classifier.take_ada_gradient_step();
 
     if (devel_dataset.size() > 0 && (iter+1) % learn_opt->evaluation_stops == 0) {
       _INFO << "eval: start evaluating ...";
@@ -840,17 +835,18 @@ void Pipe::learn() {
       for (const auto& data: devel_dataset) {
         predict(data, heads, deprels);
 
-        auto L = heads.size();
-        for (auto i = 1; i < L; ++ i) { // ignore dummy root
-          if (boost::u32regex_match(data.forms[i], boost::make_u32regex("[[:P*:]]*"))) {
-            continue;
-          }
-          ++ nr_tokens;
-          if (heads[i] == data.heads[i]) {
-            ++ corr_heads;
-            if (deprels[i] == data.deprels[i]) { ++ corr_deprels; }
-          }
+        std::tuple<int, int, int> eval;
+        if (learn_opt->evaluation_method == "conllx") {
+          eval = DependencyParserUtils::evaluate_conllx(data, heads, deprels);
+        } else if (learn_opt->evaluation_method == "chen14en") {
+          eval = DependencyParserUtils::evaluate_chen14en(data, heads, deprels);
+        } else if (learn_opt->evaluation_method == "chen14ch") {
+          eval = DependencyParserUtils::evaluate_chen14ch(data, heads, deprels);
         }
+
+        nr_tokens += std::get<0>(eval);
+        corr_heads += std::get<1>(eval);
+        corr_deprels += std::get<2>(eval);
       }
       auto uas = (floatval_t)corr_heads/nr_tokens;
       auto las = (floatval_t)corr_deprels/nr_tokens;
@@ -901,14 +897,9 @@ void Pipe::load_model(const std::string& model_path) {
     return;
   }
   boost::archive::text_iarchive ia(mfs);
-  ia >> root;
-  ia >> use_distance;
-  ia >> use_valency;
-  ia >> use_cluster;
+  ia >> root >> use_distance >> use_valency >> use_cluster;
   if (use_cluster) {
-    ia >> form_to_cluster4;
-    ia >> form_to_cluster6;
-    ia >> form_to_cluster;
+    ia >> form_to_cluster4 >> form_to_cluster6 >> form_to_cluster;
   }
 
   classifier.load(mfs);
@@ -969,16 +960,8 @@ void Pipe::save_model(const std::string& model_path) {
     return;
   }
   boost::archive::text_oarchive oa(mfs);
-  oa << root;
-  oa << use_distance;
-  oa << use_valency;
-  oa << use_cluster;
-
-  if (use_cluster) {
-    oa << form_to_cluster4;
-    oa << form_to_cluster6;
-    oa << form_to_cluster;
-  }
+  oa << root << use_distance << use_valency << use_cluster;
+  if (use_cluster) { oa << form_to_cluster4 << form_to_cluster6 << form_to_cluster; }
 
   classifier.save(mfs);
   forms_alphabet.save(mfs);

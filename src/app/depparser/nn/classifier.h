@@ -20,7 +20,10 @@ namespace NeuralNetwork {
 
 class NeuralNetworkClassifier {
 public:
-  enum ActivationType { kCube, kReLU };
+  enum ActivationType {
+    kCube,
+    kReLU,
+  };
 
 private:
   // The weight group.
@@ -61,13 +64,23 @@ private:
 
   size_t batch_size;
   size_t nr_threads;
+  size_t iter;
   bool fix_embeddings;
 
   floatval_t dropout_probability;
   floatval_t lambda;
-  floatval_t ada_eps;
-  floatval_t ada_alpha;
 
+  // adagrad parameters
+  floatval_t ada_eps;
+  floatval_t ada_lr;    //! The alpha in adagrad
+
+  // momentum parameters
+  size_t     momentum_stepsize;
+  floatval_t momentum_mu;
+  floatval_t momentum_lr;
+  floatval_t momentum_gamma;
+
+  std::vector< arma::uvec > dropout_histories;
   std::unordered_map<int, size_t> precomputation_id_encoder;
 
   bool initialized;
@@ -90,8 +103,7 @@ public:
       int nr_feature_types,
       const LearnOption& opt,
       const std::vector< std::vector<floatval_t> >& embeddings,
-      const std::vector<int>& precomputed_features,
-      const ActivationType& activation = kCube
+      const std::vector<int>& precomputed_features
       );
 
   /**
@@ -102,51 +114,78 @@ public:
    */
   void score(const std::vector<int>& attributes, std::vector<floatval_t>& retval);
 
+  /**
+   * Show the network structure.
+   */
   void info();
 
-  //!
-  void compute_ada_gradient_step(
+  /**
+   * Compute the cost and gradient
+   *
+   *  @param[in]  begin The beginning pointer to the vector<Sample>
+   *  @param[in]  end   The ending pointer to the vector<Sample>
+   *  @param[in]  check If true, perform gradient check
+   */
+  void compute_cost_and_gradient(
       std::vector<Sample>::const_iterator begin,
-      std::vector<Sample>::const_iterator end
+      std::vector<Sample>::const_iterator end,
+      bool debug = false
       );
 
+  //! Take the gradient from with adagrad.
+  void take_adagrad_step();
+
+  //! Take the gradient from momentum sgd.
+  void take_momentum_asgd_step();
+
+  /**
+   * Save the classifier to the stream.
+   *
+   *  @param[out] mfs The output stream.
+   */
+  void save(std::ofstream& mfs);
+
+  /**
+   * Load the classifier from the stream.
+   *
+   *  @param[in]  mfs The input stream.
+   */
+  void load(std::ifstream& mfs);
+
+  void precomputing();
+
+  floatval_t get_cost() const;      //! shorthand for cost
+  floatval_t get_accuracy() const;  //! shorthand for accuracy
+private:
   //!
   void initialize_gradient_histories();
-
-  void take_ada_gradient_step();
-
-  //!
-  floatval_t get_cost();
-
-  //!
-  floatval_t get_accuracy();
 
   /**
    * Collect the indices from samples and put them into a set.
    *
-   *  @param[in]  samples The samples
+   *  @param[in]  samples The 
    *  @param[out] retval  The set of indicies
    */
   void get_precomputed_features(std::vector<Sample>::const_iterator& begin,
       std::vector<Sample>::const_iterator& end,
       std::unordered_set<int>& retval);
 
-  void precomputing();
+  void precomputing(const std::unordered_set<int>& precomputed_indices);
 
-  void precomputing(const std::unordered_set<int>& candidates);
-
-  void compute_gradient(std::vector<Sample>::const_iterator& begin,
+  void compute_cost_and_gradient(std::vector<Sample>::const_iterator& begin,
       std::vector<Sample>::const_iterator& end,
-      size_t batch_size);
+      const std::unordered_set<int>& precomputed_indices,
+      bool debug);
 
-  void compute_saved_gradient(
-      const std::unordered_set<int>& precomputed_indices);
+  floatval_t compute_cost(std::vector<Sample>::const_iterator& begin,
+      std::vector<Sample>::const_iterator& end,
+      const std::vector< arma::uvec >& dropout_histories);
 
-  void add_l2_regularization();
+  void gradient_check(std::vector<Sample>::const_iterator& begin,
+      std::vector<Sample>::const_iterator& end);
 
-  void save(std::ofstream& mfs);
-
-  void load(std::ifstream& mfs);
+  void gradient_check_one_dimension(const floatval_t& num_grad,
+      const floatval_t& grad, const std::string& name, int x, int y);
 };
 
 } //  namespace neuralnetwork

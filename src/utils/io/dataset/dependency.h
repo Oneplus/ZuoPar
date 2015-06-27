@@ -46,7 +46,9 @@ void read_raw_dependency_dataset(std::istream& is,
     std::vector<RawDependency>& dataset);
 
 void read_raw_conllx_dependency_dataset(std::istream& is,
-    std::vector<RawCoNLLXDependency>& dataset);
+    std::vector<RawCoNLLXDependency>& dataset,
+    bool dummy_root=true,
+    const std::string& root="-ROOT-");
 
 }
 }

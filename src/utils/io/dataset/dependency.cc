@@ -54,11 +54,13 @@ void read_raw_dependency_dataset(std::istream& is,
 }
 
 void read_raw_conllx_dependency_dataset(std::istream& is,
-    std::vector<RawCoNLLXDependency>& dataset) {
+    std::vector<RawCoNLLXDependency>& dataset,
+    bool dummy_root,
+    const std::string& root) {
   dataset.clear();
   for (BlockIterator itx = BlockIterator(is); !itx.end(); ++ itx) {
     std::istringstream iss(*itx);
-    RawCoNLLXDependency parse;
+    RawCoNLLXDependency parse(dummy_root, root);
     read_raw_conllx_dependency_instance(iss, parse);
     dataset.push_back(parse);
   }

@@ -105,11 +105,11 @@ struct RawCoNLLXDependency: public RawDependency {
   std::vector<
     std::vector<std::string>>  feats;    //! The CoNLL feat column.
 
-  RawCoNLLXDependency(bool dummy_root = true) {
+  RawCoNLLXDependency(bool dummy_root = true, const std::string& root="-ROOT-") {
     if (dummy_root) {
-      forms.push_back("-ROOT-");    lemmas.push_back("-ROOT-");
-      cpostags.push_back("-ROOT-"); postags.push_back("-ROOT-");
-      heads.push_back(-1);          deprels.push_back("-ROOT-");
+      forms.push_back(root);    lemmas.push_back(root);
+      cpostags.push_back(root); postags.push_back(root);
+      heads.push_back(-1);      deprels.push_back(root);
       feats.push_back(std::vector<std::string>());
     }
   }

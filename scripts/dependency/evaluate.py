@@ -43,9 +43,9 @@ elif opts.language == "ch":
             ) or x == opts.ignore
 elif opts.language == "universal":
     engine = lambda x, y: len(x.decode("utf-8").translate(UNICODEPUNC)) == 0 or x == opts.ignore
-elif opts.language == "chen2014-en":
+elif opts.language == "chen2014en":
     engine = lambda x, y: y in set(["''", "``", ",", ".", ":"])
-elif opts.language == "chen2014-ch":
+elif opts.language == "chen2014ch":
     engine = lambda x, y: y in set(['PU'])
 else:
     print >> sys.stderr, "Unknown language"

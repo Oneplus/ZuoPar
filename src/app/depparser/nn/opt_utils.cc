@@ -10,7 +10,6 @@ namespace fe = ZuoPar::FrontEnd;
 std::string SpecialOption::UNKNOWN = "-UNK-";
 std::string SpecialOption::NIL     = "-NIL-";
 std::string SpecialOption::ROOT    = "-ROOT-";
-int SpecialOption::NONEXIST = -1;
 
 po::options_description build_learn_optparser(const std::string& usage) {
   po::options_description optparser = po::options_description(usage);
@@ -19,21 +18,31 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("embedding", po::value<std::string>(), "The path to the embedding file.")
     ("reference", po::value<std::string>(), "The path to the reference file.")
     ("development", po::value<std::string>(), "The path to the development file.\n")
+    ("algorithm", po::value<std::string>(), "The learning algorithm\n"
+     " - adagrad: AdaGrad [default]\n"
+     " - momentum-asgd: Momentum ASGD (not supported)")
     ("activation", po::value<std::string>(),
      "The activation function\n"
      " - cube: cube in Chen 2014 [default]\n"
-     " - relu: rectifier")
+     " - relu: rectifier in Weiss (2015)")
     ("init-range", po::value<double>(), "The initialization range. [default=0.01]")
     ("word-cutoff", po::value<int>(), "The frequency of rare word. [default=1]")
     ("max-iter", po::value<int>(), "The number of max iteration. [default=20000]")
     ("batch-size", po::value<int>(), "The size of batch. [default=10000]")
     ("hidden-size", po::value<int>(), "The size of hidden layer. [default=200]")
     ("embedding-size", po::value<int>(), "The size of embedding. [default=50]")
+    ("lambda", po::value<double>(), "The regularizer parameter. [default=1e-8]")
     ("precomputed-number", po::value<int>(), "The number of precomputed. [default=100000]")
     ("evaluation-stops", po::value<int>(), "Evaluation on per-iteration. [default=100]")
-    ("ada-eps", po::value<double>(), "The EPS in AdaGrad. [defautl=1e-6]")
-    ("ada-alpha", po::value<double>(), "The Alpha in AdaGrad. [default=0.01]")
-    ("lambda", po::value<double>(), "The regularizer parameter. [default=1e-8]")
+    ("evaluation-method", po::value<std::string>(), "Evaluation method:\n"
+     " - conllx: exclude unicode punctuation [default]\n"
+     " - chen14en: exclude ``'':,. , (require gold POS in conll feat column)\n"
+     " - chen14ch: exclude PU, (require gold POS in conll feat colum)")
+    ("ada-eps", po::value<double>(), "The 'eps' in AdaGrad. [defautl=1e-6]")
+    ("ada-alpha", po::value<double>(), "The 'alpha' in AdaGrad. [default=0.01]")
+    // ("momentum-asgd-mu", po::value<double>(), "The 'mu' in MomentumASGD. [default=0.9]")
+    // ("momentum-asgd-eta", po::value<double>(), "The 'eta0' in MomentumASGD. [default=0.05]")
+    // ("momentum-asgd-gamma", po::value<double>(), "The 'gamma' in MomentumASGD. [default=0.2]")
     ("dropout-probability", po::value<double>(), "The probability for dropout. [default=0.5]")
     ("oracle", po::value<std::string>(),
      "The oracle type\n"
@@ -47,6 +56,7 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("use-cluster", po::value<bool>(), "Specify to use cluster feature. [default=false]")
     ("cluster", po::value<std::string>(), "Specify the path to the cluster file.")
     ("root", po::value<std::string>(), "The root tag, case sensative. [default=ROOT]")
+    ("debug", po::value<bool>(), "Perform gradient check in training. [default=false]")
     ("verbose", "Logging more details")
     ("help,h", "Show help information.")
     ;
@@ -84,16 +94,17 @@ bool parse_ada_option(const po::variables_map& vm, AdaOption& opts) {
   opts.ada_eps = 1e-6;
   if (vm.count("ada-eps")) { opts.ada_eps = vm["ada-eps"].as<double>(); }
 
-  opts.ada_alpha = 0.01;
-  if (vm.count("ada-alpha")) { opts.ada_alpha = vm["ada-alpha"].as<double>(); }
+  opts.ada_lr = 0.01;
+  if (vm.count("ada-alpha")) { opts.ada_lr = vm["ada-alpha"].as<double>(); }
 
-  opts.lambda = 1e-8;
-  if (vm.count("lambda")) {
-    opts.lambda = vm["lambda"].as<double>(); }
+  return true;
+}
 
-  opts.dropout_probability = 0.5;
-  if (vm.count("dropout-probability")) {
-    opts.dropout_probability = vm["dropout-probability"].as<double>(); }
+bool parse_momentum_asgd_option(const po::variables_map& vm, MomentumASGDOption& opts) {
+  opts.momentum_mu = 0.9;
+  opts.momentum_gamma = 0.96;
+  opts.momentum_lr = 0.1;
+  opts.momentum_stepsize = 10000;
   return true;
 }
 
@@ -103,6 +114,30 @@ bool parse_network_option(const po::variables_map& vm, NetworkOption& opts) {
 
   opts.embedding_size = 50;
   if (vm.count("embedding-size")) { opts.embedding_size = vm["embedding-size"].as<int>(); }
+
+  opts.lambda = 1e-8;
+  if (vm.count("lambda")) { opts.lambda = vm["lambda"].as<double>(); }
+
+  return true;
+}
+
+bool parse_feature_option(const po::variables_map& vm, FeatureOption& opts) {
+  opts.use_distance = false;
+  if (vm.count("use-distance")) { opts.use_distance = vm["use-distance"].as<bool>(); }
+
+  opts.use_valency = false;
+  if (vm.count("use-valency")) { opts.use_valency = vm["use-valency"].as<bool>(); }
+
+  opts.use_cluster = false;
+  if (vm.count("use-cluster")) { opts.use_cluster = vm["use-cluster"].as<bool>(); }
+
+  if (opts.use_cluster) {
+    if (vm.count("cluster")) {
+      opts.cluster_file = vm["cluster"].as<std::string>();
+    } else {
+      return false;
+    }
+  }
   return true;
 }
 
@@ -128,7 +163,23 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
     opts.devel_file = vm["development"].as<std::string>();
   }
 
-  if (!parse_ada_option(vm, static_cast<AdaOption&>(opts))) { return false; }
+  opts.algorithm = "adagrad";
+  if (vm.count("algorithm")) {
+    opts.algorithm = vm["algorithm"].as<std::string>();
+    if (opts.algorithm != "adagrad" && opts.algorithm != "momentum-asgd") {
+      opts.algorithm = "adagrad";
+    }
+  }
+
+  if (opts.algorithm == "adagrad") {
+    if (!parse_ada_option(vm, static_cast<AdaOption&>(opts))) {
+      return false;
+    }
+  } else if (opts.algorithm == "momentum-asgd") {
+    /*if (!parse_momentum_asgd_option(vm, static_cast<MomentumASGDOption&>(opts))) {
+      return false;
+    }*/
+  }
   if (!parse_network_option(vm, static_cast<NetworkOption&>(opts))) { return false; }
 
   opts.max_iter = 20000;
@@ -150,9 +201,15 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
   opts.evaluation_stops = 100;
   if (vm.count("evaluation-stops")) { opts.evaluation_stops = vm["evaluation-stops"].as<int>(); }
 
-  opts.clear_gradient_per_iter = 0;
-  if (vm.count("clear-gradient-per-iter")) {
-    opts.clear_gradient_per_iter = vm["clear-gradient-per-iter"].as<int>(); }
+  opts.evaluation_method = "conllx";
+  if (vm.count("evaluation-method")) {
+    opts.evaluation_method = vm["evaluation-method"].as<std::string>();
+    if (opts.evaluation_method != "conllx" &&
+        opts.evaluation_method != "chen14en" &&
+        opts.evaluation_method != "chen14ch") {
+      opts.evaluation_method = "conllx";
+    }
+  }
 
   opts.activation = "cube";
   if (vm.count("activation")) {
@@ -175,24 +232,18 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
     opts.save_intermediate = vm["save-intermediate"].as<bool>();
   }
 
+  opts.dropout_probability = 0.5;
+  if (vm.count("dropout-probability")) {
+    opts.dropout_probability = vm["dropout-probability"].as<double>(); }
+
   opts.fix_embeddings = false;
   if (vm.count("fix-embeddings")) { opts.fix_embeddings = vm["fix-embeddings"].as<bool>(); }
 
   opts.root = "ROOT";
   if (vm.count("root")) { opts.root = vm["root"].as<std::string>(); } 
 
-  opts.use_distance = false;
-  if (vm.count("use-distance")) { opts.use_distance = vm["use-distance"].as<bool>(); }
-
-  opts.use_valency = false;
-  if (vm.count("use-valency")) { opts.use_valency = vm["use-valency"].as<bool>(); }
-
-  opts.use_cluster = false;
-  if (vm.count("use-cluster")) { opts.use_cluster = vm["use-cluster"].as<bool>(); }
-
-  if (opts.use_cluster) {
-    if (vm.count("cluster")) { opts.cluster_file = vm["cluster"].as<std::string>(); }
-  }
+  opts.debug = false;
+  if (vm.count("debug")) { opts.debug = vm["debug"].as<bool>(); }
 
   return true;
 }
