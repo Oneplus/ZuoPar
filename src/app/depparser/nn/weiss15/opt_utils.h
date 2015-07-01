@@ -13,11 +13,15 @@ namespace po = boost::program_options;
 
 po::options_description build_pretrain_optparser(const std::string& usage);
 
+po::options_description build_pretest_optparser(const std::string& usage);
+
 po::options_description build_learn_optparser(const std::string& usage);
 
 po::options_description build_test_optparser(const std::string& usage);
 
 bool parse_pretrain_option(const po::variables_map& vm, PretrainOption& opts);
+
+bool parse_pretest_option(const po::variables_map& vm, PretestOption& opts);
 
 bool parse_learn_option(const po::variables_map& vm, LearnOption& opts);
 

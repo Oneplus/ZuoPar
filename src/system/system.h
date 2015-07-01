@@ -16,7 +16,6 @@ namespace ZuoPar {
 template <
   class _ActionType,
   class _StateType,
-  class _ScoreContextType,
   class _ModelType
 >
 class TransitionSystem {
@@ -196,9 +195,8 @@ public:
         if (NULL == next_correct_state) {
           _TRACE << "sys: error at step =" << step;
           _StateType* dummy_state = row+ beam_size;
-          _ScoreContextType ctx(*correct_state);
           transit((*correct_state), gold_actions[step- 1],
-              correct_state->score + model->score(ctx, gold_actions[step- 1], use_avg),
+              correct_state->score + model->score(*correct_state, gold_actions[step- 1], use_avg),
               dummy_state);
           correct_state = dummy_state;
           dropout = true;
@@ -319,8 +317,7 @@ protected:
       itx->second = 0;
     }
     //scores.clear();
-    _ScoreContextType ctx(source);
-    model->batchly_score(ctx, actions, use_avg, scores);
+    model->batchly_score(source, actions, use_avg, scores);
   }
 
   /**

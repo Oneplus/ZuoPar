@@ -105,8 +105,13 @@ public:
    */
   void vectorize2(const _StateType& state, const _ActionType& act,
       const floatval_t& scale, SparseVector2* sparse_vector) {
-    int global_id = 0;
     _ScoreContextType ctx(state);
+    vectorize2(ctx, act, scale, sparse_vector);
+  }
+
+  void vectorize2(const _ScoreContextType& ctx, const _ActionType& act,
+      const floatval_t& scale, SparseVector2* sparse_vector) {
+    int global_id = 0;
     for (uf_map_t& entry: ufeat_map_repo) {
       entry.vectorize2(ctx, act, scale, global_id, sparse_vector);
       ++ global_id;
@@ -139,8 +144,13 @@ public:
    */
   void vectorize3(const _StateType& state, const _ActionType& act,
       const floatval_t& scale, SparseVector3* sparse_vector) {
-    int global_id = 0;
     _ScoreContextType ctx(state);
+    vectorize3(ctx, act, scale, sparse_vector);
+  }
+
+  void vectorize3(const _ScoreContextType& ctx, const _ActionType& act,
+      const floatval_t& scale, SparseVector3* sparse_vector) {
+    int global_id = 0;
     for (uf_map_t& entry: ufeat_map_repo) {
       entry.vectorize3(ctx, act, scale, global_id, sparse_vector);
       ++ global_id;
@@ -171,7 +181,8 @@ public:
    *  @param[in]  avg     The average parameter.
    *  @return     floatval_t  The score of applying the action act to the state.
    */
-  floatval_t score(const _StateType& state, const _ActionType& act, bool avg) {
+  floatval_t score(const _StateType& state, const _ActionType& act,
+      bool avg) const {
     _ScoreContextType ctx(state);
     return score(ctx, act, avg);
   }
@@ -185,26 +196,34 @@ public:
    *  @return     floatval_t  The score of applying the action act to the state
    *                           context.
    */
-  floatval_t score(const _ScoreContextType& ctx, const _ActionType& act, bool avg) {
+  floatval_t score(const _ScoreContextType& ctx, const _ActionType& act,
+      bool avg) const {
     floatval_t ret = 0;
-    for (uf_map_t& entry: ufeat_map_repo) { ret += entry.score(ctx, act, avg); }
-    for (bf_map_t& entry: bfeat_map_repo) { ret += entry.score(ctx, act, avg); }
-    for (tf_map_t& entry: tfeat_map_repo) { ret += entry.score(ctx, act, avg); }
-    for (qf_map_t& entry: qfeat_map_repo) { ret += entry.score(ctx, act, avg); }
-    for (sf_map_t& entry: sfeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (const uf_map_t& entry: ufeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (const bf_map_t& entry: bfeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (const tf_map_t& entry: tfeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (const qf_map_t& entry: qfeat_map_repo) { ret += entry.score(ctx, act, avg); }
+    for (const sf_map_t& entry: sfeat_map_repo) { ret += entry.score(ctx, act, avg); }
     return ret;
   }
 
+  void batchly_score(const _StateType& state,
+      const std::vector<_ActionType>& actions,
+      bool avg,
+      packed_score_t& result) const {
+    _ScoreContextType ctx(state);
+    return batchly_score(ctx, actions, avg, result);
+  }
 
   void batchly_score(const _ScoreContextType& ctx,
       const std::vector<_ActionType>& actions,
       bool avg,
-      packed_score_t& result) {
-    for (uf_map_t& entry: ufeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
-    for (bf_map_t& entry: bfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
-    for (tf_map_t& entry: tfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
-    for (qf_map_t& entry: qfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
-    for (sf_map_t& entry: sfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+      packed_score_t& result) const {
+    for (const uf_map_t& entry: ufeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+    for (const bf_map_t& entry: bfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+    for (const tf_map_t& entry: tfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+    for (const qf_map_t& entry: qfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
+    for (const sf_map_t& entry: sfeat_map_repo) { entry.batchly_score(ctx, actions, avg, result); }
   }
 
   /**

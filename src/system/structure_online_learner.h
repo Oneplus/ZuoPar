@@ -82,7 +82,7 @@ protected:
     ++ nr_errors;
     if (algorithm == kAveragePerceptron) {
       learn_average_perceptron(last);
-    } else if (algorithm == kPassiveAgressive) {
+    } else if (algorithm == kPassiveAggressive) {
       learn_passive_aggressive(last);
     }
   }

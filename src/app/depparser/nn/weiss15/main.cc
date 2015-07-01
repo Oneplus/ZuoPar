@@ -37,8 +37,33 @@ int pretrain(int argc, char** argv) {
   return 0;
 }
 
+int pretest(int argc, char** argv) {
+  std::string usage = "Pretesting component of ZuoPar::" APP ".\n";
+  usage += "usage: " EXE " pre-test [options]\n";
+  usage += "options";
+
+  po::options_description optparser = nn::build_pretest_optparser(usage);
+  if (argc == 1) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, optparser), vm);
+
+  nn::PretestOption opts;
+  if (!nn::parse_pretest_option(vm, opts)) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+
+  nn::Pipe pipe(opts);
+  pipe.pretest();
+  return 0;
+}
+
 int learn(int argc, char** argv) {
-  /*std::string usage = "Training component of ZuoPar::" APP ".\n";
+  std::string usage = "Training component of ZuoPar::" APP ".\n";
   usage += "usage: " EXE " learn [options]\n";
   usage += "options";
 
@@ -60,11 +85,11 @@ int learn(int argc, char** argv) {
 
   nn::Pipe pipe(opts);
   pipe.learn();
-  return 0;*/
+  return 0;
 }
 
 int test(int argc, char** argv) {
-  /*std::string usage = "Testing component of ZuoPar::" APP ".\n";
+  std::string usage = "Testing component of ZuoPar::" APP ".\n";
   usage += "usage: " EXE " test [options]\n";
   usage += "options";
 
@@ -86,18 +111,20 @@ int test(int argc, char** argv) {
 
   nn::Pipe pipe(opts);
   pipe.test();
-  return 0;*/
+  return 0;
 }
 
 int main(int argc, char** argv) {
   std::string usage = "ZuoPar::" APP ".\n";
-  usage += "Usage: " EXE " [pre-train|learn|test] [options]";
+  usage += "Usage: " EXE " [pre-train|pre-test|learn|test] [options]";
 
   if (argc == 1) {
     std::cerr << usage << std::endl;
     return 1;
   } else if (strcmp(argv[1], "pre-train") == 0) {
     pretrain(argc- 1, argv+ 1);
+  } else if (strcmp(argv[1], "pre-test") == 0) {
+    pretest(argc- 1, argv+ 1);
   } else if (strcmp(argv[1], "learn") == 0) {
     learn(argc- 1, argv+ 1);
   } else if (strcmp(argv[1], "test") == 0) {

@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_APP_NN_WEISS2015_H__
-#define __ZUOPAR_APP_NN_WEISS2015_H__
+#ifndef __ZUOPAR_APP_DEPPARSER_NN_WEISS2015_H__
+#define __ZUOPAR_APP_DEPPARSER_NN_WEISS2015_H__
 
 #include "types/common.h"
 #include "frontend/common_opt.h"
@@ -71,13 +71,29 @@ struct PretrainOption:
   bool debug;
 };
 
-struct LearnOption: public BasicOption {
-  std::string reference_file;
-  std::string devel_file;
+struct PretestOption: public BasicOption {
+  std::string input_file;   //! The path to the input file.
+  std::string output_file;  //! The path to the output file.
+};
+
+struct PretrainModelOption {
   std::string pretrain_model_file;
 };
 
-struct TestOption: public BasicOption {
+struct BeamsizeOption {
+  int beam_size;
+};
+
+struct LearnOption: public BasicOption, public PretrainModelOption, public BeamsizeOption {
+  std::string reference_file;
+  std::string devel_file;
+  std::string algorithm;        //! The learning algorithm.
+  std::string evaluation_method;
+  int max_iter;
+  bool averaged;
+};
+
+struct TestOption: public BasicOption, public PretrainModelOption, public BeamsizeOption {
   std::string input_file;   //! The path to the input file.
   std::string output_file;  //! The path to the output file.
 };
@@ -87,4 +103,4 @@ struct TestOption: public BasicOption {
 } //  namespace dependencyparser
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_NN_WEISS2015_H__
+#endif  //  end for __ZUOPAR_APP_DEPPARSER_NN_WEISS2015_H__

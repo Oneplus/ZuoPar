@@ -16,7 +16,7 @@ namespace Swap {
 
 namespace eg = ZuoPar::Engine;
 
-class Decoder: public TransitionSystem<Action, State, ScoreContext, Weight> {
+class Decoder: public TransitionSystem<Action, State, Weight> {
 public:
   enum RootPosition {
     kNone,

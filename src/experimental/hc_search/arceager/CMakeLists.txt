@@ -1,7 +1,7 @@
 add_executable (hc_arceager_depparser
     main.cc
-    action.cc
-    action_utils.cc
+    #action.cc
+    #action_utils.cc
     opt_utils.cc
     state.cc
     score_context.cc
@@ -9,7 +9,8 @@ add_executable (hc_arceager_depparser
     weight.cc
     pipe.cc
     knowledge.cc
-    ${SOURCE_DIR}/types/dependency.cc
+    ${SOURCE_DIR}/app/depparser/arceager/action.cc
+    ${SOURCE_DIR}/app/depparser/arceager/action_utils.cc
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
     ${SOURCE_DIR}/utils/io/stream.cc

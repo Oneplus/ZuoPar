@@ -7,7 +7,7 @@ namespace Postagger {
 
 Decoder::Decoder(int nr, int beam_size, bool avg, Weight* weight)
   : nr_postags(nr),
-  TransitionSystem<Action, State, ScoreContext, Weight>(
+  TransitionSystem<Action, State, Weight>(
       beam_size, avg, UpdateStrategy::kEarlyUpdate, weight) {
 }
 

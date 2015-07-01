@@ -6,7 +6,7 @@ namespace LexicalAnalyzer {
 namespace ChineseWordSegmentor {
 
 Decoder::Decoder(int beam_size, bool avg, Weight* weight)
-  : TransitionSystem<Action, State, ScoreContext, Weight>(
+  : TransitionSystem<Action, State, Weight>(
       beam_size, avg, UpdateStrategy::kEarlyUpdate, weight) {
 }
 

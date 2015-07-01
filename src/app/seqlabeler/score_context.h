@@ -4,7 +4,6 @@
 #include <vector>
 #include "types/common.h"
 #include "engine/token_alphabet.h"
-#include "app/depparser/arcstandard/state.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {

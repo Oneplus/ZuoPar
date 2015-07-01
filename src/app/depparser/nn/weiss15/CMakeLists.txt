@@ -6,6 +6,9 @@ add_executable (nndepparser_weiss15
     pipe.cc
     opt_utils.cc
     classifier.cc
+    model.cc
+    search.cc
+    ${SOURCE_DIR}/app/depparser/nn/extractor.cc
     ${SOURCE_DIR}/app/depparser/nn/decoder.cc
     ${SOURCE_DIR}/app/depparser/nn/dataset.cc
     ${SOURCE_DIR}/app/depparser/arcstandard/action.cc

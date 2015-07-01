@@ -17,7 +17,7 @@ namespace HCSearchDependencyParser {
 namespace eg = ZuoPar::Engine;
 
 class Decoder
-  : public TransitionSystem<Action, State, HeuristicScoreContext, HeuristicWeight> {
+  : public TransitionSystem<Action, State, HeuristicWeight> {
 public:
   /**
    * The decoder constructor.

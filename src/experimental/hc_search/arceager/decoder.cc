@@ -12,7 +12,6 @@ Decoder::Decoder(int nr, int root,
   TransitionSystem<
     Action,
     State,
-    HeuristicScoreContext,
     HeuristicWeight
   >(beam_size, avg, strategy, weight) {
 }

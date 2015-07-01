@@ -33,7 +33,7 @@ public:
 
     this->algorithm = LearningAlgorithm::kAveragePerceptron;
     if (opts.algorithm == "pa") {
-      this->algorithm = LearningAlgorithm::kPassiveAgressive;
+      this->algorithm = LearningAlgorithm::kPassiveAggressive;
     }
 
     _INFO << "LEARN:: mode is actived.";
@@ -52,7 +52,7 @@ public:
     switch (this->algorithm) {
       case LearningAlgorithm::kAveragePerceptron:
         _INFO << "report: learning algorithm = averaged perceptron"; break;
-      case LearningAlgorithm::kPassiveAgressive:
+      case LearningAlgorithm::kPassiveAggressive:
         _INFO << "report: learning algorithm = passive aggressive"; break;
     }
 

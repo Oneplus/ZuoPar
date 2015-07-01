@@ -11,7 +11,7 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace ChineseWordSegmentor {
 
-class Decoder: public TransitionSystem<Action, State, ScoreContext, Weight> {
+class Decoder: public TransitionSystem<Action, State, Weight> {
 public:
   /**
    * The decoder constructor.

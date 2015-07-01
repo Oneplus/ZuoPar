@@ -183,6 +183,9 @@ public:
    */
   void score(const std::vector<int>& attributes, std::vector<floatval_t>& retval);
 
+  void perceptron(const std::vector<int>& attributes, std::vector<floatval_t>& retval);
+
+  int n_perceptron() const;
   /**
    * Show the network structure.
    */

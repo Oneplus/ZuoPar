@@ -145,6 +145,48 @@ void NeuralNetworkClassifier::score(const std::vector<int>& attributes,
   for (int i = 0; i < nr_classes; ++ i) { retval[i] = output(i); }
 }
 
+int NeuralNetworkClassifier::n_perceptron() const {
+  return hidden_layer_size* 2+ nr_classes;
+}
+
+void NeuralNetworkClassifier::perceptron(const std::vector<int>& attributes,
+    std::vector<floatval_t>& retval) {
+  const std::unordered_map<int, size_t>& encoder = precomputation_id_encoder;
+  arma::vec hidden = arma::zeros<arma::vec>(hidden_layer_size);
+
+  for (auto i = 0, off = 0; i < attributes.size(); ++ i, off += embedding_size) {
+    auto& aid = attributes[i];
+    auto fid = aid * nr_feature_types + i;
+    auto rep = encoder.find(fid);
+    if (rep != encoder.end()) {
+      hidden+= saved.col(rep->second);
+    } else {
+      // W1[0:hidden_layer, off:off+embedding_size] * E[fid:]'
+      hidden+= avgW1.submat(0, off, hidden_layer_size-1, off+embedding_size-1) * avgE.col(aid);
+    }
+  }
+
+  retval.resize(n_perceptron(), 0.);
+  hidden+= avgb1;
+  hidden= arma::max(hidden, arma::zeros<arma::vec>(hidden.n_rows));
+  for (int i = 0; i < hidden_layer_size; ++ i) { retval[i] = hidden(i); }
+
+  hidden= avgW10 * hidden+ avgb10;
+  hidden= arma::max(hidden, arma::zeros<arma::vec>(hidden.n_rows));
+  for (int i = hidden_layer_size; i < hidden_layer_size* 2; ++ i) {
+    retval[i] = hidden(i- hidden_layer_size);
+  }
+
+  arma::vec output = avgW2* hidden + avgb2;
+  floatval_t best = arma::max(output);
+  output = arma::exp(output - best);
+  output = output / arma::sum(output);
+
+  for (int i = 2*hidden_layer_size; i < 2*hidden_layer_size+ nr_classes; ++ i) {
+    retval[i] = output(i- 2*hidden_layer_size);
+  }
+}
+
 void NeuralNetworkClassifier::compute_cost_and_gradient(
     std::vector<Sample>::const_iterator begin,
     std::vector<Sample>::const_iterator end,

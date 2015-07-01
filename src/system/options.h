@@ -4,7 +4,7 @@
 namespace ZuoPar {
 
 enum LearningAlgorithm {
-  kPassiveAgressive = 0,
+  kPassiveAggressive = 0,
   kAveragePerceptron
 };
 

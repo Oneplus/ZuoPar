@@ -22,12 +22,10 @@ namespace NeuralNetwork {
 namespace Weiss2015 {
 
 Pipe::Pipe(const PretrainOption& opts)
-  : mode(kPipeLearn), pretrain_opt(&opts), learn_opt(nullptr), test_opt(nullptr),
-  forms_alphabet(false), lemmas_alphabet(false),
-  cpostags_alphabet(false), postags_alphabet(false),
-  feats_alphabet(false), deprels_alphabet(false),
-  cursor(0),
-  nr_feature_types(0) {
+  : mode(kPipePretrain),
+  pretrain_opt(&opts), pretest_opt(nullptr), learn_opt(nullptr), test_opt(nullptr),
+  forms_alphabet(false), postags_alphabet(false), deprels_alphabet(false),
+  cursor(0), nr_feature_types(0) {
   reference_file = opts.reference_file;
   devel_file = opts.devel_file;
   model_file = opts.model_file;
@@ -43,33 +41,11 @@ Pipe::Pipe(const PretrainOption& opts)
   display_pretraining_parameters();
 }
 
-Pipe::Pipe(const LearnOption& opts)
-  : mode(kPipeLearn), pretrain_opt(nullptr), learn_opt(&opts), test_opt(nullptr),
-  forms_alphabet(false), lemmas_alphabet(false),
-  cpostags_alphabet(false), postags_alphabet(false),
-  feats_alphabet(false),
-  deprels_alphabet(false),
-  cursor(0),
-  nr_feature_types(0) {
-
-  reference_file = opts.reference_file;
-  devel_file = opts.devel_file;
-  model_file = opts.model_file;
-
-  _INFO << "LEARN: mode is activated.";
-  _INFO << "report: reference file: " << reference_file;
-  _INFO << "report: development file: " << devel_file;
-  _INFO << "report: model file: " << model_file;
-}
-
-Pipe::Pipe(const TestOption& opts)
-  : mode(kPipeTest), pretrain_opt(nullptr), learn_opt(nullptr), test_opt(&opts),
-  forms_alphabet(false), lemmas_alphabet(false),
-  cpostags_alphabet(false), postags_alphabet(false),
-  feats_alphabet(false),
-  deprels_alphabet(false),
-  cursor(0),
-  nr_feature_types(0) {
+Pipe::Pipe(const PretestOption& opts)
+  : mode(kPipePretest),
+  pretrain_opt(nullptr), pretest_opt(&opts), learn_opt(nullptr), test_opt(nullptr),
+  forms_alphabet(false), postags_alphabet(false), deprels_alphabet(false),
+  cursor(0), nr_feature_types(0) {
 
   input_file = opts.input_file;
   output_file = opts.output_file;
@@ -81,6 +57,46 @@ Pipe::Pipe(const TestOption& opts)
   _INFO << "report: model file: " << model_file;
 
   load_model(model_file);
+}
+
+
+Pipe::Pipe(const LearnOption& opts)
+  : mode(kPipeLearn), pretrain_opt(nullptr), learn_opt(&opts), test_opt(nullptr),
+  forms_alphabet(false), postags_alphabet(false), deprels_alphabet(false),
+  cursor(0), nr_feature_types(0) {
+
+  reference_file = opts.reference_file;
+  devel_file = opts.devel_file;
+  model_file = opts.model_file;
+
+  _INFO << "LEARN: mode is activated.";
+  _INFO << "report: reference file: " << reference_file;
+  _INFO << "report: development file: " << devel_file;
+  _INFO << "report: model file: " << model_file;
+  _INFO << "report: pretrained model file: " << opts.pretrain_model_file;
+  _INFO << "report: beam size: " << opts.beam_size;
+  _INFO << "report: max iteration: " << opts.max_iter;
+
+  load_model(opts.pretrain_model_file);
+}
+
+Pipe::Pipe(const TestOption& opts)
+  : mode(kPipeTest), pretrain_opt(nullptr), learn_opt(nullptr), test_opt(&opts),
+  forms_alphabet(false), postags_alphabet(false), deprels_alphabet(false),
+  cursor(0), nr_feature_types(0) {
+
+  input_file = opts.input_file;
+  output_file = opts.output_file;
+  model_file = opts.model_file;
+
+  _INFO << "TEST:: mode is activated.";
+  _INFO << "report: input file: " << input_file;
+  _INFO << "report: output file: " << output_file;
+  _INFO << "report: model file: " << model_file;
+  _INFO << "report: pretrained model file: " << opts.pretrain_model_file;
+
+  load_model(opts.pretrain_model_file);
+  load_structured_model(opts.model_file);
 }
 
 void Pipe::display_pretraining_parameters() {
@@ -102,7 +118,7 @@ void Pipe::display_pretraining_parameters() {
 
 bool Pipe::setup() {
   namespace ioutils = ZuoPar::IO;
-  if (mode == kPipeLearn) {
+  if (mode == kPipeLearn || mode == kPipePretrain) {
     train_dataset.clear();
     devel_dataset.clear();
     std::ifstream ifs(reference_file);
@@ -154,15 +170,7 @@ void Pipe::info() {
   _INFO << "report: " << forms_alphabet.size() << " forms(s) are detected.";
   _INFO << "report: " << postags_alphabet.size() << " postag(s) are detected.";
   _INFO << "report: " << deprels_alphabet.size() << " deprel(s) are detected.";
-  _INFO << "report: form located at: [" << kFormInFeaturespace << " ... "
-    << kPostagInFeaturespace- 1 << "]";
-  _INFO << "report: postags located at: [" << kPostagInFeaturespace << " ... "
-    << kDeprelInFeaturespace- 1 << "]";
-  _INFO << "report: deprels located at: [" << kDeprelInFeaturespace << " ... "
-    << kFeatureSpaceEnd - 1 << "]";
-  _INFO << "report: nil form (in f.s.) =" << kNilForm;
-  _INFO << "report: nil postag (in f.s.) =" << kNilPostag;
-  _INFO << "report: nil deprel (in f.s.) =" << kNilDeprel;
+  extractor.display();
   _INFO << "report: root rel(str)=" << root;
   _INFO << "report: root rel(index)=" << deprels_alphabet.encode(root);
 
@@ -185,28 +193,21 @@ void Pipe::build_alphabet() {
   }
 
   forms_alphabet.insert(SpecialOption::UNKNOWN);
-  kNilForm = forms_alphabet.insert(SpecialOption::NIL);
+  forms_alphabet.insert(SpecialOption::NIL);
   forms_alphabet.insert(SpecialOption::ROOT);
 
   postags_alphabet.insert(SpecialOption::UNKNOWN);
-  kNilPostag = postags_alphabet.insert(SpecialOption::NIL);
+  postags_alphabet.insert(SpecialOption::NIL);
   postags_alphabet.insert(SpecialOption::ROOT);
 
-  kNilDeprel = deprels_alphabet.insert(SpecialOption::NIL);
+  deprels_alphabet.insert(SpecialOption::NIL);
 }
 
 void Pipe::build_feature_space() {
-  kFormInFeaturespace = 0;
-  kFeatureSpaceEnd = forms_alphabet.size();
-  kNilForm += kFormInFeaturespace;
-
-  kPostagInFeaturespace = kFeatureSpaceEnd;
-  kFeatureSpaceEnd += postags_alphabet.size();
-  kNilPostag += kPostagInFeaturespace;
-
-  kDeprelInFeaturespace = kFeatureSpaceEnd;
-  kFeatureSpaceEnd += deprels_alphabet.size();
-  kNilDeprel += kDeprelInFeaturespace;
+  extractor.initialize(
+      forms_alphabet.encode(SpecialOption::NIL), forms_alphabet.size(),
+      postags_alphabet.encode(SpecialOption::NIL), postags_alphabet.size(),
+      deprels_alphabet.encode(SpecialOption::NIL), deprels_alphabet.size());
 
   info();
 }
@@ -268,7 +269,7 @@ void Pipe::initialize_classifier() {
   }
   _INFO << "report: " << embeddings.size() << " embedding is loaded.";
 
-  classifier.initialize(kFeatureSpaceEnd, deprels_alphabet.size()*2-1,
+  classifier.initialize(extractor.n_dim(), deprels_alphabet.size()*2-1,
       nr_feature_types, (*pretrain_opt), embeddings, precomputed_features
       );
   _INFO << "report: classifier is initialized.";
@@ -297,7 +298,7 @@ void Pipe::generate_training_samples() {
     for (auto step = 1; step < oracle_actions.size(); ++ step) {
       auto& oracle_action = oracle_actions[step];
       std::vector<int> attributes;
-      get_features(states[step], attributes);
+      extractor.get_features(states[step], attributes);
 
       if (nr_feature_types == 0) {
         nr_feature_types = attributes.size();
@@ -347,70 +348,6 @@ void Pipe::generate_training_samples() {
   for (auto& t: top) { precomputed_features.push_back(t.first); }
 }
 
-void Pipe::get_context(const State& s, Context& ctx) {
-  ctx.S0 = (s.stack.size() > 0 ? s.stack[s.stack.size() - 1]: -1);
-  ctx.S1 = (s.stack.size() > 1 ? s.stack[s.stack.size() - 2]: -1);
-  ctx.S2 = (s.stack.size() > 2 ? s.stack[s.stack.size() - 3]: -1);
-  ctx.N0 = (s.buffer < s.ref->size()    ? s.buffer:    -1);
-  ctx.N1 = (s.buffer+ 1 < s.ref->size() ? s.buffer+ 1: -1);
-  ctx.N2 = (s.buffer+ 2 < s.ref->size() ? s.buffer+ 2: -1);
-
-  ctx.S0L  = (ctx.S0 >= 0  ? s.left_most_child[ctx.S0]:  -1);
-  ctx.S0R  = (ctx.S0 >= 0  ? s.right_most_child[ctx.S0]: -1);
-  ctx.S0L2 = (ctx.S0 >= 0  ? s.left_2nd_most_child[ctx.S0]:  -1);
-  ctx.S0R2 = (ctx.S0 >= 0  ? s.right_2nd_most_child[ctx.S0]: -1);
-  ctx.S0LL = (ctx.S0L >= 0 ? s.left_most_child[ctx.S0L]:  -1);
-  ctx.S0RR = (ctx.S0R >= 0 ? s.right_most_child[ctx.S0R]: -1);
-
-  ctx.S1L  = (ctx.S1 >= 0  ? s.left_most_child[ctx.S1]:  -1);
-  ctx.S1R  = (ctx.S1 >= 0  ? s.right_most_child[ctx.S1]: -1);
-  ctx.S1L2 = (ctx.S1 >= 0  ? s.left_2nd_most_child[ctx.S1]:  -1);
-  ctx.S1R2 = (ctx.S1 >= 0  ? s.right_2nd_most_child[ctx.S1]: -1);
-  ctx.S1LL = (ctx.S1L >= 0 ? s.left_most_child[ctx.S1L]: -1);
-  ctx.S1RR = (ctx.S1R >= 0 ? s.right_most_child[ctx.S1R]: -1);
-}
-
-void Pipe::get_basic_feature(const Context& ctx,
-    const std::vector<int>& forms,
-    const std::vector<int>& postags,
-    const int* deprels,
-    std::vector<int>& features) {
-#define FORM(id)    ((ctx.id != -1) ? (forms[ctx.id]): kNilForm)
-#define POSTAG(id)  ((ctx.id != -1) ? (postags[ctx.id]+ kPostagInFeaturespace): kNilPostag)
-#define DEPREL(id)  ((ctx.id != -1) ? (deprels[ctx.id]+ kDeprelInFeaturespace): kNilDeprel)
-#define PUSH(feat)  do { features.push_back( feat ); } while (0);
-
-  PUSH( FORM(S0) );   PUSH( POSTAG(S0) );
-  PUSH( FORM(S1) );   PUSH( POSTAG(S1) );
-  PUSH( FORM(S2) );   PUSH( POSTAG(S2) );
-  PUSH( FORM(N0) );   PUSH( POSTAG(N0) );
-  PUSH( FORM(N1) );   PUSH( POSTAG(N1) );
-  PUSH( FORM(N2) );   PUSH( POSTAG(N2) );
-  PUSH( FORM(S0L) );  PUSH( POSTAG(S0L) );  PUSH( DEPREL(S0L) );
-  PUSH( FORM(S0R) );  PUSH( POSTAG(S0R) );  PUSH( DEPREL(S0R) );
-  PUSH( FORM(S0L2) ); PUSH( POSTAG(S0L2) ); PUSH( DEPREL(S0L2) );
-  PUSH( FORM(S0R2) ); PUSH( POSTAG(S0R2) ); PUSH( DEPREL(S0R2) );
-  PUSH( FORM(S0LL) ); PUSH( POSTAG(S0LL) ); PUSH( DEPREL(S0LL) );
-  PUSH( FORM(S0RR) ); PUSH( POSTAG(S0RR) ); PUSH( DEPREL(S0RR) );
-  PUSH( FORM(S1L) );  PUSH( POSTAG(S1L) );  PUSH( DEPREL(S1L) );
-  PUSH( FORM(S1R) );  PUSH( POSTAG(S1R) );  PUSH( DEPREL(S1R) );
-  PUSH( FORM(S1L2) ); PUSH( POSTAG(S1L2) ); PUSH( DEPREL(S1L2) );
-  PUSH( FORM(S1R2) ); PUSH( POSTAG(S1R2) ); PUSH( DEPREL(S1R2) );
-  PUSH( FORM(S1LL) ); PUSH( POSTAG(S1LL) ); PUSH( DEPREL(S1LL) );
-  PUSH( FORM(S1RR) ); PUSH( POSTAG(S1RR) ); PUSH( DEPREL(S1RR) );
-
-#undef FORM
-#undef POSTAG
-#undef DEPREL
-#undef PUSH
-}
-
-void Pipe::get_features(const State& s, std::vector<int>& features) {
-  Context ctx;
-  get_context(s, ctx);
-  get_basic_feature(ctx, s.ref->forms, s.ref->postags, s.deprels, features);
-}
-
 void Pipe::transduce_instance_to_dependency(const RawCoNLLXDependency& data,
     Dependency& dependency, bool with_reference) {
   auto L = data.size();
@@ -442,7 +379,7 @@ void Pipe::predict(const RawCoNLLXDependency& data,
   decoder.transit(states[0], ActionFactory::make_shift(), &states[1]);
   for (auto step = 1; step < L*2-1; ++ step) {
     std::vector<int> attributes;
-    get_features(states[step], attributes);
+    extractor.get_features(states[step], attributes);
 
     std::vector<floatval_t> scores(decoder.number_of_transitions(), 0);
     classifier.score(attributes, scores);
@@ -505,7 +442,7 @@ std::pair<
       decoder.transit(states[0], ActionFactory::make_shift(), &states[1]);
       for (auto step = 1; step < L*2-1; ++ step) {
         std::vector<int> attributes;
-        get_features(states[step], attributes);
+        extractor.get_features(states[step], attributes);
 
         if (attributes.size() != nr_feature_types) {
           _WARN << "#: number of feature types unequal to configed number";
@@ -571,7 +508,7 @@ void Pipe::pretrain() {
     std::vector<Sample>::const_iterator end;
     std::tie(begin, end) = generate_training_samples_one_batch();
 
-    classifier.compute_cost_and_gradient(begin, end, 
+    classifier.compute_cost_and_gradient(begin, end,
         (pretrain_opt->debug && (iter+1)% pretrain_opt->evaluation_stops == 0));
     if (pretrain_opt->algorithm == "asgd") {
       classifier.take_momentum_asgd_step(0.1 + (0.9999 - 0.1) / pretrain_opt->max_iter * iter);
@@ -622,19 +559,136 @@ void Pipe::pretrain() {
   }
 }
 
-void Pipe::test() {
-  /*if (!setup()) { return; }
+void Pipe::learn() {
+  if (!setup()) { return; }
+  classifier.precomputing();
+
+  model.initialize(&extractor, &classifier, &decoder);
+  model.zeros();
+
+  learner = new Learner(&model,
+      (learn_opt->algorithm == "ap"? kAveragePerceptron: kPassiveAggressive));
+  search = new StructuredDecoder(
+      deprels_alphabet.size()- 1, deprels_alphabet.encode(root),
+      learn_opt->beam_size, false, kEarlyUpdate, &model);
+
+  floatval_t best_uas = -1;
+  _INFO << "start learning ...";
+  auto nr_total = 0;
+  for (auto iter = 0; iter < learn_opt->max_iter; ++ iter) {
+    search->set_avg(false);
+    auto nr_processed = 0;
+    auto interval = train_dataset.size() / 10;
+    if (interval == 0) { interval = 10; }
+
+    _INFO << "# iteration: " << iter;
+
+    std::random_shuffle(train_dataset.begin(), train_dataset.end());
+    for (const auto& data: train_dataset) {
+      if (!DependencyUtils::is_tree(data.heads) ||
+          !DependencyUtils::is_projective(data.heads)) {
+        continue;
+      }
+      Dependency dependency;
+      size_t L = data.forms.size();
+      transduce_instance_to_dependency(data, dependency, true);
+
+      std::vector<Action> oracle_actions;
+      ActionUtils::get_oracle_actions2(dependency, oracle_actions);
+
+      State init_state(&dependency);
+      StructuredDecoder::const_decode_result_t result =
+        search->decode(init_state, oracle_actions, 2 * L- 1);
+
+      learner->set_timestamp(nr_total+ 1);
+      learner->learn(result.first, result.second);
+
+      model.average();
+      if (++ nr_processed % interval == 0) {
+        _INFO << "#: preceptron trained " << nr_processed / interval << "0% sentences.";
+      }
+    }
+    _INFO << "#: preceptron training is done.";
+
+    auto corr_heads = 0, corr_deprels = 0, nr_tokens = 0;
+    if (learn_opt->averaged) { search->set_avg(true); }
+    boost::timer::cpu_timer t;
+    for (const auto& data: devel_dataset) {
+      Dependency dependency;
+      size_t L = data.forms.size();
+      transduce_instance_to_dependency(data, dependency, true);
+
+      std::vector<Action> oracle_actions;
+
+      State init_state(&dependency);
+      StructuredDecoder::const_decode_result_t result =
+        search->decode(init_state, oracle_actions, 2 * L- 1);
+
+      std::vector<int> heads;
+      std::vector<std::string> deprels;
+
+      heads.resize(L); deprels.resize(L);
+      for (size_t i = 1; i < L; ++ i) {
+        heads[i] = result.first->heads[i];
+        deprels[i] = deprels_alphabet.decode(result.first->deprels[i]);
+      }
+      std::tuple<int, int, int> eval;
+      if (learn_opt->evaluation_method == "conllx") {
+        eval = DependencyParserUtils::evaluate_conllx(data, heads, deprels);
+      } else if (learn_opt->evaluation_method == "chen14en") {
+        eval = DependencyParserUtils::evaluate_chen14en(data, heads, deprels);
+      } else if (learn_opt->evaluation_method == "chen14ch") {
+        eval = DependencyParserUtils::evaluate_chen14ch(data, heads, deprels);
+      }
+
+      nr_tokens += std::get<0>(eval);
+      corr_heads += std::get<1>(eval);
+      corr_deprels += std::get<2>(eval);
+    }
+    auto uas = (floatval_t)corr_heads/nr_tokens;
+    auto las = (floatval_t)corr_deprels/nr_tokens;
+    _INFO << "eval: evaluating done. UAS=" << uas << " LAS=" << las
+      << " (" << t.elapsed().wall /1e9 << ")";
+
+    if (best_uas < uas) {
+      best_uas = uas;
+      _INFO << "report: model saved to " << model_file;
+      save_structured_model(model_file);
+    }
+  }
+}
+
+void Pipe::pretest() {
+  if (!setup()) { return; }
   classifier.precomputing();
 
   std::vector<int> heads;
   std::vector<std::string> deprels;
 
   std::ostream* os = IO::get_ostream(output_file);
-  boost::timer t;
+  boost::timer::cpu_timer t;
   for (const auto& data: test_dataset) {
     predict(data, heads, deprels);
 
-    auto L = heads.size();
+    Dependency dependency;
+    size_t L = data.forms.size();
+    transduce_instance_to_dependency(data, dependency, true);
+
+    std::vector<Action> oracle_actions;
+
+    State init_state(&dependency);
+    StructuredDecoder::const_decode_result_t result =
+      search->decode(init_state, oracle_actions, 2 * L- 1);
+
+    std::vector<int> heads;
+    std::vector<std::string> deprels;
+
+    heads.resize(L); deprels.resize(L);
+    for (size_t i = 0; i < L; ++ i) {
+      heads[i] = result.first->heads[i];
+      deprels[i] = deprels_alphabet.decode(result.second->deprels[i]);
+    }
+
     for (auto i = 1; i < L; ++ i) {
       (*os) << i << "\t"
         << data.forms[i] << "\t"
@@ -648,7 +702,58 @@ void Pipe::test() {
     }
     (*os) << std::endl;
   }
-  _INFO << "#: elapsed " << t.elapsed(); */
+  _INFO << "#: elapsed " << t.elapsed().wall / 1e9;
+}
+
+void Pipe::test() {
+  if (!setup()) { return; }
+  classifier.precomputing();
+
+  model.initialize(&extractor, &classifier, &decoder);
+
+  search = new StructuredDecoder(
+      deprels_alphabet.size()- 1, deprels_alphabet.encode(root),
+      test_opt->beam_size, true, kEarlyUpdate, &model);
+
+  std::vector<int> heads;
+  std::vector<std::string> deprels;
+
+  std::ostream* os = IO::get_ostream(output_file);
+  boost::timer::cpu_timer t;
+  for (const auto& data: test_dataset) {
+    Dependency dependency;
+    size_t L = data.forms.size();
+    transduce_instance_to_dependency(data, dependency, true);
+
+    std::vector<Action> oracle_actions;
+
+    State init_state(&dependency);
+    StructuredDecoder::const_decode_result_t result =
+      search->decode(init_state, oracle_actions, 2 * L- 1);
+
+    std::vector<int> heads;
+    std::vector<std::string> deprels;
+
+    heads.resize(L); deprels.resize(L);
+    for (size_t i = 1; i < L; ++ i) {
+      heads[i] = result.first->heads[i];
+      deprels[i] = deprels_alphabet.decode(result.first->deprels[i]);
+    }
+
+    for (auto i = 1; i < L; ++ i) {
+      (*os) << i << "\t"
+        << data.forms[i] << "\t"
+        << "_" << "\t"
+        << data.cpostags[i] << "\t"
+        << data.postags[i] << "\t";
+      if (data.feats[i].size()) {
+        (*os) << boost::algorithm::join(data.feats[i], "|") << "\t"; }
+      else { (*os) << "_\t"; }
+      (*os) << heads[i] << "\t" << deprels[i] << std::endl;
+    }
+    (*os) << std::endl;
+  }
+  _INFO << "#: elapsed " << t.elapsed().wall/1e9;
 }
 
 void Pipe::load_model(const std::string& model_path) {
@@ -658,22 +763,20 @@ void Pipe::load_model(const std::string& model_path) {
     return;
   }
   boost::archive::text_iarchive ia(mfs);
+  ia >> root;
 
   classifier.load(mfs);
   forms_alphabet.load(mfs);
   postags_alphabet.load(mfs);
   deprels_alphabet.load(mfs);
 
-  kFormInFeaturespace = 0;
-  kNilForm = forms_alphabet.encode(SpecialOption::NIL);
-
-  kPostagInFeaturespace = forms_alphabet.size();
-  kNilPostag = postags_alphabet.encode(SpecialOption::NIL) + kPostagInFeaturespace;
-
-  kDeprelInFeaturespace = forms_alphabet.size()+ postags_alphabet.size();
-  kNilDeprel = deprels_alphabet.encode(SpecialOption::NIL) + kDeprelInFeaturespace;
-
-  kFeatureSpaceEnd = kDeprelInFeaturespace + deprels_alphabet.size();
+  extractor.initialize(
+      forms_alphabet.encode(SpecialOption::NIL),
+      forms_alphabet.size(),
+      postags_alphabet.encode(SpecialOption::NIL),
+      postags_alphabet.size(),
+      deprels_alphabet.encode(SpecialOption::NIL),
+      deprels_alphabet.size());
 
   info();
 }
@@ -685,11 +788,30 @@ void Pipe::save_model(const std::string& model_path) {
     return;
   }
   boost::archive::text_oarchive oa(mfs);
+  oa << root;
 
   classifier.save(mfs);
   forms_alphabet.save(mfs);
   postags_alphabet.save(mfs);
   deprels_alphabet.save(mfs);
+}
+
+void Pipe::load_structured_model(const std::string& model_path) {
+  std::ifstream mfs(model_path);
+  if (!mfs.good()) {
+    _WARN << "#: failed to open file.";
+    return;
+  }
+  model.load(mfs);
+}
+
+void Pipe::save_structured_model(const std::string& model_path) {
+  std::ofstream mfs(model_path);
+  if (!mfs.good()) {
+    _WARN << "#: failed to open file.";
+    return;
+  }
+  model.save(mfs);
 }
 
 } //  namespace weiss2015

@@ -56,7 +56,7 @@ po::options_description build_pretrain_optparser(const std::string& usage) {
   return optparser;
 }
 
-po::options_description build_learn_optparser(const std::string& usage) {
+po::options_description build_pretest_optparser(const std::string& usage) {
   po::options_description optparser = po::options_description(usage);
   optparser.add_options()
     ("model", po::value<std::string>(), "The path to the model.")
@@ -67,10 +67,34 @@ po::options_description build_learn_optparser(const std::string& usage) {
   return optparser;
 }
 
+po::options_description build_learn_optparser(const std::string& usage) {
+  po::options_description optparser = po::options_description(usage);
+  optparser.add_options()
+    ("pretrain-model", po::value<std::string>(), "The path to the pretrained model.")
+    ("model", po::value<std::string>(), "The path to the model.")
+    ("reference", po::value<std::string>(), "The path to the reference file.")
+    ("development", po::value<std::string>(), "The path to the development file.")
+    ("algorithm", po::value<std::string>(), "The learning algorithm.\n"
+     " - pa: passive aggressive\n"
+     " - ap: averaged perceptron")
+    ("beam-size", po::value<int>(), "The beam-size [default=1]")
+    ("max-iter", po::value<int>(), "The maximum iteration [default=10].")
+    ("evaluation-method", po::value<std::string>(), "Evaluation method:\n"
+     " - conllx: exclude unicode punctuation [default]\n"
+     " - chen14en: exclude ``'':,. , (require gold POS in conll feat column)\n"
+     " - chen14ch: exclude PU, (require gold POS in conll feat colum)")
+    ("avg", po::value<bool>(), "Use averaged parameter [default=false]")
+    ("help,h", "Show help information.")
+    ;
+  return optparser;
+}
+
 po::options_description build_test_optparser(const std::string& usage) {
   po::options_description optparser = po::options_description(usage);
   optparser.add_options()
+    ("pretrain-model", po::value<std::string>(), "The path to the pretrained model.")
     ("model", po::value<std::string>(), "The path to the model.")
+    ("beam-size", po::value<int>(), "The beam-size [default=1]")
     ("input", po::value<std::string>(), "The path to the reference.")
     ("output", po::value<std::string>(), "The path to the output file.")
     ("help,h", "Show help information.")
@@ -201,7 +225,6 @@ bool parse_pretrain_option(const po::variables_map& vm, PretrainOption& opts) {
     }
   }
 
-
   opts.save_intermediate = true;
   if (vm.count("save-intermediate")) {
     opts.save_intermediate = vm["save-intermediate"].as<bool>();
@@ -223,7 +246,73 @@ bool parse_pretrain_option(const po::variables_map& vm, PretrainOption& opts) {
   return true;
 }
 
-bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
+bool parse_pretrain_model_option(const po::variables_map& vm, PretrainModelOption& opts) {
+  if (!vm.count("pretrain-model")) {
+    _ERROR << "parse opt: pretrained model must be specified [--pretrain-model]";
+    return false;
+  } else {
+    opts.pretrain_model_file = vm["pretrain-model"].as<std::string>();
+  }
+
+  return true;
+}
+
+bool parse_beam_size_option(const po::variables_map& vm, BeamsizeOption& opts) {
+  opts.beam_size = 1;
+  if (vm.count("beam-size")) {
+    opts.beam_size = vm["beam-size"].as<int>();
+    if (opts.beam_size <= 0) { opts.beam_size = 1; }
+  }
+
+  return true;
+}
+
+bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
+  if (!parse_basic_option(vm, static_cast<BasicOption&>(opts))) { return false; }
+  if (!parse_pretrain_model_option(vm, static_cast<PretrainModelOption&>(opts))) {
+    return false;
+  }
+  if (!vm.count("reference")) {
+    _ERROR << "parse opt: reference file must be specified [--reference].";
+    return false;
+  } else {
+    opts.reference_file = vm["reference"].as<std::string>();
+  }
+
+  opts.devel_file = "";
+  if (vm.count("development")) {
+    opts.devel_file = vm["development"].as<std::string>();
+  }
+
+  opts.max_iter = 10;
+  if (vm.count("max-iter")) { opts.max_iter = vm["max-iter"].as<int>(); }
+
+  opts.algorithm = "ap";
+  if (vm.count("algorithm")) {
+    opts.algorithm = vm["algorithm"].as<std::string>();
+    if (opts.algorithm != "pa" && opts.algorithm != "ap") {
+      opts.algorithm = "ap";
+    }
+  }
+
+  opts.averaged = false;
+  if (vm.count("avg")) { opts.averaged = vm["avg"].as<bool>(); }
+
+  opts.evaluation_method = "conllx";
+  if (vm.count("evaluation-method")) {
+    opts.evaluation_method = vm["evaluation-method"].as<std::string>();
+    if (opts.evaluation_method != "conllx" &&
+        opts.evaluation_method != "chen14en" &&
+        opts.evaluation_method != "chen14ch") {
+      opts.evaluation_method = "conllx";
+    }
+  }
+  
+  parse_beam_size_option(vm, static_cast<BeamsizeOption&>(opts));
+  return true;
+}
+
+bool parse_pretest_option(const po::variables_map& vm, PretestOption& opts) {
   if (!parse_basic_option(vm, static_cast<BasicOption&>(opts))) { return false; }
   if (!vm.count("input")) {
     _ERROR << "parse opt: input file must be specified [--input].";
@@ -237,6 +326,35 @@ bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
 
   return true;
 }
+
+bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
+  if (!parse_basic_option(vm, static_cast<BasicOption&>(opts))) { return false; }
+
+  if (!parse_pretrain_model_option(vm, static_cast<PretrainModelOption&>(opts))) {
+    return false;
+  }
+
+  if (!vm.count("pretrain-model")) {
+    _ERROR << "parse opt: pretrained model must be specified [--pretrain-model]";
+    return false;
+  } else {
+    opts.pretrain_model_file = vm["pretrain-model"].as<std::string>();
+  }
+
+  if (!vm.count("input")) {
+    _ERROR << "parse opt: input file must be specified [--input].";
+    return false;
+  } else {
+    opts.input_file = vm["input"].as<std::string>();
+  }
+
+  opts.output_file = "";
+  if (vm.count("output")) { opts.output_file = vm["output"].as<std::string>(); }
+
+  parse_beam_size_option(vm, static_cast<BeamsizeOption&>(opts));
+  return true;
+}
+
 
 } //  namespace weiss2015
 } //  namespace neuralnetwork

@@ -42,7 +42,7 @@ public:
       _TRACE << "learn: update " << (void *)correct_state << " by " << 1;
       model->update((*predict_state), timestamp, -1.);
       model->update((*correct_state), timestamp, 1.);
-    } else if (algorithm == kPassiveAgressive) {
+    } else if (algorithm == kPassiveAggressive) {
       floatval_t error = margin; //
       floatval_t score = 0.;
       floatval_t norm = 0.;

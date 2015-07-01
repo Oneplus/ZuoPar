@@ -8,7 +8,7 @@ namespace Swap {
 Decoder::Decoder(int nr, int root, int position,
     int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
   : nr_deprels(nr), root_tag(root), root_position(position),
-  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, avg, strategy, weight) {
+  TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
 }
 
 void Decoder::get_possible_actions(const State& source,
