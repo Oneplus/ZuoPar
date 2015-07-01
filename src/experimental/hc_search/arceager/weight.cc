@@ -221,9 +221,9 @@ CostWeight::CostWeight() {
     __REG_3(G_P_M, postags, forms, postags);
     __REG_3(G_P_M, postags, postags, forms);
 
-    // __REG_2(G_M, postags, postags);
-    // __REG_2(G_M, forms, postags);
-    // __REG_2(G_M, postags, forms);
+    __REG_2(G_M, postags, postags);
+    __REG_2(G_M, forms, postags);
+    __REG_2(G_M, postags, forms);
 
     // direction
     __REGN_4(G_P_M_Dir, postags, postags, postags);
@@ -292,11 +292,11 @@ CostWeight::CostWeight() {
     __REGN_5(G_P_M_C_Dir, postags, postags, forms, postags);
     __REGN_5(G_P_M_C_Dir, postags, postags, postags, forms);
 
-    //__REGN_5(G_P_M_C_Rel, postags, postags, postags, postags);
-    //__REGN_5(G_P_M_C_Rel, forms, postags, postags, postags);
-    //__REGN_5(G_P_M_C_Rel, postags, forms, postags, postags);
-    //__REGN_5(G_P_M_C_Rel, postags, postags, forms, postags);
-    //__REGN_5(G_P_M_C_Rel, postags, postags, postags, forms);
+    __REGN_5(G_P_M_C_Rel, postags, postags, postags, postags);
+    __REGN_5(G_P_M_C_Rel, forms, postags, postags, postags);
+    __REGN_5(G_P_M_C_Rel, postags, forms, postags, postags);
+    __REGN_5(G_P_M_C_Rel, postags, postags, forms, postags);
+    __REGN_5(G_P_M_C_Rel, postags, postags, postags, forms);
 
     __REG_3(G_P_C, postags, postags, postags);
     __REG_3(G_P_C, forms, postags, postags);
@@ -352,11 +352,11 @@ CostWeight::CostWeight() {
     __REGN_5(G_P_M_S_Dir, postags, postags, forms, postags);
     __REGN_5(G_P_M_S_Dir, postags, postags, postags, forms);
 
-    //__REGN_5(G_P_M_S_Rel, postags, postags, postags, postags);
-    //__REGN_5(G_P_M_S_Rel, forms, postags, postags, postags);
-    //__REGN_5(G_P_M_S_Rel, postags, forms, postags, postags);
-    //__REGN_5(G_P_M_S_Rel, postags, postags, forms, postags);
-    //__REGN_5(G_P_M_S_Rel, postags, postags, postags, forms);
+    __REGN_5(G_P_M_S_Rel, postags, postags, postags, postags);
+    __REGN_5(G_P_M_S_Rel, forms, postags, postags, postags);
+    __REGN_5(G_P_M_S_Rel, postags, forms, postags, postags);
+    __REGN_5(G_P_M_S_Rel, postags, postags, forms, postags);
+    __REGN_5(G_P_M_S_Rel, postags, postags, postags, forms);
 
     __REG_3(G_M_S, postags, postags, postags);
     __REG_3(G_M_S, forms, postags, postags);
@@ -462,15 +462,15 @@ CostWeight::CostWeight() {
             cache.push_back(uf_t(ctx.RB));
           }));
 
-    /*ufeat_map_repo.push_back(uf_map_t(
+    ufeat_map_repo.push_back(uf_map_t(
           [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
             cache.push_back(uf_t(ctx.RANK));
-          }));*/
+          }));
 
-    /*ufeat_map_repo.push_back(uf_map_t(
+    ufeat_map_repo.push_back(uf_map_t(
           [](const CostScoreContext& ctx, std::vector<uf_t>& cache) -> void {
             cache.push_back(uf_t(ctx.SCORE));
-          }));*/
+          }));
 
     // span length
     __REG_2(H_H, postags, span_length);

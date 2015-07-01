@@ -150,6 +150,7 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
 
   if (!parse_ada_option(vm, static_cast<AdaOption&>(opts))) { return false; }
   if (!parse_network_option(vm, static_cast<NetworkOption&>(opts))) { return false; }
+  if (!parse_feature_option(vm, static_cast<FeatureOption&>(opts))) { return false; }
 
   opts.max_iter = 20000;
   if (vm.count("max-iter")) { opts.max_iter = vm["max-iter"].as<int>(); }
