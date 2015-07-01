@@ -10,16 +10,15 @@ namespace MonoPredicate {
 
 namespace fe = ZuoPar::FrontEnd;
 
-struct LearnOption: public fe::LearnOption {
+struct SemanticOption {
   std::string verb_class_path;
   std::string predicate_tag;
   std::string argument_prefix;
 };
 
-struct TestOption: public fe::TestOption {
-  std::string verb_class_path;
-  std::string predicate_tag;
-  std::string argument_prefix;
+struct LearnOption: public fe::LearnOption, SemanticOption {};
+
+struct TestOption: public fe::TestOption, SemanticOption {
   std::string output_format;
 };
 

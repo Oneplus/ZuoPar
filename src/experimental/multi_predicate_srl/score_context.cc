@@ -29,7 +29,7 @@ ScoreContext::ScoreContext(const State& state_)
   if (NULL == state.previous) {
     t_1 = eg::TokenAlphabet::BEGIN;
   } else {
-    t_1 = state.last_action[predicate_rank].code();
+    t_1 = state.last_action[predicate_rank].name();
   }
 
   if (id >= 2) { w_2 = forms[id- 2]; p_2 = postags[id- 2]; }
@@ -83,7 +83,7 @@ ScoreContext::reset_predicate_rank(int rank) {
   if (NULL == state.previous) {
     t_1 = eg::TokenAlphabet::BEGIN;
   } else {
-    t_1 = state.last_action[predicate_rank].code();
+    t_1 = state.last_action[predicate_rank].name();
   }
 }
 

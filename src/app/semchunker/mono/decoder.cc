@@ -9,11 +9,10 @@ namespace MonoPredicate {
 
 Decoder::Decoder(int nr, int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
   : nr_tags(nr),
-  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, avg, strategy, weight) {
+  TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
 }
 
-void
-Decoder::get_possible_actions(const State& source,
+void Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   int buffer = source.buffer;
@@ -47,8 +46,7 @@ Decoder::get_possible_actions(const State& source,
   }
 }
 
-void
-Decoder::transit(const State& source, const Action& act, const floatval_t& score,
+void Decoder::transit(const State& source, const Action& act, const floatval_t& score,
     State* target) {
   tag_t tag;
   if (ActionUtils::is_O(act)) { target->O(source); }

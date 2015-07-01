@@ -8,21 +8,21 @@ namespace Experimental {
 namespace MultiPredicateSRL {
 
 bool ActionUtils::is_O(const Action& act) {
-  return (act.action_name == kSemanticChunkOuterTag);
+  return (act.name() == kSemanticChunkOuterTag);
 }
 
 bool ActionUtils::is_B(const Action& act, tag_t& tag) {
-  if (act.action_name >= kSemanticChunkBeginTag &&
-      act.action_name < kSemanticChunkInterTag) {
-    tag = act.action_name - kSemanticChunkBeginTag;
+  if (act.name() >= kSemanticChunkBeginTag &&
+      act.name() < kSemanticChunkInterTag) {
+    tag = act.name() - kSemanticChunkBeginTag;
     return true;
   }
   return false;
 }
 
 bool ActionUtils::is_I(const Action& act, tag_t& tag) {
-  if (act.action_name >= kSemanticChunkInterTag) {
-    tag = act.action_name - kSemanticChunkInterTag;
+  if (act.name() >= kSemanticChunkInterTag) {
+    tag = act.name() - kSemanticChunkInterTag;
     return true;
   }
   return false;
@@ -33,15 +33,15 @@ int ActionUtils::max(int nr_tags, bool erase) {
 }
 
 int ActionUtils::compress(const Action& act, int nr_tags, bool erase) {
-  if (act.action_name == kSemanticChunkOuterTag) {
+  if (act.name() == kSemanticChunkOuterTag) {
     return 0;
-  } else if (act.action_name > kSemanticChunkInterTag) {
+  } else if (act.name() > kSemanticChunkInterTag) {
     return (
-        ((act.action_name - kSemanticChunkInterTag)- (erase? 3: 0)) // compressed tag id
+        ((act.name() - kSemanticChunkInterTag)- (erase? 3: 0)) // compressed tag id
         + (nr_tags- (erase? 3:0)+ 1)                               // compressed nr tags
         );
   } else {
-    return ((act.action_name - kSemanticChunkBeginTag) - (erase? 3: 0) + 1);
+    return ((act.name() - kSemanticChunkBeginTag) - (erase? 3: 0) + 1);
   }
   return -1;
 }
@@ -60,12 +60,12 @@ Action ActionUtils::decompress(int act, int nr_tags, bool erase) {
 }
 
 tag_t ActionUtils::tag(const Action& act) {
-  if (act.action_name == kSemanticChunkOuterTag) {
+  if (act.name() == kSemanticChunkOuterTag) {
     return 0;
-  } else if (act.action_name > kSemanticChunkInterTag) {
-    return act.action_name - kSemanticChunkInterTag;
+  } else if (act.name() > kSemanticChunkInterTag) {
+    return act.name() - kSemanticChunkInterTag;
   } else {
-    return act.action_name - kSemanticChunkBeginTag;
+    return act.name() - kSemanticChunkBeginTag;
   }
 }
 

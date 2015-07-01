@@ -37,13 +37,6 @@ int multi_learn(int argc, char** argv) {
   return 0;
 }
 
-/**
- * Perform the learning process of ZuoPar::arcstandard dependency parser.
- *
- *  @param[in]  argc  The number of arguments.
- *  @param[in]  argv  The arguments.
- *  @return     int   The status of running learning.
- */
 int learn(int argc, char** argv) {
   std::string usage = "Training component of ZuoPar::sequence labeler.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";
@@ -72,13 +65,6 @@ int learn(int argc, char** argv) {
   return 0;
 }
 
-/**
- * Perform the testing process of ZuoPar::arcstandard dependency parser.
- *
- *  @param[in]  argc  The number of arguments.
- *  @param[in]  argv  The arguments.
- *  @return     int   The status of running test.
- */
 int test(int argc, char** argv) {
   std::string usage = "Testing component of ZuoPar::sequence labeler.\n";
   usage += "Author: Yijia Liu (oneplus.lau@gmail.com).\n\n";

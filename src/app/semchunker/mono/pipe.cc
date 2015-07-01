@@ -51,8 +51,13 @@ Pipe::Pipe(const TestOption& opts)
   }
 }
 
-bool
-Pipe::load_model(const std::string& model_path) {
+Pipe::~Pipe() {
+  if (decoder) { delete decoder; decoder = 0; }
+  if (learner) { delete learner; learner = 0; }
+  if (weight)  { delete weight;  weight = 0; }
+}
+
+bool Pipe::load_model(const std::string& model_path) {
   weight = new Weight;
   std::ifstream mfs(model_path);
 
@@ -89,8 +94,7 @@ Pipe::load_model(const std::string& model_path) {
   return true;
 }
 
-bool
-Pipe::save_model(const std::string& model_path) {
+bool Pipe::save_model(const std::string& model_path) {
   std::ofstream mfs(model_path);
   if (!mfs.good()) {
     _WARN << "pipe: failed to save model.";
@@ -107,8 +111,7 @@ Pipe::save_model(const std::string& model_path) {
   return true;
 }
 
-void
-Pipe::collect_argument_relations() {
+void Pipe::collect_argument_relations() {
   std::string argument;
   argument = argument_prefix + boost::lexical_cast<std::string>(0);
   ArgumentRelationUtils::arg0 = tags_alphabet.encode(argument.c_str());
@@ -141,8 +144,7 @@ Pipe::collect_argument_relations() {
   }
 }
 
-bool
-Pipe::load_verb_class() {
+bool Pipe::load_verb_class() {
   namespace algo = boost::algorithm;
 
   _INFO << "report: load verb class from " << verb_class_path;
@@ -153,7 +155,7 @@ Pipe::load_verb_class() {
   }
 
   std::string line;
-  verb_classes[0] = 0;
+  verb_classes[0] = -1;
   while (std::getline(ifs, line)) {
     std::vector<std::string> tokens;
     algo::trim(line);
@@ -193,8 +195,7 @@ Pipe::load_verb_class() {
   return true;
 }
 
-bool
-Pipe::setup() {
+bool Pipe::setup() {
   namespace ioutils = ZuoPar::IO;
 
   dataset.clear();
@@ -232,12 +233,9 @@ Pipe::setup() {
   return true;
 }
 
-void
-Pipe::run() {
+void Pipe::run() {
   namespace ioutils = ZuoPar::IO;
-  if (!setup()) {
-    return;
-  }
+  if (!setup()) { return; }
 
   collect_argument_relations();
 
@@ -313,8 +311,7 @@ Pipe::run() {
   }
 }
 
-void
-Pipe::build_output(const State& source, SemanticChunks& output) {
+void Pipe::build_output(const State& source, SemanticChunks& output) {
   SemanticChunks::predicate_t predicate;
   predicate.first = source.ref->predicate.first;
   for (const State* p = &source; p->previous; p = p->previous) {
@@ -327,7 +324,6 @@ Pipe::build_output(const State& source, SemanticChunks& output) {
     } else if (ActionUtils::is_I(p->last_action, tag)) {
       predicate.second.push_back(kSemanticChunkInterTag+ tag);
     }
-
   }
   std::reverse(predicate.second.begin(), predicate.second.end());
   output.predicates.push_back(predicate);

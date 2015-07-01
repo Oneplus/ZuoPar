@@ -26,10 +26,10 @@ Information::Information(const MonoSemanticChunks& instance,
       postags[predicate_id+ 1]:
       eg::TokenAlphabet::END);
 
-  std::unordered_map<form_t, int>::const_iterator entry = 
+  std::unordered_map<form_t, int>::const_iterator entry =
     verb_classes.find(predicate_form0);
 
-  predicate_verbclass = (entry != verb_classes.end() ? entry->second: 0);
+  predicate_verbclass = (entry != verb_classes.end() ? entry->second: -1);
 
   std::vector<std::string>& paths= postag_paths;
   paths.resize(M);

@@ -109,6 +109,10 @@ public:
     update_strategy(update_strategy_),
     model(model_) {
     candidate_transitions = new scored_transition_t[beam_size];
+    if (beam_size <= 0) {
+      _WARN << "sys(!): beam size should be greater than zero, reset to 1";
+      beam_size = 1;
+    }
   }
 
   //! The deallocator
@@ -169,6 +173,11 @@ public:
               scored_transition_t(source, act, source->score+ packed_scores[act]),
               current_beam_size);
         }
+      }
+
+      if (current_beam_size == 0) {
+        _WARN << "sys(!): no legal action is found.";
+        break;
       }
 
       for (int i = 0; i < current_beam_size; ++ i) {

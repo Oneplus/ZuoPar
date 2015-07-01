@@ -1,5 +1,6 @@
 add_executable (semchunker_mono_predicate
     main.cc
+    score_context.cc
     information.cc
     opt_utils.cc
     argument_relation_utils.cc

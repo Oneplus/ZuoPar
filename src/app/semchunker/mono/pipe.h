@@ -33,6 +33,8 @@ public:
    */
   Pipe(const TestOption& opts);
 
+  ~Pipe();
+
   /**
    * Perform learning or testing according to the configuration.
    */

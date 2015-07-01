@@ -7,15 +7,15 @@ namespace Experimental {
 namespace MultiPredicateSRL {
 
 std::ostream& operator<<(std::ostream& os, const Action& act) {
-  if (act.action_name == 0) {
+  if (act.name() == 0) {
     os << "None";
-  } else if (act.action_name == kSemanticChunkOuterTag) {
+  } else if (act.name() == kSemanticChunkOuterTag) {
     os << "O";
-  } else if (act.action_name >= kSemanticChunkBeginTag &&
-      act.action_name < kSemanticChunkInterTag) {
-    os << "B~" << act.action_name - kSemanticChunkBeginTag;
+  } else if (act.name() >= kSemanticChunkBeginTag &&
+      act.name() < kSemanticChunkInterTag) {
+    os << "B~" << act.name() - kSemanticChunkBeginTag;
   } else {
-    os << "I~" << act.action_name - kSemanticChunkInterTag;
+    os << "I~" << act.name() - kSemanticChunkInterTag;
   }
   return os;
 }

@@ -1,4 +1,4 @@
-#include "experimental/multi_predicate_srl_v1/argument_relation_utils.h"
+#include "experimental/multi_predicate_srl/argument_relation_utils.h"
 
 namespace ZuoPar {
 namespace Experimental {

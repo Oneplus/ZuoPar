@@ -18,7 +18,6 @@ namespace eg = ZuoPar::Engine;
 typedef TransitionSystem<
   ActionCollection,
   State,
-  ScoreContext,
   Weight
 > sys;
 
@@ -82,7 +81,7 @@ public:
   void transit(const State& source, const ActionCollection& act,
       const floatval_t& score, State* target);
 
-  bool terminate();
+  bool terminated();
 private:
   //! number of tags
   int nr_tags;

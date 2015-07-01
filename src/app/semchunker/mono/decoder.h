@@ -15,8 +15,7 @@ namespace MonoPredicate {
 
 namespace eg = ZuoPar::Engine;
 
-class Decoder
-: public TransitionSystem<Action, State, ScoreContext, Weight> {
+class Decoder: public TransitionSystem<Action, State, Weight> {
 public:
   /**
    * The decoder constructor.

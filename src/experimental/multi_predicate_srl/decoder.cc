@@ -44,15 +44,13 @@ Decoder::Decoder(int nr_tags_, int cap_predicates_, int beam_size, int cube_size
   TransitionSystem<
     ActionCollection,
     State,
-    ScoreContext,
     Weight>(beam_size, avg, strategy, weight) {
   // init the cube.
   int cap_tags = ActionUtils::max(nr_tags);
   cube_make(cube, cap_predicates, cap_tags);
 }
 
-void
-Decoder::score_possible_actions(const State& source,
+void Decoder::score_possible_actions(const State& source,
     const std::vector<ActionCollection>& actions,
     PackedScores<ActionCollection>& scores) {
   scores.clear();
@@ -67,8 +65,7 @@ Decoder::score_possible_actions(const State& source,
   }
 }
 
-void
-Decoder::calculate_meta_packed_scores(ScoreContext& ctx, int nr_predicates) {
+void Decoder::calculate_meta_packed_scores(ScoreContext& ctx, int nr_predicates) {
   meta_packed_scores.resize(nr_predicates);
   Action act;
   int M = ActionUtils::max(nr_tags);
@@ -79,20 +76,19 @@ Decoder::calculate_meta_packed_scores(ScoreContext& ctx, int nr_predicates) {
     meta.resize(M);
 
     act = ActionFactory::make_O();
-    meta[ActionUtils::compress(act, nr_tags)] = this->model->score(ctx, act, this->use_avg);
+    meta[ActionUtils::compress(act, nr_tags)] = this->model->scorex(ctx, act, this->use_avg);
 
     for (int j = eg::TokenAlphabet::END+ 1; j < nr_tags; ++ j) {
       act = ActionFactory::make_B(j);
-      meta[ActionUtils::compress(act, nr_tags)] = this->model->score(ctx, act, this->use_avg);
+      meta[ActionUtils::compress(act, nr_tags)] = this->model->scorex(ctx, act, this->use_avg);
 
       act = ActionFactory::make_I(j);
-      meta[ActionUtils::compress(act, nr_tags)] = this->model->score(ctx, act, this->use_avg);
+      meta[ActionUtils::compress(act, nr_tags)] = this->model->scorex(ctx, act, this->use_avg);
     }
   }
 }
 
-void
-Decoder::get_possible_actions(const State& source,
+void Decoder::get_possible_actions(const State& source,
     std::vector<ActionCollection>& actions) {
   int buffer = source.buffer;
   int nr_predicates = source.ref->nr_predicates();
@@ -192,9 +188,7 @@ void Decoder::transit(const State& source, const ActionCollection& act, const fl
   target->score = score;
 }
 
-bool decoder::terminated() {
-  return false;
-}
+bool Decoder::terminated() { return false; }
 
 } //  namespace multipredicatesrl
 } //  namespace experimental

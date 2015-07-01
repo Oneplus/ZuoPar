@@ -8,7 +8,7 @@ Decoder::Decoder(int nr, const std::vector< std::vector<bool> >& trans_,
     int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
   : nr_tags(nr),
   trans(trans_),
-  TransitionSystem<Action, State, ScoreContext, Weight>(beam_size, avg, strategy, weight) {
+  TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
 }
 
 void Decoder::get_possible_actions(const State& source,

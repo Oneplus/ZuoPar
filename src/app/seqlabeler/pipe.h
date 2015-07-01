@@ -54,7 +54,7 @@ protected:
    * Build the tag result for the state chain which ends with the source state.
    *
    *  @param[in]  source  The last state in state chain.
-   *  @param[out] output  The output dependency parse.
+   *  @param[out] output  The output sequence instance.
    */
   void build_output(const State& source, SequenceInstance& output);
 
