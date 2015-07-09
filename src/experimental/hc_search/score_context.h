@@ -5,46 +5,13 @@
 #include <boost/tuple/tuple.hpp>
 #include "types/common.h"
 #include "utils/math/fast_binned.h"
-#include "experimental/hc_search/arceager/state.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace HCSearchDependencyParser {
+namespace CStep {
 
-class HeuristicScoreContext {
-public:
-  /**
-   * The ScoreContext constructor
-   *
-   *  @param[in]  state   The State
-   */
-  HeuristicScoreContext(const State& state);
-
-  form_t   S0w, S0ldw, S0rdw, S0l2dw, S0r2dw;
-  form_t   N0w, N0ldw,        N0l2dw;
-  form_t   N1w;
-  form_t   N2w;
-  form_t   S0hw;
-  form_t   S0h2w;
-
-  postag_t S0p, S0ldp, S0rdp, S0l2dp, S0r2dp;
-  postag_t N0p, N0ldp,        N0l2dp;
-  postag_t N1p;
-  postag_t N2p;
-  postag_t S0hp;
-  postag_t S0h2p;
-
-  deprel_t      S0ldl, S0rdl, S0l2dl, S0r2dl;
-  deprel_t      N0ldl,        N0l2dl;
-  deprel_t      S0hl;
-  deprel_t      S0h2l;
-
-  int           S0la,  S0ra,  N0la;
-  int           S0lset,S0rset,N0lset;
-  int           DistS0N0;
-};
-
-class CostScoreContext {
+class ScoreContext {
 public:
   typedef boost::tuple<int, int>                          T2;
   typedef boost::tuple<int, int, int>                     T3;
@@ -54,11 +21,17 @@ public:
   typedef boost::tuple<int, int, int, int, int, int, int> T7;
 public:
   //! The score context class for extracting the global information.
-  CostScoreContext(const State& state);
+  ScoreContext(int len,
+      const std::vector<form_t>& forms,
+      const std::vector<postag_t>& postags,
+      const std::vector<int>& heads,
+      const std::vector<int>& deprels);
+
   int len;
   const std::vector<form_t>& forms;
   const std::vector<postag_t>& postags;
-  const deprel_t* deprels;
+  const std::vector<int>& heads;
+  const std::vector<int>& deprels;
   //! Begin singular
   std::vector< int > H;
   std::vector< T2 > H_H;
@@ -214,9 +187,6 @@ public:
   //! Right branch
   int RB;
 
-  int RANK;
-
-  int SCORE;
   //! Coordination
 
 private:
@@ -226,6 +196,7 @@ private:
       std::vector<int>& result);
 };
 
+} //  namespace cstep
 } //  namespace arceager
 } //  namespace dependencyparser
 } //  namespace zuopar

@@ -6,18 +6,10 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcEager {
 
-bool
-ActionUtils::is_shift(const Action& act) {
-  return (act.name() == Action::kShift);
-}
+bool ActionUtils::is_shift(const Action& act) { return (act.name() == Action::kShift); }
+bool ActionUtils::is_reduce(const Action& act) { return (act.name() == Action::kReduce); }
 
-bool
-ActionUtils::is_reduce(const Action& act) {
-  return (act.name() == Action::kReduce);
-}
-
-bool
-ActionUtils::is_left_arc(const Action& act, int& deprel) {
+bool ActionUtils::is_left_arc(const Action& act, int& deprel) {
   if (act.name() == Action::kLeftArc) {
     deprel = act.rel();
     return true;
@@ -26,8 +18,7 @@ ActionUtils::is_left_arc(const Action& act, int& deprel) {
   return false;
 }
 
-bool
-ActionUtils::is_right_arc(const Action& act, int& deprel) {
+bool ActionUtils::is_right_arc(const Action& act, int& deprel) {
   if (act.name() == Action::kRightArc) {
     deprel = act.rel();
     return true;
@@ -36,8 +27,7 @@ ActionUtils::is_right_arc(const Action& act, int& deprel) {
   return false;
 }
 
-void
-ActionUtils::get_oracle_actions(const Dependency& instance,
+void ActionUtils::get_oracle_actions(const Dependency& instance,
     std::vector<Action>& actions) {
   const int len = instance.size();
   std::vector<int> sigma;
@@ -49,8 +39,7 @@ ActionUtils::get_oracle_actions(const Dependency& instance,
   }
 }
 
-void
-ActionUtils::get_oracle_actions_onestep(const Dependency& instance,
+void ActionUtils::get_oracle_actions_onestep(const Dependency& instance,
     std::vector<int>& sigma,
     std::vector<int>& heads,
     int& beta,

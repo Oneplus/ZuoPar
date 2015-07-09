@@ -1,15 +1,15 @@
-#include "experimental/hc_search/arceager/pipe.h"
+#include "experimental/hc_search/arcstandard/pipe.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace HCSearchDependencyParser {
 namespace HStep {
 
-namespace ae = DependencyParser::ArcEager;
+namespace as = DependencyParser::ArcStandard;
 using DependencyParser::DependencyParserUtils;
 
 Pipe::Pipe(const LearnOption& opts): mode(kPipeLearn),
-  ae::Pipe(static_cast<const DependencyParser::LearnOption&>(opts)) {
+  as::Pipe(static_cast<const DependencyParser::LearnOption&>(opts)) {
 
   if (opts.neg_sample == "best") {
     neg_sample_strategy = kNegativeSamplingBest;
@@ -24,8 +24,9 @@ Pipe::Pipe(const LearnOption& opts): mode(kPipeLearn),
 }
 
 Pipe::Pipe(const PrepareOption& opts): mode(kPipePrepare),
-  ae::Pipe(static_cast<const DependencyParser::TestOption&>(opts)){
+  as::Pipe(static_cast<const DependencyParser::TestOption&>(opts)){
 
+  //! TODO redudant
   language = opts.language;
   _INFO << "report: (hstep.prepare) language = " << language;
 
@@ -37,7 +38,7 @@ Pipe::Pipe(const PrepareOption& opts): mode(kPipePrepare),
 }
 
 Pipe::Pipe(const EvaluateOption& opts): mode(kPipeEvaluate),
-  ae::Pipe(static_cast<const DependencyParser::TestOption&>(opts)) {
+  as::Pipe(static_cast<const DependencyParser::TestOption&>(opts)) {
 
   language = opts.language;
   _INFO << "report: (hstep.evaluate) language = " << language;
@@ -95,11 +96,11 @@ void Pipe::run2() {
 
   deprel_t root_tag = deprels_alphabet.encode(root.c_str());
   if (mode == kPipeLearn) {
-    decoder = new ae::Decoder(deprels_alphabet.size(), root_tag,
+    decoder = new as::Decoder(deprels_alphabet.size(), root_tag,
         beam_size, false, update_strategy, weight);
-    learner = new ae::Learner(weight, this->algorithm);
+    learner = new as::Learner(weight, this->algorithm);
   } else {
-    decoder = new ae::Decoder(deprels_alphabet.size(), root_tag,
+    decoder = new as::Decoder(deprels_alphabet.size(), root_tag,
         beam_size, true, UpdateStrategy::kNaive, weight);
   }
 
@@ -122,12 +123,12 @@ void Pipe::run2() {
   for (size_t n = 0; n < N; ++ n) {
     const Dependency& instance = dataset[ranks[n]];
 
-    std::vector<ae::Action> actions;
-    ae::ActionUtils::get_oracle_actions(instance, actions);
+    std::vector<as::Action> actions;
+    as::ActionUtils::get_oracle_actions(instance, actions);
 
     int max_nr_actions = instance.size() * 2 - 1;
-    ae::State init_state(&instance);
-    ae::Decoder::const_decode_result_t result = decoder->decode(init_state, actions,
+    as::State init_state(&instance);
+    as::Decoder::const_decode_result_t result = decoder->decode(init_state, actions,
         max_nr_actions);
 
     if (mode == kPipeLearn) {
@@ -136,11 +137,11 @@ void Pipe::run2() {
         learner->learn(result.first, result.second);
       } else {
         int round = decoder->get_ending_round();
-        std::vector<ae::State*> final_results;
+        std::vector<as::State*> final_results;
         decoder->get_results_in_beam(final_results, round);
 
         bool oracle_in_beam = false;
-        for (const ae::State* candidate_result: final_results) {
+        for (const as::State* candidate_result: final_results) {
           if (candidate_result == result.second) { oracle_in_beam = true; break; }
         }
 
@@ -151,13 +152,13 @@ void Pipe::run2() {
             learner->learn(result.first, result.second);
 
           } else if (neg_sample_strategy == kNegativeSamplingRandom) {
-            const ae::State* random_state = final_results[rand() % final_results.size()];
+            const as::State* random_state = final_results[rand() % final_results.size()];
             learner->learn(random_state, result.second);
 
           } else if (neg_sample_strategy == kNegativeSamplingWorst) {
-            const ae::State* worst_state = NULL;
+            const as::State* worst_state = NULL;
             floatval_t worst_score = 1e20;
-            for (const ae::State* candidate_result: final_results) {
+            for (const as::State* candidate_result: final_results) {
               if (worst_state == NULL || worst_score > candidate_result->score) {
                 worst_state = candidate_result;
                 worst_score = candidate_result->score;
@@ -168,13 +169,13 @@ void Pipe::run2() {
         }
       }
     } else if (mode == kPipePrepare) {
-      std::vector<ae::State*> final_results;
+      std::vector<as::State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
       std::sort(final_results.begin(), final_results.end(),
-          [](const ae::State* x,  const ae::State* y) -> bool { return x->score > y->score; });
+          [](const as::State* x,  const as::State* y) -> bool { return x->score > y->score; });
 
       (*os) << "#forms\tpostags\t" << result.second->score;
-      for (const ae::State* candidate_result: final_results) {
+      for (const as::State* candidate_result: final_results) {
         (*os) << "\t" << candidate_result->score;
       }
       (*os) << std::endl;
@@ -183,7 +184,7 @@ void Pipe::run2() {
           << postags_alphabet.decode(instance.postags[i]) << " "
           << instance.heads[i] << "/"
           << (instance.heads[i] == -1? root: deprels_alphabet.decode(instance.deprels[i]));
-        for (const ae::State* candidate_result: final_results) {
+        for (const as::State* candidate_result: final_results) {
           (*os) << " " << candidate_result->heads[i] << "/"
             << (candidate_result->heads[i] == -1? root:
                 deprels_alphabet.decode(candidate_result->deprels[i]));
@@ -192,7 +193,7 @@ void Pipe::run2() {
       }
       (*os) << std::endl;
     } else if (mode == kPipeEvaluate) {
-      std::vector<ae::State*> final_results;
+      std::vector<as::State*> final_results;
       decoder->get_results_in_beam(final_results, max_nr_actions);
 
       bool correct_in_beam = false;
@@ -204,7 +205,7 @@ void Pipe::run2() {
       int nr_effective_tokens = 0;
       int loss1, loss2;
       floatval_t one_avg_uas = 0, one_avg_las = 0;
-      for (const ae::State* candidate_result: final_results) {
+      for (const as::State* candidate_result: final_results) {
         Dependency output; build_output((*candidate_result), output);
         loss1 = wrong(output, true, instance.heads, instance.deprels);
         loss2 = wrong(output, false, instance.heads, instance.deprels);

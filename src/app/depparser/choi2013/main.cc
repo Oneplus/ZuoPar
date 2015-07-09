@@ -2,8 +2,8 @@
 #include <cstring>  // strcmp
 #include <boost/program_options.hpp>
 #include "utils/logging.h"
-#include "app/depparser/choi2013/opt.h"
-#include "app/depparser/choi2013/opt_utils.h"
+#include "app/depparser/opt.h"
+#include "app/depparser/opt_utils.h"
 #include "app/depparser/choi2013/pipe.h"
 
 #define APP "dependency parser with Choi(2013)'s system"

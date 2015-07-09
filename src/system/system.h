@@ -255,6 +255,14 @@ public:
     }
     beam_size = size;
   }
+
+  int get_ending_round() const { return step; }
+
+  void get_results_in_beam(std::vector<_StateType*>& results, int round) const {
+    for (int i = 0; i < lattice_size[round]; ++ i) {
+      results.push_back(lattice_heads[round]+ i);
+    }
+  }
 private:
   /**
    * allocate the lattice of index-th row.

@@ -2,8 +2,8 @@
 #include <cstring>  // strcmp
 #include <boost/program_options.hpp>
 #include "utils/logging.h"
-#include "app/depparser/arceager/opt.h"
-#include "app/depparser/arceager/opt_utils.h"
+#include "app/depparser/opt.h"
+#include "app/depparser/opt_utils.h"
 #include "app/depparser/arceager/pipe.h"
 
 #define APP "arceager dependency parser"

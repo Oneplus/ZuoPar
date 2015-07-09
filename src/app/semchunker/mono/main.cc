@@ -31,8 +31,8 @@ int learn(int argc, char** argv) {
   po::options_description optparser = fe::build_learn_optparser(usage);
   optparser.add_options()
     ("verb-class", po::value<std::string>(), "The path to the verb class.")
-    ("predicate", po::value<std::string>(), "The predicate tag [default=\"V\"].")
-    ("prefix", po::value<std::string>(), "The argument prefix [default=\"A\"].");
+    ("predicate", po::value<std::string>()->default_value("V"), "The predicate tag [default=\"V\"].")
+    ("prefix", po::value<std::string>()->default_value("A"), "The argument prefix [default=\"A\"].");
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -68,11 +68,12 @@ int test(int argc, char** argv) {
   po::options_description optparser = fe::build_test_optparser(usage);
   optparser.add_options()
     ("verb-class", po::value<std::string>(), "The path to the verb class.")
-    ("predicate", po::value<std::string>(), "The predicate tag [default=\"V\"].")
-    ("prefix", po::value<std::string>(), "The argument prefix [default=\"A\"].")
-    ("format", po::value<std::string>(), "The output format\n"
-                                         " - semchunk: the semantic chunk [default]\n"
-                                         " - conll: the conll props.");
+    ("predicate", po::value<std::string>()->default_value("V"), "The predicate tag [default=\"V\"].")
+    ("prefix", po::value<std::string>()->default_value("A"), "The argument prefix [default=\"A\"].")
+    ("format", po::value<std::string>()->default_value("semchunk"),
+     "The output format\n"
+     " - semchunk: the semantic chunk [default]\n"
+     " - conll: the conll props.");
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;

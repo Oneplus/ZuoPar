@@ -1,17 +1,17 @@
-#ifndef __ZUOPAR_EXPERIMENTAL_HCSEARCH_ARCEAGER_PIPE_H__
-#define __ZUOPAR_EXPERIMENTAL_HCSEARCH_ARCEAGER_PIPE_H__
+#ifndef __ZUOPAR_EXPERIMENTAL_HCSEARCH_ARCSTANDARD_PIPE_H__
+#define __ZUOPAR_EXPERIMENTAL_HCSEARCH_ARCSTANDARD_PIPE_H__
 
 #include <iostream>
 #include "experimental/hc_search/hstep_opt.h"
 #include "app/depparser/utils.h"
-#include "app/depparser/arceager/pipe.h"
+#include "app/depparser/arcstandard/pipe.h"
 
 namespace ZuoPar {
 namespace Experimental {
 namespace HCSearchDependencyParser {
 namespace HStep {
 
-class Pipe: public DependencyParser::ArcEager::Pipe {
+class Pipe: public DependencyParser::ArcStandard::Pipe {
 
 public:
   //! Build pipe for training first type data.
@@ -32,7 +32,6 @@ private:
   std::string language;
 
   enum PipeMode { kPipeLearn, kPipePrepare, kPipeEvaluate };
-
   PipeMode mode;
   NegtiveSampleStrategy neg_sample_strategy;
   DependencyParser::DependencyParserUtils::EvaluationStrategy evaluate_strategy;
@@ -48,4 +47,4 @@ private:
 } //  namespace experimental
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_EXPERIMENTAL_HCSEARCH_ARCEAGER_PIPE_H__
+#endif  //  end for __ZUOPAR_EXPERIMENTAL_HCSEARCH_ARCSTANDARD_PIPE_H__

@@ -7,9 +7,7 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-bool ActionUtils::is_shift(const Action& act) {
-  return (act.name() == Action::kShift);
-}
+bool ActionUtils::is_shift(const Action& act) { return (act.name() == Action::kShift); }
 
 bool ActionUtils::is_left_arc(const Action& act, int& deprel) {
   if (act.name() == Action::kLeftArc) { deprel = act.rel(); return true;  }

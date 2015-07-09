@@ -7,27 +7,27 @@ namespace fe = ZuoPar::FrontEnd;
 
 po::options_description build_multi_learn_optparser(const std::string& usage) {
   po::options_description optparser = fe::build_multi_learn_optparser(usage);
-  optparser.add_options()("root", po::value<std::string>(), "The root tag. [default=ROOT]");
+  optparser.add_options()("root", po::value<std::string>()->default_value("ROOT"),
+      "The root tag. [default=ROOT]");
   return optparser;
 }
 
 po::options_description build_learn_optparser(const std::string& usage) {
   po::options_description optparser = fe::build_learn_optparser(usage);
-  optparser.add_options()("root", po::value<std::string>(), "The root tag. [default=ROOT]");
+  optparser.add_options()("root", po::value<std::string>()->default_value("ROOT"),
+      "The root tag. [default=ROOT]");
   return optparser;
 }
 
 po::options_description build_test_optparser(const std::string& usage) {
   po::options_description optparser = fe::build_test_optparser(usage);
-  optparser.add_options()("root", po::value<std::string>(), "The root tag. [default=ROOT]");
+  optparser.add_options()("root", po::value<std::string>()->default_value("ROOT"),
+      "The root tag. [default=ROOT]");
   return optparser;
 }
 
 bool parse_root_option(const po::variables_map& vm, RootOption& opts) {
-  opts.root = "ROOT";
-  if (vm.count("root")) {
-    opts.root = vm["root"].as<std::string>();
-  }
+  opts.root = vm["root"].as<std::string>();
   return true;
 }
 

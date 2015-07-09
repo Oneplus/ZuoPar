@@ -4,10 +4,10 @@
 #include "utils/logging.h"
 #include "experimental/hc_search/hstep_opt.h"
 #include "experimental/hc_search/hstep_opt_utils.h"
-#include "experimental/hc_search/arceager/pipe.h"
+#include "experimental/hc_search/arcstandard/pipe.h"
 
-#define __NAME__ "HC-search depparser, arceager H-step"
-#define __EXE__ "./bin/experimental/hc_depparser_hstep_arceager"
+#define __NAME__ "HC-search depparser, arcstandard H-step"
+#define __EXE__ "./bin/experimental/hc_depparser_hstep_arcstandard"
 
 namespace hstep = ZuoPar::Experimental::HCSearchDependencyParser::HStep;
 namespace po = boost::program_options;

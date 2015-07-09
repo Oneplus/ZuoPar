@@ -7,17 +7,9 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace Swap {
 
-bool ActionUtils::is_idle(const Action& act) {
-  return (act.name() == Action::kIdle);
-}
-
-bool ActionUtils::is_shift(const Action& act) {
-  return (act.name() == Action::kShift);
-}
-
-bool ActionUtils::is_swap(const Action& act) {
-  return (act.name() == Action::kSwap);
-}
+bool ActionUtils::is_idle(const Action& act) { return (act.name() == Action::kIdle); }
+bool ActionUtils::is_shift(const Action& act) { return (act.name() == Action::kShift); }
+bool ActionUtils::is_swap(const Action& act) { return (act.name() == Action::kSwap); }
 
 bool ActionUtils::is_left_arc(const Action& act, int& deprel) {
   if (act.name() == Action::kLeftArc) {

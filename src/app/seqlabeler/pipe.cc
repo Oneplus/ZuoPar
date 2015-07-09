@@ -43,8 +43,7 @@ Pipe::Pipe(const TestOption& opts)
   }
 }
 
-bool
-Pipe::load_model(const std::string& model_path) {
+bool Pipe::load_model(const std::string& model_path) {
   weight = new Weight;
   std::ifstream mfs(model_path);
 
@@ -71,8 +70,7 @@ Pipe::load_model(const std::string& model_path) {
   return true;
 }
 
-bool
-Pipe::save_model(const std::string& model_path) {
+bool Pipe::save_model(const std::string& model_path) {
   std::ofstream mfs(model_path);
   if (!mfs.good()) {
     _WARN << "pipe: failed to save model.";
@@ -87,8 +85,7 @@ Pipe::save_model(const std::string& model_path) {
   return true;
 }
 
-void
-Pipe::load_constrain() {
+void Pipe::load_constrain() {
   namespace algo = boost::algorithm;
 
   std::size_t T = tags_alphabet.size();
@@ -130,8 +127,7 @@ Pipe::load_constrain() {
   }
 }
 
-bool
-Pipe::setup() {
+bool Pipe::setup() {
   namespace ioutils = ZuoPar::IO;
 
   dataset.clear();
@@ -164,8 +160,7 @@ Pipe::setup() {
   return true;
 }
 
-void
-Pipe::run() {
+void Pipe::run() {
   namespace ioutils = ZuoPar::IO;
   if (!setup()) {
     return;
@@ -228,8 +223,7 @@ Pipe::run() {
   }
 }
 
-void
-Pipe::build_output(const State& source, SequenceInstance& output) {
+void Pipe::build_output(const State& source, SequenceInstance& output) {
   size_t len = source.ref->size();
 
   output.resize(len);

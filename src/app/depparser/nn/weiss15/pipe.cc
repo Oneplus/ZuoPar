@@ -508,8 +508,7 @@ void Pipe::pretrain() {
     std::vector<Sample>::const_iterator end;
     std::tie(begin, end) = generate_training_samples_one_batch();
 
-    classifier.compute_cost_and_gradient(begin, end,
-        (pretrain_opt->debug && (iter+1)% pretrain_opt->evaluation_stops == 0));
+    classifier.compute_cost_and_gradient(begin, end, (pretrain_opt->debug));
     if (pretrain_opt->algorithm == "asgd") {
       classifier.take_momentum_asgd_step(0.1 + (0.9999 - 0.1) / pretrain_opt->max_iter * iter);
     } else {

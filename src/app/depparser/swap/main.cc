@@ -2,8 +2,8 @@
 #include <cstring>  // strcmp
 #include <boost/program_options.hpp>
 #include "utils/logging.h"
-#include "app/depparser/swap/opt.h"
-#include "app/depparser/swap/opt_utils.h"
+#include "app/depparser/opt.h"
+#include "app/depparser/opt_utils.h"
 #include "app/depparser/swap/pipe.h"
 
 #define APP "swap-based dependency parser"

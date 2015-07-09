@@ -517,9 +517,10 @@ void NeuralNetworkClassifier::compute_cost_and_gradient(
   auto n = 0;
 
   for (std::vector<Sample>::const_iterator sample = begin; sample != end; ++ sample, ++ n) {
-    dropout_histories.push_back(arma::find(
+    /*dropout_histories.push_back(arma::find(
           arma::randu<arma::vec>(hidden_layer_size) > dropout_probability)
-        );
+        );*/
+    dropout_histories.push_back(arma::ones<arma::uvec>(hidden_layer_size));
     queue.push(job_t(&(*sample), n));
   }
 
@@ -590,9 +591,27 @@ void NeuralNetworkClassifier::gradient_check_one_dimension(
 void NeuralNetworkClassifier::gradient_check(
     std::vector<Sample>::const_iterator& begin,
     std::vector<Sample>::const_iterator& end) {
-  _INFO << "gradient check: checking W1 ...";
   floatval_t epsilon = 1e-6;
   floatval_t diff = 0.;
+
+  if (!fix_embeddings) {
+    _INFO << "gradient check: checking E ...";
+    for (int i = 0; i < E.n_rows; ++ i) {
+      for (int j = 0; j < E.n_cols; ++ j) {
+        E(i, j) += epsilon;
+        auto c = compute_cost(begin, end, dropout_histories);
+        E(i, j) -= 2 * epsilon;
+        c -= compute_cost(begin, end, dropout_histories);
+        auto num_grad = c / (2 * epsilon);
+        gradient_check_one_dimension(num_grad, cost.grad_E(i, j), "E", i, j);
+        diff += (num_grad - cost.grad_E(i, j)) * (num_grad - cost.grad_E(i, j));
+        E(i, j) += epsilon;
+      }
+      _INFO << "gradient check: checking row[" << i << ":] on E is done.";
+    }
+    _INFO << "gradient check: checking on E is done.";
+  }
+  _INFO << "gradient check: checking W1 ...";
   for (int i = 0; i < W1.n_rows; ++ i) {
     for (int j = 0; j < W1.n_cols; ++ j) {
       W1(i, j) += epsilon;
@@ -604,8 +623,9 @@ void NeuralNetworkClassifier::gradient_check(
       diff += (num_grad - cost.grad_W1(i, j)) * (num_grad - cost.grad_W1(i, j));
       W1(i, j) += epsilon;
     }
+    _INFO << "gradient check: checking row[" << i << ":] on W1 is done.";
   }
-
+  _INFO << "gradient check: checking on W1 is done.";
   _INFO << "gradient check: checking b1 ...";
   for (int i = 0; i < b1.n_rows; ++ i) {
     b1(i) += epsilon;
@@ -617,7 +637,7 @@ void NeuralNetworkClassifier::gradient_check(
     diff += (num_grad - cost.grad_b1(i)) * (num_grad - cost.grad_b1(i));
     b1(i) += epsilon;
   }
-
+  _INFO << "gradient check: checking on b1 is done.";
   _INFO << "gradient check: checking W1' ...";
   for (int i = 0; i < W10.n_rows; ++ i) {
     for (int j = 0; j < W10.n_cols; ++ j) {
@@ -630,8 +650,9 @@ void NeuralNetworkClassifier::gradient_check(
       diff += (num_grad - cost.grad_W10(i, j)) * (num_grad - cost.grad_W10(i, j));
       W10(i, j) += epsilon;
     }
+    _INFO << "checking row[" << i << ":] on W1' is done.";
   }
-
+  _INFO << "gradient check: checking on W1' is done.";
   _INFO << "gradient check: checking b1' ...";
   for (int i = 0; i < b10.n_rows; ++ i) {
     b10(i) += epsilon;
@@ -643,7 +664,7 @@ void NeuralNetworkClassifier::gradient_check(
     diff += (num_grad - cost.grad_b10(i)) * (num_grad - cost.grad_b10(i));
     b10(i) += epsilon;
   }
-
+  _INFO << "gradient check: checking on b1' is done.";
   _INFO << "gradient check: checking W2 ...";
   for (int i = 0; i < W2.n_rows; ++ i) {
     for (int j = 0; j < W2.n_cols; ++ j) {
@@ -656,8 +677,9 @@ void NeuralNetworkClassifier::gradient_check(
       diff += (num_grad - cost.grad_W2(i, j)) * (num_grad - cost.grad_W2(i, j));
       W2(i, j) -= epsilon;
     }
+    _INFO << "checking row[" << i << ":] on W2 is done.";
   }
-
+  _INFO << "gradient check: checking on W2 is done.";
   _INFO << "gradient check: checking b2 ...";
   for (int i = 0; i < b2.n_rows; ++ i) {
     b10(i) += epsilon;
@@ -669,8 +691,7 @@ void NeuralNetworkClassifier::gradient_check(
     diff += (num_grad - cost.grad_b2(i)) * (num_grad - cost.grad_b2(i));
     b10(i) += epsilon;
   }
-
-
+  _INFO << "gradient check: checking on b2 is done.";
   _INFO << "gradient check: total diff=" << diff;
 }
 

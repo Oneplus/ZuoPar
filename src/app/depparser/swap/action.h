@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_ACTION_H__
-#define __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_ACTION_H__
+#ifndef __ZUOPAR_APP_DEPPARSER_SWAP_ACTION_H__
+#define __ZUOPAR_APP_DEPPARSER_SWAP_ACTION_H__
 
 #include <iostream>
 #include <boost/assert.hpp>
@@ -71,4 +71,4 @@ public:
 } //  end for namespace dependencyparser
 } //  end for namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_DEPPARSER_ARCSTANDARD_ACTION_H__
+#endif  //  end for __ZUOPAR_APP_DEPPARSER_SWAP_ACTION_H__

@@ -13,15 +13,8 @@ void _parse_semantic_option(const po::variables_map& vm, SemanticOption& opts) {
     opts.verb_class_path = vm["verb-class"].as<std::string>();
   }
 
-  opts.predicate_tag = "V";
-  if (vm.count("predicate")) {
-    opts.predicate_tag = vm["predicate"].as<std::string>();
-  }
-
-  opts.argument_prefix = "A";
-  if (vm.count("prefix")) {
-    opts.argument_prefix = vm["prefix"].as<std::string>();
-  }
+  opts.predicate_tag = vm["predicate"].as<std::string>();
+  opts.argument_prefix = vm["prefix"].as<std::string>();
 }
 
 bool parse_learn_option_ext(const po::variables_map& vm, LearnOption& opts) {
@@ -37,10 +30,7 @@ bool parse_test_option_ext(const po::variables_map& vm, TestOption& opts) {
     return false;
   }
   _parse_semantic_option(vm, static_cast<SemanticOption&>(opts));
-  opts.output_format = "semchunks";
-  if (vm.count("format")) {
-    opts.output_format = vm["format"].as<std::string>();
-  }
+  opts.output_format = vm["format"].as<std::string>();
   return true;
 }
 

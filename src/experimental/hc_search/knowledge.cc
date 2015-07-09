@@ -1,4 +1,4 @@
-#include "experimental/hc_search/arceager/pipe.h"
+#include "experimental/hc_search/knowledge.h"
 
 namespace ZuoPar {
 namespace Experimental {
@@ -9,8 +9,6 @@ namespace HCSearchDependencyParser {
   std::set<postag_t> CONJ_POS;
   std::set<postag_t> ADP_POS;
   std::set<postag_t> VERB_POS;
-
-  bool extract_punctuation = false;
 
 } //  namespace hcsearchdependencyparser
 } //  namespace experimental

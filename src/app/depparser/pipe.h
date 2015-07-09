@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "types/dependency.h"
 #include "engine/token_alphabet.h"
+#include "utils/misc.h"
 #include "utils/logging.h"
 #include "utils/io/stream.h"
 #include "utils/io/dataset/dependency.h"
@@ -125,8 +126,7 @@ public:
     size_t N = dataset.size();
     std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
     std::vector<std::size_t> ranks;
-    for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
-    while (this->shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
+    Utility::shuffle(N, this->shuffle_times, ranks);
 
     for (size_t n = 0; n < N; ++ n) {
       const Dependency& instance = dataset[ranks[n]];
