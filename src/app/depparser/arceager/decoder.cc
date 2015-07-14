@@ -11,8 +11,7 @@ Decoder::Decoder(int nr, int root,
   TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
 }
 
-void
-Decoder::get_possible_actions(const State& source,
+void Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   int len = source.ref->size();
@@ -48,8 +47,7 @@ Decoder::get_possible_actions(const State& source,
   }
 }
 
-void
-Decoder::transit(const State& source, const Action& act, const floatval_t& score,
+void Decoder::transit(const State& source, const Action& act, const floatval_t& score,
     State* target) {
   int deprel;
   if (ActionUtils::is_shift(act)) {

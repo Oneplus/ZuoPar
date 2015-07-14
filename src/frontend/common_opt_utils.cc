@@ -80,8 +80,7 @@ po::options_description build_test_optparser(const std::string& usage) {
 
 
 bool parse_option(const po::variables_map& vm, Option& opts) {
-  namespace utils = ZuoPar::Utility;
-  utils::init_boost_log(vm.count("verbose"));
+  Utility::init_boost_log(vm.count("verbose"));
 
   if (vm.count("help")) { return false; }
 
