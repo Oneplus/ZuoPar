@@ -653,6 +653,7 @@ public:
       }
       if ((n+ 1) % 1000 == 0) { _INFO << "report: processed " << n+1 << " instances."; }
     }
+    weight->flush(n_samples);
 
     save_model(model_path);
   }
