@@ -19,20 +19,16 @@ void Decoder::get_possible_actions(const State& source,
   if (source.buffer_empty()) {
     actions.push_back(ActionFactory::make_reduce());
   } else {
-    if (!ActionUtils::is_reduce(source.last_action) && source.buffer < len) {
-      actions.push_back(ActionFactory::make_shift());
-    }
+    actions.push_back(ActionFactory::make_shift());
 
     if (!source.stack.empty()) {
-      if (source.buffer < len) {
-        // Try to right arc
-        if (source.top0 != 0) {
-          for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-            if (l != root_deprel) { actions.push_back(ActionFactory::make_right_arc(l)); }
-          }
-        } else {
-          actions.push_back(ActionFactory::make_right_arc(root_deprel));
+      // Try to right arc
+      if (source.top0 != 0) {
+        for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
+          if (l != root_deprel) { actions.push_back(ActionFactory::make_right_arc(l)); }
         }
+      } else {
+        actions.push_back(ActionFactory::make_right_arc(root_deprel));
       }
 
       if (source.heads[source.top0] != -1) {
