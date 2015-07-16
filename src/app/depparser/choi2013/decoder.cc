@@ -5,7 +5,7 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace Choi2013 {
 
-Decoder::Decoder(int n, int root, int position,
+Decoder::Decoder(int n, int root, RootPosition position,
     int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
   : BasicDecoder(n, root, position),
   TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
@@ -32,7 +32,7 @@ void Decoder::get_possible_actions(const State& source,
           // stack top i is not linked a head, which means i should be linked a arc to
           // the last word.
           for (auto l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-            if (l == root_tag) { continue; }
+            if (l == root_deprel) { continue; }
             actions.push_back(ActionFactory::make_left_arc(l));
           }
         }
@@ -43,7 +43,7 @@ void Decoder::get_possible_actions(const State& source,
       if (source.nr_empty_heads == 1) {
         if (root_position != kRight) {
           for (auto l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-            if (l == root_tag) { continue; }
+            if (l == root_deprel) { continue; }
             actions.push_back(ActionFactory::make_right_arc(l));
           }
         }
@@ -66,7 +66,7 @@ void Decoder::get_possible_actions(const State& source,
         if (!(root_position == kLeft && source.top0 == 0)) {
           //
           for (auto l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-            if (l == root_tag) { continue; }
+            if (l == root_deprel) { continue; }
             actions.push_back(ActionFactory::make_left_arc(l));
             actions.push_back(ActionFactory::make_left_pass(l));
           }
@@ -76,7 +76,7 @@ void Decoder::get_possible_actions(const State& source,
       if (!source.buffer_front_has_head() &&
           !source.is_descendant(source.buffer, source.top0)) {
         for (auto l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-          if (l == root_tag) { continue; }
+          if (l == root_deprel) { continue; }
           actions.push_back(ActionFactory::make_right_arc(l));
           actions.push_back(ActionFactory::make_right_pass(l));
         }

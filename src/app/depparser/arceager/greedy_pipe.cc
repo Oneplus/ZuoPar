@@ -97,8 +97,9 @@ void GreedySearchPipe::test() {
 
     CoNLLXDependency output;
     build_output(states[L*2-1], output);
-    IO::write_dependency_instance((*os), output, forms_alphabet,
-        postags_alphabet, deprels_alphabet);
+    IO::write_conllx_dependency_instance((*os), output, forms_alphabet,
+        lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
+        deprels_alphabet);
   }
   if (os != &(std::cout) && os != NULL) { delete os; }
 }
@@ -161,7 +162,10 @@ void GreedySearchPipe::save_model(const std::string& model_path) {
     _WARN << "pipe: failed to save model.";
   } else {
     forms_alphabet.save(mfs);
+    lemmas_alphabet.save(mfs);
+    cpostags_alphabet.save(mfs);
     postags_alphabet.save(mfs);
+    feat_alphabet.save(mfs);
     deprels_alphabet.save(mfs);
     weight->save(mfs);
 
@@ -179,9 +183,15 @@ bool GreedySearchPipe::load_model(const std::string& model_path) {
     _WARN << "pipe: model doesn't exists.";             return false; }
   if (!forms_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load forms alphabet.";    return false; }
+  if (!lemmas_alphabet.load(mfs)) {
+    _WARN << "pipe: failed to load lemmas alphabet.";   return false; }
+  if (!cpostags_alphabet.load(mfs)) {
+    _WARN << "pipe: failed to load cpostag alphabet.";  return false; }
   if (!postags_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load postags alphabet.";  return false; }
-  if (!deprels_alphabet.load(mfs)) {
+  if (!feat_alphabet.load(mfs)) {
+    _WARN << "pipe: failed to load feat alphabet.";     return false; }
+ if (!deprels_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load deprels alphabet.";  return false; }
   if (!weight->load(mfs)) {
     _WARN << "pipe: failed to load weight.";            return false; }
@@ -194,10 +204,13 @@ bool GreedySearchPipe::load_model(const std::string& model_path) {
 void GreedySearchPipe::build_output(const State& source, CoNLLXDependency& output) {
   size_t len = source.ref->size();
   output.forms = source.ref->forms;
+  output.lemmas = source.ref->lemmas;
+  output.cpostags = source.ref->cpostags;
   output.postags = source.ref->postags;
+  output.feats = source.ref->feats;
+
   output.heads.resize(len);
   output.deprels.resize(len);
-
   for (size_t i = 0; i < len; ++ i) {
     output.heads[i] = source.heads[i];
     output.deprels[i] = source.deprels[i];

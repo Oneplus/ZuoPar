@@ -5,7 +5,7 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace Swap {
 
-Decoder::Decoder(int n, int root, int position,
+Decoder::Decoder(int n, int root, RootPosition position,
     int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
   : BasicDecoder(n, root, position),
   TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
@@ -26,7 +26,7 @@ void Decoder::get_possible_actions(const State& source,
   if (source.stack_size() >= 2) {
     //
     for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-      if (l == root_tag) { continue; }
+      if (l == root_deprel) { continue; }
       if (!(root_position == kLeft && source.top1 == 0)) {
         actions.push_back(ActionFactory::make_left_arc(l));
       }

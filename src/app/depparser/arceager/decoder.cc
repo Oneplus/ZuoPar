@@ -5,7 +5,7 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcEager {
 
-Decoder::Decoder(int n, int root, int position,
+Decoder::Decoder(int n, int root, RootPosition position,
     int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
   : BasicDecoder(n, root, position),
   TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
@@ -20,26 +20,29 @@ void Decoder::get_possible_actions(const State& source,
     actions.push_back(ActionFactory::make_reduce());
   } else {
     if (!ActionUtils::is_reduce(source.last_action)) {
-      if (source.stack.empty() || source.buffer < len - 1) {
+      if (source.stack.empty() || source.buffer < len) {
         actions.push_back(ActionFactory::make_shift());
       }
     }
 
     if (!source.stack.empty()) {
-      if (source.buffer < len - 1 || source.nr_empty_heads == 1) {
-        for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-          if (l != root_tag) {
-            actions.push_back(ActionFactory::make_right_arc(l));
+      if (source.buffer < len) {
+        // Try to right arc
+        if (source.top0 != 0) {
+          for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
+            if (l != root_deprel) { actions.push_back(ActionFactory::make_right_arc(l)); }
           }
+        } else {
+          actions.push_back(ActionFactory::make_right_arc(root_deprel));
         }
       }
 
       if (source.heads[source.top0] != -1) {
         actions.push_back(ActionFactory::make_reduce());
       } else {
-        for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-          if (l != root_tag) {
-            actions.push_back(ActionFactory::make_left_arc(l));
+        if (source.top0 != 0) {
+          for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
+            if (l != root_deprel) { actions.push_back(ActionFactory::make_left_arc(l)); }
           }
         }
       }
