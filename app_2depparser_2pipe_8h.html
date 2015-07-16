@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_5194e5fea318fda12687127c23f8aba1.html">app</a></li><li class="navelem"><a class="el" href="dir_10f755b7f845e4030b24d4aba20dd160.html">depparser</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_b70b8dffcda314476343c54a554b565c.html">app</a></li><li class="navelem"><a class="el" href="dir_63c34f74908e6c12760505586877ebe4.html">depparser</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -94,20 +94,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="textblock"><code>#include &lt;iostream&gt;</code><br/>
 <code>#include &lt;fstream&gt;</code><br/>
+<code>#include &lt;algorithm&gt;</code><br/>
+<code>#include &lt;boost/archive/text_iarchive.hpp&gt;</code><br/>
+<code>#include &lt;boost/archive/text_oarchive.hpp&gt;</code><br/>
 <code>#include &quot;<a class="el" href="types_2dependency_8h_source.html">types/dependency.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="packed__scores_8h_source.html">types/internal/packed_scores.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="token__alphabet_8h_source.html">engine/token_alphabet.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="misc_8h_source.html">utils/misc.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="logging_8h_source.html">utils/logging.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="stream_8h_source.html">utils/io/stream.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="utils_2io_2dataset_2dependency_8h_source.html">utils/io/dataset/dependency.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="utils_2io_2instance_2dependency_8h_source.html">utils/io/instance/dependency.h</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="common__opt_8h_source.html">frontend/common_opt.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="common__pipe__cfg_8h_source.html">frontend/common_pipe_cfg.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="app_2depparser_2opt_8h_source.html">app/depparser/opt.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="greedy__opt_8h_source.html">app/depparser/greedy_opt.h</a>&quot;</code><br/>
 </div>
 <p><a href="app_2depparser_2pipe_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1CommonDependencyPipe.html">ZuoPar::DependencyParser::CommonDependencyPipe&lt; Action, ActionUtils, State, Weight, Decoder, Learner &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1DependencyPipe.html">ZuoPar::DependencyParser::DependencyPipe&lt; Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1CoNLLXDependencyRepository.html">ZuoPar::DependencyParser::CoNLLXDependencyRepository</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1CoNLLXDependencyPipe.html">ZuoPar::DependencyParser::CoNLLXDependencyPipe&lt; Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1GreedySearchCoNLLXDependenyPipe.html">ZuoPar::DependencyParser::GreedySearchCoNLLXDependenyPipe&lt; Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>

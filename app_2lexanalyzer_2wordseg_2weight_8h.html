@@ -81,19 +81,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_5194e5fea318fda12687127c23f8aba1.html">app</a></li><li class="navelem"><a class="el" href="dir_de29cab2218a1daa7f47b0727120bfe2.html">lexanalyzer</a></li><li class="navelem"><a class="el" href="dir_6854af72a129d8fa68fdb87ac8c589b2.html">wordseg</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_b70b8dffcda314476343c54a554b565c.html">app</a></li><li class="navelem"><a class="el" href="dir_10ddb318c3720a7000a7651bd5b3769d.html">lexanalyzer</a></li><li class="navelem"><a class="el" href="dir_c028769dac08e0b48607faf625e1f762.html">wordseg</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">weight.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="common_8h_source.html">types/common.h</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="feature__param__map__collection_8h_source.html">model/associated/pointwise/feature_param_map_collection.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="feature_8h_source.html">model/feature.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="feature__param__map__impl1_8h_source.html">model/associated/feature_param_map_impl1.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="feature__param__map__impl2_8h_source.html">model/associated/feature_param_map_impl2.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="associated_2feature__param__map__collection_8h_source.html">model/associated/feature_param_map_collection.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="app_2lexanalyzer_2wordseg_2action_8h_source.html">app/lexanalyzer/wordseg/action.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="app_2lexanalyzer_2wordseg_2state_8h_source.html">app/lexanalyzer/wordseg/state.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="app_2lexanalyzer_2wordseg_2score__context_8h_source.html">app/lexanalyzer/wordseg/score_context.h</a>&quot;</code><br/>
@@ -102,7 +106,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1LexicalAnalyzer_1_1WordSegmentor_1_1Weight.html">ZuoPar::LexicalAnalyzer::WordSegmentor::Weight</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1Weight.html">ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::Weight</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -111,8 +115,34 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceZuoPar_1_1LexicalAnalyzer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer.html">ZuoPar::LexicalAnalyzer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceZuoPar_1_1LexicalAnalyzer_1_1WordSegmentor"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1WordSegmentor.html">ZuoPar::LexicalAnalyzer::WordSegmentor</a></td></tr>
+<tr class="memitem:namespaceZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor.html">ZuoPar::LexicalAnalyzer::ChineseWordSegmentor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a9d5ce58b96aa9d6023efa2216d4afb50"><td class="memItemLeft" align="right" valign="top">typedef Feature&lt; std::string, <br class="typebreak"/>
+Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor.html#a9d5ce58b96aa9d6023efa2216d4afb50">ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::StringFeature</a></td></tr>
+<tr class="separator:a9d5ce58b96aa9d6023efa2216d4afb50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35923bcde7e1dd6223e6217a09a3f918"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+FeatureParameterMapImpl1<br class="typebreak"/>
+&lt; std::string, ScoreContext, <br class="typebreak"/>
+Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor.html#a35923bcde7e1dd6223e6217a09a3f918">ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::StringFeatureMapImpl1</a></td></tr>
+<tr class="separator:a35923bcde7e1dd6223e6217a09a3f918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c99d5fa9464b41e72fad0d8c04e6163"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+FeatureParameterMapImpl2<br class="typebreak"/>
+&lt; StringFeature, ScoreContext, <br class="typebreak"/>
+Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor.html#a1c99d5fa9464b41e72fad0d8c04e6163">ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::StringFeatureMapImpl2</a></td></tr>
+<tr class="separator:a1c99d5fa9464b41e72fad0d8c04e6163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0815dba3e2eebe9e28b1dfc94eca743d"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+FeatureParameterCollection<br class="typebreak"/>
+&lt; StringFeatureMapImpl1, <br class="typebreak"/>
+ScoreContext, Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor.html#a0815dba3e2eebe9e28b1dfc94eca743d">ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::StringFeatureCollectionImpl1</a></td></tr>
+<tr class="separator:a0815dba3e2eebe9e28b1dfc94eca743d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9945bdc65986a6a73612f36d6eb4e884"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+FeatureParameterCollection<br class="typebreak"/>
+&lt; StringFeatureMapImpl2, <br class="typebreak"/>
+ScoreContext, Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor.html#a9945bdc65986a6a73612f36d6eb4e884">ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::StringFeatureCollectionImpl2</a></td></tr>
+<tr class="separator:a9945bdc65986a6a73612f36d6eb4e884"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

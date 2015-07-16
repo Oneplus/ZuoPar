@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_0c0c9fa8a58db41e576adc3ce68c5ee9.html">types</a></li><li class="navelem"><a class="el" href="dir_16ddcb4b0977ca9090fd5f9241b22d33.html">math</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_f76d0683dc493530e609f7ea4fbe7c97.html">types</a></li><li class="navelem"><a class="el" href="dir_8dbddc286ad8b8c47a709376a43d79d1.html">math</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -99,18 +99,30 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">   12</a></span>&#160;<span class="keyword">typedef</span> std::unordered_map&lt;int, floatval_t&gt; <a class="code" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">SparseVector</a>;</div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="namespaceZuoPar.html#a314142f174b265e0cc142ecbb252af3f">   12</a></span>&#160;<span class="keyword">typedef</span> std::unordered_map&lt;std::size_t, floatval_t&gt; <a class="code" href="namespaceZuoPar.html#a314142f174b265e0cc142ecbb252af3f">SparseVector</a>;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">typedef</span> std::unordered_map&lt;std::pair&lt;int, std::size_t&gt;, <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>,</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="namespaceZuoPar.html#a89908557b6e9c9587c4263d77130b4ac">   16</a></span>&#160;        boost::hash&lt;std::pair&lt;int, std::size_t&gt; &gt; &gt; <a class="code" href="namespaceZuoPar.html#a89908557b6e9c9587c4263d77130b4ac">SparseVector2</a>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;} <span class="comment">// end for zuopar</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_TYPES_MATH_SPARSE_VECTOR_H__</span></div>
-<div class="ttc" id="namespaceZuoPar_html_aa71e104c29f1d6a71b1623d4abe52e6a"><div class="ttname"><a href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">ZuoPar::floatval_t</a></div><div class="ttdeci">double floatval_t</div><div class="ttdef"><b>Definition:</b> settings.h:14</div></div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="namespaceZuoPar.html#ab52058eede52ac27e6d0b48920be2edd">   15</a></span>&#160;<span class="keyword">typedef</span> std::pair&lt;std::size_t, std::size_t&gt; <a class="code" href="namespaceZuoPar.html#ab52058eede52ac27e6d0b48920be2edd">SparseVector2Key</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">typedef</span> std::unordered_map&lt;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <a class="code" href="namespaceZuoPar.html#ab52058eede52ac27e6d0b48920be2edd">SparseVector2Key</a>, <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>, boost::hash&lt; SparseVector2Key &gt;</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="namespaceZuoPar.html#a1106764af57f5325fd69243dc532399b">   19</a></span>&#160;&gt; <a class="code" href="namespaceZuoPar.html#a1106764af57f5325fd69243dc532399b">SparseVector2</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="namespaceZuoPar.html#ab1fc505225d6df95ce2da588f71625d7">   22</a></span>&#160;<span class="keyword">typedef</span> std::tuple&lt;std::size_t, std::size_t, std::size_t &gt; <a class="code" href="namespaceZuoPar.html#ab1fc505225d6df95ce2da588f71625d7">SparseVector3Key</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">typedef</span> std::unordered_map&lt;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <a class="code" href="namespaceZuoPar.html#ab1fc505225d6df95ce2da588f71625d7">SparseVector3Key</a>, <a class="code" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>, boost::hash&lt; SparseVector3Key &gt;</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="namespaceZuoPar.html#a2a82ebab968935b00de76049a44b7f5c">   26</a></span>&#160;&gt; <a class="code" href="namespaceZuoPar.html#a2a82ebab968935b00de76049a44b7f5c">SparseVector3</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;} <span class="comment">// end for zuopar</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_TYPES_MATH_SPARSE_VECTOR_H__</span></div>
+<div class="ttc" id="namespaceZuoPar_html_a1106764af57f5325fd69243dc532399b"><div class="ttname"><a href="namespaceZuoPar.html#a1106764af57f5325fd69243dc532399b">ZuoPar::SparseVector2</a></div><div class="ttdeci">std::unordered_map&lt; SparseVector2Key, floatval_t, boost::hash&lt; SparseVector2Key &gt;&gt; SparseVector2</div><div class="ttdef"><b>Definition:</b> sparse_vector.h:19</div></div>
+<div class="ttc" id="namespaceZuoPar_html_a314142f174b265e0cc142ecbb252af3f"><div class="ttname"><a href="namespaceZuoPar.html#a314142f174b265e0cc142ecbb252af3f">ZuoPar::SparseVector</a></div><div class="ttdeci">std::unordered_map&lt; std::size_t, floatval_t &gt; SparseVector</div><div class="ttdoc">The most basic sparse vector. </div><div class="ttdef"><b>Definition:</b> sparse_vector.h:12</div></div>
+<div class="ttc" id="namespaceZuoPar_html_a2a82ebab968935b00de76049a44b7f5c"><div class="ttname"><a href="namespaceZuoPar.html#a2a82ebab968935b00de76049a44b7f5c">ZuoPar::SparseVector3</a></div><div class="ttdeci">std::unordered_map&lt; SparseVector3Key, floatval_t, boost::hash&lt; SparseVector3Key &gt;&gt; SparseVector3</div><div class="ttdef"><b>Definition:</b> sparse_vector.h:26</div></div>
+<div class="ttc" id="namespaceZuoPar_html_aa71e104c29f1d6a71b1623d4abe52e6a"><div class="ttname"><a href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">ZuoPar::floatval_t</a></div><div class="ttdeci">double floatval_t</div><div class="ttdoc">The internal representation of the feature attribute. </div><div class="ttdef"><b>Definition:</b> settings.h:14</div></div>
 <div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div></div>
-<div class="ttc" id="namespaceZuoPar_html_a89908557b6e9c9587c4263d77130b4ac"><div class="ttname"><a href="namespaceZuoPar.html#a89908557b6e9c9587c4263d77130b4ac">ZuoPar::SparseVector2</a></div><div class="ttdeci">std::unordered_map&lt; std::pair&lt; int, std::size_t &gt;, floatval_t, boost::hash&lt; std::pair&lt; int, std::size_t &gt; &gt; &gt; SparseVector2</div><div class="ttdoc">The version two sparse vector, with indexed for faster compute. </div><div class="ttdef"><b>Definition:</b> sparse_vector.h:16</div></div>
-<div class="ttc" id="namespaceZuoPar_html_a0c1434bff13e9de54ab240a3d544eaa3"><div class="ttname"><a href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">ZuoPar::SparseVector</a></div><div class="ttdeci">std::unordered_map&lt; int, floatval_t &gt; SparseVector</div><div class="ttdoc">The most basic sparse vector. </div><div class="ttdef"><b>Definition:</b> sparse_vector.h:12</div></div>
+<div class="ttc" id="namespaceZuoPar_html_ab52058eede52ac27e6d0b48920be2edd"><div class="ttname"><a href="namespaceZuoPar.html#ab52058eede52ac27e6d0b48920be2edd">ZuoPar::SparseVector2Key</a></div><div class="ttdeci">std::pair&lt; std::size_t, std::size_t &gt; SparseVector2Key</div><div class="ttdoc">The version two sparse vector, with indexed for faster compute. </div><div class="ttdef"><b>Definition:</b> sparse_vector.h:15</div></div>
+<div class="ttc" id="namespaceZuoPar_html_ab1fc505225d6df95ce2da588f71625d7"><div class="ttname"><a href="namespaceZuoPar.html#ab1fc505225d6df95ce2da588f71625d7">ZuoPar::SparseVector3Key</a></div><div class="ttdeci">std::tuple&lt; std::size_t, std::size_t, std::size_t &gt; SparseVector3Key</div><div class="ttdoc">The version 3 sparse vector. </div><div class="ttdef"><b>Definition:</b> sparse_vector.h:22</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

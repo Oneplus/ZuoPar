@@ -100,11 +100,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a11acd26e92c47df0fac948c8921c06a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Information.html#a11acd26e92c47df0fac948c8921c06a5">Information</a> (const <a class="el" href="classZuoPar_1_1SemanticChunks.html">SemanticChunks</a> &amp;instance)</td></tr>
-<tr class="separator:a11acd26e92c47df0fac948c8921c06a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad95f8388bcb8154373aa319878d823d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Information.html#ad95f8388bcb8154373aa319878d823d1">Information</a> (const <a class="el" href="classZuoPar_1_1SemanticChunks.html">SemanticChunks</a> &amp;instance, const std::unordered_map&lt; <a class="el" href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">form_t</a>, int &gt; &amp;verb_classes)</td></tr>
+<tr class="separator:ad95f8388bcb8154373aa319878d823d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:aae458fac5173900087919afaa48bb2e1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Information.html#aae458fac5173900087919afaa48bb2e1">predicates_id</a></td></tr>
+<tr class="memdesc:aae458fac5173900087919afaa48bb2e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of predicates.  <a href="#aae458fac5173900087919afaa48bb2e1">More...</a><br/></td></tr>
+<tr class="separator:aae458fac5173900087919afaa48bb2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67b4e07a7000e5b22059c6b10fbe1dd2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">form_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Information.html#a67b4e07a7000e5b22059c6b10fbe1dd2">predicates_form0</a></td></tr>
 <tr class="memdesc:a67b4e07a7000e5b22059c6b10fbe1dd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The forms of the predicates.  <a href="#a67b4e07a7000e5b22059c6b10fbe1dd2">More...</a><br/></td></tr>
 <tr class="separator:a67b4e07a7000e5b22059c6b10fbe1dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,7 +129,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a30aa5d09b41a454421450c89118a0f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a11acd26e92c47df0fac948c8921c06a5"></a>
+<a class="anchor" id="ad95f8388bcb8154373aa319878d823d1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -134,8 +137,18 @@ Public Attributes</h2></td></tr>
           <td class="memname">ZuoPar::Experimental::ACL2015::MultiPredicateSRL::Information::Information </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classZuoPar_1_1SemanticChunks.html">SemanticChunks</a> &amp;&#160;</td>
-          <td class="paramname"><em>instance</em></td><td>)</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::unordered_map&lt; <a class="el" href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">form_t</a>, int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>verb_classes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -168,6 +181,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The forms of the predicates. </p>
+
+</div>
+</div>
+<a class="anchor" id="aae458fac5173900087919afaa48bb2e1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;int&gt; ZuoPar::Experimental::ACL2015::MultiPredicateSRL::Information::predicates_id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The index of predicates. </p>
 
 </div>
 </div>
@@ -228,7 +255,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>src/experimental/acl2015/multi_predicate_srl/<a class="el" href="information_8h_source.html">information.h</a></li>
+<li>src/experimental/acl2015/multi_predicate_srl1/<a class="el" href="information_8h_source.html">information.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

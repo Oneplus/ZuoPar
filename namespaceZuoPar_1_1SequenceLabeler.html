@@ -104,6 +104,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Decoder.html">Decoder</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1SequenceLabeler_1_1Loss.html">Loss</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1SequenceLabeler_1_1MultiPipe.html">MultiPipe</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1SequenceLabeler_1_1ConstrainOption.html">ConstrainOption</a></td></tr>
@@ -125,14 +127,14 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ad16b42d81888fd5f639f9795013b5424"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-<a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner</a><br class="typebreak"/>
-&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#ad16b42d81888fd5f639f9795013b5424">Learner</a></td></tr>
-<tr class="separator:ad16b42d81888fd5f639f9795013b5424"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58eb0f992170c649216c53c106bffb10"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-<a class="el" href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html">TransitionStructureLearnerMiniBatch</a><br class="typebreak"/>
-&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a58eb0f992170c649216c53c106bffb10">MinibatchLearner</a></td></tr>
-<tr class="separator:a58eb0f992170c649216c53c106bffb10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dc13582247f13331b89057b4eb895b0"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1TransitionStructureOnlineLearner.html">TransitionStructureOnlineLearner</a><br class="typebreak"/>
+&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>, <a class="el" href="structZuoPar_1_1SequenceLabeler_1_1Loss.html">Loss</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a5dc13582247f13331b89057b4eb895b0">Learner</a></td></tr>
+<tr class="separator:a5dc13582247f13331b89057b4eb895b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58435a9d4292fcd79b2430c342570b8b"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1TransitionStructureOnlineLearnerMiniBatch.html">TransitionStructureOnlineLearnerMiniBatch</a><br class="typebreak"/>
+&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>, <a class="el" href="structZuoPar_1_1SequenceLabeler_1_1Loss.html">Loss</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a58435a9d4292fcd79b2430c342570b8b">MinibatchLearner</a></td></tr>
+<tr class="separator:a58435a9d4292fcd79b2430c342570b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -146,24 +148,24 @@ Functions</h2></td></tr>
 <tr class="separator:a54f291988c806612a0438cba7011e1fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="ad16b42d81888fd5f639f9795013b5424"></a>
+<a class="anchor" id="a5dc13582247f13331b89057b4eb895b0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner</a>&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>&gt; <a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#ad16b42d81888fd5f639f9795013b5424">ZuoPar::SequenceLabeler::Learner</a></td>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureOnlineLearner.html">TransitionStructureOnlineLearner</a>&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>, <a class="el" href="structZuoPar_1_1SequenceLabeler_1_1Loss.html">Loss</a>&gt; <a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a5dc13582247f13331b89057b4eb895b0">ZuoPar::SequenceLabeler::Learner</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a58eb0f992170c649216c53c106bffb10"></a>
+<a class="anchor" id="a58435a9d4292fcd79b2430c342570b8b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html">TransitionStructureLearnerMiniBatch</a>&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>&gt; <a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a58eb0f992170c649216c53c106bffb10">ZuoPar::SequenceLabeler::MinibatchLearner</a></td>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureOnlineLearnerMiniBatch.html">TransitionStructureOnlineLearnerMiniBatch</a>&lt; <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1SequenceLabeler_1_1Weight.html">Weight</a>, <a class="el" href="structZuoPar_1_1SequenceLabeler_1_1Loss.html">Loss</a>&gt; <a class="el" href="namespaceZuoPar_1_1SequenceLabeler.html#a58435a9d4292fcd79b2430c342570b8b">ZuoPar::SequenceLabeler::MinibatchLearner</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

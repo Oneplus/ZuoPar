@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_0c0c9fa8a58db41e576adc3ce68c5ee9.html">types</a></li><li class="navelem"><a class="el" href="dir_16ddcb4b0977ca9090fd5f9241b22d33.html">math</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_f76d0683dc493530e609f7ea4fbe7c97.html">types</a></li><li class="navelem"><a class="el" href="dir_8dbddc286ad8b8c47a709376a43d79d1.html">math</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -106,16 +106,27 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a0c1434bff13e9de54ab240a3d544eaa3"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map<br class="typebreak"/>
-&lt; int, floatval_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a0c1434bff13e9de54ab240a3d544eaa3">ZuoPar::SparseVector</a></td></tr>
-<tr class="memdesc:a0c1434bff13e9de54ab240a3d544eaa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The most basic sparse vector.  <a href="#a0c1434bff13e9de54ab240a3d544eaa3">More...</a><br/></td></tr>
-<tr class="separator:a0c1434bff13e9de54ab240a3d544eaa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89908557b6e9c9587c4263d77130b4ac"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map<br class="typebreak"/>
-&lt; std::pair&lt; int, std::size_t &gt;<br class="typebreak"/>
-, floatval_t, boost::hash<br class="typebreak"/>
-&lt; std::pair&lt; int, std::size_t &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a89908557b6e9c9587c4263d77130b4ac">ZuoPar::SparseVector2</a></td></tr>
-<tr class="memdesc:a89908557b6e9c9587c4263d77130b4ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">The version two sparse vector, with indexed for faster compute.  <a href="#a89908557b6e9c9587c4263d77130b4ac">More...</a><br/></td></tr>
-<tr class="separator:a89908557b6e9c9587c4263d77130b4ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a314142f174b265e0cc142ecbb252af3f"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map<br class="typebreak"/>
+&lt; std::size_t, floatval_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a314142f174b265e0cc142ecbb252af3f">ZuoPar::SparseVector</a></td></tr>
+<tr class="memdesc:a314142f174b265e0cc142ecbb252af3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The most basic sparse vector.  <a href="#a314142f174b265e0cc142ecbb252af3f">More...</a><br/></td></tr>
+<tr class="separator:a314142f174b265e0cc142ecbb252af3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab52058eede52ac27e6d0b48920be2edd"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; std::size_t, <br class="typebreak"/>
+std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#ab52058eede52ac27e6d0b48920be2edd">ZuoPar::SparseVector2Key</a></td></tr>
+<tr class="memdesc:ab52058eede52ac27e6d0b48920be2edd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The version two sparse vector, with indexed for faster compute.  <a href="#ab52058eede52ac27e6d0b48920be2edd">More...</a><br/></td></tr>
+<tr class="separator:ab52058eede52ac27e6d0b48920be2edd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1106764af57f5325fd69243dc532399b"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map<br class="typebreak"/>
+&lt; SparseVector2Key, floatval_t, <br class="typebreak"/>
+boost::hash&lt; SparseVector2Key &gt;&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a1106764af57f5325fd69243dc532399b">ZuoPar::SparseVector2</a></td></tr>
+<tr class="separator:a1106764af57f5325fd69243dc532399b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1fc505225d6df95ce2da588f71625d7"><td class="memItemLeft" align="right" valign="top">typedef std::tuple<br class="typebreak"/>
+&lt; std::size_t, std::size_t, <br class="typebreak"/>
+std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#ab1fc505225d6df95ce2da588f71625d7">ZuoPar::SparseVector3Key</a></td></tr>
+<tr class="memdesc:ab1fc505225d6df95ce2da588f71625d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The version 3 sparse vector.  <a href="#ab1fc505225d6df95ce2da588f71625d7">More...</a><br/></td></tr>
+<tr class="separator:ab1fc505225d6df95ce2da588f71625d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a82ebab968935b00de76049a44b7f5c"><td class="memItemLeft" align="right" valign="top">typedef std::unordered_map<br class="typebreak"/>
+&lt; SparseVector3Key, floatval_t, <br class="typebreak"/>
+boost::hash&lt; SparseVector3Key &gt;&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar.html#a2a82ebab968935b00de76049a44b7f5c">ZuoPar::SparseVector3</a></td></tr>
+<tr class="separator:a2a82ebab968935b00de76049a44b7f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

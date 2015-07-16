@@ -103,8 +103,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac0f79ece0af54aea6bc6d05d6dec7858"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ac0f79ece0af54aea6bc6d05d6dec7858">State</a> ()</td></tr>
 <tr class="memdesc:ac0f79ece0af54aea6bc6d05d6dec7858"><td class="mdescLeft">&#160;</td><td class="mdescRight">The empty constructor.  <a href="#ac0f79ece0af54aea6bc6d05d6dec7858">More...</a><br/></td></tr>
 <tr class="separator:ac0f79ece0af54aea6bc6d05d6dec7858"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adebbae3388d5a040713da5e1a62050cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#adebbae3388d5a040713da5e1a62050cf">State</a> (const <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a> *r)</td></tr>
-<tr class="separator:adebbae3388d5a040713da5e1a62050cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a177b98ee854a94123c6b00aea2af562a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a177b98ee854a94123c6b00aea2af562a">State</a> (const <a class="el" href="structZuoPar_1_1CoNLLXDependency.html">CoNLLXDependency</a> *r)</td></tr>
+<tr class="separator:a177b98ee854a94123c6b00aea2af562a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e541ac66ae36f005ac661cc077e26f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a1e541ac66ae36f005ac661cc077e26f8">copy</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a> &amp;source)</td></tr>
 <tr class="separator:a1e541ac66ae36f005ac661cc077e26f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c5b58e81946ad85fdc95226fb50daa8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a3c5b58e81946ad85fdc95226fb50daa8">clear</a> ()</td></tr>
@@ -116,15 +116,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acb1ff05fcbe5345abb078f4d50010ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2ff31628f4816b85e2b1db2f1f89664"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#af2ff31628f4816b85e2b1db2f1f89664">right_arc</a> (const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a> &amp;source, <a class="el" href="namespaceZuoPar.html#add15ec07d24d7bf36dabcffd01a219a9">deprel_t</a> deprel)</td></tr>
 <tr class="separator:af2ff31628f4816b85e2b1db2f1f89664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40ea34fcf2f152ec96e9c943621c211a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a40ea34fcf2f152ec96e9c943621c211a">cost</a> (const std::vector&lt; int &gt; &amp;<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ad47f46238788a097b910c2b74946e952">heads</a>, const std::vector&lt; int &gt; &amp;<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a68dd9a7224016263ebfa33be4ca5c836">deprels</a>)</td></tr>
+<tr class="memdesc:a40ea34fcf2f152ec96e9c943621c211a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used in dynamic oracle, should only be performed on gold state.  <a href="#a40ea34fcf2f152ec96e9c943621c211a">More...</a><br/></td></tr>
+<tr class="separator:a40ea34fcf2f152ec96e9c943621c211a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace1067175e8d1c9d98e49be9787869df"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ace1067175e8d1c9d98e49be9787869df">buffer_empty</a> () const </td></tr>
 <tr class="memdesc:ace1067175e8d1c9d98e49be9787869df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true on the buffer is empty.  <a href="#ace1067175e8d1c9d98e49be9787869df">More...</a><br/></td></tr>
 <tr class="separator:ace1067175e8d1c9d98e49be9787869df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7a982ae2f41a967896a8ebd4b7ca42a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#ad7a982ae2f41a967896a8ebd4b7ca42a">stack_size</a> () const </td></tr>
 <tr class="memdesc:ad7a982ae2f41a967896a8ebd4b7ca42a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the size of the stack.  <a href="#ad7a982ae2f41a967896a8ebd4b7ca42a">More...</a><br/></td></tr>
 <tr class="separator:ad7a982ae2f41a967896a8ebd4b7ca42a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a1c73c42ac7928250b2e3df5c0ccbf1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a2a1c73c42ac7928250b2e3df5c0ccbf1">refresh_stack_information</a> ()</td></tr>
-<tr class="memdesc:a2a1c73c42ac7928250b2e3df5c0ccbf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refresh the value of top0 and top1.  <a href="#a2a1c73c42ac7928250b2e3df5c0ccbf1">More...</a><br/></td></tr>
-<tr class="separator:a2a1c73c42ac7928250b2e3df5c0ccbf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -137,9 +137,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a903be5452925a3d9f6b9e2570db08580"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a903be5452925a3d9f6b9e2570db08580">previous</a></td></tr>
 <tr class="memdesc:a903be5452925a3d9f6b9e2570db08580"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pointer to the previous state.  <a href="#a903be5452925a3d9f6b9e2570db08580">More...</a><br/></td></tr>
 <tr class="separator:a903be5452925a3d9f6b9e2570db08580"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56de34ffb5e59837007b96e3d5c00928"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a56de34ffb5e59837007b96e3d5c00928">ref</a></td></tr>
-<tr class="memdesc:a56de34ffb5e59837007b96e3d5c00928"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pointer to the dependency tree.  <a href="#a56de34ffb5e59837007b96e3d5c00928">More...</a><br/></td></tr>
-<tr class="separator:a56de34ffb5e59837007b96e3d5c00928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9943c647d24ecbcd29bc3d2ffbfff7a6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structZuoPar_1_1CoNLLXDependency.html">CoNLLXDependency</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a9943c647d24ecbcd29bc3d2ffbfff7a6">ref</a></td></tr>
+<tr class="memdesc:a9943c647d24ecbcd29bc3d2ffbfff7a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pointer to the dependency tree.  <a href="#a9943c647d24ecbcd29bc3d2ffbfff7a6">More...</a><br/></td></tr>
+<tr class="separator:a9943c647d24ecbcd29bc3d2ffbfff7a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33c2ee5d8d6b7c88bc4e008b7f260755"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html#a33c2ee5d8d6b7c88bc4e008b7f260755">score</a></td></tr>
 <tr class="memdesc:a33c2ee5d8d6b7c88bc4e008b7f260755"><td class="mdescLeft">&#160;</td><td class="mdescRight">The score.  <a href="#a33c2ee5d8d6b7c88bc4e008b7f260755">More...</a><br/></td></tr>
 <tr class="separator:a33c2ee5d8d6b7c88bc4e008b7f260755"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,14 +199,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="adebbae3388d5a040713da5e1a62050cf"></a>
+<a class="anchor" id="a177b98ee854a94123c6b00aea2af562a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ZuoPar::DependencyParser::ArcStandard::State::State </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="structZuoPar_1_1CoNLLXDependency.html">CoNLLXDependency</a> *&#160;</td>
           <td class="paramname"><em>r</em></td><td>)</td>
           <td></td>
         </tr>
@@ -273,6 +273,34 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a40ea34fcf2f152ec96e9c943621c211a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ZuoPar::DependencyParser::ArcStandard::State::cost </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>heads</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>deprels</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Used in dynamic oracle, should only be performed on gold state. </p>
+
+</div>
+</div>
 <a class="anchor" id="acb1ff05fcbe5345abb078f4d50010ccd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -304,23 +332,6 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="a2a1c73c42ac7928250b2e3df5c0ccbf1"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ZuoPar::DependencyParser::ArcStandard::State::refresh_stack_information </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Refresh the value of top0 and top1. </p>
 
 </div>
 </div>
@@ -537,12 +548,12 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a56de34ffb5e59837007b96e3d5c00928"></a>
+<a class="anchor" id="a9943c647d24ecbcd29bc3d2ffbfff7a6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classZuoPar_1_1Dependency.html">Dependency</a>* ZuoPar::DependencyParser::ArcStandard::State::ref</td>
+          <td class="memname">const <a class="el" href="structZuoPar_1_1CoNLLXDependency.html">CoNLLXDependency</a>* ZuoPar::DependencyParser::ArcStandard::State::ref</td>
         </tr>
       </table>
 </div><div class="memdoc">

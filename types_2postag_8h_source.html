@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_0c0c9fa8a58db41e576adc3ce68c5ee9.html">types</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_f76d0683dc493530e609f7ea4fbe7c97.html">types</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -99,35 +99,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
 <div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classZuoPar_1_1Postag.html">    9</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1Postag.html">Postag</a> {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classZuoPar_1_1Postag.html#a4832295472a04f71b0a3425cb90828ca">   11</a></span>&#160;  std::vector&lt;form_t&gt; <a class="code" href="classZuoPar_1_1Postag.html#a4832295472a04f71b0a3425cb90828ca">forms</a>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classZuoPar_1_1Postag.html#a55283aa90ca5bb202526591b02e1be8f">   11</a></span>&#160;  std::vector&lt;std::string&gt; <a class="code" href="classZuoPar_1_1Postag.html#a55283aa90ca5bb202526591b02e1be8f">forms</a>;</div>
 <div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classZuoPar_1_1Postag.html#a26b93a040bf4767079807fb6380f8dec">   12</a></span>&#160;  std::vector&lt;postag_t&gt; <a class="code" href="classZuoPar_1_1Postag.html#a26b93a040bf4767079807fb6380f8dec">postags</a>;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classZuoPar_1_1Postag.html#aa2a0c551aa02ff2b45df2edc9b0b99d2">   14</a></span>&#160;  std::size_t <a class="code" href="classZuoPar_1_1Postag.html#aa2a0c551aa02ff2b45df2edc9b0b99d2">size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classZuoPar_1_1Postag.html#a26b93a040bf4767079807fb6380f8dec">postags</a>.size(); }</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classZuoPar_1_1Postag.html#a1ec7f1f07846192a74af2f69b36801f7">   16</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1Postag.html#a1ec7f1f07846192a74af2f69b36801f7">push_back</a>(<a class="code" href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">form_t</a> form, <a class="code" href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">postag_t</a> postag) {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="classZuoPar_1_1Postag.html#a4832295472a04f71b0a3425cb90828ca">forms</a>.push_back(form);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="classZuoPar_1_1Postag.html#a26b93a040bf4767079807fb6380f8dec">postags</a>.push_back(postag);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  }</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;};</div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classZuoPar_1_1Postag.html#aa2a0c551aa02ff2b45df2edc9b0b99d2">   13</a></span>&#160;  std::size_t <a class="code" href="classZuoPar_1_1Postag.html#aa2a0c551aa02ff2b45df2edc9b0b99d2">size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classZuoPar_1_1Postag.html#a55283aa90ca5bb202526591b02e1be8f">forms</a>.size(); }</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classZuoPar_1_1Postag.html#a7e96b479b471bf7cdc7cd85fe3bfd487">   14</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classZuoPar_1_1Postag.html#a7e96b479b471bf7cdc7cd85fe3bfd487">push_back</a>(<span class="keyword">const</span> std::string&amp; form, <a class="code" href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">postag_t</a>&amp; postag) {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="classZuoPar_1_1Postag.html#a55283aa90ca5bb202526591b02e1be8f">forms</a>.push_back(form);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="classZuoPar_1_1Postag.html#a26b93a040bf4767079807fb6380f8dec">postags</a>.push_back(postag);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  }</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;};</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classZuoPar_1_1PostagWithLiteralCache.html">   22</a></span>&#160;<span class="keyword">class </span><a class="code" href="classZuoPar_1_1PostagWithLiteralCache.html">PostagWithLiteralCache</a>: <span class="keyword">public</span> <a class="code" href="classZuoPar_1_1Postag.html">Postag</a> {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classZuoPar_1_1PostagWithLiteralCache.html#ac511d76ee994e3552c5178201f1395ec">   24</a></span>&#160;  std::vector&lt;std::string&gt; <a class="code" href="classZuoPar_1_1PostagWithLiteralCache.html#ac511d76ee994e3552c5178201f1395ec">cache</a>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;};</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;} <span class="comment">//  end for namespace zuopar</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_TYPES_POSTAG_H__</span></div>
-<div class="ttc" id="classZuoPar_1_1Postag_html_aa2a0c551aa02ff2b45df2edc9b0b99d2"><div class="ttname"><a href="classZuoPar_1_1Postag.html#aa2a0c551aa02ff2b45df2edc9b0b99d2">ZuoPar::Postag::size</a></div><div class="ttdeci">std::size_t size() const </div><div class="ttdef"><b>Definition:</b> postag.h:14</div></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_TYPES_POSTAG_H__</span></div>
+<div class="ttc" id="classZuoPar_1_1Postag_html_a55283aa90ca5bb202526591b02e1be8f"><div class="ttname"><a href="classZuoPar_1_1Postag.html#a55283aa90ca5bb202526591b02e1be8f">ZuoPar::Postag::forms</a></div><div class="ttdeci">std::vector&lt; std::string &gt; forms</div><div class="ttdef"><b>Definition:</b> postag.h:11</div></div>
+<div class="ttc" id="classZuoPar_1_1Postag_html_aa2a0c551aa02ff2b45df2edc9b0b99d2"><div class="ttname"><a href="classZuoPar_1_1Postag.html#aa2a0c551aa02ff2b45df2edc9b0b99d2">ZuoPar::Postag::size</a></div><div class="ttdeci">std::size_t size() const </div><div class="ttdef"><b>Definition:</b> postag.h:13</div></div>
 <div class="ttc" id="classZuoPar_1_1Postag_html"><div class="ttname"><a href="classZuoPar_1_1Postag.html">ZuoPar::Postag</a></div><div class="ttdef"><b>Definition:</b> postag.h:9</div></div>
-<div class="ttc" id="namespaceZuoPar_html_a925b260433445cfbf23318c3d94784fb"><div class="ttname"><a href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">ZuoPar::postag_t</a></div><div class="ttdeci">int postag_t</div><div class="ttdoc">The internal representation of part-of-speech tag. </div><div class="ttdef"><b>Definition:</b> common.h:16</div></div>
-<div class="ttc" id="classZuoPar_1_1PostagWithLiteralCache_html"><div class="ttname"><a href="classZuoPar_1_1PostagWithLiteralCache.html">ZuoPar::PostagWithLiteralCache</a></div><div class="ttdef"><b>Definition:</b> postag.h:22</div></div>
+<div class="ttc" id="namespaceZuoPar_html_a925b260433445cfbf23318c3d94784fb"><div class="ttname"><a href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">ZuoPar::postag_t</a></div><div class="ttdeci">int postag_t</div><div class="ttdoc">The internal representation of lemmas. </div><div class="ttdef"><b>Definition:</b> common.h:10</div></div>
+<div class="ttc" id="classZuoPar_1_1Postag_html_a7e96b479b471bf7cdc7cd85fe3bfd487"><div class="ttname"><a href="classZuoPar_1_1Postag.html#a7e96b479b471bf7cdc7cd85fe3bfd487">ZuoPar::Postag::push_back</a></div><div class="ttdeci">void push_back(const std::string &amp;form, postag_t &amp;postag)</div><div class="ttdef"><b>Definition:</b> postag.h:14</div></div>
 <div class="ttc" id="classZuoPar_1_1Postag_html_a26b93a040bf4767079807fb6380f8dec"><div class="ttname"><a href="classZuoPar_1_1Postag.html#a26b93a040bf4767079807fb6380f8dec">ZuoPar::Postag::postags</a></div><div class="ttdeci">std::vector&lt; postag_t &gt; postags</div><div class="ttdef"><b>Definition:</b> postag.h:12</div></div>
-<div class="ttc" id="classZuoPar_1_1PostagWithLiteralCache_html_ac511d76ee994e3552c5178201f1395ec"><div class="ttname"><a href="classZuoPar_1_1PostagWithLiteralCache.html#ac511d76ee994e3552c5178201f1395ec">ZuoPar::PostagWithLiteralCache::cache</a></div><div class="ttdeci">std::vector&lt; std::string &gt; cache</div><div class="ttdef"><b>Definition:</b> postag.h:24</div></div>
 <div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div></div>
-<div class="ttc" id="namespaceZuoPar_html_a8144a1915dcc537a5524e6d072d74ebc"><div class="ttname"><a href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">ZuoPar::form_t</a></div><div class="ttdeci">int form_t</div><div class="ttdoc">The internal representation of forms. </div><div class="ttdef"><b>Definition:</b> common.h:13</div></div>
-<div class="ttc" id="classZuoPar_1_1Postag_html_a4832295472a04f71b0a3425cb90828ca"><div class="ttname"><a href="classZuoPar_1_1Postag.html#a4832295472a04f71b0a3425cb90828ca">ZuoPar::Postag::forms</a></div><div class="ttdeci">std::vector&lt; form_t &gt; forms</div><div class="ttdef"><b>Definition:</b> postag.h:11</div></div>
-<div class="ttc" id="classZuoPar_1_1Postag_html_a1ec7f1f07846192a74af2f69b36801f7"><div class="ttname"><a href="classZuoPar_1_1Postag.html#a1ec7f1f07846192a74af2f69b36801f7">ZuoPar::Postag::push_back</a></div><div class="ttdeci">void push_back(form_t form, postag_t postag)</div><div class="ttdef"><b>Definition:</b> postag.h:16</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

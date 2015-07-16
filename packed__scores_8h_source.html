@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_0c0c9fa8a58db41e576adc3ce68c5ee9.html">types</a></li><li class="navelem"><a class="el" href="dir_a04042c3b9ec8a8fae4c66e856ff05f8.html">internal</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_f76d0683dc493530e609f7ea4fbe7c97.html">types</a></li><li class="navelem"><a class="el" href="dir_c2724e5859968d5c5b1e9ffcb6e4c44f.html">internal</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -92,24 +92,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="packed__scores_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef __ZUOPAR_TYPES_INTERNAL_PACKED_SCORE_H__</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __ZUOPAR_TYPES_INTERNAL_PACKED_SCORE_H__</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;boost/functional/hash.hpp&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="common_8h.html">types/common.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="unordered__map_8h.html">utils/serialization/unordered_map.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> _ActionType&gt;</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="structZuoPar_1_1PackedScores.html">   11</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structZuoPar_1_1PackedScores.html">PackedScores</a>: <span class="keyword">public</span> std::unordered_map&lt;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  _ActionType,</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  floatval_t,</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  boost::hash&lt;_ActionType&gt; &gt; {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;};</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;}</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;boost/functional/hash.hpp&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;boost/serialization/unordered_map.hpp&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// According to the benchmark, std::map performs better compared with</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// the std::unordered_map when the size of key is small.</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">//template &lt;class _ActionType&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//struct PackedScores: public std::map&lt;_ActionType, floatval_t&gt; {};</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> _ActionType&gt;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="structZuoPar_1_1PackedScores.html">   16</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structZuoPar_1_1PackedScores.html">PackedScores</a>: <span class="keyword">public</span> std::unordered_map&lt;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                     _ActionType, floatval_t, boost::hash&lt;_ActionType&gt;&gt; {};</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_TYPES_INTERNAL_PACKED_SCORE_H__</span></div>
-<div class="ttc" id="unordered__map_8h_html"><div class="ttname"><a href="unordered__map_8h.html">unordered_map.h</a></div></div>
-<div class="ttc" id="structZuoPar_1_1PackedScores_html"><div class="ttname"><a href="structZuoPar_1_1PackedScores.html">ZuoPar::PackedScores</a></div><div class="ttdef"><b>Definition:</b> packed_scores.h:11</div></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_TYPES_INTERNAL_PACKED_SCORE_H__</span></div>
+<div class="ttc" id="structZuoPar_1_1PackedScores_html"><div class="ttname"><a href="structZuoPar_1_1PackedScores.html">ZuoPar::PackedScores</a></div><div class="ttdef"><b>Definition:</b> packed_scores.h:16</div></div>
+<div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

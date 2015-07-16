@@ -97,32 +97,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="types_2postag_8h_source.html">postag.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for ZuoPar::Postag:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classZuoPar_1_1Postag.png" usemap="#ZuoPar::Postag_map" alt=""/>
-  <map id="ZuoPar::Postag_map" name="ZuoPar::Postag_map">
-<area href="classZuoPar_1_1PostagWithLiteralCache.html" alt="ZuoPar::PostagWithLiteralCache" shape="rect" coords="0,56,195,80"/>
-</map>
- </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa2a0c551aa02ff2b45df2edc9b0b99d2"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Postag.html#aa2a0c551aa02ff2b45df2edc9b0b99d2">size</a> () const </td></tr>
 <tr class="separator:aa2a0c551aa02ff2b45df2edc9b0b99d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ec7f1f07846192a74af2f69b36801f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Postag.html#a1ec7f1f07846192a74af2f69b36801f7">push_back</a> (<a class="el" href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">form_t</a> form, <a class="el" href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">postag_t</a> postag)</td></tr>
-<tr class="separator:a1ec7f1f07846192a74af2f69b36801f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e96b479b471bf7cdc7cd85fe3bfd487"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Postag.html#a7e96b479b471bf7cdc7cd85fe3bfd487">push_back</a> (const std::string &amp;form, <a class="el" href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">postag_t</a> &amp;postag)</td></tr>
+<tr class="separator:a7e96b479b471bf7cdc7cd85fe3bfd487"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a4832295472a04f71b0a3425cb90828ca"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">form_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Postag.html#a4832295472a04f71b0a3425cb90828ca">forms</a></td></tr>
-<tr class="separator:a4832295472a04f71b0a3425cb90828ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55283aa90ca5bb202526591b02e1be8f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Postag.html#a55283aa90ca5bb202526591b02e1be8f">forms</a></td></tr>
+<tr class="separator:a55283aa90ca5bb202526591b02e1be8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26b93a040bf4767079807fb6380f8dec"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">postag_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Postag.html#a26b93a040bf4767079807fb6380f8dec">postags</a></td></tr>
 <tr class="separator:a26b93a040bf4767079807fb6380f8dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a1ec7f1f07846192a74af2f69b36801f7"></a>
+<a class="anchor" id="a7e96b479b471bf7cdc7cd85fe3bfd487"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -132,13 +123,13 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">void ZuoPar::Postag::push_back </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">form_t</a>&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>form</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">postag_t</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceZuoPar.html#a925b260433445cfbf23318c3d94784fb">postag_t</a> &amp;&#160;</td>
           <td class="paramname"><em>postag</em>&#160;</td>
         </tr>
         <tr>
@@ -180,12 +171,12 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a4832295472a04f71b0a3425cb90828ca"></a>
+<a class="anchor" id="a55283aa90ca5bb202526591b02e1be8f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespaceZuoPar.html#a8144a1915dcc537a5524e6d072d74ebc">form_t</a>&gt; ZuoPar::Postag::forms</td>
+          <td class="memname">std::vector&lt;std::string&gt; ZuoPar::Postag::forms</td>
         </tr>
       </table>
 </div><div class="memdoc">

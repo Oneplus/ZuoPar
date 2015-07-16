@@ -1,10 +1,22 @@
 var searchData=
 [
-  ['cache',['cache',['../classZuoPar_1_1PostagWithLiteralCache.html#ac511d76ee994e3552c5178201f1395ec',1,'ZuoPar::PostagWithLiteralCache']]],
-  ['candidate_5ftransitions',['candidate_transitions',['../classZuoPar_1_1TransitionSystem.html#aebf5b0422e7c5da386d27f46fd4455d9',1,'ZuoPar::TransitionSystem']]],
-  ['chars',['chars',['../classZuoPar_1_1Segmentation.html#a0c68322557031982281321f707fe946c',1,'ZuoPar::Segmentation']]],
+  ['candidate_5ftransitions',['candidate_transitions',['../classZuoPar_1_1TransitionSystem.html#aef1204f13ba2135ede6c84d3c555f5ec',1,'ZuoPar::TransitionSystem']]],
+  ['chars',['chars',['../classZuoPar_1_1Segmentation.html#a1d247bbb508e2523869bdea724c710f0',1,'ZuoPar::Segmentation']]],
   ['chunks',['chunks',['../classZuoPar_1_1ChunksWithSemanticRoles.html#ac8c09e8fbe7dbb49e9358d9cf4b6b214',1,'ZuoPar::ChunksWithSemanticRoles::chunks()'],['../classZuoPar_1_1MonoChunksWithSemanticRoles.html#a7e1ad1bccbe0fa86c4a2bbdf6a83dc14',1,'ZuoPar::MonoChunksWithSemanticRoles::chunks()']]],
-  ['chunks_5falphabet',['chunks_alphabet',['../classZuoPar_1_1Experimental_1_1ACL2015_1_1JointChunkingMonoPredicateSRL_1_1Pipe.html#a3e7258b68a28406433ef57184e013425',1,'ZuoPar::Experimental::ACL2015::JointChunkingMonoPredicateSRL::Pipe']]],
+  ['classes',['classes',['../structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a571ad9c911f9f6d9a520d0e64b2e87c1',1,'ZuoPar::DependencyParser::NeuralNetwork::Sample']]],
+  ['cluster_5ffile',['cluster_file',['../structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Chen2014_1_1FeatureOption.html#aa216c9ca6d8580466dc023cf6a9ff3a2',1,'ZuoPar::DependencyParser::NeuralNetwork::Chen2014::FeatureOption::cluster_file()'],['../structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Weiss2015_1_1FeatureOption.html#a891d55adfcc35210b0a0bb67936d4f5f',1,'ZuoPar::DependencyParser::NeuralNetwork::Weiss2015::FeatureOption::cluster_file()']]],
+  ['constituent',['constituent',['../structZuoPar_1_1BinarizedCFGTreeNode.html#a45f80d89ad70df314e4b8ba230582945',1,'ZuoPar::BinarizedCFGTreeNode']]],
   ['constrain_5fpath',['constrain_path',['../structZuoPar_1_1SequenceLabeler_1_1ConstrainOption.html#a668ab21aab1086193d987662da295f88',1,'ZuoPar::SequenceLabeler::ConstrainOption::constrain_path()'],['../classZuoPar_1_1SequenceLabeler_1_1Pipe.html#a45f94e378bf104aaa13b7e17999fefc1',1,'ZuoPar::SequenceLabeler::Pipe::constrain_path()']]],
-  ['correct_5fstate_5fchain',['correct_state_chain',['../classZuoPar_1_1TransitionStructureLearner.html#a8e3597f4d00e795dce59fd1067c90819',1,'ZuoPar::TransitionStructureLearner']]]
+  ['correct_5fstate',['correct_state',['../classZuoPar_1_1TransitionSystem.html#aff63e4a945001d2a13d25f2cff23dff0',1,'ZuoPar::TransitionSystem']]],
+  ['correct_5fstate_5fchain',['correct_state_chain',['../classZuoPar_1_1TransitionStructureOnlineLearner.html#a517c068764eedb06032fdc76af88d1c6',1,'ZuoPar::TransitionStructureOnlineLearner']]],
+  ['cpostags',['cpostags',['../structZuoPar_1_1CoNLLXDependency.html#ab673bc3f9d6671b668925b04ae63e084',1,'ZuoPar::CoNLLXDependency::cpostags()'],['../structZuoPar_1_1RawCoNLLXDependency.html#a7b7b867ab3a988b0f8e0d6aac7930142',1,'ZuoPar::RawCoNLLXDependency::cpostags()']]],
+  ['cpostags_5falphabet',['cpostags_alphabet',['../classZuoPar_1_1DependencyParser_1_1CoNLLXDependencyRepository.html#ab9d28d35e35e5614ecbb322fc5c65f17',1,'ZuoPar::DependencyParser::CoNLLXDependencyRepository']]],
+  ['cube_5fheight',['cube_height',['../structZuoPar_1_1Experimental_1_1MultiPredicateSRL_1_1ExtraOption.html#a6f56fb02e0e7ec76a194adfae4044afc',1,'ZuoPar::Experimental::MultiPredicateSRL::ExtraOption::cube_height()'],['../classZuoPar_1_1Experimental_1_1MultiPredicateSRL_1_1Pipe.html#ae421897b194de22856f4494191591194',1,'ZuoPar::Experimental::MultiPredicateSRL::Pipe::cube_height()']]],
+  ['curr_5fch',['curr_ch',['../classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1ScoreContext.html#a39ecd8a19d76b089ace15923f693b428',1,'ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::ScoreContext']]],
+  ['curr_5fw',['curr_w',['../classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1ScoreContext.html#a7374a9f423f913dda351809d319d2dba',1,'ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::ScoreContext']]],
+  ['curr_5fw_5ffirst',['curr_w_first',['../classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1ScoreContext.html#a2d57ea6dbdcfdca28aa12d14601cc25c',1,'ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::ScoreContext']]],
+  ['curr_5fw_5flast',['curr_w_last',['../classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1ScoreContext.html#a5b54153b3558407629ad945c8a613672',1,'ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::ScoreContext']]],
+  ['curr_5fw_5flen',['curr_w_len',['../classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1ScoreContext.html#a3fe06d0be56ee0a87744ae7e488a0226',1,'ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::ScoreContext']]],
+  ['curr_5fw_5flen_5fs',['curr_w_len_s',['../classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1ScoreContext.html#a4193830db0eccab51ce3a9d27bcdea13',1,'ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::ScoreContext']]],
+  ['current_5fword_5findex',['current_word_index',['../classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1State.html#a4d5949c42c6917fe9c2470ae9cdc91cd',1,'ZuoPar::LexicalAnalyzer::ChineseWordSegmentor::State']]]
 ];

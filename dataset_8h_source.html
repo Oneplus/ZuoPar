@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>ZuoPar: A unofficial restruction for ZPar: src/utils/io/dataset.h Source File</title>
+<title>ZuoPar: A unofficial restruction for ZPar: src/app/depparser/nn/dataset.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_ead6a79ec45eeb802fee29c0b27ced46.html">utils</a></li><li class="navelem"><a class="el" href="dir_3aa559f7e41dfa897250858c440cb2a9.html">io</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_b70b8dffcda314476343c54a554b565c.html">app</a></li><li class="navelem"><a class="el" href="dir_63c34f74908e6c12760505586877ebe4.html">depparser</a></li><li class="navelem"><a class="el" href="dir_74d1534e142a77f4cd47592343ad783f.html">nn</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -89,35 +89,59 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">dataset.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="dataset_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef __ZUOPAR_UTILS_IO_DATASET_H__</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __ZUOPAR_UTILS_IO_DATASET_H__</span></div>
+<a href="dataset_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef __ZUOPAR_APP_DEPPARSER_NN_DATASET_H__</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define __ZUOPAR_APP_DEPPARSER_NN_DATASET_H__</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="dependency_8h.html">types/dependency.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="token__alphabet_8h.html">engine/token_alphabet.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>eg = ZuoPar::Engine;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="namespaceZuoPar_1_1IO.html">   12</a></span>&#160;<span class="keyword">namespace </span>IO {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a8e06a18f6e7ea1f60c346ee0c0edaf4c">read_plain_dependency_dataset</a>(</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    std::istream&amp; is,</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    std::vector&lt;Dependency&gt;&amp; dataset,</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; deprels_alphabet,</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;}</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_DATASET_H__</span></div>
-<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:17</div></div>
-<div class="ttc" id="token__alphabet_8h_html"><div class="ttname"><a href="token__alphabet_8h.html">token_alphabet.h</a></div></div>
-<div class="ttc" id="dependency_8h_html"><div class="ttname"><a href="dependency_8h.html">dependency.h</a></div></div>
-<div class="ttc" id="namespaceZuoPar_1_1IO_html_a8e06a18f6e7ea1f60c346ee0c0edaf4c"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#a8e06a18f6e7ea1f60c346ee0c0edaf4c">ZuoPar::IO::read_plain_dependency_dataset</a></div><div class="ttdeci">void read_plain_dependency_dataset(std::istream &amp;is, std::vector&lt; Dependency &gt; &amp;dataset, eg::TokenAlphabet &amp;forms_alphabet, eg::TokenAlphabet &amp;postags_alphabet, eg::TokenAlphabet &amp;deprels_alphabet, bool incremental=true)</div></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;cstdlib&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="common_8h.html">types/common.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>ZuoPar {</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>DependencyParser {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>NeuralNetwork {</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html">   12</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html">Sample</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a5a8cdab46ad26c3553a845d5e16bc8c7">   13</a></span>&#160;  std::vector&lt;int&gt; <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a5a8cdab46ad26c3553a845d5e16bc8c7">attributes</a>;      </div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a571ad9c911f9f6d9a520d0e64b2e87c1">   14</a></span>&#160;  std::vector&lt;floatval_t&gt; <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a571ad9c911f9f6d9a520d0e64b2e87c1">classes</a>;  </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a936becf80dc30311ee8e98bef7e867e6">Sample</a>();</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a936becf80dc30311ee8e98bef7e867e6">Sample</a>(<span class="keyword">const</span> std::vector&lt;int&gt;&amp; <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a5a8cdab46ad26c3553a845d5e16bc8c7">attributes</a>,</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;      <span class="keyword">const</span> std::vector&lt;floatval_t&gt;&amp; <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a571ad9c911f9f6d9a520d0e64b2e87c1">classes</a>);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;};</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html">   21</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html">Dataset</a> {</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#afa3f7361e0dabc50abdb73e8f947a259">   22</a></span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#afa3f7361e0dabc50abdb73e8f947a259">nr_attributes</a>; <span class="comment">//  nr_forms + nr_postags + nr_deprels</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a5f8c6beb759155a601e6fcdfda700982">   23</a></span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a5f8c6beb759155a601e6fcdfda700982">nr_classes</a>;    <span class="comment">//  nr_deprels * 2 - 1</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#ae93b2e2cf8faa2e40e899b66f50c2bb9">   24</a></span>&#160;  std::vector&lt;Sample&gt; <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#ae93b2e2cf8faa2e40e899b66f50c2bb9">samples</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a780a3dabce4fd0a9a6d234f145ede824">Dataset</a>();</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#aac4dfedf613c7f325d1c74d3143f5700">add</a>(<span class="keyword">const</span> std::vector&lt;int&gt;&amp; attributes, <span class="keyword">const</span> std::vector&lt;floatval_t&gt;&amp; classes);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#aa9ba1fce8dda6bf9edcb66baaed41ed9">shuffle</a>();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#aac522a9d5a751fad304ddc2551e86a8f">size</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a887de0fe5963a076bd33b6217efd3311">num_attributes</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a66e0690f1a94b0fd42e2832f3a69132f">num_classes</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;};</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;} <span class="comment">//  namespace neuralnetwork</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;} <span class="comment">//  namespace dependencyparser</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;} <span class="comment">//  namespace zuopar</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_APP_DEPPARSER_NN_DATASET_H__</span></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_aa9ba1fce8dda6bf9edcb66baaed41ed9"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#aa9ba1fce8dda6bf9edcb66baaed41ed9">ZuoPar::DependencyParser::NeuralNetwork::Dataset::shuffle</a></div><div class="ttdeci">void shuffle()</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_aac522a9d5a751fad304ddc2551e86a8f"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#aac522a9d5a751fad304ddc2551e86a8f">ZuoPar::DependencyParser::NeuralNetwork::Dataset::size</a></div><div class="ttdeci">size_t size() const </div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_ae93b2e2cf8faa2e40e899b66f50c2bb9"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#ae93b2e2cf8faa2e40e899b66f50c2bb9">ZuoPar::DependencyParser::NeuralNetwork::Dataset::samples</a></div><div class="ttdeci">std::vector&lt; Sample &gt; samples</div><div class="ttdef"><b>Definition:</b> dataset.h:24</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_a780a3dabce4fd0a9a6d234f145ede824"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a780a3dabce4fd0a9a6d234f145ede824">ZuoPar::DependencyParser::NeuralNetwork::Dataset::Dataset</a></div><div class="ttdeci">Dataset()</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample_html_a571ad9c911f9f6d9a520d0e64b2e87c1"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a571ad9c911f9f6d9a520d0e64b2e87c1">ZuoPar::DependencyParser::NeuralNetwork::Sample::classes</a></div><div class="ttdeci">std::vector&lt; floatval_t &gt; classes</div><div class="ttdoc">sparse vector of attributes </div><div class="ttdef"><b>Definition:</b> dataset.h:14</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_afa3f7361e0dabc50abdb73e8f947a259"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#afa3f7361e0dabc50abdb73e8f947a259">ZuoPar::DependencyParser::NeuralNetwork::Dataset::nr_attributes</a></div><div class="ttdeci">size_t nr_attributes</div><div class="ttdef"><b>Definition:</b> dataset.h:22</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_aac4dfedf613c7f325d1c74d3143f5700"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#aac4dfedf613c7f325d1c74d3143f5700">ZuoPar::DependencyParser::NeuralNetwork::Dataset::add</a></div><div class="ttdeci">void add(const std::vector&lt; int &gt; &amp;attributes, const std::vector&lt; floatval_t &gt; &amp;classes)</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample_html_a936becf80dc30311ee8e98bef7e867e6"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a936becf80dc30311ee8e98bef7e867e6">ZuoPar::DependencyParser::NeuralNetwork::Sample::Sample</a></div><div class="ttdeci">Sample()</div><div class="ttdoc">dense vector of classes </div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html">ZuoPar::DependencyParser::NeuralNetwork::Dataset</a></div><div class="ttdef"><b>Definition:</b> dataset.h:21</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample_html"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html">ZuoPar::DependencyParser::NeuralNetwork::Sample</a></div><div class="ttdef"><b>Definition:</b> dataset.h:12</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_a887de0fe5963a076bd33b6217efd3311"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a887de0fe5963a076bd33b6217efd3311">ZuoPar::DependencyParser::NeuralNetwork::Dataset::num_attributes</a></div><div class="ttdeci">size_t num_attributes() const </div></div>
+<div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample_html_a5a8cdab46ad26c3553a845d5e16bc8c7"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Sample.html#a5a8cdab46ad26c3553a845d5e16bc8c7">ZuoPar::DependencyParser::NeuralNetwork::Sample::attributes</a></div><div class="ttdeci">std::vector&lt; int &gt; attributes</div><div class="ttdef"><b>Definition:</b> dataset.h:13</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_a5f8c6beb759155a601e6fcdfda700982"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a5f8c6beb759155a601e6fcdfda700982">ZuoPar::DependencyParser::NeuralNetwork::Dataset::nr_classes</a></div><div class="ttdeci">size_t nr_classes</div><div class="ttdef"><b>Definition:</b> dataset.h:23</div></div>
+<div class="ttc" id="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset_html_a66e0690f1a94b0fd42e2832f3a69132f"><div class="ttname"><a href="structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html#a66e0690f1a94b0fd42e2832f3a69132f">ZuoPar::DependencyParser::NeuralNetwork::Dataset::num_classes</a></div><div class="ttdeci">size_t num_classes() const </div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

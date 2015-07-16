@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_313caf1132e152dd9b58bea13a4052ca.html">utils</a></li><li class="navelem"><a class="el" href="dir_197d292f418ff42d0b84c2a5f5223c60.html">io</a></li><li class="navelem"><a class="el" href="dir_cf8bb5566c83cce72c6d05ee7483a9ad.html">instance</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_ead6a79ec45eeb802fee29c0b27ced46.html">utils</a></li><li class="navelem"><a class="el" href="dir_3aa559f7e41dfa897250858c440cb2a9.html">io</a></li><li class="navelem"><a class="el" href="dir_968d98448460d8923045a767982b382c.html">instance</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -93,8 +93,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;iostream&gt;</code><br/>
-<code>#include &quot;<a class="el" href="types_2segmentation_8h_source.html">types/segmentation.h</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="types_2postag_8h_source.html">types/postag.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="types_2dependency_8h_source.html">types/dependency.h</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="token__alphabet_8h_source.html">engine/token_alphabet.h</a>&quot;</code><br/>
 </div>
@@ -109,10 +107,18 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad4c814b896890a5d80763ca550e6f24a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#ad4c814b896890a5d80763ca550e6f24a">ZuoPar::IO::read_dependency_instance</a> (std::istream &amp;is, Dependency &amp;output, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet, bool incremental=true)</td></tr>
-<tr class="separator:ad4c814b896890a5d80763ca550e6f24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f5b4d7aefa883e25278f48f2b1bfa0c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a0f5b4d7aefa883e25278f48f2b1bfa0c">ZuoPar::IO::read_dependency_instance</a> (std::istream &amp;is, Dependency &amp;output, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet, size_t flag=0xffff)</td></tr>
+<tr class="separator:a0f5b4d7aefa883e25278f48f2b1bfa0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a117846badbad1bd2a7750d50b256bddd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a117846badbad1bd2a7750d50b256bddd">ZuoPar::IO::read_raw_dependency_instance</a> (std::istream &amp;is, RawDependency &amp;output)</td></tr>
+<tr class="separator:a117846badbad1bd2a7750d50b256bddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe69892a055d39b8ed9459c0e3c8aefa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#abe69892a055d39b8ed9459c0e3c8aefa">ZuoPar::IO::write_dependency_instance</a> (std::ostream &amp;os, const Dependency &amp;output, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet)</td></tr>
 <tr class="separator:abe69892a055d39b8ed9459c0e3c8aefa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a261e6c3d06ca5652a430497a9f6a9ab8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a261e6c3d06ca5652a430497a9f6a9ab8">ZuoPar::IO::read_conllx_dependency_instance</a> (std::istream &amp;is, CoNLLXDependency &amp;output, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;lemmas_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;cpostag_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;feat_alphabet, <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet, size_t flag=0xffff)</td></tr>
+<tr class="separator:a261e6c3d06ca5652a430497a9f6a9ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad90a72d80b8df4cebd051a28b2331720"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#ad90a72d80b8df4cebd051a28b2331720">ZuoPar::IO::read_raw_conllx_dependency_instance</a> (std::istream &amp;is, RawCoNLLXDependency &amp;output)</td></tr>
+<tr class="separator:ad90a72d80b8df4cebd051a28b2331720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87d57603b8e18cfbad3e16cf165cd4f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1IO.html#a87d57603b8e18cfbad3e16cf165cd4f7">ZuoPar::IO::write_conllx_dependency_instance</a> (std::ostream &amp;os, const CoNLLXDependency &amp;output, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;forms_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;lemmas_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;cpostag_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;postags_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;feat_alphabet, const <a class="el" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a> &amp;deprels_alphabet)</td></tr>
+<tr class="separator:a87d57603b8e18cfbad3e16cf165cd4f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

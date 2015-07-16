@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pipemode',['PipeMode',['../classZuoPar_1_1FrontEnd_1_1CommonPipeConfigure.html#ad94a054965d2bd6432c1e8a12dbc1288',1,'ZuoPar::FrontEnd::CommonPipeConfigure']]]
+  ['negtivesamplestrategy',['NegtiveSampleStrategy',['../namespaceZuoPar_1_1Experimental_1_1HCSearchDependencyParser_1_1HStep.html#abf972aea44a981f767248c7306cca150',1,'ZuoPar::Experimental::HCSearchDependencyParser::HStep']]]
 ];

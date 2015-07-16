@@ -103,6 +103,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1MaxNunmberActions.html">MaxNunmberActions</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ScoreContext.html">ScoreContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a></td></tr>
@@ -112,68 +114,88 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a5a1255fe6a02f05d8920dde9f685d10c"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-<a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner</a><br class="typebreak"/>
-&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">Learner</a></td></tr>
-<tr class="separator:a5a1255fe6a02f05d8920dde9f685d10c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41a4cc3c519aa3e117eb0ca6a7c2d16c"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-<a class="el" href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html">TransitionStructureLearnerMiniBatch</a><br class="typebreak"/>
-&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a41a4cc3c519aa3e117eb0ca6a7c2d16c">MinibatchLearner</a></td></tr>
-<tr class="separator:a41a4cc3c519aa3e117eb0ca6a7c2d16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa10bc7545a55b95cddc286cdf031f558"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classZuoPar_1_1DependencyParser_1_1CommonDependencyPipe.html">CommonDependencyPipe</a><br class="typebreak"/>
+<tr class="memitem:a362bf5e51bb4896336bde2b0470b2cfa"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1TransitionStructureOnlineLearner.html">TransitionStructureOnlineLearner</a><br class="typebreak"/>
+&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="structZuoPar_1_1DependencyParser_1_1Loss.html">Loss</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a362bf5e51bb4896336bde2b0470b2cfa">Learner</a></td></tr>
+<tr class="separator:a362bf5e51bb4896336bde2b0470b2cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19747304800f5f56fef1de40558fe6ae"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1TransitionStructureOnlineLearnerMiniBatch.html">TransitionStructureOnlineLearnerMiniBatch</a><br class="typebreak"/>
+&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="structZuoPar_1_1DependencyParser_1_1Loss.html">Loss</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a19747304800f5f56fef1de40558fe6ae">MinibatchLearner</a></td></tr>
+<tr class="separator:a19747304800f5f56fef1de40558fe6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8ef084e56de9bb39e753b7c15601b25"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classZuoPar_1_1DependencyParser_1_1CoNLLXDependencyPipe.html">CoNLLXDependencyPipe</a><br class="typebreak"/>
 &lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <br class="typebreak"/>
-<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">Learner</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#aa10bc7545a55b95cddc286cdf031f558">Pipe</a></td></tr>
-<tr class="separator:aa10bc7545a55b95cddc286cdf031f558"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5bc00f67421791e3ab576fd060106d2"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
-<a class="el" href="classZuoPar_1_1DependencyParser_1_1CommonDependencyMultiPipe.html">CommonDependencyMultiPipe</a><br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a362bf5e51bb4896336bde2b0470b2cfa">Learner</a>, <br class="typebreak"/>
+<a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1MaxNunmberActions.html">MaxNunmberActions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#aa8ef084e56de9bb39e753b7c15601b25">Pipe</a></td></tr>
+<tr class="separator:aa8ef084e56de9bb39e753b7c15601b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad45a89fca4e782d3e0337fb08496b4b9"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1DependencyParser_1_1CoNLLXDependencyMultiPipe.html">CoNLLXDependencyMultiPipe</a><br class="typebreak"/>
 &lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <br class="typebreak"/>
-<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">Learner</a>, <br class="typebreak"/>
-<a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a41a4cc3c519aa3e117eb0ca6a7c2d16c">MinibatchLearner</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#af5bc00f67421791e3ab576fd060106d2">MultiPipe</a></td></tr>
-<tr class="separator:af5bc00f67421791e3ab576fd060106d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a362bf5e51bb4896336bde2b0470b2cfa">Learner</a>, <br class="typebreak"/>
+<a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a19747304800f5f56fef1de40558fe6ae">MinibatchLearner</a>, <br class="typebreak"/>
+<a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1MaxNunmberActions.html">MaxNunmberActions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#ad45a89fca4e782d3e0337fb08496b4b9">MultiPipe</a></td></tr>
+<tr class="separator:ad45a89fca4e782d3e0337fb08496b4b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab85b878dfb75e814d60b4807945d7d72"><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1DependencyParser_1_1GreedySearchCoNLLXDependenyPipe.html">GreedySearchCoNLLXDependenyPipe</a><br class="typebreak"/>
+&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <br class="typebreak"/>
+<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a362bf5e51bb4896336bde2b0470b2cfa">Learner</a>, <br class="typebreak"/>
+<a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1MaxNunmberActions.html">MaxNunmberActions</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#ab85b878dfb75e814d60b4807945d7d72">GreedyPipe</a></td></tr>
+<tr class="separator:ab85b878dfb75e814d60b4807945d7d72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="a5a1255fe6a02f05d8920dde9f685d10c"></a>
+<a class="anchor" id="ab85b878dfb75e814d60b4807945d7d72"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureLearner.html">TransitionStructureLearner</a>&lt;<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">ZuoPar::DependencyParser::ArcStandard::Learner</a></td>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1DependencyParser_1_1GreedySearchCoNLLXDependenyPipe.html">GreedySearchCoNLLXDependenyPipe</a>&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a362bf5e51bb4896336bde2b0470b2cfa">Learner</a>, <a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1MaxNunmberActions.html">MaxNunmberActions</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#ab85b878dfb75e814d60b4807945d7d72">ZuoPar::DependencyParser::ArcStandard::GreedyPipe</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a41a4cc3c519aa3e117eb0ca6a7c2d16c"></a>
+<a class="anchor" id="a362bf5e51bb4896336bde2b0470b2cfa"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureLearnerMiniBatch.html">TransitionStructureLearnerMiniBatch</a>&lt;<a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a41a4cc3c519aa3e117eb0ca6a7c2d16c">ZuoPar::DependencyParser::ArcStandard::MinibatchLearner</a></td>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureOnlineLearner.html">TransitionStructureOnlineLearner</a>&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="structZuoPar_1_1DependencyParser_1_1Loss.html">Loss</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a362bf5e51bb4896336bde2b0470b2cfa">ZuoPar::DependencyParser::ArcStandard::Learner</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="af5bc00f67421791e3ab576fd060106d2"></a>
+<a class="anchor" id="a19747304800f5f56fef1de40558fe6ae"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classZuoPar_1_1DependencyParser_1_1CommonDependencyMultiPipe.html">CommonDependencyMultiPipe</a>&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">Learner</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a41a4cc3c519aa3e117eb0ca6a7c2d16c">MinibatchLearner</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#af5bc00f67421791e3ab576fd060106d2">ZuoPar::DependencyParser::ArcStandard::MultiPipe</a></td>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1TransitionStructureOnlineLearnerMiniBatch.html">TransitionStructureOnlineLearnerMiniBatch</a>&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="structZuoPar_1_1DependencyParser_1_1Loss.html">Loss</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a19747304800f5f56fef1de40558fe6ae">ZuoPar::DependencyParser::ArcStandard::MinibatchLearner</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="aa10bc7545a55b95cddc286cdf031f558"></a>
+<a class="anchor" id="ad45a89fca4e782d3e0337fb08496b4b9"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="classZuoPar_1_1DependencyParser_1_1CommonDependencyPipe.html">CommonDependencyPipe</a>&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a5a1255fe6a02f05d8920dde9f685d10c">Learner</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#aa10bc7545a55b95cddc286cdf031f558">ZuoPar::DependencyParser::ArcStandard::Pipe</a></td>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1DependencyParser_1_1CoNLLXDependencyMultiPipe.html">CoNLLXDependencyMultiPipe</a>&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a362bf5e51bb4896336bde2b0470b2cfa">Learner</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a19747304800f5f56fef1de40558fe6ae">MinibatchLearner</a>, <a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1MaxNunmberActions.html">MaxNunmberActions</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#ad45a89fca4e782d3e0337fb08496b4b9">ZuoPar::DependencyParser::ArcStandard::MultiPipe</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa8ef084e56de9bb39e753b7c15601b25"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classZuoPar_1_1DependencyParser_1_1CoNLLXDependencyPipe.html">CoNLLXDependencyPipe</a>&lt; <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Action.html">Action</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1ActionUtils.html">ActionUtils</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1State.html">State</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Weight.html">Weight</a>, <a class="el" href="classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html">Decoder</a>, <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#a362bf5e51bb4896336bde2b0470b2cfa">Learner</a>, <a class="el" href="structZuoPar_1_1DependencyParser_1_1ArcStandard_1_1MaxNunmberActions.html">MaxNunmberActions</a>&gt; <a class="el" href="namespaceZuoPar_1_1DependencyParser_1_1ArcStandard.html#aa8ef084e56de9bb39e753b7c15601b25">ZuoPar::DependencyParser::ArcStandard::Pipe</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

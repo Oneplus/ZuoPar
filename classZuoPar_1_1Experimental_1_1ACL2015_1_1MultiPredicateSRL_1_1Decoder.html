@@ -96,7 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="experimental_2acl2015_2multi__predicate__srl_2decoder_8h_source.html">decoder.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="experimental_2acl2015_2multi__predicate__srl1_2decoder_8h_source.html">decoder.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for ZuoPar::Experimental::ACL2015::MultiPredicateSRL::Decoder:</div>
 <div class="dyncontent">
@@ -117,6 +117,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aade92e580d49d8cf5b630df44e360b36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Decoder.html#aade92e580d49d8cf5b630df44e360b36">score_possible_actions</a> (const <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1State.html">State</a> &amp;source, const std::vector&lt; <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1ActionCollection.html">ActionCollection</a> &gt; &amp;actions, <a class="el" href="structZuoPar_1_1PackedScores.html">PackedScores</a>&lt; <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1ActionCollection.html">ActionCollection</a> &gt; &amp;scores)</td></tr>
 <tr class="memdesc:aade92e580d49d8cf5b630df44e360b36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement the possible actions scoring functions.functions.  <a href="#aade92e580d49d8cf5b630df44e360b36">More...</a><br/></td></tr>
 <tr class="separator:aade92e580d49d8cf5b630df44e360b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2e6ae2fc4a3d43babf0854232264493"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Decoder.html#ad2e6ae2fc4a3d43babf0854232264493">make_meta_packed_scores</a> (<a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1ScoreContext.html">ScoreContext</a> &amp;ctx, int nr_predicates)</td></tr>
+<tr class="memdesc:ad2e6ae2fc4a3d43babf0854232264493"><td class="mdescLeft">&#160;</td><td class="mdescRight">make the meta packed score cache.  <a href="#ad2e6ae2fc4a3d43babf0854232264493">More...</a><br/></td></tr>
+<tr class="separator:ad2e6ae2fc4a3d43babf0854232264493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a446e3cb5abd37877c8036b504e11dcbe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Decoder.html#a446e3cb5abd37877c8036b504e11dcbe">transit</a> (const <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1State.html">State</a> &amp;source, const <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1ActionCollection.html">ActionCollection</a> &amp;act, const <a class="el" href="namespaceZuoPar.html#aa71e104c29f1d6a71b1623d4abe52e6a">floatval_t</a> &amp;score, <a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1State.html">State</a> *target)</td></tr>
 <tr class="memdesc:a446e3cb5abd37877c8036b504e11dcbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implement arc standard transition.  <a href="#a446e3cb5abd37877c8036b504e11dcbe">More...</a><br/></td></tr>
 <tr class="separator:a446e3cb5abd37877c8036b504e11dcbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -290,6 +293,34 @@ _StateType *, const _StateType * &gt;&#160;</td><td class="memItemRight" valign=
 
 </div>
 </div>
+<a class="anchor" id="ad2e6ae2fc4a3d43babf0854232264493"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ZuoPar::Experimental::ACL2015::MultiPredicateSRL::Decoder::make_meta_packed_scores </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1ScoreContext.html">ScoreContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nr_predicates</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>make the meta packed score cache. </p>
+
+</div>
+</div>
 <a class="anchor" id="aade92e580d49d8cf5b630df44e360b36"></a>
 <div class="memitem">
 <div class="memproto">
@@ -365,7 +396,7 @@ _StateType *, const _StateType * &gt;&#160;</td><td class="memItemRight" valign=
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/experimental/acl2015/multi_predicate_srl/<a class="el" href="experimental_2acl2015_2multi__predicate__srl_2decoder_8h_source.html">decoder.h</a></li>
+<li>src/experimental/acl2015/multi_predicate_srl1/<a class="el" href="experimental_2acl2015_2multi__predicate__srl1_2decoder_8h_source.html">decoder.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

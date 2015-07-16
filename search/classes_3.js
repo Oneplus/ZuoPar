@@ -1,11 +1,19 @@
 var searchData=
 [
-  ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1ArcEager_1_1Decoder.html',1,'ZuoPar::DependencyParser::ArcEager']]],
-  ['decoder',['Decoder',['../classZuoPar_1_1Experimental_1_1ACL2015_1_1MultiPredicateSRL_1_1Decoder.html',1,'ZuoPar::Experimental::ACL2015::MultiPredicateSRL']]],
+  ['dataset',['Dataset',['../structZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Dataset.html',1,'ZuoPar::DependencyParser::NeuralNetwork']]],
+  ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1NeuralNetwork_1_1Decoder.html',1,'ZuoPar::DependencyParser::NeuralNetwork']]],
+  ['decoder',['Decoder',['../classZuoPar_1_1Experimental_1_1MultiPredicateSRL_1_1Decoder.html',1,'ZuoPar::Experimental::MultiPredicateSRL']]],
+  ['decoder',['Decoder',['../classZuoPar_1_1LexicalAnalyzer_1_1ChineseWordSegmentor_1_1Decoder.html',1,'ZuoPar::LexicalAnalyzer::ChineseWordSegmentor']]],
+  ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1Choi2013_1_1Decoder.html',1,'ZuoPar::DependencyParser::Choi2013']]],
+  ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1Swap_1_1Decoder.html',1,'ZuoPar::DependencyParser::Swap']]],
+  ['decoder',['Decoder',['../classZuoPar_1_1SemanticChunker_1_1MonoPredicate_1_1Decoder.html',1,'ZuoPar::SemanticChunker::MonoPredicate']]],
   ['decoder',['Decoder',['../classZuoPar_1_1SequenceLabeler_1_1Decoder.html',1,'ZuoPar::SequenceLabeler']]],
-  ['decoder',['Decoder',['../classZuoPar_1_1Experimental_1_1ACL2015_1_1MonoPredicateSRL_1_1Decoder.html',1,'ZuoPar::Experimental::ACL2015::MonoPredicateSRL']]],
   ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1ArcStandard_1_1Decoder.html',1,'ZuoPar::DependencyParser::ArcStandard']]],
-  ['decoder',['Decoder',['../classZuoPar_1_1Experimental_1_1ACL2015_1_1JointChunkingMonoPredicateSRL_1_1Decoder.html',1,'ZuoPar::Experimental::ACL2015::JointChunkingMonoPredicateSRL']]],
+  ['decoder',['Decoder',['../classZuoPar_1_1DependencyParser_1_1ArcEager_1_1Decoder.html',1,'ZuoPar::DependencyParser::ArcEager']]],
   ['decoder',['Decoder',['../classZuoPar_1_1LexicalAnalyzer_1_1Postagger_1_1Decoder.html',1,'ZuoPar::LexicalAnalyzer::Postagger']]],
-  ['dependency',['Dependency',['../classZuoPar_1_1Dependency.html',1,'ZuoPar']]]
+  ['dependency',['Dependency',['../structZuoPar_1_1Dependency.html',1,'ZuoPar']]],
+  ['dependencymultipipe',['DependencyMultiPipe',['../classZuoPar_1_1DependencyParser_1_1DependencyMultiPipe.html',1,'ZuoPar::DependencyParser']]],
+  ['dependencyparserutils',['DependencyParserUtils',['../classZuoPar_1_1DependencyParser_1_1DependencyParserUtils.html',1,'ZuoPar::DependencyParser']]],
+  ['dependencypipe',['DependencyPipe',['../classZuoPar_1_1DependencyParser_1_1DependencyPipe.html',1,'ZuoPar::DependencyParser']]],
+  ['dependencyutils',['DependencyUtils',['../classZuoPar_1_1DependencyUtils.html',1,'ZuoPar']]]
 ];

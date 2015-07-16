@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_313caf1132e152dd9b58bea13a4052ca.html">utils</a></li><li class="navelem"><a class="el" href="dir_197d292f418ff42d0b84c2a5f5223c60.html">io</a></li><li class="navelem"><a class="el" href="dir_22f8e59488b265923208f4b573cd73d6.html">dataset</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_de81af260583bfa1475435761ccbba9f.html">src</a></li><li class="navelem"><a class="el" href="dir_ead6a79ec45eeb802fee29c0b27ced46.html">utils</a></li><li class="navelem"><a class="el" href="dir_3aa559f7e41dfa897250858c440cb2a9.html">io</a></li><li class="navelem"><a class="el" href="dir_5c17ca73bb5d96003d4ec7da67cec33f.html">dataset</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -103,23 +103,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>eg = ZuoPar::Engine;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#ac6bc3ea5a39c092a023c9e2afe0cbff5">read_dependency_dataset</a>(</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    std::istream&amp; is,</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    std::vector&lt;Dependency&gt;&amp; dataset,</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; deprels_alphabet,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">bool</span> incremental = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_DATASET_H__</span></div>
-<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:15</div></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#ad60bb8b8e37c60221c9c3a8975e5f7b9">read_dependency_dataset</a>(std::istream&amp; is,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    std::vector&lt;Dependency&gt;&amp; dataset,</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; deprels_alphabet,</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">size_t</span> flag = 0xffff);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#a2aa4f3b219d53b817f16597e42289db7">read_conllx_dependency_dataset</a>(std::istream&amp; is,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::vector&lt;CoNLLXDependency&gt;&amp; dataset,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; forms_alphabet,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; lemmas_alphabet,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; cpostags_alphabet,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; postags_alphabet,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; feat_alphabet,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">eg::TokenAlphabet</a>&amp; deprels_alphabet,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordtype">size_t</span> flag = 0xffff);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#afbb85c9f95333f240f691f932f8ad7e1">read_raw_dependency_dataset</a>(std::istream&amp; is,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    std::vector&lt;RawDependency&gt;&amp; dataset);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespaceZuoPar_1_1IO.html#afe60dbad52017d97527e6fb6ef2e048f">read_raw_conllx_dependency_dataset</a>(std::istream&amp; is,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;RawCoNLLXDependency&gt;&amp; dataset,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordtype">bool</span> dummy_root=<span class="keyword">true</span>,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">const</span> std::string&amp; root=<span class="stringliteral">&quot;-ROOT-&quot;</span>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif  //  end for __ZUOPAR_UTILS_IO_DATASET_H__</span></div>
+<div class="ttc" id="classZuoPar_1_1Engine_1_1TokenAlphabet_html"><div class="ttname"><a href="classZuoPar_1_1Engine_1_1TokenAlphabet.html">ZuoPar::Engine::TokenAlphabet</a></div><div class="ttdef"><b>Definition:</b> token_alphabet.h:14</div></div>
 <div class="ttc" id="token__alphabet_8h_html"><div class="ttname"><a href="token__alphabet_8h.html">token_alphabet.h</a></div></div>
+<div class="ttc" id="namespaceZuoPar_1_1IO_html_a2aa4f3b219d53b817f16597e42289db7"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#a2aa4f3b219d53b817f16597e42289db7">ZuoPar::IO::read_conllx_dependency_dataset</a></div><div class="ttdeci">void read_conllx_dependency_dataset(std::istream &amp;is, std::vector&lt; CoNLLXDependency &gt; &amp;dataset, eg::TokenAlphabet &amp;forms_alphabet, eg::TokenAlphabet &amp;lemmas_alphabet, eg::TokenAlphabet &amp;cpostags_alphabet, eg::TokenAlphabet &amp;postags_alphabet, eg::TokenAlphabet &amp;feat_alphabet, eg::TokenAlphabet &amp;deprels_alphabet, size_t flag=0xffff)</div></div>
 <div class="ttc" id="utils_2io_2instance_2dependency_8h_html"><div class="ttname"><a href="utils_2io_2instance_2dependency_8h.html">dependency.h</a></div></div>
+<div class="ttc" id="namespaceZuoPar_1_1IO_html_afe60dbad52017d97527e6fb6ef2e048f"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#afe60dbad52017d97527e6fb6ef2e048f">ZuoPar::IO::read_raw_conllx_dependency_dataset</a></div><div class="ttdeci">void read_raw_conllx_dependency_dataset(std::istream &amp;is, std::vector&lt; RawCoNLLXDependency &gt; &amp;dataset, bool dummy_root=true, const std::string &amp;root=&quot;-ROOT-&quot;)</div></div>
+<div class="ttc" id="namespaceZuoPar_1_1IO_html_ad60bb8b8e37c60221c9c3a8975e5f7b9"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#ad60bb8b8e37c60221c9c3a8975e5f7b9">ZuoPar::IO::read_dependency_dataset</a></div><div class="ttdeci">void read_dependency_dataset(std::istream &amp;is, std::vector&lt; Dependency &gt; &amp;dataset, eg::TokenAlphabet &amp;forms_alphabet, eg::TokenAlphabet &amp;postags_alphabet, eg::TokenAlphabet &amp;deprels_alphabet, size_t flag=0xffff)</div></div>
+<div class="ttc" id="namespaceZuoPar_1_1IO_html_afbb85c9f95333f240f691f932f8ad7e1"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#afbb85c9f95333f240f691f932f8ad7e1">ZuoPar::IO::read_raw_dependency_dataset</a></div><div class="ttdeci">void read_raw_dependency_dataset(std::istream &amp;is, std::vector&lt; RawDependency &gt; &amp;dataset)</div></div>
 <div class="ttc" id="types_2dependency_8h_html"><div class="ttname"><a href="types_2dependency_8h.html">dependency.h</a></div></div>
-<div class="ttc" id="namespaceZuoPar_1_1IO_html_ac6bc3ea5a39c092a023c9e2afe0cbff5"><div class="ttname"><a href="namespaceZuoPar_1_1IO.html#ac6bc3ea5a39c092a023c9e2afe0cbff5">ZuoPar::IO::read_dependency_dataset</a></div><div class="ttdeci">void read_dependency_dataset(std::istream &amp;is, std::vector&lt; Dependency &gt; &amp;dataset, eg::TokenAlphabet &amp;forms_alphabet, eg::TokenAlphabet &amp;postags_alphabet, eg::TokenAlphabet &amp;deprels_alphabet, bool incremental=true)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

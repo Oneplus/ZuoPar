@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['option',['Option',['../structZuoPar_1_1FrontEnd_1_1Option.html',1,'ZuoPar::FrontEnd']]]
+  ['information',['Information',['../structZuoPar_1_1Experimental_1_1MultiPredicateSRL_1_1Information.html',1,'ZuoPar::Experimental::MultiPredicateSRL']]],
+  ['information',['Information',['../structZuoPar_1_1SemanticChunker_1_1MonoPredicate_1_1Information.html',1,'ZuoPar::SemanticChunker::MonoPredicate']]]
 ];
