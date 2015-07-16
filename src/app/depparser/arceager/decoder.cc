@@ -19,10 +19,8 @@ void Decoder::get_possible_actions(const State& source,
   if (source.buffer_empty()) {
     actions.push_back(ActionFactory::make_reduce());
   } else {
-    if (!ActionUtils::is_reduce(source.last_action)) {
-      if (source.stack.empty() || source.buffer < len) {
-        actions.push_back(ActionFactory::make_shift());
-      }
+    if (!ActionUtils::is_reduce(source.last_action) && source.buffer < len) {
+      actions.push_back(ActionFactory::make_shift());
     }
 
     if (!source.stack.empty()) {

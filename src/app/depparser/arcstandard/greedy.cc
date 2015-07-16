@@ -2,13 +2,13 @@
 #include <cstring>
 #include <boost/program_options.hpp>
 #include "app/depparser/greedy_opt_utils.h"
-#include "app/depparser/arceager/pipe.h"
+#include "app/depparser/arcstandard/pipe.h"
 
-#define APP "arceager greedy dependency parser"
-#define EXE "arceager_depparser_greedy"
+#define APP "arcstandard greedy dependency parser"
+#define EXE "arcstandard_depparser_greedy"
 
 namespace po = boost::program_options;
-namespace ae = ZuoPar::DependencyParser::ArcEager;
+namespace as = ZuoPar::DependencyParser::ArcStandard;
 namespace dp = ZuoPar::DependencyParser;
 
 int learn(int argc, char** argv) {
@@ -28,7 +28,7 @@ int learn(int argc, char** argv) {
     return 1;
   }
 
-  ae::GreedyPipe p(rep);
+  as::GreedyPipe p(rep);
   p.learn();
   return 0;
 }
@@ -50,7 +50,7 @@ int test(int argc, char** argv) {
     return 1;
   }
 
-  ae::GreedyPipe p(rep);
+  as::GreedyPipe p(rep);
   p.test();
   return 0;
 }

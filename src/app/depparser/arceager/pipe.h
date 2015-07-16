@@ -28,6 +28,10 @@ typedef CoNLLXDependencyMultiPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
 > MultiPipe;
 
+typedef GreedySearchCoNLLXDependenyPipe<
+  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
+> GreedyPipe;
+
 } //  end for namespace arceager
 } //  end for namespace dependencyparser
 } //  end for namespace zuopar

@@ -178,7 +178,7 @@ public:
 
   //!
   void run() {
-    if (!this->setup()) { return;  }
+    if (!this->setup(this->reference_path, true)) { return; }
     decoder_pool.resize(num_threads);
     deprel_t root_tag = this->deprels_alphabet.encode(this->root.c_str());
     for (int i = 0; i < num_threads; ++ i) {

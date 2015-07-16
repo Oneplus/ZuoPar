@@ -27,7 +27,6 @@ target_link_libraries (depparser_arceager
 
 add_executable (depparser_arceager_greedy
     greedy.cc
-    greedy_pipe.cc
     action.cc
     action_utils.cc
     state.cc
@@ -51,5 +50,4 @@ target_link_libraries (depparser_arceager_greedy
     boost_thread
     boost_system
     pthread)
-
 

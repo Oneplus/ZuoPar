@@ -90,8 +90,11 @@ int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
 }
 
 void Pipe::run2() {
-  namespace ioutils = ZuoPar::IO;
-  if (!setup()) { return; }
+  if (mode == kPipeLearn || mode == kPipePrepare) {
+    if (!setup(reference_path, true)) { return; }
+  } else if (mode == kPipeEvaluate) {
+    if (!setup(input_path, false)) { return; }
+  }
 
   deprel_t root_tag = deprels_alphabet.encode(root);
   if (mode == kPipeLearn) {
@@ -104,7 +107,7 @@ void Pipe::run2() {
   }
 
   size_t N = dataset.size();
-  std::ostream* os = (mode != kPipeLearn? ioutils::get_ostream(output_path.c_str()): NULL);
+  std::ostream* os = (mode != kPipeLearn? IO::get_ostream(output_path.c_str()): NULL);
 
   std::vector<std::size_t> ranks;
   Utility::shuffle(N, shuffle_times, ranks);
@@ -205,7 +208,8 @@ void Pipe::run2() {
       int loss1, loss2;
       floatval_t one_avg_uas = 0, one_avg_las = 0;
       for (const ae::State* candidate_result: final_results) {
-        CoNLLXDependency output; build_output((*candidate_result), output);
+        CoNLLXDependency output;
+        build_output((*candidate_result), output, deprels_alphabet.encode(root));
         loss1 = wrong(output, true, instance.heads, instance.deprels);
         loss2 = wrong(output, false, instance.heads, instance.deprels);
 
