@@ -15,16 +15,16 @@ namespace DependencyParser {
 namespace ArcStandard {
 
 struct MaxNunmberActions {
-  int operator ()(const Dependency& instance) {
+  int operator ()(const CoNLLXDependency& instance) {
     return instance.size()* 2- 1;
   }
 };
 
-typedef DependencyPipe<
+typedef CoNLLXDependencyPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
 > Pipe;
 
-typedef DependencyMultiPipe<
+typedef CoNLLXDependencyMultiPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
 > MultiPipe;
 

@@ -36,6 +36,7 @@ add_executable (depparser_arceager_greedy
     ${SOURCE_DIR}/app/depparser/greedy_opt_utils.cc
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
+    ${SOURCE_DIR}/utils/io/stream.cc
     ${SOURCE_DIR}/utils/io/dataset/dependency.cc
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
     ${SOURCE_DIR}/utils/io/instance/csv.cc

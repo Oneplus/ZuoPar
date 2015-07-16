@@ -6,10 +6,9 @@ namespace DependencyParser {
 namespace ArcEager {
 
 State::State(): ref(0) { clear(); }
-State::State(const Dependency* r): ref(r) { clear(); }
+State::State(const CoNLLXDependency* r): ref(r) { clear(); }
 
-void
-State::copy(const State& source) {
+void State::copy(const State& source) {
   this->ref = source.ref;
   this->score = source.score;
   this->previous = source.previous;
@@ -32,8 +31,7 @@ State::copy(const State& source) {
   #undef _COPY
 }
 
-void
-State::clear() {
+void State::clear() {
   this->score = 0;
   this->previous = 0;
   this->buffer = 0;
@@ -52,8 +50,7 @@ State::clear() {
   memset(right_2nd_most_child, -1, sizeof(right_2nd_most_child));
 }
 
-void
-State::refresh_stack_information() {
+void State::refresh_stack_information() {
   size_t sz = stack.size();
   if (0 == sz) {
     top0 = -1;
@@ -62,8 +59,7 @@ State::refresh_stack_information() {
   }
 }
 
-bool
-State::shift(const State& source) {
+bool State::shift(const State& source) {
   if (source.buffer_empty()) {
     return false;
   }
@@ -79,8 +75,7 @@ State::shift(const State& source) {
   return true;
 }
 
-bool
-State::reduce(const State& source) {
+bool State::reduce(const State& source) {
   if (source.stack.size() <= 0) {
     return false;
   }
@@ -92,8 +87,7 @@ State::reduce(const State& source) {
   return true;
 }
 
-bool
-State::left_arc(const State& source, deprel_t deprel) {
+bool State::left_arc(const State& source, deprel_t deprel) {
   if (source.stack.empty() || source.heads[source.top0] != -1) {
     return false;
   }
@@ -126,8 +120,7 @@ State::left_arc(const State& source, deprel_t deprel) {
   return true;
 }
 
-bool
-State::right_arc(const State& source, deprel_t deprel) {
+bool State::right_arc(const State& source, deprel_t deprel) {
   if (source.stack.empty()) {
     return false;
   }
@@ -158,15 +151,8 @@ State::right_arc(const State& source, deprel_t deprel) {
   return true;
 }
 
-bool
-State::buffer_empty() const {
-  return (this->buffer == this->ref->size());
-}
-
-size_t
-State::stack_size() const {
-  return (this->stack.size());
-}
+bool State::buffer_empty() const { return (this->buffer == this->ref->size()); }
+size_t State::stack_size() const { return (this->stack.size()); }
 
 } //  end for namespace arceager
 } //  end for namespace dependencyparser

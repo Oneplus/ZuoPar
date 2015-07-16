@@ -101,7 +101,7 @@ private:
   > generate_training_samples_one_batch();
 
   void transduce_instance_to_dependency(const RawCoNLLXDependency& data,
-      Dependency& output, bool with_reference);
+      CoNLLXDependency& output, bool with_reference);
 };
 
 } //  namespace weiss2015

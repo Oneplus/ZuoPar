@@ -20,14 +20,18 @@ private:
 private:
   std::string reference_path;
   std::string input_path;
+  std::string output_path;
   std::string model_path;
   std::string root;
   int shuffle_times;
 
   Engine::TokenAlphabet forms_alphabet;
+  Engine::TokenAlphabet lemmas_alphabet;
+  Engine::TokenAlphabet cpostags_alphabet;
   Engine::TokenAlphabet postags_alphabet;
   Engine::TokenAlphabet deprels_alphabet;
-  std::vector<Dependency> dataset;
+  Engine::TokenAlphabet feat_alphabet;
+  std::vector<CoNLLXDependency> dataset;
 
   PipeMode mode;
 
@@ -45,7 +49,7 @@ private:
   bool setup();
   void save_model(const std::string& model_path);
   bool load_model(const std::string& model_path);
-  void build_output(const State& state, Dependency& output);
+  void build_output(const State& state, CoNLLXDependency& output);
 };
 
 } //  namespace arceager

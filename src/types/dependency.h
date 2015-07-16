@@ -76,6 +76,13 @@ struct CoNLLXDependency: public Dependency {
     cpostags.push_back(cpostag);
     feats.push_back(feat_list);
   }
+
+  void push_back(const form_t& form,
+      const postag_t& postag,
+      const int& head,
+      const deprel_t& deprel) {
+    Dependency::push_back(form, postag, head, deprel);
+  }
 };
 
 struct RawDependency {

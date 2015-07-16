@@ -403,7 +403,7 @@ void Pipe::generate_training_samples() {
         !DependencyUtils::is_projective(data.heads)) {
       continue;
     }
-    Dependency dependency;
+    CoNLLXDependency dependency;
     std::vector<int> cluster4, cluster6, cluster;
     size_t L = data.forms.size();
     transduce_instance_to_dependency(data, dependency, true);
@@ -626,7 +626,7 @@ void Pipe::get_features(const State& s,
 }
 
 void Pipe::transduce_instance_to_dependency(const RawCoNLLXDependency& data,
-    Dependency& dependency, bool with_reference) {
+    CoNLLXDependency& dependency, bool with_reference) {
   auto L = data.size();
   for (size_t i = 0; i < L; ++ i) {
     auto form = (i == 0? 
@@ -645,7 +645,7 @@ void Pipe::transduce_instance_to_dependency(const RawCoNLLXDependency& data,
   }
 }
 
-void Pipe::get_cluster_from_dependency(const Dependency& data,
+void Pipe::get_cluster_from_dependency(const CoNLLXDependency& data,
     std::vector<int>& cluster4, std::vector<int>& cluster6, std::vector<int>& cluster) {
   auto L = data.size();
   for (size_t i = 0; i < L; ++ i) {
@@ -665,7 +665,7 @@ void Pipe::predict(const RawCoNLLXDependency& data,
     std::vector<int>& heads,
     std::vector<std::string>& deprels) {
   size_t L = data.forms.size();
-  Dependency dependency;
+  CoNLLXDependency dependency;
   std::vector<int> cluster, cluster4, cluster6;
   transduce_instance_to_dependency(data, dependency, false);
   get_cluster_from_dependency(dependency, cluster4, cluster6, cluster);
@@ -731,7 +731,7 @@ std::pair<
           !DependencyUtils::is_projective(data.heads)) {
         continue;
       }
-      Dependency dependency;
+      CoNLLXDependency dependency;
       std::vector<int> cluster, cluster4, cluster6;
       size_t L = data.forms.size();
       transduce_instance_to_dependency(data, dependency, true);

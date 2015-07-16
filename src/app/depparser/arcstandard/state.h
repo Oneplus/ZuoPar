@@ -20,7 +20,7 @@ public:
    *
    *  @param[in]  r   The pointer to the dependency state.
    */
-  State(const Dependency* r);
+  State(const CoNLLXDependency* r);
 
   /**
    * This method is needed by @class TransitionSystem.
@@ -74,7 +74,7 @@ public:
   const State* previous;
 
   //! The pointer to the dependency tree.
-  const Dependency* ref;
+  const CoNLLXDependency* ref;
 
   //! The score.
   floatval_t score;

@@ -20,11 +20,11 @@ struct MaxNunmberActions {
   }
 };
 
-typedef DependencyPipe<
+typedef CoNLLXDependencyPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
 > Pipe;
 
-typedef DependencyMultiPipe<
+typedef CoNLLXDependencyMultiPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
 > MultiPipe;
 

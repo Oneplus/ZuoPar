@@ -15,6 +15,7 @@ struct GreedyLearnOption {
 
 struct GreedyTestOption {
   std::string input_path;
+  std::string output_path;
   std::string model_path;
 };
 

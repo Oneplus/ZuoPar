@@ -4,6 +4,7 @@
 #include "engine/token_alphabet.h"
 #include "system/options.h"
 #include "system/system.h"
+#include "app/depparser/decoder.h"
 #include "app/depparser/choi2013/state.h"
 #include "app/depparser/choi2013/action.h"
 #include "app/depparser/choi2013/score_context.h"
@@ -16,14 +17,8 @@ namespace Choi2013 {
 
 namespace eg = ZuoPar::Engine;
 
-class Decoder: public TransitionSystem<Action, State, Weight> {
+class Decoder: public TransitionSystem<Action, State, Weight>, public BasicDecoder {
 public:
-  enum RootPosition {
-    kNone,
-    kLeft,
-    kRight
-  };
-
   /**
    * The decoder constructor.
    *
@@ -33,7 +28,7 @@ public:
    *  @param[in]  update_strategy The update strategy.
    *  @param[in]  weight          The pointer to the weight.
    */
-  Decoder(int nr, int root, int position,
+  Decoder(int n, int root, int position,
       int beam_size, bool avg, UpdateStrategy update_strategy, Weight* weight);
 
   //! Implement arc standard get possible actions.
@@ -45,10 +40,6 @@ public:
       State* target);
 
   bool terminated();
-private:
-  int nr_deprels;     //! The number of dependency relations, NONE, BEGIN, END included.
-  int root_tag;       //! The tag of root.
-  int root_position;  //!
 };
 
 } //  end for namespace choi2013

@@ -4,6 +4,7 @@
 #include "engine/token_alphabet.h"
 #include "system/options.h"
 #include "system/system.h"
+#include "app/depparser/decoder.h"
 #include "app/depparser/swap/state.h"
 #include "app/depparser/swap/action.h"
 #include "app/depparser/swap/score_context.h"
@@ -16,14 +17,8 @@ namespace Swap {
 
 namespace eg = ZuoPar::Engine;
 
-class Decoder: public TransitionSystem<Action, State, Weight> {
+class Decoder: public TransitionSystem<Action, State, Weight>, public BasicDecoder {
 public:
-  enum RootPosition {
-    kNone,
-    kLeft,
-    kRight
-  };
-
   /**
    * The decoder constructor.
    *
@@ -47,10 +42,6 @@ public:
   bool terminated();
 
   void report();
-private:
-  int nr_deprels;
-  int root_tag;
-  int root_position;
 };
 
 } //  end for namespace swap

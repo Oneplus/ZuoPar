@@ -285,7 +285,7 @@ void Pipe::generate_training_samples() {
         !DependencyUtils::is_projective(data.heads)) {
       continue;
     }
-    Dependency dependency;
+    CoNLLXDependency dependency;
     size_t L = data.forms.size();
     transduce_instance_to_dependency(data, dependency, true);
 
@@ -349,7 +349,7 @@ void Pipe::generate_training_samples() {
 }
 
 void Pipe::transduce_instance_to_dependency(const RawCoNLLXDependency& data,
-    Dependency& dependency, bool with_reference) {
+    CoNLLXDependency& dependency, bool with_reference) {
   auto L = data.size();
   for (size_t i = 0; i < L; ++ i) {
     auto form = (i == 0? 
@@ -372,7 +372,7 @@ void Pipe::predict(const RawCoNLLXDependency& data,
     std::vector<int>& heads,
     std::vector<std::string>& deprels) {
   size_t L = data.forms.size();
-  Dependency dependency;
+  CoNLLXDependency dependency;
   transduce_instance_to_dependency(data, dependency, false);
   std::vector<State> states(L*2);
   states[0].copy(State(&dependency));
@@ -432,7 +432,7 @@ std::pair<
           !DependencyUtils::is_projective(data.heads)) {
         continue;
       }
-      Dependency dependency;
+      CoNLLXDependency dependency;
       size_t L = data.forms.size();
       transduce_instance_to_dependency(data, dependency, true);
 
@@ -588,7 +588,7 @@ void Pipe::learn() {
           !DependencyUtils::is_projective(data.heads)) {
         continue;
       }
-      Dependency dependency;
+      CoNLLXDependency dependency;
       size_t L = data.forms.size();
       transduce_instance_to_dependency(data, dependency, true);
 
@@ -613,7 +613,7 @@ void Pipe::learn() {
     if (learn_opt->averaged) { search->set_avg(true); }
     boost::timer::cpu_timer t;
     for (const auto& data: devel_dataset) {
-      Dependency dependency;
+      CoNLLXDependency dependency;
       size_t L = data.forms.size();
       transduce_instance_to_dependency(data, dependency, true);
 
@@ -669,7 +669,7 @@ void Pipe::pretest() {
   for (const auto& data: test_dataset) {
     predict(data, heads, deprels);
 
-    Dependency dependency;
+    CoNLLXDependency dependency;
     size_t L = data.forms.size();
     transduce_instance_to_dependency(data, dependency, true);
 
@@ -720,7 +720,7 @@ void Pipe::test() {
   std::ostream* os = IO::get_ostream(output_file);
   boost::timer::cpu_timer t;
   for (const auto& data: test_dataset) {
-    Dependency dependency;
+    CoNLLXDependency dependency;
     size_t L = data.forms.size();
     transduce_instance_to_dependency(data, dependency, true);
 

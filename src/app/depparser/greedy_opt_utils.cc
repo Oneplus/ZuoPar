@@ -22,6 +22,7 @@ po::options_description build_greedy_test_optparser(
   po::options_description opt(usage);
   opt.add_options()
     ("input", po::value<std::string>(), "The path to the input file.")
+    ("output", po::value<std::string>(), "The path to the output file.")
     ("model", po::value<std::string>(), "The path to the model file.")
     ("help", "Show help information");
   return opt;
@@ -74,6 +75,9 @@ bool parse_greedy_test_option(const po::variables_map& vm, GreedyTestOption& opt
     opts.input_path = vm["input"].as<std::string>();
   }
 
+  if (vm.count("output")) {
+    opts.output_path = vm["output"].as<std::string>();
+  }
   return true;
 }
 

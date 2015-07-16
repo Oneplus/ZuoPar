@@ -11,7 +11,7 @@ namespace DependencyParser {
 namespace ArcStandard {
 
 State::State(): ref(0) { clear(); }
-State::State(const Dependency* r): ref(r) { clear(); }
+State::State(const CoNLLXDependency* r): ref(r) { clear(); }
 
 bool State::can_shift() const     { return !buffer_empty(); }
 bool State::can_left_arc() const  { return stack_size() >= 2; }

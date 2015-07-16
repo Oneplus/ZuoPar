@@ -55,7 +55,7 @@ Pipe::Pipe(const EvaluateOption& opts): mode(kPipeEvaluate),
 Pipe::~Pipe() {
 }
 
-int Pipe::wrong(const Dependency& instance, bool labeled,
+int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
     const std::vector<int>& heads,
     const std::vector<deprel_t>& deprels) const {
   std::vector<std::string> forms;
@@ -69,20 +69,20 @@ int Pipe::wrong(const Dependency& instance, bool labeled,
     std::tuple<int, int, int> eval;
     if (evaluate_strategy == DependencyParserUtils::kChen14en) {
       eval = DependencyParserUtils::evaluate_chen14en(forms, postags,
-          instance.heads, instance.deprels, heads, deprels, false);
+          instance.heads, instance.deprels, heads, deprels, true);
     } else {
       eval = DependencyParserUtils::evaluate_chen14ch(forms, postags,
-          instance.heads, instance.deprels, heads, deprels, false);
+          instance.heads, instance.deprels, heads, deprels, true);
     }
     return std::get<0>(eval) - std::get<2>(eval);
   } else {
     std::tuple<int, int> eval;
     if (evaluate_strategy == DependencyParserUtils::kChen14en) {
       eval = DependencyParserUtils::evaluate_chen14en(
-          forms, postags, instance.heads, heads, false);
+          forms, postags, instance.heads, heads, true);
     } else {
       eval = DependencyParserUtils::evaluate_chen14ch(
-          forms, postags, instance.heads, heads, false);
+          forms, postags, instance.heads, heads, true);
     }
     return std::get<0>(eval) - std::get<1>(eval);
   }
@@ -93,13 +93,13 @@ void Pipe::run2() {
   namespace ioutils = ZuoPar::IO;
   if (!setup()) { return; }
 
-  deprel_t root_tag = deprels_alphabet.encode(root.c_str());
+  deprel_t root_tag = deprels_alphabet.encode(root);
   if (mode == kPipeLearn) {
-    decoder = new ae::Decoder(deprels_alphabet.size(), root_tag,
+    decoder = new ae::Decoder(deprels_alphabet.size(), root_tag, ae::Decoder::kLeft,
         beam_size, false, update_strategy, weight);
     learner = new ae::Learner(weight, this->algorithm);
   } else {
-    decoder = new ae::Decoder(deprels_alphabet.size(), root_tag,
+    decoder = new ae::Decoder(deprels_alphabet.size(), root_tag, ae::Decoder::kLeft,
         beam_size, true, UpdateStrategy::kNaive, weight);
   }
 
@@ -120,7 +120,7 @@ void Pipe::run2() {
   floatval_t avg_las = 0.;
 
   for (size_t n = 0; n < N; ++ n) {
-    const Dependency& instance = dataset[ranks[n]];
+    const CoNLLXDependency& instance = dataset[ranks[n]];
 
     std::vector<ae::Action> actions;
     ae::ActionUtils::get_oracle_actions(instance, actions);
@@ -205,7 +205,7 @@ void Pipe::run2() {
       int loss1, loss2;
       floatval_t one_avg_uas = 0, one_avg_las = 0;
       for (const ae::State* candidate_result: final_results) {
-        Dependency output; build_output((*candidate_result), output);
+        CoNLLXDependency output; build_output((*candidate_result), output);
         loss1 = wrong(output, true, instance.heads, instance.deprels);
         loss2 = wrong(output, false, instance.heads, instance.deprels);
 

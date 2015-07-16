@@ -37,7 +37,7 @@ private:
   DependencyParser::DependencyParserUtils::EvaluationStrategy evaluate_strategy;
 
 private:
-  int wrong(const Dependency& instance, bool labeled,
+  int wrong(const CoNLLXDependency& instance, bool labeled,
       const std::vector<int>& heads,
       const std::vector<int>& deprels) const;
 };

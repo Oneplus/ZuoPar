@@ -4,6 +4,7 @@
 #include "engine/token_alphabet.h"
 #include "system/options.h"
 #include "system/system.h"
+#include "app/depparser/decoder.h"
 #include "app/depparser/arcstandard/state.h"
 #include "app/depparser/arcstandard/action.h"
 #include "app/depparser/arcstandard/score_context.h"
@@ -16,7 +17,7 @@ namespace ArcStandard {
 
 namespace eg = ZuoPar::Engine;
 
-class Decoder: public TransitionSystem<Action, State, Weight> {
+class Decoder: public TransitionSystem<Action, State, Weight>, public BasicDecoder {
 public:
   /**
    * The decoder constructor.
@@ -27,7 +28,7 @@ public:
    *  @param[in]  update_strategy The update strategy.
    *  @param[in]  weight          The pointer to the weight.
    */
-  Decoder(int nr, int root,
+  Decoder(int n, int root, int position,
       int beam_size, bool avg, UpdateStrategy update_strategy, Weight* weight);
 
   //! Implement arc standard get possible actions.
@@ -39,9 +40,6 @@ public:
       State* target);
 
   bool terminated();
-private:
-  int nr_deprels;
-  int root_tag;
 };
 
 } //  end for namespace arcstandard

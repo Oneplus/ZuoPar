@@ -5,14 +5,13 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace Choi2013 {
 
-Decoder::Decoder(int nr, int root, int position,
+Decoder::Decoder(int n, int root, int position,
     int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
-  : nr_deprels(nr), root_tag(root), root_position(position),
+  : BasicDecoder(n, root, position),
   TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
 }
 
-void
-Decoder::get_possible_actions(const State& source,
+void Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
   if (source.is_complete()) {
@@ -32,7 +31,7 @@ Decoder::get_possible_actions(const State& source,
         if (!(root_position == kLeft && source.top0 == 0)) {
           // stack top i is not linked a head, which means i should be linked a arc to
           // the last word.
-          for (auto l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
+          for (auto l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
             if (l == root_tag) { continue; }
             actions.push_back(ActionFactory::make_left_arc(l));
           }
@@ -43,7 +42,7 @@ Decoder::get_possible_actions(const State& source,
 
       if (source.nr_empty_heads == 1) {
         if (root_position != kRight) {
-          for (auto l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
+          for (auto l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
             if (l == root_tag) { continue; }
             actions.push_back(ActionFactory::make_right_arc(l));
           }
@@ -66,7 +65,7 @@ Decoder::get_possible_actions(const State& source,
           !source.is_descendant(source.top0, source.buffer)) {
         if (!(root_position == kLeft && source.top0 == 0)) {
           //
-          for (auto l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
+          for (auto l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
             if (l == root_tag) { continue; }
             actions.push_back(ActionFactory::make_left_arc(l));
             actions.push_back(ActionFactory::make_left_pass(l));
@@ -76,7 +75,7 @@ Decoder::get_possible_actions(const State& source,
 
       if (!source.buffer_front_has_head() &&
           !source.is_descendant(source.buffer, source.top0)) {
-        for (auto l = eg::TokenAlphabet::END+ 1; l < nr_deprels; ++ l) {
+        for (auto l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
           if (l == root_tag) { continue; }
           actions.push_back(ActionFactory::make_right_arc(l));
           actions.push_back(ActionFactory::make_right_pass(l));

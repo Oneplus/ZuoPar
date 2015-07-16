@@ -3,6 +3,7 @@
 #include "app/depparser/arceager/action_utils.h"
 #include "utils/io/dataset/dependency.h"
 #include "utils/io/instance/dependency.h"
+#include "utils/io/stream.h"
 #include "utils/logging.h"
 #include "utils/misc.h"
 #include "types/internal/packed_scores.h"
@@ -26,7 +27,7 @@ GreedySearchPipe::GreedySearchPipe(const GreedyLearnOption& opt):
 GreedySearchPipe::GreedySearchPipe(const GreedyTestOption& opt):
   mode(kPipeTest),
   weight(nullptr), decoder(nullptr),
-  input_path(opt.input_path), model_path(opt.model_path),
+  input_path(opt.input_path), output_path(opt.output_path), model_path(opt.model_path),
   shuffle_times(0) {
   if (load_model(opt.model_path)) { _INFO << "report: model is loaded.";}
   else                            { _INFO << "report: model is not loaded.";}
@@ -47,8 +48,9 @@ bool GreedySearchPipe::setup() {
       return false;
     }
     _INFO << "report: loading dataset from reference file.";
-    IO::read_dependency_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, deprels_alphabet);
+    IO::read_conllx_dependency_dataset(ifs, dataset, forms_alphabet,
+        lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
+        deprels_alphabet);
     _INFO << "report: dataset is loaded.";
   } else {
     std::ifstream ifs(input_path.c_str());
@@ -56,8 +58,9 @@ bool GreedySearchPipe::setup() {
       _ERROR << "#: Failed to open input file, testing halt";
       return false;
     }
-    IO::read_dependency_dataset(ifs, dataset, forms_alphabet,
-        postags_alphabet, deprels_alphabet, 0x1f);
+    IO::read_conllx_dependency_dataset(ifs, dataset, forms_alphabet,
+        lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
+        deprels_alphabet, 0x1f);
   }
 }
 
@@ -65,12 +68,12 @@ void GreedySearchPipe::test() {
   if (!setup()) { return; }
 
   auto N = dataset.size();
-  decoder = new Decoder(deprels_alphabet.size(),
-      deprels_alphabet.encode(root), 1, false,
-      kEarlyUpdate, nullptr);
+  decoder = new Decoder(deprels_alphabet.size(), deprels_alphabet.encode(root),
+      Decoder::kLeft, 1, false, kEarlyUpdate, nullptr);
 
+  std::ostream* os = IO::get_ostream(output_path.c_str());
   for (auto n = 0; n < N; ++ n) {
-    const Dependency& instance = dataset[n];
+    const CoNLLXDependency& instance = dataset[n];
     auto L = instance.forms.size();
     std::vector<State> states(L* 2);
     states[0].copy(State(&instance));
@@ -92,18 +95,19 @@ void GreedySearchPipe::test() {
       decoder->transit(states[step], best_action, 0, &states[step+ 1]);
     }
 
-    Dependency output;
+    CoNLLXDependency output;
     build_output(states[L*2-1], output);
-    IO::write_dependency_instance(std::cout, output, forms_alphabet,
+    IO::write_dependency_instance((*os), output, forms_alphabet,
         postags_alphabet, deprels_alphabet);
   }
+  if (os != &(std::cout) && os != NULL) { delete os; }
 }
 
 void GreedySearchPipe::learn() {
   if (!setup()) { return; }
 
-  decoder = new Decoder(deprels_alphabet.size(),
-      deprels_alphabet.encode(root), 1, false,
+  decoder = new Decoder(deprels_alphabet.size(), deprels_alphabet.encode(root),
+      Decoder::kLeft, 1, false,
       kEarlyUpdate, nullptr);
 
   auto N = dataset.size();
@@ -111,7 +115,7 @@ void GreedySearchPipe::learn() {
   std::vector<size_t> ranks;
   Utility::shuffle(N, shuffle_times, ranks);
   for (int n = 0; n < N; ++ n) {
-    const Dependency& instance = dataset[ranks[n]];
+    const CoNLLXDependency& instance = dataset[ranks[n]];
     std::vector<Action> oracle_actions;
     std::vector<Action> possible_actions;
     ActionUtils::get_oracle_actions(instance, oracle_actions);
@@ -187,7 +191,7 @@ bool GreedySearchPipe::load_model(const std::string& model_path) {
   return true;
 }
 
-void GreedySearchPipe::build_output(const State& source, Dependency& output) {
+void GreedySearchPipe::build_output(const State& source, CoNLLXDependency& output) {
   size_t len = source.ref->size();
   output.forms = source.ref->forms;
   output.postags = source.ref->postags;
