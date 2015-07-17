@@ -106,11 +106,11 @@ bool Pipe::check_instance(const std::vector<std::string>& info,
 
   auto col = mat[0].size();
   if (col != info.size()) { _WARN << "Unmatched number of columns in header"; return false; }
-  if (col <= 3) {  _WARN << "Number of columns less than 3!"; return false; }
+  if (col <= 4) {  _WARN << "Number of columns less than 4!"; return false; }
   for (auto& row: mat) {
     if (row.size() != col) { _WARN << "Unmatched number of columns"; return false; }
   }
-  if (info[0] != "#forms" || info[1] != "postags") {
+  if (info[0] != "#id" || info[1] != "forms" || info[2] != "postags") {
     _WARN << "Wrong name of header"; return false;
   }
   return true;
@@ -187,20 +187,20 @@ bool Pipe::load_data(const std::string& filename, bool with_oracle) {
 
     // The tree part
     if (with_oracle) {
-      column_to_reranking_tree(2, info, mat, ri.oracle);
+      column_to_reranking_tree(3, info, mat, ri.oracle);
       ri.oracle.c_score = 0;
       ri.oracle.loss = 0;
     }
 
-    ri.trees.resize(M - 3);
-    for (int col = 3; col < M; ++ col) {
-      column_to_reranking_tree(col, info, mat, ri.trees[col- 3]);
-      ri.trees[col- 3].c_score = 0;
+    ri.trees.resize(M - 4);
+    for (int col = 4, i = 0; col < M; ++ col, ++ i) {
+      column_to_reranking_tree(col, info, mat, ri.trees[i]);
+      ri.trees[i].c_score = 0;
       if (with_oracle) {
-        ri.trees[col- 3].loss = wrong(ri.instance, ri.oracle.heads, ri.oracle.deprels,
-            ri.trees[col- 3].heads, ri.trees[col- 3].deprels, true);
+        ri.trees[i].loss = wrong(ri.instance, ri.oracle.heads, ri.oracle.deprels,
+            ri.trees[i].heads, ri.trees[i].deprels, true);
       } else {
-        ri.trees[col- 3].loss = 0;
+        ri.trees[i].loss = 0;
       }
     }
 

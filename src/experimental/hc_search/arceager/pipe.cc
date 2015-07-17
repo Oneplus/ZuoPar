@@ -57,12 +57,17 @@ Pipe::~Pipe() {
 
 int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
     const std::vector<int>& heads,
-    const std::vector<deprel_t>& deprels) const {
+    const std::vector<deprel_t>& deprels,
+    int& n_effective_words) const {
   std::vector<std::string> forms;
   std::vector<std::string> postags;
   for (auto i = 0; i < instance.size(); ++ i) {
     forms.push_back( forms_alphabet.decode(instance.forms[i]) );
-    postags.push_back( postags_alphabet.decode(instance.postags[i]) );
+    if (instance.feats[i].size() > 0) {
+      postags.push_back( feat_alphabet.decode(instance.feats[i][0]) );
+    } else {
+      postags.push_back( postags_alphabet.decode(instance.postags[i]) );
+    }
   }
 
   if (labeled) {
@@ -74,6 +79,7 @@ int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
       eval = DependencyParserUtils::evaluate_chen14ch(forms, postags,
           instance.heads, instance.deprels, heads, deprels, true);
     }
+    n_effective_words = std::get<0>(eval);
     return std::get<0>(eval) - std::get<2>(eval);
   } else {
     std::tuple<int, int> eval;
@@ -84,15 +90,17 @@ int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
       eval = DependencyParserUtils::evaluate_chen14ch(
           forms, postags, instance.heads, heads, true);
     }
+    n_effective_words = std::get<0>(eval);
     return std::get<0>(eval) - std::get<1>(eval);
   }
+  n_effective_words = instance.size();
   return instance.size();
 }
 
 void Pipe::run2() {
-  if (mode == kPipeLearn || mode == kPipePrepare) {
+  if (mode == kPipeLearn) {
     if (!setup(reference_path, true)) { return; }
-  } else if (mode == kPipeEvaluate) {
+  } else if (mode == kPipePrepare || mode == kPipeEvaluate) {
     if (!setup(input_path, false)) { return; }
   }
 
@@ -176,13 +184,14 @@ void Pipe::run2() {
       std::sort(final_results.begin(), final_results.end(),
           [](const ae::State* x,  const ae::State* y) -> bool { return x->score > y->score; });
 
-      (*os) << "#forms\tpostags\t" << result.second->score;
+      (*os) << "#id\tforms\tpostags\t" << result.second->score;
       for (const ae::State* candidate_result: final_results) {
         (*os) << "\t" << candidate_result->score;
       }
       (*os) << std::endl;
-      for (size_t i = 0; i < instance.size(); ++ i) {
-        (*os) << forms_alphabet.decode(instance.forms[i]) << " "
+      for (size_t i = 1; i < instance.size(); ++ i) {
+        (*os) << i << " "
+          << forms_alphabet.decode(instance.forms[i]) << " "
           << postags_alphabet.decode(instance.postags[i]) << " "
           << instance.heads[i] << "/"
           << (instance.heads[i] == -1? root: deprels_alphabet.decode(instance.deprels[i]));
@@ -210,8 +219,8 @@ void Pipe::run2() {
       for (const ae::State* candidate_result: final_results) {
         CoNLLXDependency output;
         build_output((*candidate_result), output, deprels_alphabet.encode(root));
-        loss1 = wrong(output, true, instance.heads, instance.deprels);
-        loss2 = wrong(output, false, instance.heads, instance.deprels);
+        loss1 = wrong(output, true, instance.heads, instance.deprels, nr_effective_tokens);
+        loss2 = wrong(output, false, instance.heads, instance.deprels, nr_effective_tokens);
 
         if (0 == loss1) {
           correct_in_beam = true;

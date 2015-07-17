@@ -19,7 +19,9 @@ void Decoder::get_possible_actions(const State& source,
   if (source.buffer_empty()) {
     actions.push_back(ActionFactory::make_reduce());
   } else {
-    actions.push_back(ActionFactory::make_shift());
+    if (source.buffer < len- 1) { //empty shift is illegal.
+      actions.push_back(ActionFactory::make_shift());
+    }
 
     if (!source.stack.empty()) {
       // Try to right arc

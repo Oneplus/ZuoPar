@@ -24,8 +24,8 @@ po::options_description build_learn_optparser(const std::string& usage) {
      " ch - Chinese")
     ("evaluation", po::value<std::string>()->default_value("punc"),
      "The evaluation strategy:\n"
-     " punc - include punctuation [default]"
-     " conllx - conllx punctuation exclude"
+     " punc - include punctuation [default]\n"
+     " conllx - conllx punctuation exclude\n"
      " chen14 - chen14 punctuation exclude, jointly determined by language.");
   return optparser;
 }

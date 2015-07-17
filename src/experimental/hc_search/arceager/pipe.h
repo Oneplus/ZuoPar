@@ -40,7 +40,8 @@ private:
 private:
   int wrong(const CoNLLXDependency& instance, bool labeled,
       const std::vector<int>& heads,
-      const std::vector<int>& deprels) const;
+      const std::vector<int>& deprels,
+      int& n_effective_words) const;
 };
 
 } //  namespace hstep
