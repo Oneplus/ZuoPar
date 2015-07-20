@@ -16,7 +16,7 @@ ScoreContext::ScoreContext(int   _len,
     const std::vector<int>&      _heads,
     const std::vector<int>&      _deprels)
   : len(_len), forms(_forms), postags(_postags), heads(_heads), deprels(_deprels) {
-  int root = -1;
+  int root = 0;
   std::vector< std::vector<int> > tree(len);
   for (int i = 0; i < len; ++ i) {
     int hid = heads[i];
@@ -40,8 +40,8 @@ ScoreContext::ScoreContext(int   _len,
   left_label_set.resize(len, 0);
   right_label_set.resize(len, 0);
 
-  for (int i = 0; i < len; ++ i) {
-    for (int c: tree[i]) {
+  for (auto i = 1; i < len; ++ i) {
+    for (auto& c: tree[i]) {
       if (PUNC_POS.find(postags[c]) == PUNC_POS.end()) {
         //! Non-punctuation.
         ++ nr_children[i];
@@ -53,7 +53,7 @@ ScoreContext::ScoreContext(int   _len,
   }
 
   __R( PP_H_M ); __R( PP_H_M_Dir ); __R( PP_P_H_M ); __R( PP_P_H_M_Dir );
-  for (int i = 0; i < len; ++ i) {
+  for (int i = 1; i < len; ++ i) {
     if (ADP_POS.find(postags[i]) != ADP_POS.end()) {
       int hid = heads[i];
       for (int mid: tree[i]) {
@@ -67,7 +67,7 @@ ScoreContext::ScoreContext(int   _len,
     }
   }
 
-  __R( H ); __R( H_H ); __R( H_H_H ); __R( H_pH_H ); __R( H_nH_H ); __R( pH_H_nH_H );
+  __R( H_H ); __R( H_H_H ); __R( H_pH_H ); __R( H_nH_H ); __R( pH_H_nH_H );
   __R( H_M );     __R( H_H_M );     __R( H_M_M );     __R( H_H_M_M );
   __R( H_M_Rel ); __R( H_H_M_Rel ); __R( H_M_M_Rel ); __R( H_H_M_M_Rel );
   __R( H_M_Dist); __R( H_H_M_Dist); __R( H_M_M_Dist); __R( H_H_M_M_Dist);
@@ -75,9 +75,8 @@ ScoreContext::ScoreContext(int   _len,
   __R( pH_H_M_Mn ); __R( pH_H_Mn ); __R( pH_M_Mn );
   __R( H_M_Mn );  __R( pH_H_M );    __R( H_pM_M );
 
-  for (int hid = 0; hid < len; ++ hid) {
+  for (int hid = 1; hid < len; ++ hid) {
     // Begin singular
-    H.push_back(hid);
     H_H.push_back( __M(hid, hid) );
     H_H_H.push_back( __M(hid, hid, hid) );
     if (hid > 0)      H_pH_H.push_back( __M(hid, hid- 1, hid) );
@@ -207,7 +206,7 @@ ScoreContext::ScoreContext(int   _len,
     H1_H_M1_M_Dir.push_back( __M(hid1, hid, mid1, mid, Dir) );
   }
 
-  for (int gid = 0; gid < len; ++ gid) {
+  for (int gid = 1; gid < len; ++ gid) {
     const std::vector<int>& gnode = tree[gid];
     for (int hid: gnode) {
       const std::vector<int>& hnode = tree[hid];

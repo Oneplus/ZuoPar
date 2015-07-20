@@ -3,7 +3,6 @@
 
 #include "types/common.h"
 #include "model/fast_meta/meta_feature_param_map_collection.h"
-#include "model/fast_associated/feature_param_map_collection.h"
 #include "experimental/hc_search/score_context.h"
 
 namespace ZuoPar {

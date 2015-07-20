@@ -33,7 +33,7 @@ public:
   const std::vector<int>& heads;
   const std::vector<int>& deprels;
   //! Begin singular
-  std::vector< int > H;
+  // std::vector< int > H;
   std::vector< T2 > H_H;
   std::vector< T3 > H_H_H;
   std::vector< T3 > H_pH_H;

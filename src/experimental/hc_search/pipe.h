@@ -33,14 +33,14 @@ private:
   };
 
   struct RerankingInstance {
-    Dependency instance; //! The instance to store forms, postags, deprels
+    CoNLLXDependency instance; //! The instance to store forms, postags, deprels
     RerankingTree oracle; //! The oracle tree
     std::vector<RerankingTree> trees;
   };
 
   struct Sample {
     // Two group of (+/-) instances
-    const Dependency* ref;
+    const CoNLLXDependency* ref;
     std::vector<RerankingTree *> good;
     std::vector<RerankingTree *> bad;
   };
@@ -94,7 +94,7 @@ private:
 
   void generate_training_samples();
 
-  int wrong(const Dependency& instance,
+  int wrong(const CoNLLXDependency& instance,
       const std::vector<int>& predict_heads,
       const std::vector<int>& predict_deprels,
       const std::vector<int>& heads,
@@ -103,7 +103,7 @@ private:
 
   void build_knowledge();
 
-  void learn_one_pair(const Dependency* instance,
+  void learn_one_pair(const CoNLLXDependency* instance,
       const RerankingTree* good,
       const RerankingTree* bad,
       int timestamp);

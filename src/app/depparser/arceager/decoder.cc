@@ -25,12 +25,14 @@ void Decoder::get_possible_actions(const State& source,
 
     if (!source.stack.empty()) {
       // Try to right arc
-      if (source.top0 != 0) {
-        for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
-          if (l != root_deprel) { actions.push_back(ActionFactory::make_right_arc(l)); }
+      if (source.buffer < len - 1 || source.nr_empty_heads == 1) {
+        if (source.top0 != 0) {
+          for (deprel_t l = eg::TokenAlphabet::END+ 1; l < n_deprels; ++ l) {
+            if (l != root_deprel) { actions.push_back(ActionFactory::make_right_arc(l)); }
+          }
+        } else {
+          actions.push_back(ActionFactory::make_right_arc(root_deprel));
         }
-      } else {
-        actions.push_back(ActionFactory::make_right_arc(root_deprel));
       }
 
       if (source.heads[source.top0] != -1) {

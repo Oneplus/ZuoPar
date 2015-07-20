@@ -12,6 +12,7 @@ add_executable (hc_depparser_cstep
     ${SOURCE_DIR}/app/depparser/opt_utils.cc
     ${SOURCE_DIR}/engine/token_alphabet.cc
     ${SOURCE_DIR}/utils/logging.cc
+    ${SOURCE_DIR}/utils/io/stream.cc
     ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 

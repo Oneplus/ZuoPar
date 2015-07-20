@@ -1,5 +1,6 @@
 #include "experimental/hc_search/pipe.h"
 #include "experimental/hc_search/knowledge.h"
+#include "utils/io/stream.h"
 #include "utils/io/instance/csv.h"
 #include "utils/misc.h"
 #include <set>
@@ -54,6 +55,7 @@ Pipe::Pipe(const TestOption& opts)
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
   alpha = opts.alpha;
   _INFO << "report: (cstep.test) alpha = " << alpha;
+  _INFO << "report: (cstep.test) loading model from " << model_path;
   if (load_model(model_path)) {
     _INFO << "report: (cstep.test) model " << model_path << " is loaded.";
   } else {
@@ -70,8 +72,10 @@ void Pipe::test() {
   if (!load_data(input_path, false)) { return; }
   build_knowledge();
 
+  std::ostream* os = IO::get_ostream(output_path);
+
   for (auto& data: dataset) {
-    Dependency& inst = data.instance;
+    CoNLLXDependency& inst = data.instance;
     std::vector<RerankingTree>& trees = data.trees;
     std::vector<floatval_t> scores(trees.size(), 0.);
 
@@ -89,14 +93,19 @@ void Pipe::test() {
       }
     }
 
-    for (auto i = 0; i < inst.size(); ++ i) {
-      std::cout << forms_alphabet.decode(inst.forms[i]) << "\t"
+    for (auto i = 1; i < inst.size(); ++ i) {
+      (*os) << i << " "
+        << forms_alphabet.decode(inst.forms[i]) << "\t"
+        << forms_alphabet.decode(inst.forms[i]) << "\t"
         << postags_alphabet.decode(inst.postags[i]) << "\t"
+        << postags_alphabet.decode(inst.postags[i]) << "\t"
+        << "_\t"
         << trees[best_i].heads[i] << "\t"
-        << trees[best_i].deprels[i] << std::endl;
+        << deprels_alphabet.decode(trees[best_i].deprels[i]) << std::endl;
     }
-    std::cout << std::endl;
+    (*os) << std::endl;
   }
+  if (os!= &(std::cout) && os != NULL) { delete os; }
 }
 
 
@@ -122,12 +131,13 @@ void Pipe::column_to_reranking_tree(int i, const std::vector< std::string >& hea
     RerankingTree& tree) {
   auto N = mat.size();
 
-  tree.resize(N);
+  tree.resize(N+1); // with dummy root
   tree.h_score = boost::lexical_cast<floatval_t>(header[i]);
-  for (auto row = 0; row < N; ++ row) {
+  tree.heads[0] = -1; tree.deprels[0] = 0;
+  for (auto row = 0, j = 1; row < N; ++ row, ++ j) {
     auto delimiter_position = mat[row][i].find_first_of('/');
-    tree.heads[row] = atoi(mat[row][i].substr(0, delimiter_position).c_str());
-    tree.deprels[row] = deprels_alphabet.insert(mat[row][i].substr(delimiter_position+ 1));
+    tree.heads[j] = atoi(mat[row][i].substr(0, delimiter_position).c_str());
+    tree.deprels[j] = deprels_alphabet.insert(mat[row][i].substr(delimiter_position+ 1));
   }
 }
 
@@ -175,11 +185,11 @@ bool Pipe::load_data(const std::string& filename, bool with_oracle) {
     int N = mat.size(), M = mat[0].size();
 
     // The dependency part
-    RerankingInstance ri; Dependency& inst = ri.instance;
+    RerankingInstance ri; CoNLLXDependency& inst = ri.instance;
     size_t delimiter_position;
     for (int row = 0; row < N; ++ row) {
-      auto form = forms_alphabet.insert(mat[row][0]);
-      auto postag = postags_alphabet.insert(mat[row][1]);
+      auto form = forms_alphabet.insert(mat[row][1]);
+      auto postag = postags_alphabet.insert(mat[row][2]);
 
       inst.forms.push_back(form);
       inst.postags.push_back(postag);
@@ -262,7 +272,7 @@ void Pipe::build_knowledge() {
 }
 
 
-int Pipe::wrong(const Dependency& instance,
+int Pipe::wrong(const CoNLLXDependency& instance,
     const std::vector<int>& predict_heads,
     const std::vector<int>& predict_deprels,
     const std::vector<int>& heads,
@@ -277,34 +287,34 @@ int Pipe::wrong(const Dependency& instance,
 
   if (labeled) {
     std::tuple<int, int, int> eval;
-    if (evaluate_strategy == DependencyParserUtils::kIncludePunctuation) { 
+    if (evaluate_strategy == DependencyParserUtils::kIncludePunctuation) {
       eval = DependencyParserUtils::evaluate_inc_punc(forms, postags,
-          predict_heads, predict_deprels, heads, deprels, false);
+          predict_heads, predict_deprels, heads, deprels, true);
     } else if (evaluate_strategy == DependencyParserUtils::kCoNLLx) {
       eval = DependencyParserUtils::evaluate_conllx(forms, postags,
-          predict_heads, predict_deprels, heads, deprels, false);
+          predict_heads, predict_deprels, heads, deprels, true);
     } else if (evaluate_strategy == DependencyParserUtils::kChen14en) {
       eval = DependencyParserUtils::evaluate_chen14en(forms, postags,
-          predict_heads, predict_deprels, heads, deprels, false);
+          predict_heads, predict_deprels, heads, deprels, true);
     } else {
       eval = DependencyParserUtils::evaluate_chen14ch(forms, postags,
-          predict_heads, predict_deprels, heads, deprels, false);
+          predict_heads, predict_deprels, heads, deprels, true);
     }
     return std::get<0>(eval) - std::get<2>(eval);
   } else {
     std::tuple<int, int> eval;
     if (evaluate_strategy == DependencyParserUtils::kIncludePunctuation) { 
       eval = DependencyParserUtils::evaluate_inc_punc(
-          forms, postags, predict_heads, heads, false);
+          forms, postags, predict_heads, heads, true);
     } else if (evaluate_strategy == DependencyParserUtils::kCoNLLx) {
       eval = DependencyParserUtils::evaluate_conllx(
-          forms, postags, predict_heads, heads, false);
+          forms, postags, predict_heads, heads, true);
     } else if (evaluate_strategy == DependencyParserUtils::kChen14en) {
       eval = DependencyParserUtils::evaluate_chen14en(
-          forms, postags, predict_heads, heads, false);
+          forms, postags, predict_heads, heads, true);
     } else {
       eval = DependencyParserUtils::evaluate_chen14ch(
-          forms, postags, predict_heads, heads, false);
+          forms, postags, predict_heads, heads, true);
     }
     return std::get<0>(eval) - std::get<1>(eval);
   }
@@ -367,7 +377,7 @@ void Pipe::learn() {
 
   for (size_t n = 0; n < N; ++ n) {
     const Sample& sample = samples[ranks[n]];
-    const Dependency* inst = sample.ref;
+    const CoNLLXDependency* inst = sample.ref;
 
     RerankingTree* worst_good_tree = NULL;
     RerankingTree* best_bad_tree = NULL;
@@ -413,7 +423,7 @@ void Pipe::learn() {
   save_model(model_path);
 }
 
-void Pipe::learn_one_pair(const Dependency* inst,
+void Pipe::learn_one_pair(const CoNLLXDependency* inst,
     const RerankingTree* good, const RerankingTree* bad,
     int timestamp) {
   int delta_loss = bad->loss - good->loss;

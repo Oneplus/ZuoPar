@@ -126,6 +126,8 @@ void Pipe::run2() {
   int nr_oracle_negative_recalled_heads = 0;
   int nr_oracle_positive_recalled_deprels = 0;
   int nr_oracle_negative_recalled_deprels = 0;
+  int nr_best_recalled_heads = 0;
+  int nr_best_recalled_deprels = 0;
   int nr_deprels = 0;
   floatval_t avg_uas = 0.;
   floatval_t avg_las = 0.;
@@ -216,6 +218,14 @@ void Pipe::run2() {
       int nr_effective_tokens = 0;
       int loss1, loss2;
       floatval_t one_avg_uas = 0, one_avg_las = 0;
+
+      CoNLLXDependency output;
+      build_output((*result.first), output, deprels_alphabet.encode(root));
+      loss1 = wrong(output, true, instance.heads, instance.deprels, nr_effective_tokens);
+      loss2 = wrong(output, false, instance.heads, instance.deprels, nr_effective_tokens);
+      nr_best_recalled_heads += nr_effective_tokens - loss2;
+      nr_best_recalled_deprels += nr_effective_tokens - loss1;
+
       for (const ae::State* candidate_result: final_results) {
         CoNLLXDependency output;
         build_output((*candidate_result), output, deprels_alphabet.encode(root));
@@ -296,6 +306,8 @@ void Pipe::run2() {
       << "/" << nr_deprels << "=" << floatval_t(nr_oracle_negative_recalled_deprels)/nr_deprels;
     _INFO << "report: averaged UAS: " << avg_uas / N;
     _INFO << "report: averaged LAS: " << avg_las / N;
+    _INFO << "report: best UAS: " << floatval_t(nr_best_recalled_heads) / nr_deprels;
+    _INFO << "report: best LAS: " << floatval_t(nr_best_recalled_deprels) / nr_deprels;
   }
 
   if (os != NULL && os != &std::cout) { delete os; }
