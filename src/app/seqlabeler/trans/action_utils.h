@@ -1,9 +1,9 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_ACTION_UTILS_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_ACTION_UTILS_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_ACTION_UTILS_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_ACTION_UTILS_H__
 
 #include <vector>
 #include "types/sequence_instance.h"
-#include "app/seqlabeler/action.h"
+#include "app/seqlabeler/trans/action.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -23,4 +23,4 @@ public:
 } //  end for lexicalanalyzer
 } //  end for zuopar
 
-#endif  //  end for __ZUOPAR_APP_LEXANALYZER_POSTAGGER_ACTION_UTILS_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_ACTION_UTILS_H__

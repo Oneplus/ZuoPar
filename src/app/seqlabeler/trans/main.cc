@@ -1,10 +1,10 @@
 #include <iostream>
 #include <cstring>  // strcmp
 #include "utils/logging.h"
-#include "app/seqlabeler/opt.h"
-#include "app/seqlabeler/opt_utils.h"
-#include "app/seqlabeler/pipe.h"
-#include "app/seqlabeler/multi_pipe.h"
+#include "app/seqlabeler/trans/opt.h"
+#include "app/seqlabeler/trans/opt_utils.h"
+#include "app/seqlabeler/trans/pipe.h"
+#include "app/seqlabeler/trans/multi_pipe.h"
 
 namespace po = boost::program_options;
 namespace seq = ZuoPar::SequenceLabeler;

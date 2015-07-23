@@ -1,6 +1,6 @@
-#include "app/seqlabeler/weight.h"
-#include "app/seqlabeler/action.h"
-#include "app/seqlabeler/score_context.h"
+#include "app/seqlabeler/trans/weight.h"
+#include "app/seqlabeler/trans/action.h"
+#include "app/seqlabeler/trans/score_context.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {

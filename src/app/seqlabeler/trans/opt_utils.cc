@@ -1,4 +1,4 @@
-#include "app/seqlabeler/opt_utils.h"
+#include "app/seqlabeler/trans/opt_utils.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {

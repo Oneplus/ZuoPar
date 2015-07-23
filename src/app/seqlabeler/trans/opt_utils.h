@@ -1,8 +1,8 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_OPT_UTILS_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_OPT_UTILS_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_OPT_UTILS_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_OPT_UTILS_H__
 
 #include "frontend/common_opt_utils.h"
-#include "app/seqlabeler/opt.h"
+#include "app/seqlabeler/trans/opt.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -18,4 +18,4 @@ bool parse_test_option(const po::variables_map& vm, TestOption& opts);
 } //  namespace sequencelabeler
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_OPT_UTILS_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_OPT_UTILS_H__

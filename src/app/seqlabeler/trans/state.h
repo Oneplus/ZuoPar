@@ -1,10 +1,10 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_STATE_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_STATE_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_STATE_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_STATE_H__
 
 #include "types/common.h"
 #include "types/sequence_instance.h"
 #include "app/settings.h"
-#include "app/seqlabeler/action.h"
+#include "app/seqlabeler/trans/action.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -56,4 +56,4 @@ public:
 
 } //  end for namespace sequencelabeler
 } //  end for namespace zuopar
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_STATE_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_STATE_H__

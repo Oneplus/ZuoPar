@@ -3,8 +3,8 @@
 #include <boost/bind/bind.hpp>
 #include <boost/thread/thread.hpp>
 #include "utils/logging.h"
-#include "app/seqlabeler/multi_pipe.h"
-#include "app/seqlabeler/action_utils.h"
+#include "app/seqlabeler/trans/multi_pipe.h"
+#include "app/seqlabeler/trans/action_utils.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -21,8 +21,7 @@ MultiPipe::MultiPipe(const MultiLearnOption& opts)
   this->constrain_path = opts.constrain_path;
 }
 
-void
-MultiPipe::run() {
+void MultiPipe::run() {
   if (!setup()) {
     return;
   }
@@ -81,8 +80,7 @@ MultiPipe::run() {
   save_model(model_path);
 }
 
-void
-MultiPipe::decode() {
+void MultiPipe::decode() {
   Decoder* decoder = get_decoder();
   const SequenceInstance* data;
   while (queue.pop(data)) {
@@ -99,8 +97,7 @@ MultiPipe::decode() {
   }
 }
 
-Decoder*
-MultiPipe::get_decoder() {
+Decoder* MultiPipe::get_decoder() {
   boost::lock_guard<boost::mutex> lock(mtx);
   BOOST_ASSERT(last_free_decoder_id < decoder_pool.size());
   return decoder_pool[last_free_decoder_id++];

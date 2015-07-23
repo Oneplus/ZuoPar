@@ -1,13 +1,13 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_PIPE_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_PIPE_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_PIPE_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_PIPE_H__
 
 #include "types/sequence_instance.h"
 #include "engine/token_alphabet.h"
 #include "frontend/common_pipe_cfg.h"
-#include "app/seqlabeler/opt.h"
-#include "app/seqlabeler/weight.h"
-#include "app/seqlabeler/decoder.h"
-#include "app/seqlabeler/learner.h"
+#include "app/seqlabeler/trans/opt.h"
+#include "app/seqlabeler/trans/weight.h"
+#include "app/seqlabeler/trans/decoder.h"
+#include "app/seqlabeler/trans/learner.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -89,4 +89,4 @@ protected:
 } //  end for namespace sequencelabeler
 } //  end for namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_PIPE_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_PIPE_H__

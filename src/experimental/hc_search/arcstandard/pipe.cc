@@ -128,7 +128,7 @@ void Pipe::run2() {
   int nr_oracle_positive_recalled_deprels = 0;
   int nr_oracle_negative_recalled_deprels = 0;
   int nr_best_recalled_heads = 0;
-  int nr_best_recalled_deprels = 0; 
+  int nr_best_recalled_deprels = 0;
   int nr_deprels = 0;
   floatval_t avg_uas = 0.;
   floatval_t avg_las = 0.;
@@ -187,7 +187,7 @@ void Pipe::run2() {
       std::sort(final_results.begin(), final_results.end(),
           [](const as::State* x,  const as::State* y) -> bool { return x->score > y->score; });
 
-      (*os) << "#forms\tpostags\t" << result.second->score;
+      (*os) << "#id\tforms\tpostags\t" << result.second->score;
       for (const as::State* candidate_result: final_results) {
         (*os) << "\t" << candidate_result->score;
       }

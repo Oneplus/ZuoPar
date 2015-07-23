@@ -1,11 +1,11 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_LEARNER_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_LEARNER_H__
 
 #include "system/structure_online_learner.h"
 #include "system/structure_online_learner_minibatch.h"
-#include "app/seqlabeler/action.h"
-#include "app/seqlabeler/state.h"
-#include "app/seqlabeler/weight.h"
+#include "app/seqlabeler/trans/action.h"
+#include "app/seqlabeler/trans/state.h"
+#include "app/seqlabeler/trans/weight.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -31,4 +31,4 @@ typedef TransitionStructureOnlineLearnerMiniBatch<
 } //  end for sequencelabeler
 } //  end for zuopar
 
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_LEARNER_H__

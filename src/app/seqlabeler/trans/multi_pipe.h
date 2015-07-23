@@ -1,10 +1,10 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_MULTI_PIPE_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_MULTI_PIPE_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_MULTI_PIPE_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_MULTI_PIPE_H__
 
 #include <boost/thread/mutex.hpp>
 #include <boost/lockfree/queue.hpp>
 #include "frontend/common_opt.h"
-#include "app/seqlabeler/pipe.h"
+#include "app/seqlabeler/trans/pipe.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -58,4 +58,4 @@ private:
 } //  namespace sequencelabeler
 } //  namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_MULTI_PIPE_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_MULTI_PIPE_H__

@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_SCORE_CONTEXT_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_SCORE_CONTEXT_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_SCORE_CONTEXT_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_SCORE_CONTEXT_H__
 
 #include <vector>
 #include "types/common.h"
@@ -31,4 +31,4 @@ public:
 } //  end for namespace sequencelabeler
 } //  end for namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_SCORE_CONTEXT_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_SCORE_CONTEXT_H__

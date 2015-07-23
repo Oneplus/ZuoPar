@@ -1,5 +1,5 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_ACTION_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_ACTION_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_ACTION_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_ACTION_H__
 
 #include <iostream>
 #include "types/common.h"
@@ -33,4 +33,4 @@ public:
 } //  end for namespace sequencelabeler
 } //  end for namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_ACTION_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_ACTION_H__

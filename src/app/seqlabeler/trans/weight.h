@@ -1,11 +1,11 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_MODEL_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_MODEL_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_MODEL_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_MODEL_H__
 
 #include "types/common.h"
 #include "model/fast_associated/feature_param_map_collection.h"
-#include "app/seqlabeler/action.h"
-#include "app/seqlabeler/state.h"
-#include "app/seqlabeler/score_context.h"
+#include "app/seqlabeler/trans/action.h"
+#include "app/seqlabeler/trans/state.h"
+#include "app/seqlabeler/trans/score_context.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -20,4 +20,4 @@ public:
 } //  end for namespace sequencelabeler
 } //  end for namespace zuopar
 
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_MODEL_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_MODEL_H__

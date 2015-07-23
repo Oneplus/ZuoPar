@@ -1,5 +1,5 @@
 #include <boost/assert.hpp>
-#include "app/seqlabeler/action.h"
+#include "app/seqlabeler/trans/action.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {

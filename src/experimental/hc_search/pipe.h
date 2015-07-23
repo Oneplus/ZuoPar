@@ -107,22 +107,6 @@ private:
       const RerankingTree* good,
       const RerankingTree* bad,
       int timestamp);
-
-  /*
-  //!
-  bool is_punctuation(const form_t& postag);
-
-  //! Calculate the loss of the predicted dependency tree
-  int wrong(const Dependency& predict, const Dependency& oracle,
-      bool labeled, bool ignore_punctuation, int& nr_effective_tokens);
-
-  //
-  bool ignore_punctuation;          //! Use to specify to ignore punctuation
-  bool rerank;                      //! Use to specify rerank.
-  std::string root;                 //! The root relation string.
-  std::string language;             //! The language.
-
-*/
 };
 
 } //  namespace cstep

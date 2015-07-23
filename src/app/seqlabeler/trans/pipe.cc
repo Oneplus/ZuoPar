@@ -1,16 +1,16 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include "utils/logging.h"
-#include "utils/io/stream.h"
-#include "utils/io/dataset/sequence_instance.h"
-#include "utils/io/instance/sequence_instance.h"
-#include "app/seqlabeler/action_utils.h"
-#include "app/seqlabeler/pipe.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/regex.hpp>
+#include "utils/logging.h"
+#include "utils/io/stream.h"
+#include "utils/io/dataset/sequence_instance.h"
+#include "utils/io/instance/sequence_instance.h"
+#include "app/seqlabeler/trans/action_utils.h"
+#include "app/seqlabeler/trans/pipe.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {

@@ -9,6 +9,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 
 namespace ZuoPar {
 namespace Experimental {
@@ -58,6 +60,7 @@ Pipe::Pipe(const TestOption& opts)
   _INFO << "report: (cstep.test) loading model from " << model_path;
   if (load_model(model_path)) {
     _INFO << "report: (cstep.test) model " << model_path << " is loaded.";
+    _INFO << "report: (cstep.test) language = " << language;
   } else {
     _INFO << "report: (cstep.test) model " << model_path << " is not loaded.";
   }
@@ -79,11 +82,22 @@ void Pipe::test() {
     std::vector<RerankingTree>& trees = data.trees;
     std::vector<floatval_t> scores(trees.size(), 0.);
 
+    floatval_t max_h_score = 0, max_c_score = 0;
+    floatval_t min_h_score = 0, min_c_score = 0;
     for (auto i = 0; i < trees.size(); ++ i) {
       auto& t = trees[i];
       ScoreContext ctx(inst.size(), inst.forms, inst.postags, t.heads, t.deprels);
       t.c_score = weight->score(ctx, false);
-      scores[i] = t.h_score* alpha + (1- alpha)* t.c_score;
+      if (i == 0 || max_h_score < t.h_score) { max_h_score = t.h_score; }
+      if (i == 0 || min_h_score > t.h_score) { min_h_score = t.h_score; }
+      if (i == 0 || max_c_score < t.c_score) { max_c_score = t.c_score; }
+      if (i == 0 || min_c_score > t.c_score) { min_c_score = t.c_score; }
+    }
+
+    for (auto i = 0; i < trees.size(); ++ i) {
+      auto& t = trees[i];
+      scores[i] = alpha* ((t.h_score-min_h_score) / (max_h_score-min_h_score))+
+        (1- alpha)* ((t.c_score-min_c_score) / (max_c_score-min_c_score));
     }
 
     floatval_t best_score = -1e20; int best_i = -1;
@@ -381,8 +395,6 @@ void Pipe::learn() {
 
     RerankingTree* worst_good_tree = NULL;
     RerankingTree* best_bad_tree = NULL;
-    floatval_t worst_good_score = 1e20;
-    floatval_t best_bad_score = -1e20;
 
     for (int i = 0; i < sample.good.size(); ++ i) {
       RerankingTree* t = sample.good[i];
@@ -427,10 +439,13 @@ void Pipe::learn_one_pair(const CoNLLXDependency* inst,
     const RerankingTree* good, const RerankingTree* bad,
     int timestamp) {
   int delta_loss = bad->loss - good->loss;
+  _TRACE << "good loss=" << good->loss << ", bad loss=" << bad->loss
+    << ", delta = " << delta_loss << ", good score=" << good->c_score
+    << ", bad score=" << bad->c_score;
   if (delta_loss > 0 && good->c_score - bad->c_score < delta_loss - 1e-8) {
     learner->set_timestamp(timestamp);
-    ScoreContext bad_ctx(inst->size(), inst->forms, inst->postags, good->heads, good->deprels);
-    ScoreContext good_ctx(inst->size(), inst->forms, inst->postags, bad->heads, bad->deprels);
+    ScoreContext good_ctx(inst->size(), inst->forms, inst->postags, good->heads, good->deprels);
+    ScoreContext bad_ctx(inst->size(), inst->forms, inst->postags, bad->heads, bad->deprels);
     learner->learn(&bad_ctx, &good_ctx, delta_loss, &bad->c_score, &good->c_score);
   }
 }
@@ -443,6 +458,10 @@ bool Pipe::load_model(const std::string& model_path) {
     _WARN << "pipe: cstep model doesn't exist.";
     return false;
   }
+
+  boost::archive::text_iarchive ia(mfs);
+  ia >> language;
+
   if (!forms_alphabet.load(mfs)) {
     _WARN << "pipe: failed to load forms alphabet.";
     return false;
@@ -468,6 +487,8 @@ void Pipe::save_model(const std::string& model_path) {
   if (!mfs.good()) {
     _WARN << "pipe: failed to save C-step model.";
   } else {
+    boost::archive::text_oarchive oa(mfs);
+    oa << language;
     forms_alphabet.save(mfs);
     postags_alphabet.save(mfs);
     deprels_alphabet.save(mfs);

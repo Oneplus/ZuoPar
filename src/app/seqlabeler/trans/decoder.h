@@ -1,13 +1,13 @@
-#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_DECODER_H__
-#define __ZUOPAR_APP_SEQUENCE_LABELER_DECODER_H__
+#ifndef __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_DECODER_H__
+#define __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_DECODER_H__
 
 #include "engine/token_alphabet.h"
 #include "system/system.h"
-#include "app/seqlabeler/state.h"
-#include "app/seqlabeler/action.h"
-#include "app/seqlabeler/score_context.h"
-#include "app/seqlabeler/action.h"
-#include "app/seqlabeler/weight.h"
+#include "app/seqlabeler/trans/state.h"
+#include "app/seqlabeler/trans/action.h"
+#include "app/seqlabeler/trans/score_context.h"
+#include "app/seqlabeler/trans/action.h"
+#include "app/seqlabeler/trans/weight.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
@@ -46,4 +46,4 @@ private:
 } //  namespace zuopar
 
 
-#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_DECODER_H__
+#endif  //  end for __ZUOPAR_APP_SEQUENCE_LABELER_TRANS_DECODER_H__
