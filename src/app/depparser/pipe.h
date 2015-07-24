@@ -577,10 +577,13 @@ public:
 
     for (auto n = 0; n < N; ++ n) {
       const CoNLLXDependency& instance = dataset[n];
-      auto L = instance.forms.size();
-      std::vector<State> states(L* 2);
+      //auto L = instance.forms.size();
+      int max_nr_actions = MaxNumberOfActionsFunction()(instance) ;
+      //std::vector<State> states(L* 2);
+      std::vector<State> states(max_nr_actions + 1) ; // one more state
       states[0].copy(State(&instance));
-      for (auto step = 0; step < L*2-1; ++ step) {
+      int ended_step = 0 ;
+      for (auto step = 0 ; step < max_nr_actions ; ++ step) {
         std::vector<Action> possible_actions;
         PackedScores<Action> scores;
         decoder->get_possible_actions(states[step], possible_actions);
@@ -595,10 +598,13 @@ public:
         }
 
         decoder->transit(states[step], best_action, 0, &states[step+ 1]);
+        ended_step = step ; // sync ended step
+        if(decoder->terminated()){ break ;}
       }
 
       CoNLLXDependency output;
-      build_output(states[L*2-1], output, deprels_alphabet.encode(root));
+      //build_output(states[L*2-1], output, deprels_alphabet.encode(root));
+      build_output(states[ended_step], output, deprels_alphabet.encode(root));
       IO::write_conllx_dependency_instance((*os), output, forms_alphabet,
           lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
           deprels_alphabet);
