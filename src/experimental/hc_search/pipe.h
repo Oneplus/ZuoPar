@@ -59,7 +59,8 @@ private:
   Engine::TokenAlphabet postags_alphabet; //! The postag alphabet.
   Engine::TokenAlphabet deprels_alphabet; //! The deprel alphabet.
   std::string language;
-  floatval_t alpha; //  only used in testing model.
+  std::vector<std::string> alpha_tokens;
+  std::vector<floatval_t> alphas; //  only used in testing model.
 public:
   //! Build pipe for learning the second phase.
   Pipe(const LearnOption& opts);

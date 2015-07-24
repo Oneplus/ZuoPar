@@ -33,7 +33,7 @@ po::options_description build_learn_optparser(const std::string& usage) {
 po::options_description build_test_optparser(const std::string& usage) {
   po::options_description optparser = dp::build_test_optparser(usage);
   optparser.add_options()
-    ("alpha", po::value<floatval_t>()->default_value(0),
+    ("alpha", po::value<std::string>()->default_value("0"),
      "the interpolation on h-step and c-step score.");
   return optparser;
 }
@@ -66,7 +66,7 @@ bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
 
 bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
   if (!dp::parse_test_option(vm, static_cast<dp::TestOption&>(opts))) { return false; }
-  opts.alpha = vm["alpha"].as<floatval_t>();
+  opts.alphas = vm["alpha"].as<std::string>();
   return true;
 }
 

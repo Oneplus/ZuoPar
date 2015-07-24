@@ -20,7 +20,7 @@ struct LearnOption: public DependencyParser::LearnOption,
 
 struct TestOption: public DependencyParser::TestOption,
   public LanguageOption {
-  floatval_t alpha;
+  std::string alphas;
 };
 
 } //  namespace cstep

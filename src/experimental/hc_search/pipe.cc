@@ -55,8 +55,13 @@ Pipe::Pipe(const LearnOption& opts)
 Pipe::Pipe(const TestOption& opts)
   : weight(NULL), learner(NULL),
   fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
-  alpha = opts.alpha;
-  _INFO << "report: (cstep.test) alpha = " << alpha;
+  boost::algorithm::split(alpha_tokens, opts.alphas, boost::is_any_of(";"),
+      boost::token_compress_on);
+  alphas.resize(alpha_tokens.size());
+  for (auto i = 0; i < alpha_tokens.size(); ++ i) {
+    alphas[i] = boost::lexical_cast<floatval_t>(alpha_tokens[i]);
+  }
+  _INFO << "report: (cstep.test) alphas = " << opts.alphas;
   _INFO << "report: (cstep.test) loading model from " << model_path;
   if (load_model(model_path)) {
     _INFO << "report: (cstep.test) model " << model_path << " is loaded.";
@@ -75,7 +80,11 @@ void Pipe::test() {
   if (!load_data(input_path, false)) { return; }
   build_knowledge();
 
-  std::ostream* os = IO::get_ostream(output_path);
+  std::vector<std::ostream*> ostreams;
+  ostreams.resize(alphas.size());
+  for (auto i = 0; i < alphas.size(); ++ i) {
+    ostreams[i] = IO::get_ostream(output_path + "." + alpha_tokens[i]);
+  }
 
   for (auto& data: dataset) {
     CoNLLXDependency& inst = data.instance;
@@ -94,32 +103,40 @@ void Pipe::test() {
       if (i == 0 || min_c_score > t.c_score) { min_c_score = t.c_score; }
     }
 
-    for (auto i = 0; i < trees.size(); ++ i) {
-      auto& t = trees[i];
-      scores[i] = alpha* ((t.h_score-min_h_score) / (max_h_score-min_h_score))+
-        (1- alpha)* ((t.c_score-min_c_score) / (max_c_score-min_c_score));
-    }
+    for (auto a = 0; a < alphas.size(); ++ a) {
+      floatval_t alpha = alphas[a];
+      std::ostream* os = ostreams[a];
 
-    floatval_t best_score = -1e20; int best_i = -1;
-    for (auto i = 0; i < scores.size(); ++ i) {
-      if (best_i < 0 || best_score < scores[i]) {
-        best_i = i; best_score = scores[i];
+      for (auto i = 0; i < trees.size(); ++ i) {
+        auto& t = trees[i];
+        scores[i] = alpha* ((t.h_score-min_h_score) / (max_h_score-min_h_score))+
+          (1- alpha)* ((t.c_score-min_c_score) / (max_c_score-min_c_score));
       }
-    }
 
-    for (auto i = 1; i < inst.size(); ++ i) {
-      (*os) << i << " "
-        << forms_alphabet.decode(inst.forms[i]) << "\t"
-        << forms_alphabet.decode(inst.forms[i]) << "\t"
-        << postags_alphabet.decode(inst.postags[i]) << "\t"
-        << postags_alphabet.decode(inst.postags[i]) << "\t"
-        << "_\t"
-        << trees[best_i].heads[i] << "\t"
-        << deprels_alphabet.decode(trees[best_i].deprels[i]) << std::endl;
+      floatval_t best_score = -1e20; int best_i = -1;
+      for (auto i = 0; i < scores.size(); ++ i) {
+        if (best_i < 0 || best_score < scores[i]) {
+          best_i = i; best_score = scores[i];
+        }
+      }
+
+      for (auto i = 1; i < inst.size(); ++ i) {
+        (*os) << i << " "
+          << forms_alphabet.decode(inst.forms[i]) << "\t"
+          << forms_alphabet.decode(inst.forms[i]) << "\t"
+          << postags_alphabet.decode(inst.postags[i]) << "\t"
+          << postags_alphabet.decode(inst.postags[i]) << "\t"
+          << "_\t"
+          << trees[best_i].heads[i] << "\t"
+          << deprels_alphabet.decode(trees[best_i].deprels[i]) << std::endl;
+      }
+      (*os) << std::endl;
     }
-    (*os) << std::endl;
   }
-  if (os!= &(std::cout) && os != NULL) { delete os; }
+  for (auto i = 0; i < alphas.size(); ++ i) {
+    std::ostream* os = ostreams[i];
+    if (os!= &(std::cout) && os != NULL) { delete os; }
+  }
 }
 
 
