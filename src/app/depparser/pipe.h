@@ -598,8 +598,8 @@ public:
         }
 
         decoder->transit(states[step], best_action, 0, &states[step+ 1]);
-        ended_step = step ; // sync ended step
-        if(decoder->terminated()){ break ;}
+        ended_step = step + 1 ; // sync ended step
+        if(states[ended_step].is_complete()){ break ;}
       }
 
       CoNLLXDependency output;

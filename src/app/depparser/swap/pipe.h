@@ -14,7 +14,7 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace Swap {
 
-struct MaxNunmberActions {
+struct MaxNumberActions {
   int operator ()(const CoNLLXDependency& instance) {
     // According to Nivre (2009), the number of action is bounded by n+n^2
     return instance.size()* instance.size() + instance.size();
@@ -22,12 +22,16 @@ struct MaxNunmberActions {
 };
 
 typedef CoNLLXDependencyPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
+  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberActions
 > Pipe;
 
 typedef CoNLLXDependencyMultiPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
+  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNumberActions
 > MultiPipe;
+
+typedef GreedySearchCoNLLXDependenyPipe<
+  Action , ActionUtils , State , Weight , Decoder , Learner , MaxNumberActions 
+> GreedyPipe ;
 
 } //  end for namespace swap
 } //  end for namespace dependencyparser

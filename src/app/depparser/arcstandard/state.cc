@@ -238,6 +238,7 @@ int State::cost(const std::vector<int>& gold_heads,
 
 bool State::buffer_empty() const { return (this->buffer == this->ref->size()); }
 size_t State::stack_size() const { return (this->stack.size()); }
+bool State::is_complete() const           { return stack.size() == 1 && buffer == ref->size(); }
 
 } //  end for namespace arcstandard
 } //  end for namespace dependencyparser

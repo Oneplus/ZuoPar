@@ -153,6 +153,7 @@ bool State::right_arc(const State& source, deprel_t deprel) {
 
 bool State::buffer_empty() const { return (this->buffer == this->ref->size()); }
 size_t State::stack_size() const { return (this->stack.size()); }
+bool State::is_complete() const           { return stack.size() == 1 && buffer == ref->size(); }
 
 } //  end for namespace arceager
 } //  end for namespace dependencyparser

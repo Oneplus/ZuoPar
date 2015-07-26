@@ -64,6 +64,8 @@ public:
   //! Get the size of the stack.
   size_t stack_size() const;
 
+  bool is_complete() const;           //! shorthand for stack.size() == 1 &&
+  
   //! The pointer to the previous state.
   std::vector<int> stack;
 
