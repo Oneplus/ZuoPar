@@ -14,20 +14,23 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace Choi2013 {
 
-struct MaxNunmberActions {
+struct MaxNumberActions {
   int operator ()(const CoNLLXDependency& instance) {
     return instance.size()* instance.size() / 2+ 2* instance.size();
   }
 };
 
 typedef CoNLLXDependencyPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
+  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberActions
 > Pipe;
 
 typedef CoNLLXDependencyMultiPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
+  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNumberActions
 > MultiPipe;
 
+typedef GreedySearchCoNLLXDependenyPipe<
+  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberActions
+> GreedyPipe;
 } //  end for namespace choi2013
 } //  end for namespace dependencyparser
 } //  end for namespace zuopar

@@ -68,6 +68,8 @@ public:
   //! Get the size of the stack.
   size_t stack_size() const;
 
+  bool is_complete() const;           //! shorthand for stack.size() == 1 &&
+  
   //! Refresh the value of top0 and top1.
   void refresh_stack_information();
 
