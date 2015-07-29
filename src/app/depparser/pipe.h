@@ -522,7 +522,7 @@ template <
   class Learner,
   class MaxNumberOfActionsFunction
 >
-class GreedySearchCoNLLXDependenyPipe: public CoNLLXDependencyRepository {
+class GreedySearchCoNLLXDependencyPipe: public CoNLLXDependencyRepository {
 private:
   //! The supported modes.
   enum PipeMode { kPipeLearn, kPipeTest };
@@ -540,7 +540,7 @@ private:
   Weight* weight;
 
 public:
-  GreedySearchCoNLLXDependenyPipe(const GreedyLearnOption& opt):
+  GreedySearchCoNLLXDependencyPipe(const GreedyLearnOption& opt):
     mode(kPipeLearn),
     weight(nullptr), decoder(nullptr),
     reference_path(opt.reference_path), model_path(opt.model_path),
@@ -551,7 +551,7 @@ public:
     _INFO << "report: root = " << root;
   }
 
-  GreedySearchCoNLLXDependenyPipe(const GreedyTestOption& opt):
+  GreedySearchCoNLLXDependencyPipe(const GreedyTestOption& opt):
     mode(kPipeTest),
     weight(nullptr), decoder(nullptr),
     input_path(opt.input_path), output_path(opt.output_path), model_path(opt.model_path),
@@ -561,7 +561,7 @@ public:
     _INFO << "report: root = " << root;
   }
 
-  ~GreedySearchCoNLLXDependenyPipe() {
+  ~GreedySearchCoNLLXDependencyPipe() {
     if (weight) { delete weight; weight = nullptr; }
     if (decoder) { delete decoder; decoder = nullptr; }
   }

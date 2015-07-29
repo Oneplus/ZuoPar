@@ -14,22 +14,22 @@ namespace ZuoPar {
 namespace DependencyParser {
 namespace ArcStandard {
 
-struct MaxNunmberActions {
+struct MaxNumberActions {
   int operator ()(const CoNLLXDependency& instance) {
     return instance.size()* 2- 1;
   }
 };
 
 typedef CoNLLXDependencyPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
+  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberActions
 > Pipe;
 
 typedef CoNLLXDependencyMultiPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNunmberActions
+  Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNumberActions
 > MultiPipe;
 
-typedef GreedySearchCoNLLXDependenyPipe<
-  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNunmberActions
+typedef GreedySearchCoNLLXDependencyPipe<
+  Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberActions
 > GreedyPipe;
 
 
