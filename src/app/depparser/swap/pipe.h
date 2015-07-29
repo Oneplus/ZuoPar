@@ -29,7 +29,7 @@ typedef CoNLLXDependencyMultiPipe<
   Action, ActionUtils, State, Weight, Decoder, Learner, MinibatchLearner, MaxNumberActions
 > MultiPipe;
 
-typedef GreedySearchCoNLLXDependenyPipe<
+typedef GreedySearchCoNLLXDependencyPipe<
   Action , ActionUtils , State , Weight , Decoder , Learner , MaxNumberActions 
 > GreedyPipe ;
 
