@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8.0)
 project ("ZuoPar")
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
+set(BOOST_ROOT "E:\\lib\\boost_1_58_0")
 find_package (Boost REQUIRED)
 find_package (sparsehash)
 
@@ -22,7 +22,7 @@ set (THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 if (SPARSEHASH_FOUND)
     include_directories (${Boost_INCLUDE_DIRS} ${SPARSEHASH_INCLUDE_DIR} ${SOURCE_DIR})
 else ()
-    include_directories (${Boost_LIBRARY_DIRS} ${SOURCE_DIR})
+    include_directories (${Boost_INCLUDE_DIRS} ${SOURCE_DIR})
 endif (SPARSEHASH_FOUND)
 
 link_directories (${Boost_LIBRARY_DIRS})
