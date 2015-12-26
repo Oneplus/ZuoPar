@@ -19,15 +19,7 @@ add_executable (multi_predicate_srl
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (multi_predicate_srl
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries (multi_predicate_srl ${LIBS})
 
 set_target_properties (multi_predicate_srl
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

@@ -8,13 +8,12 @@
 #include <boost/functional/hash.hpp>
 #include <unordered_map>
 
-#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
 # include <google/dense_hash_map>
 # include "utils/serialization/dense_hash_map.h"
 #else
 # include <unordered_map>
 # include "utils/serialization/unordered_map.h"
-# warning ("use std::unordered_map which is slow")
 #endif
 
 namespace ZuoPar {
@@ -32,7 +31,7 @@ private:
   typedef _MetaFeatureType feature_t;
 
   //! Define the mapping type.
-#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
   typedef google::dense_hash_map< feature_t, param_t, boost::hash<feature_t> > map_t;
 #else
   typedef std::unordered_map< feature_t, param_t, boost::hash<feature_t> > map_t;
@@ -53,9 +52,8 @@ public:
    *
    *  @param[in]  extractor_  The extraction functor.
    */
-  MetaFeatureParameterMap(extractor_t extractor_)
-    : extractor(extractor_) {
-#if defined(UNORDERED_MAP_IMPL) and (UNORDERED_MAP_IMPL == dense_hash_map)
+  MetaFeatureParameterMap(extractor_t extractor_) : extractor(extractor_) {
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
     rep.set_empty_key(feature_t());
 #endif
   }

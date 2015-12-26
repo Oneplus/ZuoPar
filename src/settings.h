@@ -9,6 +9,9 @@
 #ifndef __ZUOPAR_SETTINGS_H__
 #define __ZUOPAR_SETTINGS_H__
 
+#define use_dense_hash_map 0
+#define use_unordered_map  1
+
 namespace ZuoPar {
 
 typedef double floatval_t;

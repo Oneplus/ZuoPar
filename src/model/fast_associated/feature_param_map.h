@@ -9,13 +9,13 @@
 #include <boost/functional/hash.hpp>
 #include <boost/serialization/map.hpp>
 
-#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
 # include <google/dense_hash_map>
 # include "utils/serialization/dense_hash_map.h"
 #else
 # include <unordered_map>
 # include <boost/serialization/unordered_map.hpp> // boost ~1_57 required.
-# warning ("use std::unordered_map which is slow")
 #endif
 
 namespace ZuoPar {
@@ -64,8 +64,8 @@ private:
   typedef std::unordered_map<
     _ActionType, param_t, boost::hash<_ActionType>
   > entry_t;
-
-#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+  
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
   typedef google::dense_hash_map<
     _MetaFeatureType, entry_t, boost::hash<_MetaFeatureType>
   > map_t;
@@ -91,7 +91,7 @@ public:
    *  @param[in]  extractor_  The extraction functor.
    */
   FeatureParameterMap(extractor_t extractor_): extractor(extractor_) {
-#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
     rep.set_empty_key(_MetaFeatureType());
 #endif
   }
@@ -141,9 +141,7 @@ public:
     cache_t cache;
     extractor(ctx, cache);
     for (const _MetaFeatureType& c: cache) {
-      SparseVector3Key key = SparseVector3Key(gid,
-          boost::hash_value<_MetaFeatureType>(c),
-          boost::hash_value<_ActionType>(act));
+      SparseVector3Key key = SparseVector3Key(gid, hash_value(c), hash_value(act));
       (*sparse_vector)[key] += scale;
     }
   }

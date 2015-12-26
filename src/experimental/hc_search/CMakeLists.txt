@@ -16,16 +16,7 @@ add_executable (hc_depparser_cstep
     ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (hc_depparser_cstep
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    icuuc
-    pthread)
+target_link_libraries (hc_depparser_cstep ${LIBS})
 
 set_target_properties(hc_depparser_cstep
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

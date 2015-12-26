@@ -13,6 +13,7 @@ int multi_learn(int argc, char** argv) {
   std::string usage = "Multi-threaded training component of ZuoPar::" APP ".\n";
   usage += "usage: " EXE " multi-learn [options]\n";
   usage += "options";
+  return 0;
 }
 
 int learn(int argc, char** argv) {
@@ -39,6 +40,7 @@ int learn(int argc, char** argv) {
 
 int test(int argc, char** argv) {
   std::string usage = "Testing component of ZuoPar::" APP ".\n";
+  return 0;
 }
 
 #include "frontend/template/main.h"

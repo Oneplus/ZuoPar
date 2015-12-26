@@ -16,15 +16,7 @@ add_executable (depparser_swap
     ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (depparser_swap
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries (depparser_swap ${LIBS})
 
 add_executable (depparser_swap_greedy
     greedy.cc
@@ -42,12 +34,4 @@ add_executable (depparser_swap_greedy
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
     ${SOURCE_DIR}/utils/io/instance/csv.cc)
 
-target_link_libraries(depparser_swap_greedy
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries(depparser_swap_greedy ${LIBS})

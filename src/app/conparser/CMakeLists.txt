@@ -9,12 +9,4 @@ add_executable (conparser main.cc
     ${SOURCE_DIR}/utils/io/instance/lisp.cc
     )
 
-target_link_libraries (conparser
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries (conparser ${LIBS})

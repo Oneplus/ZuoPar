@@ -22,8 +22,8 @@ public:
    */
   AbstractSimpleAction(int name) : seed(name) {}
 
-  bool operator == (const AbstractSimpleAction& a) const { return (a.seed== seed); }
-  bool operator != (const AbstractSimpleAction& a) const { return (a.seed!= seed); }
+  bool operator == (const AbstractSimpleAction& a) const { return (a.seed == seed); }
+  bool operator != (const AbstractSimpleAction& a) const { return (a.seed != seed); }
   bool operator <  (const AbstractSimpleAction& a) const { return (seed < a.seed); }
 
   inline int name() const { return seed; }

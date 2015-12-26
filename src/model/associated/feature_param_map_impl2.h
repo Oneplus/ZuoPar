@@ -9,13 +9,12 @@
 #include "utils/logging.h"
 #include <boost/functional/hash.hpp>
 
-#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
 # include <google/dense_hash_map>
 # include "utils/serialization/dense_hash_map.h"
 #else
 # include <unordered_map>
 # include "utils/serialization/unordered_map.h"
-# warning ("use std::unordered_map which is slow")
 #endif
 
 namespace ZuoPar {
@@ -38,7 +37,7 @@ private:
   typedef MachineLearning::PointwiseParameter param_t;
 
   //! Define the mapping type.
-#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == dense_hash_map)
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
   typedef google::dense_hash_map<
     _FeatureType,
     param_t,
@@ -68,7 +67,7 @@ public:
    *  @param[in]  extractor_  The extraction functor.
    */
   FeatureParameterMapImpl2(extractor_t extractor_): extractor(extractor_) {
-#if defined(UNORDERED_MAP_IMPL) and (UNORDERED_MAP_IMPL == dense_hash_map)
+#if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
     rep.set_empty_key(_FeatureType());
 #endif
   }

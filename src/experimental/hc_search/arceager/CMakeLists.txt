@@ -17,15 +17,7 @@ add_executable (hc_depparser_hstep_arceager
     ${SOURCE_DIR}/utils/io/instance/dependency.cc
     )
 
-target_link_libraries (hc_depparser_hstep_arceager
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries (hc_depparser_hstep_arceager ${LIBS})
 
 set_target_properties(hc_depparser_hstep_arceager
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

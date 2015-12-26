@@ -16,15 +16,7 @@ add_executable (depparser_choi2013
     ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (depparser_choi2013
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries (depparser_choi2013 ${LIBS})
 
 add_executable (depparser_choi2013_greedy
     greedy.cc
@@ -43,13 +35,5 @@ add_executable (depparser_choi2013_greedy
     ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries(depparser_choi2013_greedy
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries(depparser_choi2013_greedy ${LIBS})
 

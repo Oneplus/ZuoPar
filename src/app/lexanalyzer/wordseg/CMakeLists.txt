@@ -15,12 +15,4 @@ add_executable (wordseg
     ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (wordseg
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries (wordseg ${LIBS})

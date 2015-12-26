@@ -15,15 +15,7 @@ add_executable (depparser_arceager
     ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (depparser_arceager
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries (depparser_arceager ${LIBS})
 
 add_executable (depparser_arceager_greedy
     greedy.cc
@@ -41,13 +33,5 @@ add_executable (depparser_arceager_greedy
     ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (depparser_arceager_greedy
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_system
-    pthread)
+target_link_libraries (depparser_arceager_greedy ${LIBS})
 
