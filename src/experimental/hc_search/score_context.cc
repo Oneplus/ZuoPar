@@ -90,7 +90,7 @@ ScoreContext::ScoreContext(int   _len,
       int Rel = deprels[mid];
       int Dir  = (hid < mid? 0: 1);
       int Dist = (hid < mid?
-          Math::binned_1_2_3_4_5_6_10[mid- hid]:
+          -Math::binned_1_2_3_4_5_6_10[mid- hid]:
           Math::binned_1_2_3_4_5_6_10[hid- mid]);
 
       // relation

@@ -16,7 +16,7 @@ add_executable (hc_depparser_cstep
     ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (hc_depparser_cstep ${LIBS})
+target_link_libraries (hc_depparser_cstep ${LIBS} icuuc)
 
 set_target_properties(hc_depparser_cstep
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

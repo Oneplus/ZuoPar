@@ -141,7 +141,13 @@ public:
     cache_t cache;
     extractor(ctx, cache);
     for (const _MetaFeatureType& c: cache) {
+#ifdef MSC_VER
       SparseVector3Key key = SparseVector3Key(gid, hash_value(c), hash_value(act));
+#else
+      SparseVector3Key key = SparseVector3Key(gid,
+          boost::hash_value<_MetaFeatureType>(c),
+          boost::hash_value<_ActionType>(act));
+#endif
       (*sparse_vector)[key] += scale;
     }
   }
