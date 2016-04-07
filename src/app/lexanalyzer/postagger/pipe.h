@@ -8,6 +8,7 @@
 #include "app/lexanalyzer/postagger/weight.h"
 #include "app/lexanalyzer/postagger/decoder.h"
 #include "app/lexanalyzer/postagger/learner.h"
+#include <boost/program_options.hpp>
 
 namespace ZuoPar {
 namespace LexicalAnalyzer {
@@ -16,26 +17,12 @@ namespace Postagger {
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
 
-class Pipe: public fe::CommonPipeConfigure {
+class Pipe {
 public:
-  /**
-   * The learning mode constructor.
-   *
-   *  @param[in]  opts  The learning options.
-   */
-  Pipe(const fe::LearnOption& opts);
-
-  /**
-   * The testing mode constructor.
-   *
-   *  @param[in]  opts  The testing options.
-   */
-  Pipe(const fe::TestOption& opts);
-
-  /**
-   * Perform learning or testing according to the configuration.
-   */
-  void run();
+  Pipe(const boost::program_options::variables_map& vm);
+  ~Pipe();
+  void test();  //  Perform testing.
+  void learn(); //  Perform training.
 
   /**
    * Load model from the specified path.
@@ -53,6 +40,8 @@ public:
    */
   void build_output(const State& source, Postag& output);
 private:
+  double evaluate(const std::vector<Postag>& dataset);
+
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.
   Weight* weight;
@@ -68,6 +57,10 @@ private:
 
   //! The dataset.
   std::vector<Postag> dataset;
+  std::vector<Postag> devel_dataset;
+
+  //! The configuration.
+  const boost::program_options::variables_map& conf;
 };
 
 

@@ -5,16 +5,15 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
 
-Decoder::Decoder(int nr, int beam_size, bool avg, Weight* weight)
-  : nr_postags(nr),
-  TransitionSystem<Action, State, Weight>(
-      beam_size, avg, UpdateStrategy::kEarlyUpdate, weight) {
+Decoder::Decoder(int n, int beam, bool avg, UpdateStrategy strategy, Weight* weight)
+  : n_postags(n),
+  TransitionSystem<Action, State, Weight>(beam, avg, strategy, weight) {
 }
 
 void Decoder::get_possible_actions(const State& source,
     std::vector<Action>& actions) {
   actions.clear();
-  for (postag_t p = eg::TokenAlphabet::END+ 1; p < nr_postags; ++ p) {
+  for (postag_t p = eg::TokenAlphabet::END+ 1; p < n_postags; ++ p) {
     actions.push_back(ActionFactory::make(p));
   }
 }

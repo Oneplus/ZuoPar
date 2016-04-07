@@ -19,11 +19,13 @@ public:
   /**
    * The decoder constructor.
    *
-   *  @param[in]  nr        The number of dependency relations.
-   *  @param[in]  beam_size The size of beam.
+   *  @param[in]  n         The number of dependency relations.
+   *  @param[in]  beam      The size of beam.
+   *  @param[in]  avg       Use average parameter?
+   *  @param[in]  strategy  The update stategy (for learning).
    *  @param[in]  weight    The pointer to the weight.
    */
-  Decoder(int nr, int beam_size, bool avg, Weight* weight);
+  Decoder(int n, int beam, bool avg, UpdateStrategy strategy, Weight* weight);
 
   //! Implement arc standard get possible actions.
   void get_possible_actions(const State& source,
@@ -35,7 +37,7 @@ public:
 
   bool terminated();
 private:
-  int nr_postags;
+  int n_postags;
 };
 
 } //  end for namespace postagger
