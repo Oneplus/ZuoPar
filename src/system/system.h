@@ -256,6 +256,8 @@ public:
     beam_size = size;
   }
 
+  void set_use_avg()   { use_avg = true;  }
+  void reset_use_avg() { use_avg = false; }
   int get_ending_round() const { return step; }
 
   void get_results_in_beam(std::vector<_StateType*>& results, int round) const {

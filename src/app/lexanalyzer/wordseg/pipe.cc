@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include "utils/misc.h"
 #include "utils/logging.h"
 #include "utils/io/stream.h"
 #include "utils/io/dataset/segmentation.h"
@@ -13,16 +14,19 @@ namespace ChineseWordSegmentor {
 
 namespace fe = ZuoPar::FrontEnd;
 
-Pipe::Pipe(const fe::LearnOption& opts)
-  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
-  if (load_model(opts.model_path)) { _INFO << "report: model is loaded."; }
-  else { _INFO << "report: model is not loaded."; }
+Pipe::Pipe(const boost::program_options::variables_map& vm) 
+  : weight(new Weight), decoder(0), learner(0), conf(vm) {
+  if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
+    _INFO << "report: model is loaded.";
+  } else {
+    _INFO << "report: model is not loaded.";
+  }
 }
 
-Pipe::Pipe(const fe::TestOption& opts)
-  : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
-  if (load_model(opts.model_path)) { _INFO << "report: model is loaded."; }
-  else { _INFO << "report: model is not loaded."; }
+Pipe::~Pipe() {
+  if (weight)   { delete weight;  weight = nullptr;   }
+  if (decoder)  { delete decoder; decoder = nullptr;  }
+  if (learner)  { delete learner; learner = nullptr;  }
 }
 
 bool Pipe::load_model(const std::string& model_path) {
@@ -40,81 +44,135 @@ bool Pipe::save_model(const std::string& model_path) {
   return true;
 }
 
-bool Pipe::setup() {
-  namespace ioutils = ZuoPar::IO;
-  dataset.clear();
-  if (mode == kPipeLearn) {
-    std::ifstream ifs(reference_path.c_str());
-    if (!ifs.good()) {
-      _ERROR << "#: failed to open reference file.";
-      _ERROR << "#: training halt";
-      return false;
-    }
-    _INFO << "report: loading dataset from reference file.";
-    ioutils::read_segmentation_dataset(ifs, dataset, true);
-    _INFO << "report: dataset is loaded from reference file.";
-  } else {
-    std::ifstream ifs(input_path.c_str());
-    if (!ifs.good()) {
-      _ERROR << "#: failed to open input file.";
-      _ERROR << "#: testing halt";
-      return false;
-    }
-    ioutils::read_segmentation_dataset(ifs, dataset, false);
-  }
-  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
-  return true;
-}
 
-void Pipe::run() {
+void Pipe::learn() {
   namespace ioutils = ZuoPar::IO;
-  if (!setup()) {
+
+  std::ifstream ifs(conf["train"].as<std::string>());
+  if (!ifs.good()) {
+    _ERROR << "#: failed to open reference file.";
+    _ERROR << "#: training halt";
     return;
   }
-
-  if (mode == kPipeLearn) {
-    decoder = new Decoder(beam_size, false, weight);
-    learner = new Learner(weight);
-  } else {
-    decoder = new Decoder(beam_size, true, weight);
-  }
-  size_t N = dataset.size();
-  std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
-  for (size_t n = 0; n < N; ++ n) {
-    const Segmentation& instance = dataset[n];
-    // calculate the oracle transition actions.
-    std::vector<Action> actions;
-    if (mode == kPipeLearn) {
-      ActionUtils::get_oracle_actions(instance, actions);
-      for (const Action& a: actions) { _TRACE << a; }
+  _INFO << "report: loading dataset from reference file.";
+  ioutils::read_segmentation_dataset(ifs, dataset, true);
+  _INFO << "report: loaded " << dataset.size() << " training instance(s).";
+  
+  if (conf.count("devel")) {
+    std::ifstream devel_ifs(conf["devel"].as<std::string>());
+    if (!devel_ifs.good()) {
+      _WARN << "report: Failed to load development data.";
+    } else {
+      ioutils::read_segmentation_dataset(devel_ifs, devel_dataset, false);
+      _INFO << "report: loaded " << devel_dataset.size() << " development instance(s).";
     }
+  }
 
-    int max_nr_actions = instance.size();
-    State init_state(&instance);
-    Decoder::const_decode_result_t result = decoder->decode(init_state,
+  decoder = new Decoder(conf["beam"].as<unsigned>(), false, weight);
+  learner = new Learner(weight);
+
+  std::string model_path;
+  double best_score = 0.;
+  if (conf.count("model")) {
+    model_path = conf["model"].as<std::string>();
+  } else {
+    model_path = "pos.";
+    model_path += conf["algorithm"].as<std::string>() + "_" + conf["update"].as<std::string>() + "_";
+    model_path += boost::lexical_cast<std::string>(conf["beam"].as<unsigned>()) + ".";
+    model_path += boost::lexical_cast<std::string>(Utility::get_pid()) + ".model";
+  }
+
+  unsigned n_seen = 0, N = dataset.size();
+  for (unsigned iter = 0; iter < conf["iteration"].as<unsigned>(); ++iter) {
+    for (const Segmentation& instance : dataset) {
+      ++n_seen;
+      std::vector<Action> actions;
+      ActionUtils::get_oracle_actions(instance, actions);
+      for (const Action& a : actions) { _TRACE << a; }
+
+      int max_nr_actions = instance.size();
+      State init_state(&instance);
+      Decoder::const_decode_result_t result = decoder->decode(init_state,
         actions, max_nr_actions);
 
-    if (mode == kPipeLearn) {
-      learner->set_timestamp(n+ 1);
+      learner->set_timestamp(n_seen);
       learner->learn(result.first, result.second);
-    } else {
-      Segmentation output;
-      build_output((*result.first), output);
-      ioutils::write_segmentation_instance((*os), output);
-    }
 
-    if ((n+ 1)% display_interval == 0) {
-      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
+      if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
+        _INFO << "pipe: processed #" << n_seen % N << "/" << n_seen / N << " instances.";
+      }
+      if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+        learner->flush();
+        double score = evaluate(devel_dataset);
+        decoder->reset_use_avg();
+        _INFO << "pipe: evaluate at instance#" << n_seen << ", score: " << score;
+        if (score > best_score) {
+          _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+          save_model(model_path);
+          best_score = score;
+        }
+      }
     }
-  }
-  _INFO << "pipe: processed #" << N << " instances.";
-
-  if (mode == kPipeLearn) {
-    learner->set_timestamp(N);
     learner->flush();
-    _INFO << "pipe: nr errors: " << learner->errors();
-    save_model(model_path);
+    _INFO << "pipe: iter" << iter + 1 << " #errros: " << learner->errors();
+    learner->clear_errors();
+    double score = evaluate(devel_dataset);
+    decoder->reset_use_avg();
+    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << "score: " << score;
+    if (score > best_score) {
+      _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+      save_model(model_path);
+      best_score = score;
+    }
   }
+  _INFO << "pipe: end of training, best development score: " << best_score;
+}
+
+double Pipe::evaluate(const std::vector<Segmentation>& dataset) {
+  namespace ioutils = ZuoPar::IO;
+
+  std::string output;
+  if (conf.count("output")) {
+    output = conf["output"].as<std::string>();
+  } else {
+    output = "wordseg.output." + boost::lexical_cast<std::string>(Utility::get_pid());
+  }
+
+  std::ostream* os = ioutils::get_ostream(output);
+  decoder->set_use_avg();
+  for (const Segmentation& instance : dataset) {
+    std::vector<Action> actions;
+
+    int max_actions = instance.size();
+    State init_state(&instance);
+    Decoder::const_decode_result_t result =
+      decoder->decode(init_state, actions, max_actions);
+
+    Segmentation output;
+    build_output((*result.first), output);
+    ioutils::write_segmentation_instance((*os), output);
+  }
+  _INFO << "pipe: processed #" << dataset.size() << " instances.";
+  if (os == (&(std::cout))) { return 0.; }
+  return Utility::execute_script(conf["script"].as<std::string>(), output);
+}
+
+void Pipe::test() {
+  namespace ioutils = ZuoPar::IO;
+  dataset.clear();
+  // not implemented.
+  std::ifstream ifs(conf["input"].as<std::string>());
+  if (!ifs.good()) {
+    _ERROR << "#: failed to open input file, training halt.";
+    return;
+  }
+  ioutils::read_segmentation_dataset(ifs, dataset, false);
+  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
+
+  decoder = new Decoder(conf["beam"].as<unsigned>(), true, weight);
+
+  double score = evaluate(dataset);
+  _INFO << "test: score " << score;
 }
 
 void Pipe::build_output(const State& source, Segmentation& output) {

@@ -8,6 +8,7 @@
 #include "app/lexanalyzer/wordseg/weight.h"
 #include "app/lexanalyzer/wordseg/decoder.h"
 #include "app/lexanalyzer/wordseg/learner.h"
+#include <boost/program_options.hpp>
 
 namespace ZuoPar {
 namespace LexicalAnalyzer {
@@ -16,28 +17,13 @@ namespace ChineseWordSegmentor {
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
 
-class Pipe: public fe::CommonPipeConfigure {
+class Pipe {
 public:
-  /**
-   * The learning mode constructor.
-   *
-   *  @param[in]  opts  The learning options.
-   */
-  Pipe(const fe::LearnOption& opts);
-
-  /**
-   * The testing mode constructor.
-   *
-   *  @param[in]  opts  The testing options.
-   */
-  Pipe(const fe::TestOption& opts);
-
-  /**
-   * Perform learning or testing according to the configuration.
-   */
-  void run();
-
-  bool setup();
+  Pipe(const boost::program_options::variables_map& vm);
+  ~Pipe();  
+  void learn(); //  perform learning
+  void test();  //  perform testing
+  double evaluate(const std::vector<Segmentation>& dataset);
 
   /**
    * Load model from the specified path.
@@ -46,7 +32,13 @@ public:
    */
   bool load_model(const std::string& model_path);
 
+  /**
+   * Save model to the specified path.
+   *
+   *  @param[in]  model_path  The path to the model.
+   */
   bool save_model(const std::string& model_path);
+  
   /**
    * Build the dependency output for the state chain which ends with the source
    * state.
@@ -68,6 +60,9 @@ private:
 
   //! The dataset.
   std::vector<Segmentation> dataset;
+  std::vector<Segmentation> devel_dataset;
+
+  const boost::program_options::variables_map& conf;
 };
 
 

@@ -131,6 +131,7 @@ void Pipe::learn() {
       if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
         learner->flush();
         double score = evaluate(devel_dataset);
+        decoder->reset_use_avg();
         _INFO << "pipe: evaluate score: " << score;
         if (score > best_score) {
           _INFO << "pipe: NEW best model is achieved, save to " << model_path;
@@ -143,6 +144,7 @@ void Pipe::learn() {
     _INFO << "pipe: #errors: " << learner->errors();
     learner->clear_errors();
     double score = evaluate(devel_dataset);
+    decoder->reset_use_avg();
     _INFO << "pipe: evaluate score: " << score;
     if (score > best_score) {
       _INFO << "pipe: NEW best model is achieved, save to " << model_path;
@@ -164,6 +166,7 @@ double Pipe::evaluate(const std::vector<Postag>& dataset) {
   }
 
   std::ostream* os = ioutils::get_ostream(output); 
+  decoder->set_use_avg();
   for (const Postag& instance : dataset) {
     std::vector<Action> actions;
 
