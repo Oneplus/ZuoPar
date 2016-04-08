@@ -4,6 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include "utils/logging.h"
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
 #ifdef _MSC_VER
 #include <Windows.h>
 #endif
@@ -48,10 +51,11 @@ static double execute_script(const std::string& script, const std::string& outpu
 }
 
 static unsigned get_pid() {
-#ifndef _MSC_VER
+#ifdef _MSC_VER
+  return GetCurrentProcessId();
+#else
   return getpid();
 #endif
-  return GetCurrentProcessId();
 }
 
 } //  namespace utility

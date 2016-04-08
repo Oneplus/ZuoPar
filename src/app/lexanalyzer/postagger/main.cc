@@ -78,7 +78,7 @@ int test(int argc, char** argv) {
     ("output,o", po::value<std::string>(), "The path to the output file.")
     ("beam,b", po::value<unsigned>()->default_value(64), "The size for beam.")
     ("delimiter", po::value<char>()->default_value('/'), "The delimiter")
-    ("scripts", po::value<std::string>(), "The path to the evaluation script.")
+    ("script", po::value<std::string>(), "The path to the evaluation script.")
     ("verbose,v", "Logging every detail.");
 
   if (argc == 1) { std::cerr << optparser << std::endl; return 1; }

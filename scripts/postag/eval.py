@@ -7,10 +7,12 @@ parser = OptionParser(usage)
 
 parser.add_option("-g", "--gold", dest="gold", help="the gold result")
 parser.add_option("-s", "--system", dest="system", help="the system output")
+parser.add_option("-d", "--delimiter", dest="delimiter", default="/", help="the delimiter")
+parser.add_option("-v", "--verbose", action="store_true", default=False, help="verbose output")
 opts, args = parser.parse_args()
 
 def read(filename):
-    return [[token.rsplit("/", 1) for token in inst.split()]
+    return [[token.rsplit(opts.delimiter, 1) for token in inst.split()]
             for inst in open(filename, "r").read().split("\n")]
 
 answer = read(opts.gold)
@@ -27,5 +29,7 @@ for answ, syst in zip(answer, system):
             nr_recalled += 1
         nr_total += 1
 
-print "Precision = %f ( %d / %d )" % ((float(nr_recalled)/ nr_total),
-        nr_recalled, nr_total)
+print float(nr_recalled) / nr_total
+if opts.verbose:
+    print "Precision = %f ( %d / %d )" % ((float(nr_recalled)/ nr_total),
+            nr_recalled, nr_total)

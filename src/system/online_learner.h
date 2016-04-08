@@ -81,7 +81,7 @@ public:
 
   void flush() { model->flush(timestamp); }
   int errors() const { return nr_errors; }
-
+  void clear_errors() { nr_errors = 0; }
 protected:
   int timestamp;
   int nr_errors;

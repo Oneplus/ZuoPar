@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <boost/format.hpp>
 #include "utils/misc.h"
 #include "utils/logging.h"
 #include "utils/io/stream.h"
@@ -16,7 +17,7 @@ namespace fe = ZuoPar::FrontEnd;
 
 
 Pipe::Pipe(const boost::program_options::variables_map& vm)
-  : weight(0), decoder(0), learner(0), conf(vm) {
+  : weight(new Weight), decoder(0), learner(0), conf(vm) {
   if (conf.count("model") && load_model(conf["model"].as<std::string>())) {
     _INFO << "report: model is loaded.";
   } else {
@@ -31,7 +32,6 @@ Pipe::~Pipe() {
 }
 
 bool Pipe::load_model(const std::string& model_path) {
-  weight = new Weight;
   std::ifstream mfs(model_path);
 
   if (!mfs.good()) {
@@ -49,6 +49,18 @@ bool Pipe::load_model(const std::string& model_path) {
     return false;
   }
 
+  return true;
+}
+
+bool Pipe::save_model(const std::string& model_path) {
+  std::ofstream mfs(model_path);
+  if (!mfs.good()) {
+    _WARN << "pipe: failed to save model."; return false; 
+  } else {
+    postags_alphabet.save(mfs);
+    weight->save(mfs);
+    _INFO << "pipe: model saved to " << model_path;
+  }
   return true;
 }
 
@@ -85,8 +97,17 @@ void Pipe::learn() {
     weight);
   learner = new Learner(weight);
 
-  unsigned n_seen = 0, tot_seen = conf["maxiter"].as<unsigned>() * dataset.size();
+  unsigned n_seen = 0, tot_seen = dataset.size();
   double best_score = 0.;
+  std::string model_path;
+  if (conf.count("model")) {
+    model_path = conf["model"].as<std::string>();
+  } else {
+    model_path = "pos.";
+    model_path += conf["algorithm"].as<std::string>() + "_" + conf["update"].as<std::string>() + "_";
+    model_path += boost::lexical_cast<std::string>(conf["beam"].as<unsigned>()) + ".";
+    model_path += boost::lexical_cast<std::string>(Utility::get_pid()) + ".model";
+  }
   for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
     _INFO << "pipe: iteration #" << iter + 1 << ", start training.";
     std::random_shuffle(dataset.begin(), dataset.end());
@@ -105,24 +126,31 @@ void Pipe::learn() {
       learner->learn(result.first, result.second);
 
       if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-        _INFO << "pipe: processed " << double(n_seen) / tot_seen  << "% instances.";
+        _INFO << "pipe: processed " << n_seen % tot_seen << "/" << n_seen / tot_seen << " instances.";
       }
       if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+        learner->flush();
         double score = evaluate(devel_dataset);
         _INFO << "pipe: evaluate score: " << score;
         if (score > best_score) {
-          _INFO << "pipe: new best model is achieved, save to " << conf["model"].as<std::string>();
+          _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+          save_model(model_path);
           best_score = score;
         }
       }
     }
+    learner->flush();
+    _INFO << "pipe: #errors: " << learner->errors();
+    learner->clear_errors();
     double score = evaluate(devel_dataset);
     _INFO << "pipe: evaluate score: " << score;
     if (score > best_score) {
-      _INFO << "pipe: new best model is achieved, save to " << conf["model"].as<std::string>();
+      _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+      save_model(model_path);
       best_score = score;
     }
   }
+  _INFO << "pipe: best development score: " << best_score;
 }
 
 double Pipe::evaluate(const std::vector<Postag>& dataset) {
@@ -132,7 +160,7 @@ double Pipe::evaluate(const std::vector<Postag>& dataset) {
   if (conf.count("output")) {
     output = conf["output"].as<std::string>();
   } else {
-    output = "postagger.output" + boost::lexical_cast<std::string>(Utility::get_pid());
+    output = "postagger.output." + boost::lexical_cast<std::string>(Utility::get_pid());
   }
 
   std::ostream* os = ioutils::get_ostream(output); 
@@ -150,7 +178,7 @@ double Pipe::evaluate(const std::vector<Postag>& dataset) {
   }
   _INFO << "pipe: processed #" << dataset.size() << " instances.";
   if (os == (&(std::cout))) { return 0.; }
-  return Utility::execute_script(conf["script"].as<std::string>(), conf["output"].as<std::string>());
+  return Utility::execute_script(conf["script"].as<std::string>(), output);
 }
 
 void Pipe::test() {
@@ -172,6 +200,7 @@ void Pipe::test() {
     get_update_strategy("naive"), weight);
 
   double score = evaluate(dataset);
+  _INFO << "test: score " << score;
 }
 
 void Pipe::build_output(const State& source, Postag& output) {
