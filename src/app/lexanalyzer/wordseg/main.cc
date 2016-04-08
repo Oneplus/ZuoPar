@@ -72,7 +72,7 @@ int test(int argc, char** argv) {
   usage += "usage: " EXE " test [options]\n";
   usage += "options";
 
-  po::options_description optparser = fe::build_test_optparser(usage);
+  po::options_description optparser;
   optparser.add_options()
     ("help,h", "Show help information.")
     ("model,m", po::value<std::string>(), "The path to the model.")
