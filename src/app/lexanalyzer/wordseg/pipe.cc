@@ -76,14 +76,14 @@ void Pipe::learn() {
   if (conf.count("model")) {
     model_path = conf["model"].as<std::string>();
   } else {
-    model_path = "pos.";
+    model_path = "cws.";
     model_path += conf["algorithm"].as<std::string>() + "_" + conf["update"].as<std::string>() + "_";
     model_path += boost::lexical_cast<std::string>(conf["beam"].as<unsigned>()) + ".";
     model_path += boost::lexical_cast<std::string>(Utility::get_pid()) + ".model";
   }
 
   unsigned n_seen = 0, N = dataset.size();
-  for (unsigned iter = 0; iter < conf["iteration"].as<unsigned>(); ++iter) {
+  for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
     for (const Segmentation& instance : dataset) {
       ++n_seen;
       std::vector<Action> actions;
