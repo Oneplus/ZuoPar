@@ -23,7 +23,6 @@ public:
   ~Pipe();  
   void learn(); //  perform learning
   void test();  //  perform testing
-  double evaluate(const std::vector<Segmentation>& dataset);
 
   /**
    * Load model from the specified path.
@@ -48,6 +47,12 @@ public:
    */
   void build_output(const State& source, Segmentation& output);
 private:
+  //! Loading dataset.
+  bool setup(const std::string& path, std::vector<Segmentation>& ds, bool insert);
+  
+  //! Evaluation.
+  double evaluate(const std::vector<Segmentation>& dataset);
+
   //! The pointer to the weights instances which is pointwise averaged
   //! perceptron model.
   Weight* weight;

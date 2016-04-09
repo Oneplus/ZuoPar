@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <boost/program_options.hpp>
+#include "frontend/common_opt_utils.h"
 #include "app/depparser/greedy_opt_utils.h"
 #include "app/depparser/arceager/pipe.h"
 
@@ -20,8 +21,23 @@ int learn(int argc, char** argv) {
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, opt), vm);
-
+  try {
+    po::store(po::parse_command_line(argc, argv, opt), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "train", "script" })) {
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_learn_options(vm);
   ae::GreedyPipe p(vm);
   p.set_signature(EXE);
   p.learn();
@@ -37,8 +53,23 @@ int test(int argc, char** argv) {
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, opt), vm);
-
+  try {
+    po::store(po::parse_command_line(argc, argv, opt), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model", "script" })) {
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_test_options(vm);
   ae::GreedyPipe p(vm);
   p.test();
   return 0;

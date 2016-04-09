@@ -15,13 +15,18 @@ MultiPipe::MultiPipe(const boost::program_options::variables_map& vm)
 }
 
 void MultiPipe::multi_learn() {
-  if (!load_training_data()) { return; }
+  if (!setup(conf["train"].as<std::string>(), dataset, true)) {
+    return;
+  }
+  if (!conf.count("devel") || !setup(conf["devel"].as<std::string>(), devel_dataset, false)) {
+    _WARN << "[PIP] development data is not loaded";
+  }
+  _INFO << "[PIP] " << attributes_alphabet.size() << " attribute(s) is detected.";
+  _INFO << "[PIP] " << tags_alphabet.size() << " tag(s) is detected.";
+  _INFO << "[RPT] batch size = " << batch_size;
+  _INFO << "[RPT] number of threads = " << num_threads;
 
   load_constrain();
-
-  _INFO << "report: batch size = " << batch_size;
-  _INFO << "report: number of threads = " << num_threads;
-
   decoder_pool.resize(num_threads);
   for (int i = 0; i < num_threads; ++ i) {
     decoder_pool[i] = new Decoder(tags_alphabet.size(), trans, conf["beam"].as<unsigned>(),
@@ -57,28 +62,28 @@ void MultiPipe::multi_learn() {
       minibatch_learner->clear();
       
       if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-        _INFO << "pipe: finish learning batch#" << n_seen % n_batches << "/" << n_seen / n_batches;
+        _INFO << "[PIP] finish learning batch#" << n_seen % n_batches << "/" << n_seen / n_batches;
       }
       if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
         minibatch_learner->flush();
         double score = evaluate(devel_dataset);
         decoder->reset_use_avg();
-        _INFO << "pipe: evaluate at instance #" << n_seen << ", score: " << score;
+        _INFO << "[PIP] evaluate at instance #" << n_seen << ", score: " << score;
         if (score > best_score) {
-          _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+          _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
           save_model(model_path);
           best_score = score;
         }
       }
     }
     minibatch_learner->flush();
-    _INFO << "pipe: iter " << iter + 1 << " #errors: " << minibatch_learner->errors();
+    _INFO << "[PIP] iter " << iter + 1 << " #errors: " << minibatch_learner->errors();
     minibatch_learner->clear_errors();
     double score = evaluate(devel_dataset);
     decoder->reset_use_avg();
-    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+    _INFO << "[PIP] evaluate at the end of iteration#" << iter + 1 << " score: " << score;
     if (score > best_score) {
-      _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+      _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
       save_model(model_path);
       best_score = score;
     }

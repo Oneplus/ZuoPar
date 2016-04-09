@@ -10,6 +10,8 @@ add_executable (depparser_arcstandard
     decoder.cc
     weight.h
     weight.cc
+    ${SOURCE_DIR}/app/depparser/pipe.h
+    ${SOURCE_DIR}/app/depparser/multi_pipe.h
     ${SOURCE_DIR}/app/depparser/opt_utils.h
     ${SOURCE_DIR}/app/depparser/opt_utils.cc
     )
@@ -28,6 +30,7 @@ add_executable (depparser_arcstandard_greedy
     decoder.cc
     weight.h
     weight.cc
+    ${SOURCE_DIR}/app/depparser/pipe.h
     ${SOURCE_DIR}/app/depparser/greedy_opt_utils.h
     ${SOURCE_DIR}/app/depparser/greedy_opt_utils.cc
     )

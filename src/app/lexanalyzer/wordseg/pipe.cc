@@ -18,9 +18,9 @@ namespace fe = ZuoPar::FrontEnd;
 Pipe::Pipe(const boost::program_options::variables_map& vm) 
   : weight(new Weight), decoder(0), learner(0), conf(vm) {
   if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
-    _INFO << "report: model is loaded.";
+    _INFO << "[RPT] model is loaded.";
   } else {
-    _INFO << "report: model is not loaded.";
+    _INFO << "[RPT] model is not loaded.";
   }
 }
 
@@ -32,50 +32,50 @@ Pipe::~Pipe() {
 
 bool Pipe::load_model(const std::string& model_path) {
   std::ifstream mfs(model_path);
-  if (!mfs.good()) { _WARN << "pipe: model doesn't exists."; return false; }
-  if (!weight->load(mfs)) { _WARN << "pipe: failed to load weight."; return false; }
+  if (!mfs.good()) { _WARN << "[PIP] model doesn't exists."; return false; }
+  if (!weight->load(mfs)) { _WARN << "[PIP] failed to load weight."; return false; }
   return true;
 }
 
 bool Pipe::save_model(const std::string& model_path) {
   std::ofstream mfs(model_path);
-  if (!mfs.good()) { _WARN << "pipe: failed to save model."; return false; }
-  else { weight->save(mfs); _INFO << "pipe: model saved to " << model_path; }
+  if (!mfs.good()) { _WARN << "[PIP] failed to save model."; return false; }
+  else { weight->save(mfs); _INFO << "[PIP] model saved to " << model_path; }
   return true;
 }
 
+bool Pipe::setup(const std::string& path, std::vector<Segmentation>& ds, bool insert) {
+  ds.clear();
+  std::ifstream ifs(path);
+  if (!ifs.good()) {
+    return false;
+  }
+  _INFO << "[PIP] alphabet is " << (insert ? "open" : "closed") << ".";
+  _INFO << "[PIP] loading dataset from: " << path;
+  IO::read_segmentation_dataset(ifs, ds, insert);
+  _INFO << "[PIP] dataset is loaded with " << ds.size() << " instance(s)";
+  return true;
+}
 
 void Pipe::learn() {
-  namespace ioutils = ZuoPar::IO;
-
-  std::ifstream ifs(conf["train"].as<std::string>());
-  if (!ifs.good()) {
-    _ERROR << "#: failed to open reference file.";
-    _ERROR << "#: training halt";
+  if (!setup(conf["train"].as<std::string>(), dataset, true)) {
+    _ERROR << "#: failed to open reference file, training halt.";
     return;
   }
-  _INFO << "report: loading dataset from reference file.";
-  ioutils::read_segmentation_dataset(ifs, dataset, true);
-  _INFO << "report: loaded " << dataset.size() << " training instance(s).";
-  
-  if (conf.count("devel")) {
-    std::ifstream devel_ifs(conf["devel"].as<std::string>());
-    if (!devel_ifs.good()) {
-      _WARN << "report: Failed to load development data.";
-    } else {
-      ioutils::read_segmentation_dataset(devel_ifs, devel_dataset, false);
-      _INFO << "report: loaded " << devel_dataset.size() << " development instance(s).";
-    }
+  if (!conf.count("devel") || !setup(conf["devel"].as<std::string>(), devel_dataset, false)) {
+    _WARN << "[PIP] development data is not loaded";
   }
 
-  decoder = new Decoder(conf["beam"].as<unsigned>(), false, weight);
-  learner = new Learner(weight);
+  decoder = new Decoder(conf["beam"].as<unsigned>(), false,
+    get_update_strategy(conf["update"].as<std::string>()), weight);
+  learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
 
   std::string model_path = FrontEnd::get_model_name("cws", conf);
   double best_score = 0.;
 
   unsigned n_seen = 0, N = dataset.size();
   for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
+    _INFO << "[PIP] iteration " << iter + 1 << ", start training.";
     for (const Segmentation& instance : dataset) {
       ++n_seen;
       std::vector<Action> actions;
@@ -91,40 +91,38 @@ void Pipe::learn() {
       learner->learn(result.first, result.second);
 
       if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-        _INFO << "pipe: processed #" << n_seen % N << "/" << n_seen / N << " instances.";
+        _INFO << "[PIP] processed #" << n_seen % N << "/" << n_seen / N << " instances.";
       }
       if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
         learner->flush();
         double score = evaluate(devel_dataset);
         decoder->reset_use_avg();
-        _INFO << "pipe: evaluate at instance#" << n_seen << ", score: " << score;
+        _INFO << "[PIP] evaluate at instance#" << n_seen << ", score: " << score;
         if (score > best_score) {
-          _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+          _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
           save_model(model_path);
           best_score = score;
         }
       }
     }
     learner->flush();
-    _INFO << "pipe: iter" << iter + 1 << " #errros: " << learner->errors();
+    _INFO << "[PIP] iteration " << iter + 1 << " #errros: " << learner->errors();
     learner->clear_errors();
     double score = evaluate(devel_dataset);
     decoder->reset_use_avg();
-    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+    _INFO << "[PIP] evaluate at the end of iteration#" << iter + 1 << " score: " << score;
     if (score > best_score) {
-      _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+      _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
       save_model(model_path);
       best_score = score;
     }
   }
-  _INFO << "pipe: end of training, best development score: " << best_score;
+  _INFO << "[PIP] end of training, best development score: " << best_score;
 }
 
 double Pipe::evaluate(const std::vector<Segmentation>& dataset) {
-  namespace ioutils = ZuoPar::IO;
-
   std::string output = FrontEnd::get_output_name("wordseg", conf);
-  std::ostream* os = ioutils::get_ostream(output);
+  std::ostream* os = IO::get_ostream(output);
   decoder->set_use_avg();
   for (const Segmentation& instance : dataset) {
     std::vector<Action> actions;
@@ -136,28 +134,21 @@ double Pipe::evaluate(const std::vector<Segmentation>& dataset) {
 
     Segmentation output;
     build_output((*result.first), output);
-    ioutils::write_segmentation_instance((*os), output);
+    IO::write_segmentation_instance((*os), output);
   }
-  _INFO << "pipe: processed #" << dataset.size() << " instances.";
+  _INFO << "[PIP] processed #" << dataset.size() << " instances.";
   if (os == (&(std::cout))) { return 0.; }
   delete os;
   return Utility::execute_script(conf["script"].as<std::string>(), output);
 }
 
 void Pipe::test() {
-  namespace ioutils = ZuoPar::IO;
-  dataset.clear();
-  // not implemented.
-  std::ifstream ifs(conf["input"].as<std::string>());
-  if (!ifs.good()) {
+  if (!setup(conf["input"].as<std::string>(), dataset, false)) {
     _ERROR << "#: failed to open input file, training halt.";
     return;
   }
-  ioutils::read_segmentation_dataset(ifs, dataset, false);
-  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
 
-  decoder = new Decoder(conf["beam"].as<unsigned>(), true, weight);
-
+  decoder = new Decoder(conf["beam"].as<unsigned>(), true, UpdateStrategy::kNaive, weight);
   double score = evaluate(dataset);
   _INFO << "test: score " << score;
 }

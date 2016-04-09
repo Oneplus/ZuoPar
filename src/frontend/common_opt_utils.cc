@@ -35,8 +35,8 @@ po::options_description build_learn_optparser(const std::string& usage) {
 po::options_description build_multi_learn_optparser(const std::string& usage) {
   po::options_description optparser = build_learn_optparser(usage);
   optparser.add_options()
-    ("batch,c", po::value<int>()->default_value(16), "The size for batch.")
-    ("threads,t", po::value<int>()->default_value(10), "The number of threads.")
+    ("batch", po::value<int>()->default_value(16), "The size for batch.")
+    ("threads", po::value<int>()->default_value(10), "The number of threads.")
     ;
 
   return optparser;
@@ -49,14 +49,43 @@ po::options_description build_test_optparser(const std::string& usage) {
     ("verbose,v", "Logging every detail.")
     ("model,m", po::value<std::string>(), "The path to the model.")
     ("input,i", po::value<std::string>(), "The path to the input file.")
-    ("output,o", po::value<std::string>(), "The path to the output file.")
-    ("beam,b", po::value<unsigned>()->default_value(64), "The size for beam.")
+    ("output", po::value<std::string>(), "The path to the output file.")
+    ("beam", po::value<unsigned>()->default_value(64), "The size for beam.")
     ("script", po::value<std::string>(), "The path to the evaluation script.")
     ;
 
   return optparser;
 }
 
+void show_learn_options(const boost::program_options::variables_map& vm) {
+  _INFO << "[OPT] #beam: " << vm["beam"].as<unsigned>();
+  _INFO << "[OPT] algorithm: " << vm["algorithm"].as<std::string>();
+  _INFO << "[OPT] update: " << vm["update"].as<std::string>();
+  _INFO << "[OPT] report every: " << vm["report_stops"].as<unsigned>() << " stops";
+  _INFO << "[OPT] evaluate every: " << vm["evaluate_stops"].as<unsigned>() << " stops";
+  _INFO << "[OPT] #iteration: " << vm["maxiter"].as<unsigned>();
+}
+
+void show_multi_learn_options(const boost::program_options::variables_map& vm) {
+  show_learn_options(vm);
+  _INFO << "[OPT] #batch: " << vm["batch"].as<unsigned>();
+  _INFO << "[OPT] #threads: " << vm["threads"].as<unsigned>();
+}
+
+void show_test_options(const boost::program_options::variables_map& vm) {
+  _INFO << "[OPT] #beam: " << vm["beam"].as<unsigned>();
+}
+
+bool check_required_options(const boost::program_options::variables_map& vm,
+  const std::vector<std::string>& required) {
+  for (const std::string& option : required) {
+    if (!vm.count(option)) {
+      _ERROR << "option: " << option << " is required, but not set.";
+      return false;
+    }
+  }
+  return true;
+}
 
 bool parse_option(const po::variables_map& vm, Option& opts) {
   Utility::init_boost_log(vm.count("verbose"));

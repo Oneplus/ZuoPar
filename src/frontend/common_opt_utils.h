@@ -34,6 +34,23 @@ po::options_description build_multi_learn_optparser(const std::string& usage);
 po::options_description build_test_optparser(const std::string& usage);
 
 /**
+ * Check if the required options are provided.
+ *
+ *
+ *  @param[in]  vm        The options.
+ *  @param[in]  required  The names of the required options.
+ *  @return     bool      Return true if all the required options are set.
+ */
+bool check_required_options(const boost::program_options::variables_map& vm,
+  const std::vector<std::string>& required);
+
+void show_learn_options(const boost::program_options::variables_map& vm);
+
+void show_multi_learn_options(const boost::program_options::variables_map& vm);
+
+void show_test_options(const boost::program_options::variables_map& vm);
+
+/**
  * Parse commonly shared options.
  *
  *  @param[in]    vm    The variables map

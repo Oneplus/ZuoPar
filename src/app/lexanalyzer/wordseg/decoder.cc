@@ -5,9 +5,8 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace ChineseWordSegmentor {
 
-Decoder::Decoder(int beam_size, bool avg, Weight* weight)
-  : TransitionSystem<Action, State, Weight>(
-      beam_size, avg, UpdateStrategy::kEarlyUpdate, weight) {
+Decoder::Decoder(int beam_size, bool avg, UpdateStrategy strategy, Weight* weight)
+  : TransitionSystem<Action, State, Weight>(beam_size, avg, strategy, weight) {
 }
 
 void Decoder::get_possible_actions(const State& source,

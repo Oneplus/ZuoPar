@@ -22,9 +22,13 @@ public:
   void test();  //  perform testing
 
 protected:
-  double evaluate(const std::vector<SequenceInstance>& dataset);
-  bool load_training_data();
-  bool load_test_data();
+  //! Perform evaluation
+  double evaluate(const std::vector<SequenceInstance>& ds);
+
+  //! load dataset
+  bool setup(const std::string& path, std::vector<SequenceInstance>& ds, bool insert);
+  
+  //! load constrain
   void load_constrain();
 
   /**

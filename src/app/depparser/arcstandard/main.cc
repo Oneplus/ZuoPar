@@ -25,8 +25,23 @@ int multi_learn(int argc, char** argv) {
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
-
+  try {
+    po::store(po::parse_command_line(argc, argv, optparser), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "train", "script" })) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_multi_learn_options(vm);
   as::MultiPipe p(vm);
   p.set_signature(std::string(EXE) + std::string("_mt"));
   p.learn();
@@ -53,8 +68,23 @@ int learn(int argc, char** argv) {
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
-
+  try {
+    po::store(po::parse_command_line(argc, argv, optparser), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "train", "script" })) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_learn_options(vm);
   as::Pipe p(vm);
   p.set_signature(EXE);
   p.learn();
@@ -81,8 +111,23 @@ int test(int argc, char** argv) {
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
-
+  try {
+    po::store(po::parse_command_line(argc, argv, optparser), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model", "script" })) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_test_options(vm);
   as::Pipe p(vm);
   p.test();
 

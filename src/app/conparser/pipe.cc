@@ -33,10 +33,10 @@ bool Pipe::setup() {
       _ERROR << "#: training halted.";
       return false;
     }
-    _INFO << "report: loading dataset from reference file.";
+    _INFO << "[RPT] loading dataset from reference file.";
     ioutils::read_binarized_cfg_dataset(ifs, dataset, forms_alphabet,
         postags_alphabet, constituents_alphabet);
-    _INFO << "report: dataset is loaded from reference file.";
+    _INFO << "[RPT] dataset is loaded from reference file.";
   } else {
     std::ifstream ifs(input_path.c_str());
     if (!ifs.good()) {
@@ -47,10 +47,10 @@ bool Pipe::setup() {
     ioutils::read_binarized_cfg_dataset(ifs, dataset, forms_alphabet,
         postags_alphabet, constituents_alphabet, 0x03);
   }
-  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
-  _INFO << "report: " << forms_alphabet.size() << " form(s) is detected.";
-  _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
-  _INFO << "report: " << constituents_alphabet.size() << " constituent type(s) is detected.";
+  _INFO << "[RPT] " << dataset.size() << " instance(s) is loaded.";
+  _INFO << "[RPT] " << forms_alphabet.size() << " form(s) is detected.";
+  _INFO << "[RPT] " << postags_alphabet.size() << " postag(s) is detected.";
+  _INFO << "[RPT] " << constituents_alphabet.size() << " constituent type(s) is detected.";
   return true;
 }
 

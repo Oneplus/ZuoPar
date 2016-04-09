@@ -12,13 +12,13 @@ std::istream* get_istream(const char* filename,
   if (filename!= NULL && strlen(filename) > 0) {
     is = new std::ifstream(filename);
     if (!is->good()) {
-      _WARN << "ioutils: Opening file failure, use default stream";
+      _WARN << "[IO] Opening file failure, use default stream";
       is = default_stream;
     } else {
-      _INFO << "ioutils: Opening file stream from "<< filename << ".";
+      _INFO << "[IO] Opening file stream from "<< filename << ".";
     }
   } else {
-    _WARN << "ioutils: Input file not specified, use default stream";
+    _WARN << "[IO] Input file not specified, use default stream";
     is = default_stream;
   }
   return is;
@@ -35,13 +35,13 @@ std::ostream* get_ostream(const char* filename,
   if (filename!= NULL && strlen(filename) > 0) {
     os = new std::ofstream(filename);
     if (!os->good()) {
-      _WARN << "ioutils: Opening file failure, use default stream";
+      _WARN << "[IO] Opening file failure, use default stream";
       os = default_stream;
     } else {
-      _INFO << "ioutils: File stream from: "<< filename << " is opened.";
+      _INFO << "[IO] File stream from: "<< filename << " is opened.";
     }
   } else {
-    _WARN << "ioutils: Output file not specified, use default stream";
+    _WARN << "[IO] Output file not specified, use default stream";
     os = default_stream;
   }
   return os;

@@ -24,13 +24,13 @@ namespace ioutils = ZuoPar::IO;
 Pipe::Pipe(const boost::program_options::variables_map& vm)
   : weight(new Weight), decoder(0), learner(0), conf(vm) {
   if (vm.count("constrain")) {
-    _INFO << "report: constrain path: " << vm["constrain"].as<std::string>();
+    _INFO << "[RPT] constrain path: " << vm["constrain"].as<std::string>();
   }
 
   if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
-    _INFO << "report: model is loaded.";
+    _INFO << "[RPT] model is loaded.";
   } else {
-    _INFO << "report: model is not loaded.";
+    _INFO << "[RPT] model is not loaded.";
   }
 }
 
@@ -38,22 +38,22 @@ bool Pipe::load_model(const std::string& model_path) {
   std::ifstream mfs(model_path);
 
   if (!mfs.good()) {
-    _WARN << "pipe: model doesn't exists.";
+    _WARN << "[PIP] model doesn't exists.";
     return false;
   }
 
   if (!attributes_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load forms alphabet.";
+    _WARN << "[PIP] failed to load forms alphabet.";
     return false;
   }
 
   if (!tags_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load tags alphabet.";
+    _WARN << "[PIP] failed to load tags alphabet.";
     return false;
   }
 
   if (!weight->load(mfs)) {
-    _WARN << "pipe: failed to load weight.";
+    _WARN << "[PIP] failed to load weight.";
     return false;
   }
 
@@ -63,57 +63,30 @@ bool Pipe::load_model(const std::string& model_path) {
 bool Pipe::save_model(const std::string& model_path) {
   std::ofstream mfs(model_path);
   if (!mfs.good()) {
-    _WARN << "pipe: failed to save model.";
+    _WARN << "[PIP] failed to save model.";
     return false;
   } else {
     attributes_alphabet.save(mfs);
     tags_alphabet.save(mfs);
     weight->save(mfs);
-    _INFO << "pipe: model saved to " << model_path;
+    _INFO << "[PIP] model saved to " << model_path;
   }
 
   return true;
 }
 
-bool Pipe::load_training_data() {
-  std::ifstream ifs(conf["train"].as<std::string>());
+bool Pipe::setup(const std::string& path, std::vector<SequenceInstance>& ds, bool insert) {
+  ds.clear();
+  std::ifstream ifs(path);
   if (!ifs.good()) {
-    _ERROR << "#: failed to open reference file.";
-    _ERROR << "#: training halt";
     return false;
   }
-  _INFO << "report: loading dataset from reference file.";
-  ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
-    tags_alphabet, true);
-  _INFO << "report: dataset is loaded from reference file.";
-  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
-  _INFO << "report: " << attributes_alphabet.size() << " attribute(s) is detected.";
-  _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
-
-  if (conf.count("devel")) {
-    std::ifstream devel_ifs(conf["devel"].as<std::string>());
-    if (!devel_ifs.good()) {
-      _WARN << "report: failed to load development data.";
-    } else {
-      ioutils::read_sequence_instance_dataset(ifs, devel_dataset, attributes_alphabet,
-        tags_alphabet, false);
-      _INFO << "report: loaded " << devel_dataset.size() << " development instance(s).";
-    }
-  }
-  return true;
-}
-
-bool Pipe::load_test_data() {
-  dataset.clear();
-  // not implemented.
-  std::ifstream ifs(conf["input"].as<std::string>());
-  if (!ifs.good()) {
-    _ERROR << "#: failed to open input file.";
-    _ERROR << "#: testing halt";
-    return false;
-  }
-  ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
-    tags_alphabet, false);
+  _INFO << "[PIP] alphabet is " << (insert ? "open" : "close") << ".";
+  _INFO << "[RPT] loading dataset from: " << path;
+  ioutils::read_sequence_instance_dataset(ifs, ds, attributes_alphabet,
+    tags_alphabet, insert);
+  _INFO << "[RPT] dataset is loaded from reference file.";
+  _INFO << "[RPT] " << ds.size() << " instance(s) is loaded.";
   return true;
 }
 
@@ -131,7 +104,7 @@ void Pipe::load_constrain() {
 
   if (conf.count("constrain")) {
     std::ifstream ifs(conf["constrain"].as<std::string>());
-    _INFO << "report: load constrain from " << conf["constrain"].as<std::string>();
+    _INFO << "[RPT] load constrain from " << conf["constrain"].as<std::string>();
 
     if (!ifs.good()) {
       for (std::size_t i = 0; i < T; ++ i) {
@@ -155,7 +128,7 @@ void Pipe::load_constrain() {
           nr_constraints += 1;
         }
       }
-      _INFO << "report: number of constrain is: " << nr_constraints;
+      _INFO << "[RPT] number of constrain is: " << nr_constraints;
     }
   } else {
     _INFO << "constrain not set.";
@@ -166,11 +139,18 @@ void Pipe::load_constrain() {
 }
 
 void Pipe::learn() {
-  if (!load_training_data()) { return; }
+  if (!setup(conf["train"].as<std::string>(), dataset, true)) {
+    return;
+  }
+  if (!conf.count("devel") || !setup(conf["devel"].as<std::string>(), devel_dataset, false)) {
+    _WARN << "[PIP] development data is not loaded";
+  }
+  _INFO << "[PIP] " << attributes_alphabet.size() << " attribute(s) is detected.";
+  _INFO << "[PIP] " << tags_alphabet.size() << " tag(s) is detected.";
 
   load_constrain();
   decoder = new Decoder(tags_alphabet.size(), trans, conf["beam"].as<unsigned>(), false,
-    get_update_strategy(conf["strategy"].as<std::string>()), weight);
+    get_update_strategy(conf["update"].as<std::string>()), weight);
   learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
 
   std::string model_path = FrontEnd::get_model_name("seqlabel", conf);
@@ -193,37 +173,37 @@ void Pipe::learn() {
       learner->learn(result.first, result.second);
 
       if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-        _INFO << "pipe: processed #" << n_seen % N << "/" << n_seen / N << " instances.";
+        _INFO << "[PIP] processed #" << n_seen % N << "/" << n_seen / N << " instances.";
       }
       if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
         learner->flush();
         double score = evaluate(devel_dataset);
         decoder->reset_use_avg();
-        _INFO << "pipe: evaluate at instance #" << n_seen << ", score: " << score;
+        _INFO << "[PIP] evaluate at instance #" << n_seen << ", score: " << score;
         if (score > best_score) {
-          _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+          _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
           save_model(model_path);
           best_score = score;
         }
       }
     }
     learner->flush();
-    _INFO << "pipe: iter " << iter + 1 << " #errors: " << learner->errors();
+    _INFO << "[PIP] iter " << iter + 1 << " #errors: " << learner->errors();
     learner->clear_errors();
     double score = evaluate(devel_dataset);
     decoder->reset_use_avg();
-    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+    _INFO << "[PIP] evaluate at the end of iteration#" << iter + 1 << " score: " << score;
     if (score > best_score) {
-      _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+      _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
       save_model(model_path);
       best_score = score;
     }
   }
-  _INFO << "pipe: end of training, best development score: " << best_score;
+  _INFO << "[PIP] end of training, best development score: " << best_score;
 }
 
 double Pipe::evaluate(const std::vector<SequenceInstance>& dataset) {
-  std::string output = FrontEnd::get_output_name("wordseg", conf);
+  std::string output = FrontEnd::get_output_name("seqlabel", conf);
   std::ostream* os = ioutils::get_ostream(output);
   decoder->set_use_avg();
   for (const SequenceInstance& instance : dataset) {
@@ -238,17 +218,19 @@ double Pipe::evaluate(const std::vector<SequenceInstance>& dataset) {
     build_output((*result.first), output);
     ioutils::write_sequence_instance((*os), output, attributes_alphabet, tags_alphabet);
   }
-  _INFO << "pipe: processed #" << dataset.size() << " instances.";
+  _INFO << "[PIP] processed #" << dataset.size() << " instances.";
   if (os == (&(std::cout))) { return 0.; }
   delete os;
   return Utility::execute_script(conf["script"].as<std::string>(), output);
 }
 
 void Pipe::test() {
-  if (!load_test_data()) { return; }
-  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
-  _INFO << "report: " << attributes_alphabet.size() << " attribute(s) is detected.";
-  _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
+  if (!setup(conf["input"].as<std::string>(), dataset, false)) {
+    _ERROR << "[PIP] failed to open test data, testing halted.";
+    return;
+  }
+  _INFO << "[PIP] " << attributes_alphabet.size() << " attribute(s) is detected.";
+  _INFO << "[PIP] " << tags_alphabet.size() << " tag(s) is detected.";
 
   decoder = new Decoder(tags_alphabet.size(), trans, conf["beam"].as<unsigned>(), false,
     get_update_strategy(conf["strategy"].as<std::string>()), weight);
@@ -265,7 +247,6 @@ void Pipe::build_output(const State& source, SequenceInstance& output) {
     output[i].tag = source.tags[i];
   }
 }
-
 
 } //  end for namespace sequencelabeler
 } //  end for namespace zuopar

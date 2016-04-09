@@ -40,8 +40,8 @@ public:
     DependencyPipe<
       Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction
     >(vm) {
-    _INFO << "report: batch size = " << vm["batch"].as<unsigned>();
-    _INFO << "report: number of threads = " << vm["threads"].as<unsigned>();
+    _INFO << "[RPT] batch size = " << vm["batch"].as<unsigned>();
+    _INFO << "[RPT] number of threads = " << vm["threads"].as<unsigned>();
   }
 
   //!
@@ -98,16 +98,16 @@ public:
         minibatch_learner->learn();
         minibatch_learner->clear();
         if (n_seen % this->conf["report_stops"].template as<unsigned>() == 0) {
-          _INFO << "pipe: processed " << n_seen % n_batches <<
+          _INFO << "[PIP] processed " << n_seen % n_batches <<
             "/" << n_seen / n_batches << " instances.";
         }
         if (n_seen % this->conf["evaluate_stops"].template as<unsigned>() == 0) {
           minibatch_learner->flush();
           double score = this->evaluate(this->devel_dataset);
           this->decoder->reset_use_avg();
-          _INFO << "pipe: evaluate score: " << score;
+          _INFO << "[PIP] evaluate score: " << score;
           if (score > best_score) {
-            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
             this->save_model(model_path);
             best_score = score;
           }
@@ -115,13 +115,13 @@ public:
       }
 
       minibatch_learner->flush();
-      _INFO << "pipe: iter" << iter + 1 << " #errros: " << minibatch_learner->errors();
+      _INFO << "[PIP] iter" << iter + 1 << " #errros: " << minibatch_learner->errors();
       minibatch_learner->clear_errors();
       double score = this->evaluate(this->devel_dataset);
       this->decoder->reset_use_avg();
-      _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+      _INFO << "[PIP] evaluate at the end of iteration#" << iter + 1 << " score: " << score;
       if (score > best_score) {
-        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
         this->save_model(model_path);
         best_score = score;
       }
@@ -197,8 +197,8 @@ public:
     CoNLLXDependencyPipe<
       Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction
     >(vm) {
-    _INFO << "report: batch size = " << vm["batch"].as<unsigned>();
-    _INFO << "report: number of threads = " << vm["threads"].as<unsigned>();
+    _INFO << "[RPT] batch size = " << vm["batch"].as<unsigned>();
+    _INFO << "[RPT] number of threads = " << vm["threads"].as<unsigned>();
   }
 
   //!
@@ -232,7 +232,7 @@ public:
     int n_batches = (N % batch_size == 0 ? N / batch_size : N / batch_size + 1);
     double best_score = 0.;
     for (unsigned iter = 0; iter < this->conf["maxiter"].template as<unsigned>(); ++iter) {
-      _INFO << "pipe: start training at iteration " << iter + 1;
+      _INFO << "[PIP] start training at iteration " << iter + 1;
       std::random_shuffle(this->dataset.begin(), this->dataset.end());
       for (unsigned batch_id = 0; batch_id < n_batches; ++ batch_id) {
         //! Producer
@@ -256,28 +256,28 @@ public:
         minibatch_learner->learn();
         minibatch_learner->clear();
         if (n_seen % this->conf["report_stops"].template as<unsigned>() == 0) {
-          _INFO << "pipe: finish learning batch#" << n_seen % n_batches << "/" << n_seen / n_batches;
+          _INFO << "[PIP] finish learning batch#" << n_seen % n_batches << "/" << n_seen / n_batches;
         }
         if (n_seen % this->conf["evaluate_stops"].template as<unsigned>() == 0) {
           minibatch_learner->flush();
           double score = this->evaluate(this->devel_dataset);
           this->decoder->reset_use_avg();
-          _INFO << "pipe: evaluate score: " << score;
+          _INFO << "[PIP] evaluate score: " << score;
           if (score > best_score) {
-            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
             this->save_model(model_path);
             best_score = score;
           }
         }
       }
       
-      _INFO << "pipe: learn " << n_batches << " batches";
+      _INFO << "[PIP] learn " << n_batches << " batches";
       minibatch_learner->flush();
-      _INFO << "pipe: nr errors: " << minibatch_learner->errors();
+      _INFO << "[PIP] nr errors: " << minibatch_learner->errors();
       minibatch_learner->clear_errors();
       double score = this->evaluate(this->devel_dataset);
       if (score > best_score) {
-        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
         this->save_model(model_path);
         best_score = score;
       }

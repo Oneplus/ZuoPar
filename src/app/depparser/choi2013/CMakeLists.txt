@@ -12,6 +12,8 @@ add_executable (depparser_choi2013
     weight.cc
     score_context.h
     score_context.cc
+    ${SOURCE_DIR}/app/depparser/pipe.h
+    ${SOURCE_DIR}/app/depparser/multi_pipe.h
     ${SOURCE_DIR}/app/depparser/opt_utils.h
     ${SOURCE_DIR}/app/depparser/opt_utils.cc
     )
@@ -32,6 +34,7 @@ add_executable (depparser_choi2013_greedy
     weight.cc
     score_context.h
     score_context.cc
+    ${SOURCE_DIR}/app/depparser/pipe.h
     ${SOURCE_DIR}/app/depparser/greedy_opt_utils.h
     ${SOURCE_DIR}/app/depparser/greedy_opt_utils.cc
     )

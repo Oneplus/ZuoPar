@@ -41,9 +41,9 @@ public:
   DependencyPipe(const boost::program_options::variables_map& vm)
     : weight(new Weight), decoder(0), learner(0), conf(vm) {
     if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
-      _INFO << "report: model is loaded.";
+      _INFO << "[RPT] model is loaded.";
     } else {
-      _INFO << "report: model is not loaded.";
+      _INFO << "[RPT] model is not loaded.";
     }
   }
 
@@ -62,10 +62,10 @@ public:
         _ERROR << "#: training halt";
         return false;
       }
-      _INFO << "report: loading dataset from reference file.";
+      _INFO << "[RPT] loading dataset from reference file.";
       IO::read_dependency_dataset(ifs, ds, forms_alphabet,
         postags_alphabet, deprels_alphabet);
-      _INFO << "report: dataset is loaded from reference file.";
+      _INFO << "[RPT] dataset is loaded from reference file.";
     } else {
       std::ifstream ifs(path);
       if (!ifs.good()) {
@@ -76,10 +76,10 @@ public:
       IO::read_dependency_dataset(ifs, ds, forms_alphabet,
         postags_alphabet, deprels_alphabet, 0x03);
     }
-    _INFO << "report: " << ds.size() << " instance(s) is loaded.";
-    _INFO << "report: " << forms_alphabet.size() << " forms(s) is detected.";
-    _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
-    _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is detected.";
+    _INFO << "[RPT] " << ds.size() << " instance(s) is loaded.";
+    _INFO << "[RPT] " << forms_alphabet.size() << " forms(s) is detected.";
+    _INFO << "[RPT] " << postags_alphabet.size() << " postag(s) is detected.";
+    _INFO << "[RPT] " << deprels_alphabet.size() << " deprel(s) is detected.";
     return true;
   }
 
@@ -268,11 +268,11 @@ public:
         return false;
       }
 
-      _INFO << "report: loading dataset from reference file.";
+      _INFO << "[RPT] loading dataset from reference file.";
       IO::read_conllx_dependency_dataset(ifs, ds, forms_alphabet,
           lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
           deprels_alphabet);
-      _INFO << "report: dataset is loaded from reference file.";
+      _INFO << "[RPT] dataset is loaded from reference file.";
     } else {
       if (!ifs.good()) {
         _ERROR << "#: failed to open input file.";
@@ -283,13 +283,13 @@ public:
           lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
           deprels_alphabet, 0x1f);
     }
-    _INFO << "report: " << ds.size() << " instance(s) is loaded.";
-    _INFO << "report: " << forms_alphabet.size()    << " form(s) is detected.";
-    _INFO << "report: " << lemmas_alphabet.size()   << " lemmas(s) is detected.";
-    _INFO << "report: " << cpostags_alphabet.size() << " cpostag(s) is detected.";
-    _INFO << "report: " << postags_alphabet.size()  << " postag(s) is detected.";
-    _INFO << "report: " << feat_alphabet.size()     << " feat(s) is detected.";
-    _INFO << "report: " << deprels_alphabet.size()  << " deprel(s) is detected.";
+    _INFO << "[RPT] " << ds.size() << " instance(s) is loaded.";
+    _INFO << "[RPT] " << forms_alphabet.size()    << " form(s) is detected.";
+    _INFO << "[RPT] " << lemmas_alphabet.size()   << " lemmas(s) is detected.";
+    _INFO << "[RPT] " << cpostags_alphabet.size() << " cpostag(s) is detected.";
+    _INFO << "[RPT] " << postags_alphabet.size()  << " postag(s) is detected.";
+    _INFO << "[RPT] " << feat_alphabet.size()     << " feat(s) is detected.";
+    _INFO << "[RPT] " << deprels_alphabet.size()  << " deprel(s) is detected.";
     return true;
   }
 
@@ -389,11 +389,11 @@ public:
     : weight(new Weight), decoder(0), learner(0), conf(vm) {
     root = conf["root"].as<std::string>();
     if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
-      _INFO << "report: model is loaded."; 
+      _INFO << "[RPT] model is loaded."; 
     } else {
-      _INFO << "report: model is not loaded."; 
+      _INFO << "[RPT] model is not loaded."; 
     }
-    _INFO << "report: root = " << root;
+    _INFO << "[RPT] root = " << root;
   }
 
   ~CoNLLXDependencyPipe() {
@@ -565,11 +565,11 @@ public:
     weight(new Weight), decoder(nullptr), conf(vm) {
     root = conf["root"].as<std::string>();
     if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
-      _INFO << "report: model is loaded.";
+      _INFO << "[RPT] model is loaded.";
     } else {
-      _INFO << "report: model is not loaded.";
+      _INFO << "[RPT] model is not loaded.";
     }
-    _INFO << "report: root = " << root;
+    _INFO << "[RPT] root = " << root;
   }
 
   ~GreedySearchCoNLLXDependencyPipe() {
@@ -618,7 +618,7 @@ public:
     }
     if (os == (&(std::cout))) { return 0.; }
     if (os != nullptr) { delete os;  }
-    return Utility::execute_script(conf["stript"].as<std::string>(), output);
+    return Utility::execute_script(conf["script"].as<std::string>(), output);
   }
 
   void test() {

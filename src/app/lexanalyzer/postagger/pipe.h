@@ -47,6 +47,10 @@ public:
    */
   void build_output(const State& source, Postag& output);
 private:
+  //! Load data.
+  bool setup(const std::string& path, std::vector<Postag>& ds, bool insert);
+
+  //! Perform evaluation
   double evaluate(const std::vector<Postag>& dataset);
 
   //! The pointer to the weights instances which is pointwise averaged
