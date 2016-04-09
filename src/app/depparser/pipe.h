@@ -20,7 +20,6 @@
 namespace ZuoPar {
 namespace DependencyParser {
 
-namespace fe = ZuoPar::FrontEnd;
 namespace eg = ZuoPar::Engine;
 
 template <
@@ -41,9 +40,11 @@ public:
    */
   DependencyPipe(const boost::program_options::variables_map& vm)
     : weight(new Weight), decoder(0), learner(0), conf(vm) {
-    this->root = opts.root;
-    if (load_model(opts.model_path)) { _INFO << "report: model is loaded.";}
-    else                             { _INFO << "report: model is not loaded.";}
+    if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
+      _INFO << "report: model is loaded.";
+    } else {
+      _INFO << "report: model is not loaded.";
+    }
   }
 
   ~DependencyPipe() {
@@ -82,16 +83,18 @@ public:
     return true;
   }
 
+  void set_signature(const std::string& sign) { signature = sign; }
+
   double evaluate(const std::vector<Dependency>& dataset) {
     std::string output = FrontEnd::get_output_name(signature, conf);
-    std::ostream* os = ioutils::get_ostream(output);
+    std::ostream* os = IO::get_ostream(output);
     decoder->set_use_avg();
     for (const Dependency& instance : dataset) {
       int max_actions = MaxNumberOfActionsFunction()(instance);
       State init_state(&instance);
       typename Decoder::const_decode_result_t result = decoder->decode(init_state,
-        actions, max_actions);
-      
+        std::vector<Action>(), max_actions);
+
       Dependency output;
       build_output((*result.first), output);
       IO::write_dependency_instance((*os), output, forms_alphabet,
@@ -127,6 +130,8 @@ public:
     learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
 
     unsigned n_seen = 0, N = dataset.size();
+    double best_score = 0.;
+    std::string model_path = FrontEnd::get_model_name(signature, conf);
     for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
       _INFO << "pipe: iteration #" << iter + 1 << ", start training.";
       std::random_shuffle(dataset.begin(), dataset.end());
@@ -246,7 +251,7 @@ protected:
   std::vector<Dependency> dataset;      //! The dataset.
   std::vector<Dependency> devel_dataset;
   const boost::program_options::variables_map& conf;
-  static std::string signature;
+  std::string signature;
   std::string root;
 };
 
@@ -359,6 +364,8 @@ public:
   Engine::TokenAlphabet deprels_alphabet;   //! The alphabet for dependency relations.
   std::vector<CoNLLXDependency> dataset;
   std::vector<CoNLLXDependency> devel_dataset;
+  std::string signature;
+  std::string root;
 };
 
 
@@ -380,11 +387,13 @@ public:
    */
   CoNLLXDependencyPipe(const boost::program_options::variables_map& vm)
     : weight(new Weight), decoder(0), learner(0), conf(vm) {
+    root = conf["root"].as<std::string>();
     if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
       _INFO << "report: model is loaded."; 
     } else {
       _INFO << "report: model is not loaded."; 
     }
+    _INFO << "report: root = " << root;
   }
 
   ~CoNLLXDependencyPipe() {
@@ -393,6 +402,8 @@ public:
     if (learner) { delete learner; learner = 0; }
   }
 
+  void set_signature(const std::string& sign) { signature = sign; }
+
   //! Perform learning.
   void learn() {
     if (!setup(conf["train"].as<std::string>(), dataset, true)) { return; }
@@ -400,7 +411,7 @@ public:
       setup(conf["devel"].as<std::string>(), devel_dataset, false);
     }
 
-    deprel_t root_tag = deprels_alphabet.insert(this->root);
+    deprel_t root_tag = deprels_alphabet.insert(root);
     decoder = new Decoder(deprels_alphabet.size(), root_tag, Decoder::kLeft,
       conf["beam"].as<unsigned>(),
       false, 
@@ -487,7 +498,7 @@ public:
     if (setup(conf["input"].as<std::string>(), dataset, false)) {
       return;
     }
-    deprel_t root_tag = deprels_alphabet.insert(this->root);
+    deprel_t root_tag = deprels_alphabet.insert(root);
     decoder = new Decoder(deprels_alphabet.size(), root_tag, Decoder::kLeft,
       conf["beam"].as<unsigned>(), true, UpdateStrategy::kNaive, weight);
     double score = evaluate(dataset);
@@ -530,11 +541,9 @@ public:
 
 protected:
   const boost::program_options::variables_map& conf;
-  static std::string signature;
   Weight* weight;     //! The parameter
   Learner* learner;   //! The parameter learner.
   Decoder* decoder;   //! The pointer to the decoder.
-  std::string root;
 };
 
 template <
@@ -548,16 +557,13 @@ template <
 >
 class GreedySearchCoNLLXDependencyPipe: public CoNLLXDependencyRepository {
 private:
-  static std::string signature;
-  std::string root;
-
   Decoder* decoder;
   Weight* weight;
   const boost::program_options::variables_map& conf;
 public:
   GreedySearchCoNLLXDependencyPipe(const boost::program_options::variables_map& vm):
     weight(new Weight), decoder(nullptr), conf(vm) {
-    root = vm["root"].as<std::string>();
+    root = conf["root"].as<std::string>();
     if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
       _INFO << "report: model is loaded.";
     } else {
@@ -571,9 +577,7 @@ public:
     if (decoder)  { delete decoder; decoder = nullptr; }
   }
 
-  static void set_signature(const std::string& name) {
-    signature = name;
-  }
+  void set_signature(const std::string& sign) { signature = sign; }
 
   double evaluate(const std::vector<CoNLLXDependency>& dataset) {
     // evaluation not rely on the decoder.

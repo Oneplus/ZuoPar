@@ -16,4 +16,4 @@ add_executable (wordseg
     weight.cc
     )
 
-target_link_libraries (wordseg ${LIBS} _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils)
+target_link_libraries (wordseg _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils ${LIBS})

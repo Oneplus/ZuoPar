@@ -14,4 +14,4 @@ add_executable (postagger
     weight.cc
     )
 
-target_link_libraries (postagger ${LIBS} _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils)
+target_link_libraries (postagger _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils ${LIBS})

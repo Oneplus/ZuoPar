@@ -18,4 +18,4 @@ add_executable (sequence_labeler
     weight.cc
     )
 
-target_link_libraries (sequence_labeler ${LIBS} _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils)
+target_link_libraries (sequence_labeler _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils ${LIBS})

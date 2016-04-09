@@ -12,8 +12,6 @@ namespace dp = ZuoPar::DependencyParser;
 namespace choi = ZuoPar::DependencyParser::Choi2013;
 namespace po = boost::program_options;
 
-std::string choi::Pipe::signature = EXE;
-
 int multi_learn(int argc, char** argv) {
   std::string usage = "Multi-threaded training component of ZuoPar::" APP ".\n";
   usage += "usage: " EXE " multi-learn [options]\n";
@@ -28,8 +26,9 @@ int multi_learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  choi::MultiPipe pipe(vm);
-  pipe.learn();
+  choi::MultiPipe p(vm);
+  p.set_signature(std::string(EXE) + "_mt");
+  p.learn();
   return 0;
 }
 
@@ -55,8 +54,9 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  choi::Pipe pipe(vm);
-  pipe.learn();
+  choi::Pipe p(vm);
+  p.set_signature(EXE);
+  p.learn();
   return 0;
 }
 
@@ -82,8 +82,8 @@ int test(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  choi::Pipe pipe(vm);
-  pipe.test();
+  choi::Pipe p(vm);
+  p.test();
 
   return 0;
 }

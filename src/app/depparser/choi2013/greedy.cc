@@ -11,7 +11,6 @@ namespace po = boost::program_options ;
 namespace choi = ZuoPar::DependencyParser::Choi2013 ;
 namespace dp = ZuoPar::DependencyParser ;
 
-std::string choi::GreedyPipe::signature = EXE;
 
 int learn(int argc , char ** argv) {
   std::string usage = "usage" ;
@@ -26,6 +25,7 @@ int learn(int argc , char ** argv) {
   po::store(po::parse_command_line(argc , argv , opt) , vm) ;
 
   choi::GreedyPipe p(vm) ;
+  p.set_signature(EXE);
   p.learn() ;
   return 0 ;
 }

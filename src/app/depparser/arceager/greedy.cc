@@ -11,8 +11,6 @@ namespace po = boost::program_options;
 namespace ae = ZuoPar::DependencyParser::ArcEager;
 namespace dp = ZuoPar::DependencyParser;
 
-std::string ae::GreedyPipe::signature = EXE;
-
 int learn(int argc, char** argv) {
   std::string usage = "usage";
   po::options_description opt = dp::build_greedy_learn_optparser(usage);
@@ -25,6 +23,7 @@ int learn(int argc, char** argv) {
   po::store(po::parse_command_line(argc, argv, opt), vm);
 
   ae::GreedyPipe p(vm);
+  p.set_signature(EXE);
   p.learn();
   return 0;
 }
