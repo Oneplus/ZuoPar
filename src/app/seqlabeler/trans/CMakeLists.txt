@@ -1,20 +1,21 @@
 add_executable (sequence_labeler
     main.cc
+    opt_utils.h
     opt_utils.cc
+    action.h
     action.cc
+    action_utils.h
     action_utils.cc
+    state.h
     state.cc
+    decoder.h
     decoder.cc
+    pipe.h
     pipe.cc
+    multi_pipe.h
     multi_pipe.cc
+    weight.h
     weight.cc
-    ${SOURCE_DIR}/engine/token_alphabet.cc
-    ${SOURCE_DIR}/frontend/common_opt_utils.cc
-    ${SOURCE_DIR}/utils/logging.cc
-    ${SOURCE_DIR}/utils/io/dataset/sequence_instance.cc
-    ${SOURCE_DIR}/utils/io/instance/sequence_instance.cc
-    ${SOURCE_DIR}/utils/io/instance/csv.cc
-    ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (sequence_labeler ${LIBS})
+target_link_libraries (sequence_labeler ${LIBS} _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils)

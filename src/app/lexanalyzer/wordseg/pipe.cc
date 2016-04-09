@@ -5,6 +5,7 @@
 #include "utils/io/stream.h"
 #include "utils/io/dataset/segmentation.h"
 #include "utils/io/instance/segmentation.h"
+#include "frontend/common_pipe_utils.h"
 #include "app/lexanalyzer/wordseg/action_utils.h"
 #include "app/lexanalyzer/wordseg/pipe.h"
 
@@ -71,16 +72,8 @@ void Pipe::learn() {
   decoder = new Decoder(conf["beam"].as<unsigned>(), false, weight);
   learner = new Learner(weight);
 
-  std::string model_path;
+  std::string model_path = FrontEnd::get_model_name("cws", conf);
   double best_score = 0.;
-  if (conf.count("model")) {
-    model_path = conf["model"].as<std::string>();
-  } else {
-    model_path = "cws.";
-    model_path += conf["algorithm"].as<std::string>() + "_" + conf["update"].as<std::string>() + "_";
-    model_path += boost::lexical_cast<std::string>(conf["beam"].as<unsigned>()) + ".";
-    model_path += boost::lexical_cast<std::string>(Utility::get_pid()) + ".model";
-  }
 
   unsigned n_seen = 0, N = dataset.size();
   for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
@@ -118,7 +111,7 @@ void Pipe::learn() {
     learner->clear_errors();
     double score = evaluate(devel_dataset);
     decoder->reset_use_avg();
-    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << "score: " << score;
+    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
     if (score > best_score) {
       _INFO << "pipe: NEW best model is achieved, save to " << model_path;
       save_model(model_path);
@@ -131,13 +124,7 @@ void Pipe::learn() {
 double Pipe::evaluate(const std::vector<Segmentation>& dataset) {
   namespace ioutils = ZuoPar::IO;
 
-  std::string output;
-  if (conf.count("output")) {
-    output = conf["output"].as<std::string>();
-  } else {
-    output = "wordseg.output." + boost::lexical_cast<std::string>(Utility::get_pid());
-  }
-
+  std::string output = FrontEnd::get_output_name("wordseg", conf);
   std::ostream* os = ioutils::get_ostream(output);
   decoder->set_use_avg();
   for (const Segmentation& instance : dataset) {

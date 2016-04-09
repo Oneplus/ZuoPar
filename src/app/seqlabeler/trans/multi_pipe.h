@@ -10,19 +10,18 @@ namespace ZuoPar {
 namespace SequenceLabeler {
 
 namespace eg = ZuoPar::Engine;
-namespace fe = ZuoPar::FrontEnd;
 
-class MultiPipe: public Pipe {
+class MultiPipe : public Pipe {
 public:
   /**
    * The learning mode constructor.
    *
    *  @param[in]  opts  The learning options.
    */
-  MultiPipe(const MultiLearnOption& opts);
+  MultiPipe(const boost::program_options::variables_map& vm);
 
   //!
-  void run();
+  void multi_learn();
 private:
   //!
   void decode();

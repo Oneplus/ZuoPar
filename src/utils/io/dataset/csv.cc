@@ -12,11 +12,10 @@ void read_csv_dataset(
     ) {
   dataset.clear();
   for (BlockIterator itx(is); !itx.end(); ++ itx) {
-    std::istringstream iss(*instance);
+    std::istringstream iss(*itx);
     std::vector<std::vector<std::string> > csv;
     read_csv(iss, csv);
     dataset.push_back(csv);
-    instance ++;
   }
 }
 

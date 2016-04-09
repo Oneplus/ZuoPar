@@ -22,28 +22,7 @@ int learn(int argc, char** argv) {
   usage += "usage: " EXE " learn [options]\n";
   usage += "options";
 
-  po::options_description optparser(usage);
-  optparser.add_options()
-    ("train,r", po::value<std::string>(), "The path to the reference file.")
-    ("devel,d", po::value<std::string>(), "The path to the development data.")
-    ("model,m", po::value<std::string>(), "The path to the model.")
-    ("beam", po::value<unsigned>()->default_value(64), "The size for beam.")
-    ("algorithm", po::value<std::string>()->default_value("ap"),
-    "The learning algorithm.\n"
-    " ap - average perceptron\n"
-    " pa - passive aggressive")
-    ("update", po::value<std::string>()->default_value("early"),
-    "Specify the update strategy.\n"
-    " naive - no update\n"
-    " early - early update (Collins 04)"
-    " max - max violation (Huang 12)")
-    ("report_stops", po::value<unsigned>()->default_value(1000), "The report frequency.")
-    ("evaluate_stops", po::value<unsigned>()->default_value(5000), "The evaluation frequency.")
-    ("script", po::value<std::string>(), "The path to the evaluation script.")
-    ("output", po::value<std::string>(), "The path to the output file (temporal).")
-    ("maxiter", po::value<unsigned>()->default_value(10), "The maximum number of iteration.")
-    ("help,h", "Show help information.")
-    ("verbose,v", "Logging every detail.");
+  po::options_description optparser = fe::build_learn_optparser(usage);
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -72,16 +51,8 @@ int test(int argc, char** argv) {
   usage += "usage: " EXE " test [options]\n";
   usage += "options";
 
-  po::options_description optparser;
-  optparser.add_options()
-    ("help,h", "Show help information.")
-    ("model,m", po::value<std::string>(), "The path to the model.")
-    ("input,i", po::value<std::string>(), "The path to the input file.")
-    ("output,o", po::value<std::string>(), "The path to the output file.")
-    ("beam,b", po::value<unsigned>()->default_value(64), "The size for beam.")
-    ("script", po::value<std::string>(), "The path to the evaluation script.")
-    ("verbose,v", "Logging every detail.");
-  
+  po::options_description optparser = fe::build_test_optparser(usage);
+ 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
     return 1;

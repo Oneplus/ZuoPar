@@ -26,14 +26,8 @@ int multi_learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  seq::MultiLearnOption opts;
-  if (!seq::parse_multi_learn_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  seq::MultiPipe pipe(opts);
-  pipe.run();
+  seq::MultiPipe pipe(vm);
+  pipe.learn();
   return 0;
 }
 
@@ -44,7 +38,7 @@ int learn(int argc, char** argv) {
   usage += "OPTIONS";
 
   po::options_description optparser = fe::build_learn_optparser(usage);
-  optparser.add_options()("constrain,n", po::value<std::string>(), "The constrain file.");
+  optparser.add_options()("constrain", po::value<std::string>(), "The constrain file.");
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -54,14 +48,8 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  seq::LearnOption opts;
-  if (!seq::parse_learn_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  seq::Pipe pipe(opts);
-  pipe.run();
+  seq::Pipe pipe(vm);
+  pipe.learn();
   return 0;
 }
 
@@ -72,7 +60,7 @@ int test(int argc, char** argv) {
   usage += "OPTIONS";
 
   po::options_description optparser = fe::build_test_optparser(usage);
-  optparser.add_options()("constrain,n", po::value<std::string>(), "The constrain file.");
+  optparser.add_options()("constrain", po::value<std::string>(), "The constrain file.");
 
   if (argc == 1) {
     std::cerr << optparser << std::endl;
@@ -82,13 +70,8 @@ int test(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  seq::TestOption opts;
-  if (!seq::parse_test_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-  seq::Pipe pipe(opts);
-  pipe.run();
+  seq::Pipe pipe(vm);
+  pipe.test();
 
   return 0;
 }

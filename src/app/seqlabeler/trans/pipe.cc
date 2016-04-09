@@ -5,10 +5,12 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/regex.hpp>
+#include "utils/misc.h"
 #include "utils/logging.h"
 #include "utils/io/stream.h"
 #include "utils/io/dataset/sequence_instance.h"
 #include "utils/io/instance/sequence_instance.h"
+#include "frontend/common_pipe_utils.h"
 #include "app/seqlabeler/trans/action_utils.h"
 #include "app/seqlabeler/trans/pipe.h"
 
@@ -17,26 +19,15 @@ namespace SequenceLabeler {
 
 namespace eg = ZuoPar::Engine;
 namespace fe = ZuoPar::FrontEnd;
+namespace ioutils = ZuoPar::IO;
 
-Pipe::Pipe(const LearnOption& opts)
-  : weight(0), decoder(0), learner(0),
-  fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
-  constrain_path = opts.constrain_path;
-  _INFO << "report: constrain path: " << constrain_path;
-
-  if (load_model(opts.model_path)) {
-    _INFO << "report: model is loaded.";
-  } else {
-    _INFO << "report: model is not loaded.";
+Pipe::Pipe(const boost::program_options::variables_map& vm)
+  : weight(new Weight), decoder(0), learner(0), conf(vm) {
+  if (vm.count("constrain")) {
+    _INFO << "report: constrain path: " << vm["constrain"].as<std::string>();
   }
-}
 
-Pipe::Pipe(const TestOption& opts)
-  : weight(0), decoder(0), learner(0),
-  fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
-  constrain_path = opts.constrain_path;
-  _INFO << "report: constrain path: " << constrain_path;
-  if (load_model(opts.model_path)) {
+  if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
     _INFO << "report: model is loaded.";
   } else {
     _INFO << "report: model is not loaded.";
@@ -85,6 +76,48 @@ bool Pipe::save_model(const std::string& model_path) {
   return true;
 }
 
+bool Pipe::load_training_data() {
+  std::ifstream ifs(conf["train"].as<std::string>());
+  if (!ifs.good()) {
+    _ERROR << "#: failed to open reference file.";
+    _ERROR << "#: training halt";
+    return false;
+  }
+  _INFO << "report: loading dataset from reference file.";
+  ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
+    tags_alphabet, true);
+  _INFO << "report: dataset is loaded from reference file.";
+  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
+  _INFO << "report: " << attributes_alphabet.size() << " attribute(s) is detected.";
+  _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
+
+  if (conf.count("devel")) {
+    std::ifstream devel_ifs(conf["devel"].as<std::string>());
+    if (!devel_ifs.good()) {
+      _WARN << "report: failed to load development data.";
+    } else {
+      ioutils::read_sequence_instance_dataset(ifs, devel_dataset, attributes_alphabet,
+        tags_alphabet, false);
+      _INFO << "report: loaded " << devel_dataset.size() << " development instance(s).";
+    }
+  }
+  return true;
+}
+
+bool Pipe::load_test_data() {
+  dataset.clear();
+  // not implemented.
+  std::ifstream ifs(conf["input"].as<std::string>());
+  if (!ifs.good()) {
+    _ERROR << "#: failed to open input file.";
+    _ERROR << "#: testing halt";
+    return false;
+  }
+  ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
+    tags_alphabet, false);
+  return true;
+}
+
 void Pipe::load_constrain() {
   namespace algo = boost::algorithm;
 
@@ -97,130 +130,131 @@ void Pipe::load_constrain() {
     trans[1][i] = true;
   }
 
-  std::ifstream ifs(constrain_path.c_str());
-  _INFO << "report: load constrain from " << constrain_path;
-  if (!ifs.good()) {
+  if (conf.count("constrain")) {
+    std::ifstream ifs(conf["constrain"].as<std::string>());
+    _INFO << "report: load constrain from " << conf["constrain"].as<std::string>();
+
+    if (!ifs.good()) {
+      for (std::size_t i = 0; i < T; ++ i) {
+        for (std::size_t j = 0; j < T; ++ j) { trans[i][j] = true; }
+      }
+    } else {
+      std::string line;
+      int nr_constraints = 0;
+      while (std::getline(ifs, line)) {
+        std::vector<std::string> items;
+        algo::trim(line);
+        if (line.size() == 0) { continue; }
+        algo::split_regex(items, line, boost::regex("-->"));
+        BOOST_ASSERT(2 == items.size());
+        algo::trim(items[0]); algo::trim(items[1]);
+        tag_t source = tags_alphabet.encode(items[0]);
+        tag_t target = tags_alphabet.encode(items[1]);
+        if (source > 0 && target > 0) {
+          //_INFO << items[0] << " " << items[1];
+          trans[source][target] = true;
+          nr_constraints += 1;
+        }
+      }
+      _INFO << "report: number of constrain is: " << nr_constraints;
+    }
+  } else {
+    _INFO << "constrain not set.";
     for (std::size_t i = 0; i < T; ++ i) {
       for (std::size_t j = 0; j < T; ++ j) { trans[i][j] = true; }
     }
-  } else {
-    std::string line;
-    int nr_constraints = 0;
-    while (std::getline(ifs, line)) {
-      std::vector<std::string> items;
-      algo::trim(line);
-      if (line.size() == 0) { continue; }
-      algo::split_regex(items, line, boost::regex("-->"));
-      BOOST_ASSERT(2 == items.size());
-
-      algo::trim(items[0]);
-      algo::trim(items[1]);
-      tag_t source = tags_alphabet.encode(items[0].c_str());
-      tag_t target = tags_alphabet.encode(items[1].c_str());
-      if (source > 0 && target > 0) {
-        //_INFO << items[0] << " " << items[1];
-        trans[source][target] = true;
-        nr_constraints += 1;
-      }
-    }
-    _INFO << "report: number of constrain is: " << nr_constraints;
   }
 }
 
-bool Pipe::setup() {
-  namespace ioutils = ZuoPar::IO;
+void Pipe::learn() {
+  if (!load_training_data()) { return; }
 
-  dataset.clear();
-  if (mode == kPipeLearn) {
-    std::ifstream ifs(reference_path.c_str());
-    if (!ifs.good()) {
-      _ERROR << "#: failed to open reference file.";
-      _ERROR << "#: training halt";
-      return false;
+  load_constrain();
+  decoder = new Decoder(tags_alphabet.size(), trans, conf["beam"].as<unsigned>(), false,
+    get_update_strategy(conf["strategy"].as<std::string>()), weight);
+  learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
+
+  std::string model_path = FrontEnd::get_model_name("seqlabel", conf);
+  double best_score = 0.;
+  unsigned n_seen = 0, N = dataset.size();
+  for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
+    std::random_shuffle(dataset.begin(), dataset.end());
+    for (const SequenceInstance& instance : dataset) {
+      n_seen++;
+
+      std::vector<Action> actions;
+      ActionUtils::get_oracle_actions(instance, actions);
+
+      int max_nr_actions = instance.size();
+      State init_state(&instance);
+      Decoder::const_decode_result_t result = decoder->decode(init_state,
+        actions, max_nr_actions);
+
+      learner->set_timestamp(n_seen);
+      learner->learn(result.first, result.second);
+
+      if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
+        _INFO << "pipe: processed #" << n_seen % N << "/" << n_seen / N << " instances.";
+      }
+      if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+        learner->flush();
+        double score = evaluate(devel_dataset);
+        decoder->reset_use_avg();
+        _INFO << "pipe: evaluate at instance #" << n_seen << ", score: " << score;
+        if (score > best_score) {
+          _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+          save_model(model_path);
+          best_score = score;
+        }
+      }
     }
-    _INFO << "report: loading dataset from reference file.";
-    ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
-        tags_alphabet, true);
-    _INFO << "report: dataset is loaded from reference file.";
-  } else {
-    // not implemented.
-    std::ifstream ifs(input_path.c_str());
-    if (!ifs.good()) {
-      _ERROR << "#: failed to open input file.";
-      _ERROR << "#: testing halt";
-      return false;
+    learner->flush();
+    _INFO << "pipe: iter " << iter + 1 << " #errors: " << learner->errors();
+    learner->clear_errors();
+    double score = evaluate(devel_dataset);
+    decoder->reset_use_avg();
+    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+    if (score > best_score) {
+      _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+      save_model(model_path);
+      best_score = score;
     }
-    ioutils::read_sequence_instance_dataset(ifs, dataset, attributes_alphabet,
-        tags_alphabet, false);
   }
+  _INFO << "pipe: end of training, best development score: " << best_score;
+}
+
+double Pipe::evaluate(const std::vector<SequenceInstance>& dataset) {
+  std::string output = FrontEnd::get_output_name("wordseg", conf);
+  std::ostream* os = ioutils::get_ostream(output);
+  decoder->set_use_avg();
+  for (const SequenceInstance& instance : dataset) {
+    std::vector<Action> actions;
+
+    int max_actions = instance.size();
+    State init_state(&instance);
+    Decoder::const_decode_result_t result =
+      decoder->decode(init_state, actions, max_actions);
+
+    SequenceInstance output;
+    build_output((*result.first), output);
+    ioutils::write_sequence_instance((*os), output, attributes_alphabet, tags_alphabet);
+  }
+  _INFO << "pipe: processed #" << dataset.size() << " instances.";
+  if (os == (&(std::cout))) { return 0.; }
+  return Utility::execute_script(conf["script"].as<std::string>(), output);
+}
+
+void Pipe::test() {
+  if (!load_test_data()) { return; }
   _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
   _INFO << "report: " << attributes_alphabet.size() << " attribute(s) is detected.";
   _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
 
-  return true;
-}
+  decoder = new Decoder(tags_alphabet.size(), trans, conf["beam"].as<unsigned>(), false,
+    get_update_strategy(conf["strategy"].as<std::string>()), weight);
 
-void Pipe::run() {
-  namespace ioutils = ZuoPar::IO;
-  if (!setup()) {
-    return;
-  }
-
-  load_constrain();
-
-  if (mode == kPipeLearn) {
-    decoder = new Decoder(tags_alphabet.size(), trans, beam_size, false, update_strategy, weight);
-    learner = new Learner(weight, this->algorithm);
-  } else {
-    decoder = new Decoder(tags_alphabet.size(), trans, beam_size, true, update_strategy, weight);
-  }
-
-  size_t N = dataset.size();
-  std::ostream* os = (mode == kPipeLearn ? NULL: ioutils::get_ostream(output_path.c_str()));
-
-  std::vector<int> ranks;
-  for (size_t i = 0; i < N; ++ i) { ranks.push_back(i); }
-
-  while (shuffle_times --) {
-    // To avoid fake shuffling.
-    std::random_shuffle(ranks.begin(), ranks.end());
-  }
-
-  for (size_t n = 0; n < N; ++ n) {
-    const SequenceInstance& instance = dataset[ranks[n]];
-    // calculate the oracle transition actions.
-    std::vector<Action> actions;
-    if (mode == kPipeLearn) {
-      ActionUtils::get_oracle_actions(instance, actions);
-    }
-
-    int max_nr_actions = instance.size();
-    State init_state(&instance);
-    Decoder::const_decode_result_t result = decoder->decode(init_state,
-        actions, max_nr_actions);
-
-    if (mode == kPipeLearn) {
-      learner->set_timestamp(n+ 1);
-      learner->learn(result.first, result.second);
-    } else {
-      SequenceInstance output;
-      build_output((*result.first), output);
-      ioutils::write_sequence_instance((*os), output, attributes_alphabet, tags_alphabet);
-    }
-
-    if ((n+ 1)% display_interval == 0) {
-      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
-    }
-  }
-  _INFO << "pipe: processed #" << N << " instances.";
-
-  if (mode == kPipeLearn) {
-    learner->set_timestamp(N);
-    learner->flush();
-    _INFO << "pipe: nr errors: " << learner->errors();
-
-    save_model(model_path);
-  }
+  double score = evaluate(dataset);
+  _INFO << "test: score " << score;
 }
 
 void Pipe::build_output(const State& source, SequenceInstance& output) {

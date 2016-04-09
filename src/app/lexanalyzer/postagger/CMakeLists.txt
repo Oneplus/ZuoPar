@@ -1,17 +1,17 @@
 add_executable (postagger
     main.cc
+    action.h
     action.cc
+    action_utils.h
     action_utils.cc
+    state.h
     state.cc
+    decoder.h
     decoder.cc
+    pipe.h
     pipe.cc
+    weight.h
     weight.cc
-    ${SOURCE_DIR}/engine/token_alphabet.cc
-    ${SOURCE_DIR}/frontend/common_opt_utils.cc
-    ${SOURCE_DIR}/utils/logging.cc
-    ${SOURCE_DIR}/utils/io/dataset/postag.cc
-    ${SOURCE_DIR}/utils/io/instance/postag.cc
-    ${SOURCE_DIR}/utils/io/stream.cc
     )
 
-target_link_libraries (postagger ${LIBS})
+target_link_libraries (postagger ${LIBS} _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils)

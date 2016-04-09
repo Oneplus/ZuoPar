@@ -6,15 +6,13 @@
 #include "utils/io/stream.h"
 #include "utils/io/dataset/postag.h"
 #include "utils/io/instance/postag.h"
+#include "frontend/common_pipe_utils.h"
 #include "app/lexanalyzer/postagger/action_utils.h"
 #include "app/lexanalyzer/postagger/pipe.h"
 
 namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
-
-namespace fe = ZuoPar::FrontEnd;
-
 
 Pipe::Pipe(const boost::program_options::variables_map& vm)
   : weight(new Weight), decoder(0), learner(0), conf(vm) {
@@ -99,15 +97,8 @@ void Pipe::learn() {
 
   unsigned n_seen = 0, tot_seen = dataset.size();
   double best_score = 0.;
-  std::string model_path;
-  if (conf.count("model")) {
-    model_path = conf["model"].as<std::string>();
-  } else {
-    model_path = "pos.";
-    model_path += conf["algorithm"].as<std::string>() + "_" + conf["update"].as<std::string>() + "_";
-    model_path += boost::lexical_cast<std::string>(conf["beam"].as<unsigned>()) + ".";
-    model_path += boost::lexical_cast<std::string>(Utility::get_pid()) + ".model";
-  }
+  std::string model_path = FrontEnd::get_model_name("pos", conf);
+
   for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
     _INFO << "pipe: iteration #" << iter + 1 << ", start training.";
     std::random_shuffle(dataset.begin(), dataset.end());
@@ -141,11 +132,11 @@ void Pipe::learn() {
       }
     }
     learner->flush();
-    _INFO << "pipe: #errors: " << learner->errors();
+    _INFO << "pipe: iter" << iter + 1 << " #errros: " << learner->errors();
     learner->clear_errors();
     double score = evaluate(devel_dataset);
     decoder->reset_use_avg();
-    _INFO << "pipe: evaluate score: " << score;
+    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
     if (score > best_score) {
       _INFO << "pipe: NEW best model is achieved, save to " << model_path;
       save_model(model_path);
@@ -158,13 +149,7 @@ void Pipe::learn() {
 double Pipe::evaluate(const std::vector<Postag>& dataset) {
   namespace ioutils = ZuoPar::IO;
 
-  std::string output;
-  if (conf.count("output")) {
-    output = conf["output"].as<std::string>();
-  } else {
-    output = "postagger.output." + boost::lexical_cast<std::string>(Utility::get_pid());
-  }
-
+  std::string output = FrontEnd::get_output_name("postagger", conf);
   std::ostream* os = ioutils::get_ostream(output); 
   decoder->set_use_avg();
   for (const Postag& instance : dataset) {

@@ -8,17 +8,26 @@ po::options_description build_learn_optparser(const std::string& usage) {
   po::options_description optparser(usage);
   optparser.add_options()
     ("help,h", "Show help information.")
-    ("algorithm,a", po::value<std::string>()->default_value("ap"), "The learning algorithm.\n"
-     " ap - average perceptron [default]\n pa - passive aggressive")
-    ("beam,b", po::value<int>()->default_value(64), "The size for beam [default=64].")
-    ("display,d", po::value<int>()->default_value(1000), "The display interval [default=1000].")
+    ("verbose,v", "Logging every detail.")
+    ("train,r", po::value<std::string>(), "The path to the reference file.")
+    ("devel,d", po::value<std::string>(), "The path to the development data.")
     ("model,m", po::value<std::string>(), "The path to the model.")
-    ("reference,r", po::value<std::string>(), "The path to the reference file.")
-    ("shuffle,s", po::value<int>()->default_value(0), "The flag for shuffling instance.\n"
-     " 0  - not shuffle instance [default].\n >0 - perform s time shuffle (to avoid fake shuffling.)")
-    ("update,u", po::value<std::string>()->default_value("early"), "Specify the update strategy.\n"
-     " naive - no update\n early - early update (Collins 04) [default]\n max - max violation (Huang 12)")
-    ("verbose,v", "Logging every detail.");
+    ("beam", po::value<unsigned>()->default_value(64), "The size for beam.")
+    ("algorithm", po::value<std::string>()->default_value("ap"),
+    "The learning algorithm.\n"
+    " ap - average perceptron\n"
+    " pa - passive aggressive")
+    ("update", po::value<std::string>()->default_value("early"),
+    "Specify the update strategy.\n"
+    " naive - no update\n"
+    " early - early update (Collins 04)"
+    " max - max violation (Huang 12)")
+    ("report_stops", po::value<unsigned>()->default_value(1000), "The report frequency.")
+    ("evaluate_stops", po::value<unsigned>()->default_value(5000), "The evaluation frequency.")
+    ("script", po::value<std::string>(), "The path to the evaluation script.")
+    ("output", po::value<std::string>(), "The path to the output file (temporal).")
+    ("maxiter", po::value<unsigned>()->default_value(10), "The maximum number of iteration.")
+    ;
 
   return optparser;
 }
@@ -48,12 +57,13 @@ po::options_description build_test_optparser(const std::string& usage) {
   po::options_description optparser(usage);
   optparser.add_options()
     ("help,h", "Show help information.")
+    ("verbose,v", "Logging every detail.")
     ("model,m", po::value<std::string>(), "The path to the model.")
     ("input,i", po::value<std::string>(), "The path to the input file.")
     ("output,o", po::value<std::string>(), "The path to the output file.")
-    ("display,d", po::value<int>()->default_value(1000), "The display interval [default=1000].")
-    ("beam,b", po::value<int>()->default_value(64), "The size for beam [default=64].")
-    ("verbose,v", "Logging every detail.");
+    ("beam,b", po::value<unsigned>()->default_value(64), "The size for beam.")
+    ("script", po::value<std::string>(), "The path to the evaluation script.")
+    ;
 
   return optparser;
 }

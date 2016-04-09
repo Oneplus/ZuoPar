@@ -13,32 +13,18 @@ namespace ZuoPar {
 namespace SequenceLabeler {
 
 namespace eg = ZuoPar::Engine;
-namespace fe = ZuoPar::FrontEnd;
 
-class Pipe: public fe::CommonPipeConfigure {
+class Pipe {
 public:
-  /**
-   * The learning mode constructor.
-   *
-   *  @param[in]  opts  The learning options.
-   */
-  Pipe(const LearnOption& opts);
+  Pipe(const boost::program_options::variables_map& vm);
 
-  /**
-   * The testing mode constructor.
-   *
-   *  @param[in]  opts  The testing options.
-   */
-  Pipe(const TestOption& opts);
-
-  /**
-   * Perform learning or testing according to the configuration.
-   */
-  void run();
+  void learn(); //  perform learning
+  void test();  //  perform testing
 
 protected:
-  bool setup();
-
+  double evaluate(const std::vector<SequenceInstance>& dataset);
+  bool load_training_data();
+  bool load_test_data();
   void load_constrain();
 
   /**
@@ -59,10 +45,7 @@ protected:
   void build_output(const State& source, SequenceInstance& output);
 
 protected:
-  //! The path to the constrain file.
-  std::string constrain_path;
-
-  //!
+  //! Matrix for legal transition.
   std::vector< std::vector<bool> > trans;
 
   //! The pointer to the weights instances which is pointwise averaged
@@ -83,6 +66,10 @@ protected:
 
   //! The dataset.
   std::vector<SequenceInstance> dataset;
+  std::vector<SequenceInstance> devel_dataset;
+
+  //! The configuration
+  const boost::program_options::variables_map& conf;
 };
 
 

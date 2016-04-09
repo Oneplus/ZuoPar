@@ -3,28 +3,19 @@
 #include <boost/bind/bind.hpp>
 #include <boost/thread/thread.hpp>
 #include "utils/logging.h"
+#include "frontend/common_pipe_utils.h"
 #include "app/seqlabeler/trans/multi_pipe.h"
 #include "app/seqlabeler/trans/action_utils.h"
 
 namespace ZuoPar {
 namespace SequenceLabeler {
 
-namespace eg = ZuoPar::Engine;
-namespace fe = ZuoPar::FrontEnd;
-
-MultiPipe::MultiPipe(const MultiLearnOption& opts)
-  : minibatch_learner(0),
-  Pipe(static_cast<const LearnOption&>(opts)) {
-  _INFO << "::MULTI-LEARN:: mode is activated.";
-  this->batch_size = opts.batch_size;
-  this->num_threads = opts.num_threads;
-  this->constrain_path = opts.constrain_path;
+MultiPipe::MultiPipe(const boost::program_options::variables_map& vm)
+  : minibatch_learner(0), Pipe(vm) {
 }
 
-void MultiPipe::run() {
-  if (!setup()) {
-    return;
-  }
+void MultiPipe::multi_learn() {
+  if (!load_training_data()) { return; }
 
   load_constrain();
 
@@ -33,51 +24,65 @@ void MultiPipe::run() {
 
   decoder_pool.resize(num_threads);
   for (int i = 0; i < num_threads; ++ i) {
-    decoder_pool[i] = new Decoder(tags_alphabet.size(), trans,
-        beam_size, false, update_strategy, weight);
+    decoder_pool[i] = new Decoder(tags_alphabet.size(), trans, conf["beam"].as<unsigned>(),
+      false, get_update_strategy(conf["strategy"].as<std::string>()), weight);
   }
 
   minibatch_learner = new MinibatchLearner(weight);
   std::size_t N = dataset.size();
+  
+  std::string model_path = FrontEnd::get_model_name("seqlabel_mulit", conf);
+  double best_score = 0.;
+  unsigned n_seen = 0;
+  int n_batches = ((N % batch_size) == 0 ? (N / batch_size) : (N / batch_size + 1));
+  for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
+    std::random_shuffle(dataset.begin(), dataset.end());
+    
+    for (std::size_t batch_id = 0; batch_id < n_batches; ++ batch_id) {
+      //! Producer
+      ++n_seen;
+      std::size_t start = batch_id * batch_size;
+      std::size_t end = std::min(N, (batch_id + 1) * batch_size);
+      for (std::size_t n = start; n < end; ++ n) { queue.push(&dataset[n]); }
 
-  std::vector<int> ranks;
-  for (size_t i = 0; i < N; ++ i) { ranks.push_back(i); }
-  while (shuffle_times --) {
-    // To avoid fake shuffling.
-    std::random_shuffle(ranks.begin(), ranks.end());
+      boost::thread_group decoder_threads;
+      last_free_decoder_id = 0;
+      for (int i = 0; i < num_threads; ++ i) {
+        decoder_threads.create_thread(boost::bind(&MultiPipe::decode, this));
+      }
+      decoder_threads.join_all();
+      
+      minibatch_learner->set_timestamp(n_seen);
+      minibatch_learner->learn();
+      minibatch_learner->clear();
+      
+      if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
+        _INFO << "pipe: finish learning batch#" << n_seen % n_batches << "/" << n_seen / n_batches;
+      }
+      if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+        minibatch_learner->flush();
+        double score = evaluate(devel_dataset);
+        decoder->reset_use_avg();
+        _INFO << "pipe: evaluate at instance #" << n_seen << ", score: " << score;
+        if (score > best_score) {
+          _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+          save_model(model_path);
+          best_score = score;
+        }
+      }
+    }
+    minibatch_learner->flush();
+    _INFO << "pipe: iter " << iter + 1 << " #errors: " << minibatch_learner->errors();
+    minibatch_learner->clear_errors();
+    double score = evaluate(devel_dataset);
+    decoder->reset_use_avg();
+    _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+    if (score > best_score) {
+      _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+      save_model(model_path);
+      best_score = score;
+    }
   }
-
-  int nr_batches = (N % batch_size == 0? N / batch_size: N/batch_size+ 1);
-  for (std::size_t batch_id = 0; batch_id < nr_batches; ++ batch_id) {
-    //! Producer
-    std::size_t start = batch_id* batch_size;
-    std::size_t end = std::min(N, (batch_id+ 1) * batch_size);
-    for (std::size_t n = start; n < end; ++ n) {
-      queue.push(&dataset[ranks[n]]);
-    }
-
-    boost::thread_group decoder_threads;
-    last_free_decoder_id = 0;
-    for (int i = 0; i < num_threads; ++ i) {
-      decoder_threads.create_thread(boost::bind(&MultiPipe::decode, this));
-    }
-    decoder_threads.join_all();
-
-    minibatch_learner->set_timestamp(batch_id+ 1);
-    minibatch_learner->learn();
-    minibatch_learner->clear();
-
-    if ((batch_id+ 1) % display_interval == 0) {
-      _INFO << "pipe: finish learning batch#" << batch_id + 1;
-    }
-  }
-
-  _INFO << "pipe: learn " << nr_batches << " batches.";
-  minibatch_learner->set_timestamp(nr_batches);
-  minibatch_learner->flush();
-  _INFO << "pipe: nr errors: " << minibatch_learner->errors();
-
-  save_model(model_path);
 }
 
 void MultiPipe::decode() {
