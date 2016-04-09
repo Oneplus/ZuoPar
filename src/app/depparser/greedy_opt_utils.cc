@@ -18,58 +18,5 @@ po::options_description build_greedy_test_optparser(
   return opt;
 }
 
-bool parse_greedy_learn_option(const po::variables_map& vm, GreedyLearnOption& opts) {
-  Utility::init_boost_log(false);
-
-  if (vm.count("help")) {
-    return false;
-  }
-
-  if (!vm.count("reference")) {
-    _WARN << "reference file is not specified.";
-    return false;
-  } else {
-    opts.reference_path = vm["reference"].as<std::string>();
-  }
-
-  if (!vm.count("model")) {
-    _WARN << "model file is not specified.";
-    return false;
-  } else {
-    opts.model_path = vm["model"].as<std::string>();
-  }
-
-  opts.shuffle_times = vm["shuffle"].as<int>();
-  opts.root = vm["root"].as<std::string>();
-  return true;
-}
-
-bool parse_greedy_test_option(const po::variables_map& vm, GreedyTestOption& opts) {
-  Utility::init_boost_log(false);
-
-  if (vm.count("help")) {
-    return false;
-  }
-
-  if (!vm.count("model")) {
-    _WARN << "model file is not specified.";
-    return false;
-  } else {
-    opts.model_path = vm["model"].as<std::string>();
-  }
-
-  if (!vm.count("input")) {
-    _WARN << "input file is not specified.";
-    return false;
-  } else {
-    opts.input_path = vm["input"].as<std::string>();
-  }
-
-  if (vm.count("output")) {
-    opts.output_path = vm["output"].as<std::string>();
-  }
-  return true;
-}
-
 } //  namespace dependencyparser
 } //  namespace zuopar

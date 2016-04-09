@@ -33,22 +33,11 @@ po::options_description build_learn_optparser(const std::string& usage) {
 }
 
 po::options_description build_multi_learn_optparser(const std::string& usage) {
-  po::options_description optparser(usage);
+  po::options_description optparser = build_learn_optparser(usage);
   optparser.add_options()
-    ("help,h", "Show help information.")
-    ("algorithm,a", po::value<std::string>()->default_value("ap"), "The learning algorithm.\n"
-     " ap - average perceptron [default]\n pa - passive aggressive")
-    ("beam,b", po::value<int>()->default_value(64), "The size for beam [default=64].")
-    ("batch,c", po::value<int>()->default_value(16), "The size for batch [default=16].")
-    ("display,d", po::value<int>()->default_value(100), "The display interval (batch) [default=100].")
-    ("model,m", po::value<std::string>(), "The path to the model.")
-    ("threads,t", po::value<int>()->default_value(10), "The number of threads [default=10].")
-    ("reference,r", po::value<std::string>(), "The path to the reference file.")
-    ("shuffle,s", po::value<int>()->default_value(0), "The flag for shuffling instance.\n"
-     " 0  - not shuffle instance [default].\n >0 - perform s time shuffle (to avoid fake shuffling.)")
-    ("update,u", po::value<std::string>()->default_value("early"), "Specify the update strategy.\n"
-     " naive - no update\n early - early update (Collins 04) [default]\n max - max violation (Huang 12)")
-    ("verbose,v", "Logging every detail.");
+    ("batch,c", po::value<int>()->default_value(16), "The size for batch.")
+    ("threads,t", po::value<int>()->default_value(10), "The number of threads.")
+    ;
 
   return optparser;
 }

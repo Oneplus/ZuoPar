@@ -14,6 +14,8 @@ namespace ZuoPar {
 namespace LexicalAnalyzer {
 namespace Postagger {
 
+namespace ioutils = ZuoPar::IO;
+
 Pipe::Pipe(const boost::program_options::variables_map& vm)
   : weight(new Weight), decoder(0), learner(0), conf(vm) {
   if (conf.count("model") && load_model(conf["model"].as<std::string>())) {
@@ -63,7 +65,6 @@ bool Pipe::save_model(const std::string& model_path) {
 }
 
 void Pipe::learn() {
-  namespace ioutils = ZuoPar::IO;
   dataset.clear();
   devel_dataset.clear();
 
@@ -95,29 +96,28 @@ void Pipe::learn() {
     weight);
   learner = new Learner(weight);
 
-  unsigned n_seen = 0, tot_seen = dataset.size();
+  unsigned n_seen = 0, N = dataset.size();
   double best_score = 0.;
   std::string model_path = FrontEnd::get_model_name("pos", conf);
 
   for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
     _INFO << "pipe: iteration #" << iter + 1 << ", start training.";
     std::random_shuffle(dataset.begin(), dataset.end());
-    size_t N = dataset.size();
     for (const Postag& instance : dataset) {
       ++n_seen;
       std::vector<Action> actions;
       ActionUtils::get_oracle_actions(instance, actions);
 
-      int max_nr_actions = instance.size();
+      int max_actions = instance.size();
       State init_state(&instance);
       Decoder::const_decode_result_t result = 
-        decoder->decode(init_state, actions, max_nr_actions);
+        decoder->decode(init_state, actions, max_actions);
 
       learner->set_timestamp(n_seen);
       learner->learn(result.first, result.second);
 
       if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-        _INFO << "pipe: processed " << n_seen % tot_seen << "/" << n_seen / tot_seen << " instances.";
+        _INFO << "pipe: processed " << n_seen % N << "/" << n_seen / N << " instances.";
       }
       if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
         learner->flush();
@@ -147,8 +147,6 @@ void Pipe::learn() {
 }
 
 double Pipe::evaluate(const std::vector<Postag>& dataset) {
-  namespace ioutils = ZuoPar::IO;
-
   std::string output = FrontEnd::get_output_name("postagger", conf);
   std::ostream* os = ioutils::get_ostream(output); 
   decoder->set_use_avg();
@@ -171,7 +169,6 @@ double Pipe::evaluate(const std::vector<Postag>& dataset) {
 }
 
 void Pipe::test() {
-  namespace ioutils = ZuoPar::IO;
   dataset.clear();
   // not implemented.
   std::ifstream ifs(conf["input"].as<std::string>());

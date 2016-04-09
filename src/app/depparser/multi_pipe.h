@@ -35,69 +35,85 @@ public:
    *
    *  @param[in]  opts  The learning options.
    */
-  DependencyMultiPipe(const MultiLearnOption& opts)
+  DependencyMultiPipe(const boost::program_options::variables_map& vm)
     : minibatch_learner(0),
     DependencyPipe<
       Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction
-    >(static_cast<const fe::LearnOption&>(opts)) {
-    _INFO << "::MULTI-LEARN:: mode is activated.";
-    this->root = opts.root;
-    this->batch_size = opts.batch_size;
-    this->num_threads = opts.num_threads;
-    _INFO << "report: batch size = " << batch_size;
-    _INFO << "report: number of threads = " << num_threads;
+    >(vm) {
+    _INFO << "report: batch size = " << vm["batch"].as<unsigned>();
+    _INFO << "report: number of threads = " << vm["threads"].as<unsigned>();
   }
 
   //!
-  void run() {
-    if (!this->setup()) {
-      return;
-    }
-    decoder_pool.resize(num_threads);
+  void learn() {
+    if (!this->setup(vm["train"].as<std::string>(), dataset, true)) { return;  }
+
+    unsigned n_threads = conf["threads"].as<unsigned>();
+    unsigned batch_size = conf["batch"].as<unsigned>();
+ 
+    decoder_pool.resize(n_threads);
     deprel_t root_tag = this->deprels_alphabet.encode(this->root.c_str());
-    for (int i = 0; i < num_threads; ++ i) {
+    for (int i = 0; i < n_threads; ++ i) {
       decoder_pool[i] = new Decoder(
-          this->deprels_alphabet.size(), root_tag, this->beam_size, false,
-          this->update_strategy, this->weight);
+        this->deprels_alphabet.size(), root_tag,
+        this->conf["beam"].as<unsigned>(), false,
+        get_update_stragey(conf["update"].as<std::string>()),
+        this->weight);
     }
 
     minibatch_learner = new MinibatchLearner(this->weight);
-    std::size_t N = this->dataset.size();
-    std::vector<std::size_t> ranks;
-    for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
-    while (this->shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
-
-    int nr_batches = (N % batch_size == 0? N / batch_size: N/batch_size+ 1);
-    for (std::size_t batch_id = 0; batch_id < nr_batches; ++ batch_id) {
-      //! Producer
-      std::size_t start = batch_id* batch_size;
-      std::size_t end = std::min(N, (batch_id+ 1) * batch_size);
-      for (std::size_t n = start; n < end; ++ n) {
-        queue.push(&(this->dataset[n]));
-      }
-      boost::thread_group decoder_threads;
-      last_free_decoder_id = 0;
-      for (int i = 0; i < num_threads; ++ i) {
-        decoder_threads.create_thread(
+    unsigned n_seen = 0, N = this->dataset.size();
+    unsigned n_batches = (N % batch_size == 0 ? N / batch_size: N / batch_size+ 1);
+    for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
+      for (unsigned batch_id = 0; batch_id < nr_batches; ++batch_id) {
+        //! Producer
+        unsigned start = batch_id * batch_size;
+        unsigned end = (batch_id + 1) * batch_size; if (end > N) { end = N; }
+        for (unsigned n = start; n < end; ++n) {
+          queue.push(&(this->dataset[n]));
+        }
+        boost::thread_group decoder_threads;
+        last_free_decoder_id = 0;
+        for (unsigned i = 0; i < n_threads; ++i) {
+          decoder_threads.create_thread(
             boost::bind(&DependencyMultiPipe<
-              Action, ActionUtils, State, Weight, Decoder, Learner,
-              MinibatchLearner, MaxNumberOfActionsFunction>::decode,
-              this));
+            Action, ActionUtils, State, Weight, Decoder, Learner,
+            MinibatchLearner, MaxNumberOfActionsFunction>::decode,
+            this));
+        }
+        decoder_threads.join_all();
+        minibatch_learner->set_timestamp(n_seen);
+        minibatch_learner->learn();
+        minibatch_learner->clear();
+        if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
+          _INFO << "pipe: processed " << n_seen % n_batches <<
+            "/" << n_seen / n_batches << " instances.";
+        }
+        if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+          minibatch_learner->flush();
+          double score = evaluate(devel_dataset);
+          decoder->reset_use_avg();
+          _INFO << "pipe: evaluate score: " << score;
+          if (score > best_score) {
+            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            save_model(model_path);
+            best_score = score;
+          }
+        }
       }
-      decoder_threads.join_all();
-      minibatch_learner->set_timestamp(batch_id+ 1);
-      minibatch_learner->learn();
-      minibatch_learner->clear();
-      if ((batch_id+ 1) % this->display_interval == 0) {
-        _INFO << "pipe: finish learning batch#" << batch_id + 1;
+
+      minibatch_learner->flush();
+      _INFO << "pipe: iter" << iter + 1 << " #errros: " << minibatch_learner->errors();
+      minibatch_learner->clear_errors();
+      double score = evaluate(devel_dataset);
+      decoder->reset_use_avg();
+      _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+      if (score > best_score) {
+        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        save_model(model_path);
+        best_score = score;
       }
     }
-
-    _INFO << "pipe: learn " << nr_batches << " batches";
-    minibatch_learner->set_timestamp(nr_batches);
-    minibatch_learner->flush();
-    _INFO << "pipe: nr errors: " << minibatch_learner->errors();
-    this->save_model(this->model_path);
   }
 private:
   //!
@@ -163,67 +179,93 @@ public:
    *
    *  @param[in]  opts  The learning options.
    */
-  CoNLLXDependencyMultiPipe(const MultiLearnOption& opts)
+  CoNLLXDependencyMultiPipe(const boost::program_options::variables_map& vm)
     : minibatch_learner(0),
     CoNLLXDependencyPipe<
       Action, ActionUtils, State, Weight, Decoder, Learner, MaxNumberOfActionsFunction
-    >(static_cast<const fe::LearnOption&>(opts)) {
-    _INFO << "::MULTI-LEARN:: mode is activated.";
-    this->root = opts.root;
-    this->batch_size = opts.batch_size;
-    this->num_threads = opts.num_threads;
-    _INFO << "report: batch size = " << batch_size;
-    _INFO << "report: number of threads = " << num_threads;
+    >(vm) {
+    _INFO << "report: batch size = " << vm["batch"].as<unsigned>();
+    _INFO << "report: number of threads = " << vm["threads"].as<unsigned>();
   }
 
   //!
-  void run() {
-    if (!this->setup(this->reference_path, true)) { return; }
-    decoder_pool.resize(num_threads);
+  void learn() {
+    if (!this->setup(this->conf["train"].as<std::string>(), dataset, true)) {
+      return;
+    }
+    if (this->conf.count("devel")) {
+      this->setup(this->conf["devel"].as<std::string>(), devel_dataset, false); 
+    }
+    unsigned n_threads = this->conf["threads"].as<unsigned>();
+    unsigned batch_size = this->conf["batch"].as<unsigned>();
+
+    decoder_pool.resize(n_threads);
     deprel_t root_tag = this->deprels_alphabet.encode(this->root.c_str());
-    for (int i = 0; i < num_threads; ++ i) {
+
+    for (int i = 0; i < n_threads; ++ i) {
       decoder_pool[i] = new Decoder(
-          this->deprels_alphabet.size(), root_tag, Decoder::kLeft, this->beam_size, false,
-          this->update_strategy, this->weight);
+          this->deprels_alphabet.size(), root_tag, Decoder::kLeft,
+          this->conf["beam"].as<unsigned>(),
+          false,
+          get_update_strategy(this->conf["update"].as<std::string>()),
+          this->weight);
     }
 
     minibatch_learner = new MinibatchLearner(this->weight);
-    std::size_t N = this->dataset.size();
-    std::vector<std::size_t> ranks;
-    for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
-    while (this->shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
-
-    int nr_batches = (N % batch_size == 0? N / batch_size: N/batch_size+ 1);
-    for (std::size_t batch_id = 0; batch_id < nr_batches; ++ batch_id) {
-      //! Producer
-      std::size_t start = batch_id* batch_size;
-      std::size_t end = std::min(N, (batch_id + 1) * batch_size);
-      for (std::size_t n = start; n < end; ++ n) {
-        queue.push(&(this->dataset[n]));
-      }
-      boost::thread_group decoder_threads;
-      last_free_decoder_id = 0;
-      for (int i = 0; i < num_threads; ++ i) {
-        decoder_threads.create_thread(
+    std::string model_path = FrontEnd::get_model_name(signature, this->conf);
+    unsigned n_seen = 0, N = this->dataset.size();
+    int n_batches = (N % batch_size == 0 ? N / batch_size : N / batch_size + 1);
+    double best_score = 0.;
+    for (unsigned iter = 0; iter < this->conf["maxiter"].as<unsigned>(); ++iter) {
+      std::random_shuffle(dataset.begin(), dataset.end());
+      for (unsigned batch_id = 0; batch_id < n_batches; ++ batch_id) {
+        //! Producer
+        n_seen++;
+        unsigned start = batch_id * batch_size;
+        unsigned end = ((batch_id + 1) * batch_size); if (end > N) { end = N; }
+        for (std::size_t n = start; n < end; ++ n) {
+          queue.push(&(this->dataset[n]));
+        }
+        boost::thread_group decoder_threads;
+        last_free_decoder_id = 0;
+        for (int i = 0; i < n_threads; ++ i) {
+          decoder_threads.create_thread(
             boost::bind(&CoNLLXDependencyMultiPipe<
-              Action, ActionUtils, State, Weight, Decoder, Learner,
-              MinibatchLearner, MaxNumberOfActionsFunction>::decode,
-              this));
+            Action, ActionUtils, State, Weight, Decoder, Learner,
+            MinibatchLearner, MaxNumberOfActionsFunction>::decode,
+            this));
+        }
+        decoder_threads.join_all();
+        minibatch_learner->set_timestamp(batch_id+ 1);
+        minibatch_learner->learn();
+        minibatch_learner->clear();
+        if (n_seen % this->conf["report_stops"].as<unsigned>() == 0) {
+          _INFO << "pipe: finish learning batch#" << n_seen % n_batches << "/" << n_seen / n_batches;
+        }
+        if (n_seen % this->conf["evaluate_stops"].as<unsigned>() == 0) {
+          learner->flush();
+          double score = evaluate(devel_dataset);
+          decoder->reset_use_avg();
+          _INFO << "pipe: evaluate score: " << score;
+          if (score > best_score) {
+            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            save_model(model_path);
+            best_score = score;
+          }
+        }
       }
-      decoder_threads.join_all();
-      minibatch_learner->set_timestamp(batch_id+ 1);
-      minibatch_learner->learn();
-      minibatch_learner->clear();
-      if ((batch_id+ 1) % this->display_interval == 0) {
-        _INFO << "pipe: finish learning batch#" << batch_id + 1;
+      
+      _INFO << "pipe: learn " << n_batches << " batches";
+      minibatch_learner->set_timestamp(n_seen);
+      minibatch_learner->flush();
+      _INFO << "pipe: nr errors: " << minibatch_learner->errors();
+      double score = evaluate(devel_dataset);
+      if (score > best_score) {
+        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        save_model(model_path);
+        best_score = score;
       }
     }
-
-    _INFO << "pipe: learn " << nr_batches << " batches";
-    minibatch_learner->set_timestamp(nr_batches);
-    minibatch_learner->flush();
-    _INFO << "pipe: nr errors: " << minibatch_learner->errors();
-    this->save_model(this->model_path);
   }
 private:
   //!
@@ -249,13 +291,9 @@ private:
     return decoder_pool[last_free_decoder_id++];
   }
 
-  int batch_size;           //! The size of mini batch.
-  int num_threads;          //! The number of threads in.
   int last_free_decoder_id; //! The index of the last free decoder in decoder pool.
-
   std::vector<Decoder *> decoder_pool;  //! The pool of decoders
   MinibatchLearner* minibatch_learner;  //! The learner
-
   boost::lockfree::queue<const CoNLLXDependency*> queue;  //! The job queue
   boost::mutex mtx;  //!  The mutex
 };

@@ -35,7 +35,6 @@ Pipe::Pipe(const boost::program_options::variables_map& vm)
 }
 
 bool Pipe::load_model(const std::string& model_path) {
-  weight = new Weight;
   std::ifstream mfs(model_path);
 
   if (!mfs.good()) {

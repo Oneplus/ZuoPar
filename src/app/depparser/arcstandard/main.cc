@@ -2,7 +2,6 @@
 #include <cstring>  // strcmp
 #include <boost/program_options.hpp>
 #include "utils/logging.h"
-#include "app/depparser/opt.h"
 #include "app/depparser/opt_utils.h"
 #include "app/depparser/arcstandard/pipe.h"
 
@@ -12,6 +11,8 @@
 namespace dp = ZuoPar::DependencyParser;
 namespace as = ZuoPar::DependencyParser::ArcStandard;
 namespace po = boost::program_options;
+
+std::string as::Pipe::signature = EXE;
 
 int multi_learn(int argc, char** argv) {
   std::string usage = "Multi-threaded training component of ZuoPar::" APP ".\n";
@@ -27,14 +28,8 @@ int multi_learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  dp::MultiLearnOption opts;
-  if (!dp::parse_multi_learn_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  as::MultiPipe pipe(opts);
-  pipe.run();
+  as::MultiPipe pipe(vm);
+  pipe.learn();
   return 0;
 }
 
@@ -60,14 +55,8 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  dp::LearnOption opts;
-  if (!dp::parse_learn_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  as::Pipe pipe(opts);
-  pipe.run();
+  as::Pipe pipe(vm);
+  pipe.learn();
   return 0;
 }
 
@@ -93,17 +82,11 @@ int test(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  dp::TestOption opts;
-  if (!dp::parse_test_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-  as::Pipe pipe(opts);
-  pipe.run();
+  as::Pipe pipe(vm);
+  pipe.test();
 
   return 0;
 }
 
 #include "frontend/template/main.h"
 MAIN(APP, EXE)
-

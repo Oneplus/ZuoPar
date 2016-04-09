@@ -1,22 +1,22 @@
 add_executable (depparser_choi2013
     main.cc
+    action.h
     action.cc
+    action_utils.h
     action_utils.cc
+    state.h
     state.cc
+    decoder.h
     decoder.cc
+    weight.h
     weight.cc
+    score_context.h
     score_context.cc
+    ${SOURCE_DIR}/app/depparser/opt_utils.h
     ${SOURCE_DIR}/app/depparser/opt_utils.cc
-    ${SOURCE_DIR}/frontend/common_opt_utils.cc
-    ${SOURCE_DIR}/engine/token_alphabet.cc
-    ${SOURCE_DIR}/utils/logging.cc
-    ${SOURCE_DIR}/utils/io/stream.cc
-    ${SOURCE_DIR}/utils/io/dataset/dependency.cc
-    ${SOURCE_DIR}/utils/io/instance/dependency.cc
-    ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (depparser_choi2013 ${LIBS})
+target_link_libraries (depparser_choi2013 _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils ${LIBS})
 
 add_executable (depparser_choi2013_greedy
     greedy.cc

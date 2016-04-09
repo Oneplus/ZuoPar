@@ -16,8 +16,6 @@
 #include "utils/io/instance/dependency.h"
 #include "frontend/common_pipe_cfg.h"
 #include "frontend/common_pipe_utils.h"
-#include "app/depparser/opt.h"
-#include "app/depparser/greedy_opt.h"
 
 namespace ZuoPar {
 namespace DependencyParser {
@@ -34,42 +32,18 @@ template <
   class Learner,
   class MaxNumberOfActionsFunction
 >
-class DependencyPipe: public fe::CommonPipeConfigure {
-protected:
-  /**
-   * The learning mode constructor.
-   *
-   *  @param[in]  opts  The learning options.
-   */
-  DependencyPipe(const fe::LearnOption& opts)
-    : weight(0), decoder(0), learner(0),
-    fe::CommonPipeConfigure(opts) {
-    if (load_model(opts.model_path)) { _INFO << "report: model is loaded.";}
-    else                             { _INFO << "report: model is not loaded.";}
-  }
+class DependencyPipe {
 public:
   /**
    * The learning mode constructor.
    *
    *  @param[in]  opts  The learning options.
    */
-  DependencyPipe(const LearnOption& opts): weight(0), decoder(0), learner(0),
-    fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
+  DependencyPipe(const boost::program_options::variables_map& vm)
+    : weight(new Weight), decoder(0), learner(0), conf(vm) {
     this->root = opts.root;
     if (load_model(opts.model_path)) { _INFO << "report: model is loaded.";}
     else                             { _INFO << "report: model is not loaded.";}
-  }
-
-  /**
-   * The testing mode constructor.
-   *
-   *  @param[in]  opts  The testing options.
-   */
-  DependencyPipe(const TestOption& opts): weight(0), decoder(0), learner(0),
-    fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
-    this->root = opts.root;
-    if (load_model(opts.model_path)) { _INFO << "report: model is loaded.";}
-    else                             { _INFO << "report: model is not loaded."; }
   }
 
   ~DependencyPipe() {
@@ -78,96 +52,125 @@ public:
     if (learner) { delete learner; learner = 0; }
   }
 
-  bool setup() {
-    dataset.clear();
-    if (mode == kPipeLearn) {
-      std::ifstream ifs(reference_path.c_str());
+  bool setup(const std::string& path, std::vector<Dependency>& ds, bool insert) {
+    ds.clear();
+    if (insert) {
+      std::ifstream ifs(path);
       if (!ifs.good()) {
         _ERROR << "#: failed to open reference file.";
         _ERROR << "#: training halt";
         return false;
       }
-
       _INFO << "report: loading dataset from reference file.";
-      IO::read_dependency_dataset(ifs, dataset, forms_alphabet,
-          postags_alphabet, deprels_alphabet);
+      IO::read_dependency_dataset(ifs, ds, forms_alphabet,
+        postags_alphabet, deprels_alphabet);
       _INFO << "report: dataset is loaded from reference file.";
     } else {
-      std::ifstream ifs(input_path.c_str());
+      std::ifstream ifs(path);
       if (!ifs.good()) {
         _ERROR << "#: failed to open input file.";
         _ERROR << "#: testing halt";
         return false;
       }
-      IO::read_dependency_dataset(ifs, dataset, forms_alphabet,
-          postags_alphabet, deprels_alphabet, 0x03);
+      IO::read_dependency_dataset(ifs, ds, forms_alphabet,
+        postags_alphabet, deprels_alphabet, 0x03);
     }
-    _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
+    _INFO << "report: " << ds.size() << " instance(s) is loaded.";
     _INFO << "report: " << forms_alphabet.size() << " forms(s) is detected.";
     _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
     _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is detected.";
     return true;
   }
 
-  //! Perform learning or testing according to the configuration.
-  void run() {
-    if (!setup()) {
-      return;
-    }
-
-    deprel_t root_tag = deprels_alphabet.insert(this->root);
-    if (mode == kPipeLearn) {
-      decoder = new Decoder(deprels_alphabet.size(), root_tag,
-          beam_size, false, update_strategy, weight);
-      learner = new Learner(weight, this->algorithm);
-    } else {
-      decoder = new Decoder(deprels_alphabet.size(), root_tag,
-          beam_size, true, UpdateStrategy::kNaive, weight);
-    }
-
-    size_t N = dataset.size();
-    std::ostream* os = (mode == kPipeLearn ? NULL: IO::get_ostream(output_path.c_str()));
-    std::vector<std::size_t> ranks;
-    Utility::shuffle(N, this->shuffle_times, ranks);
-
-    for (size_t n = 0; n < N; ++ n) {
-      const Dependency& instance = dataset[ranks[n]];
-      // calculate the oracle transition actions.
-      std::vector<Action> actions;
-      if (mode == kPipeLearn) {
-        ActionUtils::get_oracle_actions(instance, actions);
-      }
-
-      int max_nr_actions = MaxNumberOfActionsFunction()(instance);
+  double evaluate(const std::vector<Dependency>& dataset) {
+    std::string output = FrontEnd::get_output_name(signature, conf);
+    std::ostream* os = ioutils::get_ostream(output);
+    decoder->set_use_avg();
+    for (const Dependency& instance : dataset) {
+      int max_actions = MaxNumberOfActionsFunction()(instance);
       State init_state(&instance);
       typename Decoder::const_decode_result_t result = decoder->decode(init_state,
-          actions, max_nr_actions);
+        actions, max_actions);
+      
+      Dependency output;
+      build_output((*result.first), output);
+      IO::write_dependency_instance((*os), output, forms_alphabet,
+        postags_alphabet, deprels_alphabet);
+    }
 
-      if (mode == kPipeLearn) {
-        learner->set_timestamp(n+ 1);
-        //if (result.first != result.second) { _TRACE << "failed at: " << result.first->buffer; }
+    _INFO << "pipe: processed #" << dataset.size() << " instances.";
+    if (os == (&(std::cout))) { return 0.; }
+    delete os;
+    return Utility::execute_script(conf["script"].as<std::string>(), output);
+  }
+
+  void test() {
+    if (!setup(conf["input"].as<std::string>(), dataset, false)) { return; }
+
+    deprel_t root_tag = deprels_alphabet.insert(this->root);
+    decoder = new Decoder(deprels_alphabet.size(), root_tag,
+      conf["beam"].as<unsigned>(), true, UpdateStrategy::kNaive, weight);
+
+    double score = evaluate(dataset);
+    _INFO << "pipe test score: " << score;
+  }
+
+  //! Perform learning or testing according to the configuration.
+  void learn() {
+    if (!setup(conf["train"].as<std::string>(), dataset, true)) { return; }
+    if (conf.count("devel")) { setup(conf["devel"].as<std::string>(), devel_dataset, false); }
+
+    deprel_t root_tag = deprels_alphabet.insert(this->root);
+    decoder = new Decoder(deprels_alphabet.size(), root_tag,
+      conf["beam"].as<unsigned>(), false,
+      get_update_strategy(conf["update"].as<std::string>()), weight);
+    learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
+
+    unsigned n_seen = 0, N = dataset.size();
+    for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
+      _INFO << "pipe: iteration #" << iter + 1 << ", start training.";
+      std::random_shuffle(dataset.begin(), dataset.end());
+      for (const Dependency& instance : dataset) {
+        ++n_seen;
+        // calculate the oracle transition actions.
+        std::vector<Action> actions;
+        ActionUtils::get_oracle_actions(instance, actions);
+
+        int max_actions = MaxNumberOfActionsFunction()(instance);
+        State init_state(&instance);
+        typename Decoder::const_decode_result_t result = decoder->decode(init_state,
+          actions, max_actions);
+
+        learner->set_timestamp(n_seen);
         learner->learn(result.first, result.second);
-      } else {
-        Dependency output;
-        build_output((*result.first), output);
-        IO::write_dependency_instance((*os), output, forms_alphabet,
-            postags_alphabet, deprels_alphabet);
-      }
 
-      if ((n+ 1)% display_interval == 0) {
-        _INFO << "pipe: processed #" << (n+ 1) << " instances.";
+        if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
+          _INFO << "pipe: processed #" << n_seen << " instances.";
+        }
+        if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+          learner->flush();
+          double score = evaluate(devel_dataset);
+          decoder->reset_use_avg();
+          _INFO << "pipe: evaluate score: " << score;
+          if (score > best_score) {
+            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            save_model(model_path);
+            best_score = score;
+          }
+        }
       }
-    }
-    _INFO << "pipe: processed #" << N << " instances.";
-
-    if (mode == kPipeLearn) {
-      learner->set_timestamp(N);
       learner->flush();
-      _INFO << "pipe: nr errors: " << learner->errors();
-      save_model(model_path);
+      _INFO << "pipe: iter" << iter + 1 << " #errros: " << learner->errors();
+      learner->clear_errors();
+      double score = evaluate(devel_dataset);
+      decoder->reset_use_avg();
+      _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+      if (score > best_score) {
+        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        save_model(model_path);
+        best_score = score;
+      }
     }
-
-    if (os != &(std::cout) && os != NULL) { delete os; }
   }
 
   /**
@@ -241,6 +244,9 @@ protected:
   eg::TokenAlphabet postags_alphabet;   //! The alphabets of postags.
   eg::TokenAlphabet deprels_alphabet;   //! The alphabets of dependency relations.
   std::vector<Dependency> dataset;      //! The dataset.
+  std::vector<Dependency> devel_dataset;
+  const boost::program_options::variables_map& conf;
+  static std::string signature;
   std::string root;
 };
 
@@ -365,43 +371,20 @@ template <
   class Learner,
   class MaxNumberOfActionsFunction
 >
-class CoNLLXDependencyPipe:
-  public fe::CommonPipeConfigure,
-  public CoNLLXDependencyRepository {
-protected:
-  /**
-   * The learning mode constructor.
-   *
-   *  @param[in]  opts  The learning options.
-   */
-  CoNLLXDependencyPipe(const fe::LearnOption& opts)
-    : weight(0), decoder(0), learner(0), fe::CommonPipeConfigure(opts) {
-    if (load_model(opts.model_path)) { _INFO << "report: model is loaded."; }
-    else                             { _INFO << "report: model is not loaded."; }
-  }
+class CoNLLXDependencyPipe: public CoNLLXDependencyRepository {
 public:
   /**
-   * The learning mode constructor.
+   * The pipe constructor.
    *
-   *  @param[in]  opts  The learning options.
+   *  @param[in]  vm  The options.
    */
-  CoNLLXDependencyPipe(const LearnOption& opts): weight(0), decoder(0), learner(0),
-    fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
-    this->root = opts.root;
-    if (load_model(opts.model_path))  { _INFO << "report: model is loaded."; }
-    else                              { _INFO << "report: model is not loaded."; }
-  }
-
-  /**
-   * The testing mode constructor.
-   *
-   *  @param[in]  opts  The testing options.
-   */
-  CoNLLXDependencyPipe(const TestOption& opts): weight(0), decoder(0), learner(0),
-    fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)) {
-    this->root = opts.root;
-    if (load_model(opts.model_path))  { _INFO << "report: model is loaded."; }
-    else                              { _INFO << "report: model is not loaded."; }
+  CoNLLXDependencyPipe(const boost::program_options::variables_map& vm)
+    : weight(new Weight), decoder(0), learner(0), conf(vm) {
+    if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
+      _INFO << "report: model is loaded."; 
+    } else {
+      _INFO << "report: model is not loaded."; 
+    }
   }
 
   ~CoNLLXDependencyPipe() {
@@ -410,67 +393,105 @@ public:
     if (learner) { delete learner; learner = 0; }
   }
 
-  //! Perform learning or testing according to the configuration.
-  void run() {
-    if (mode == kPipeLearn) {
-      if (!setup(reference_path, true)) { return; }
-    } else if (mode == kPipeTest) {
-      if (!setup(input_path, false)) { return; }
+  //! Perform learning.
+  void learn() {
+    if (!setup(conf["train"].as<std::string>(), dataset, true)) { return; }
+    if (conf.count("devel")) {
+      setup(conf["devel"].as<std::string>(), devel_dataset, false);
     }
 
     deprel_t root_tag = deprels_alphabet.insert(this->root);
-    if (mode == kPipeLearn) {
-      decoder = new Decoder(deprels_alphabet.size(), root_tag, Decoder::kLeft,
-          beam_size, false, update_strategy, weight);
-      learner = new Learner(weight, this->algorithm);
-    } else {
-      decoder = new Decoder(deprels_alphabet.size(), root_tag, Decoder::kLeft,
-          beam_size, true, UpdateStrategy::kNaive, weight);
+    decoder = new Decoder(deprels_alphabet.size(), root_tag, Decoder::kLeft,
+      conf["beam"].as<unsigned>(),
+      false, 
+      get_update_strategy(conf["algorithm"].as<std::string>()),
+      weight);
+    learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
+
+    unsigned n_seen = 0, N = dataset.size();
+    double best_score = 0.;
+    std::string model_path = FrontEnd::get_model_name(signature, conf);
+
+    for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
+      _INFO << "pipe: iteration #" << iter + 1 << ", start training.";
+      std::random_shuffle(dataset.begin(), dataset.end());
+      for (const CoNLLXDependency& instance : dataset) {
+        // calculate the oracle transition actions.
+        ++n_seen;
+        std::vector<Action> actions;
+        ActionUtils::get_oracle_actions(instance, actions);
+        
+        int max_actions = MaxNumberOfActionsFunction()(instance);
+        State init_state(&instance);
+        typename Decoder::const_decode_result_t result = decoder->decode(init_state,
+          actions, max_actions);
+ 
+        learner->set_timestamp(n_seen);
+        learner->learn(result.first, result.second);
+
+        if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
+          _INFO << "pipe: processed #" << n_seen % N << " / " << n_seen / N << " instances.";
+        }
+        if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+          learner->flush();
+          double score = evaluate(devel_dataset);
+          decoder->reset_use_avg();
+          _INFO << "pipe: evaluate score: " << score;
+          if (score > best_score) {
+            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            save_model(model_path);
+            best_score = score;
+          }
+        }
+      }
+
+      learner->flush();
+      _INFO << "pipe: iter" << iter + 1 << " #errros: " << learner->errors();
+      learner->clear_errors();
+      double score = evaluate(devel_dataset);
+      decoder->reset_use_avg();
+      _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+      if (score > best_score) {
+        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        save_model(model_path);
+        best_score = score;
+      }
     }
+    _INFO << "pipe: best development score: " << best_score;
+  }
 
-    size_t N = dataset.size();
-    std::ostream* os = (mode == kPipeLearn ? NULL: IO::get_ostream(output_path.c_str()));
-    std::vector<std::size_t> ranks;
-    for (size_t n = 0; n < N; ++ n) { ranks.push_back(n); }
-    while (this->shuffle_times --) { std::random_shuffle(ranks.begin(), ranks.end()); }
-
-    for (size_t n = 0; n < N; ++ n) {
-      const CoNLLXDependency& instance = dataset[ranks[n]];
-      // calculate the oracle transition actions.
+  double evaluate(const std::vector<CoNLLXDependency>& dataset) {
+    std::string output = FrontEnd::get_output_name(signature, conf);
+    std::ostream* os = IO::get_ostream(output);
+    decoder->set_use_avg();
+    for (const CoNLLXDependency& instance : dataset) {
       std::vector<Action> actions;
-      if (mode == kPipeLearn) { ActionUtils::get_oracle_actions(instance, actions);  }
-
-      int max_nr_actions = MaxNumberOfActionsFunction()(instance);
+      int max_actions = MaxNumberOfActionsFunction()(instance);
       State init_state(&instance);
       typename Decoder::const_decode_result_t result = decoder->decode(init_state,
-          actions, max_nr_actions);
+        actions, max_actions);
 
-      if (mode == kPipeLearn) {
-        learner->set_timestamp(n+ 1);
-        //if (result.first != result.second) { _TRACE << "failed at: " << result.first->buffer; }
-        learner->learn(result.first, result.second);
-      } else {
-        CoNLLXDependency output;
-        build_output((*result.first), output, deprels_alphabet.encode(root));
-        IO::write_conllx_dependency_instance((*os), output, forms_alphabet,
-            lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
-            deprels_alphabet);
-      }
-
-      if ((n+ 1)% display_interval == 0) {
-        _INFO << "pipe: processed #" << (n+ 1) << " instances.";
-      }
+      CoNLLXDependency output;
+      build_output((*result.first), output, deprels_alphabet.encode(root));
+      IO::write_conllx_dependency_instance((*os), output, forms_alphabet,
+        lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
+        deprels_alphabet);
     }
-    _INFO << "pipe: processed #" << N << " instances.";
+    _INFO << "pipe: processed #" << dataset.size() << " instance(s).";
+    if (os == (&(std::cout))) { return 0.; }
+    delete os;
+    return Utility::execute_script(conf["script"].as<std::string>(), output);
+  }
 
-    if (mode == kPipeLearn) {
-      learner->set_timestamp(N);
-      learner->flush();
-      _INFO << "pipe: nr errors: " << learner->errors();
-      save_model(model_path);
+  void test() {
+    if (setup(conf["input"].as<std::string>(), dataset, false)) {
+      return;
     }
-
-    if (os != &(std::cout) && os != NULL) { delete os; }
+    deprel_t root_tag = deprels_alphabet.insert(this->root);
+    decoder = new Decoder(deprels_alphabet.size(), root_tag, Decoder::kLeft,
+      conf["beam"].as<unsigned>(), true, UpdateStrategy::kNaive, weight);
+    double score = evaluate(dataset);
+    _INFO << "test: score" << score;
   }
 
   /**
@@ -479,7 +500,6 @@ public:
    *  @param[in]  model_path  The path to the model.
    */
   bool load_model(const std::string& model_path) {
-    weight = new Weight;
     std::ifstream mfs(model_path);
 
     if (!CoNLLXDependencyRepository::load_model(mfs)) {
@@ -509,6 +529,8 @@ public:
   }
 
 protected:
+  const boost::program_options::variables_map& conf;
+  static std::string signature;
   Weight* weight;     //! The parameter
   Learner* learner;   //! The parameter learner.
   Decoder* decoder;   //! The pointer to the decoder.

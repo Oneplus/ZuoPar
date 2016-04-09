@@ -31,7 +31,6 @@ Pipe::~Pipe() {
 }
 
 bool Pipe::load_model(const std::string& model_path) {
-  weight = new Weight;
   std::ifstream mfs(model_path);
   if (!mfs.good()) { _WARN << "pipe: model doesn't exists."; return false; }
   if (!weight->load(mfs)) { _WARN << "pipe: failed to load weight."; return false; }
