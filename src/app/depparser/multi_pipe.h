@@ -197,7 +197,7 @@ public:
     for (std::size_t batch_id = 0; batch_id < nr_batches; ++ batch_id) {
       //! Producer
       std::size_t start = batch_id* batch_size;
-      std::size_t end = std::min(N, (batch_id+ 1) * batch_size);
+      std::size_t end = std::min(N, (batch_id + 1) * batch_size);
       for (std::size_t n = start; n < end; ++ n) {
         queue.push(&(this->dataset[n]));
       }

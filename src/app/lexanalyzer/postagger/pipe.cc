@@ -166,6 +166,7 @@ double Pipe::evaluate(const std::vector<Postag>& dataset) {
   }
   _INFO << "pipe: processed #" << dataset.size() << " instances.";
   if (os == (&(std::cout))) { return 0.; }
+  delete os;
   return Utility::execute_script(conf["script"].as<std::string>(), output);
 }
 

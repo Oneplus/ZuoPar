@@ -1,4 +1,5 @@
 #include "app/depparser/greedy_opt_utils.h"
+#include "frontend/common_opt_utils.h"
 #include "utils/logging.h"
 
 namespace ZuoPar {
@@ -6,25 +7,14 @@ namespace DependencyParser {
 
 po::options_description build_greedy_learn_optparser(
     const std::string& usage) {
-  po::options_description opt(usage);
-  opt.add_options()
-    ("reference", po::value<std::string>(), "The path to the reference file.")
-    ("model", po::value<std::string>(), "The path to the model file.")
-    ("root", po::value<std::string>()->default_value("ROOT"), "the root tag")
-    ("shuffle", po::value<int>()->default_value(0),
-     "The shuffle time")
-    ("help,h", "Show help information");
+  po::options_description opt = FrontEnd::build_learn_optparser(usage);
+  opt.add_options()("root", po::value<std::string>()->default_value("ROOT"), "the root tag");
   return opt;
 }
 
 po::options_description build_greedy_test_optparser(
     const std::string& usage) {
-  po::options_description opt(usage);
-  opt.add_options()
-    ("input", po::value<std::string>(), "The path to the input file.")
-    ("output", po::value<std::string>(), "The path to the output file.")
-    ("model", po::value<std::string>(), "The path to the model file.")
-    ("help", "Show help information");
+  po::options_description opt = FrontEnd::build_test_optparser(usage);
   return opt;
 }
 

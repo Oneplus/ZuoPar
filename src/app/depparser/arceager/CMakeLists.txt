@@ -19,19 +19,19 @@ target_link_libraries (depparser_arceager ${LIBS})
 
 add_executable (depparser_arceager_greedy
     greedy.cc
+    action.h
     action.cc
+    action_utils.h
     action_utils.cc
+    state.h
     state.cc
+    decoder.h
     decoder.cc
+    weight.h
     weight.cc
+    ${SOURCE_DIR}/app/depparser/greedy_opt_utils.h
     ${SOURCE_DIR}/app/depparser/greedy_opt_utils.cc
-    ${SOURCE_DIR}/engine/token_alphabet.cc
-    ${SOURCE_DIR}/utils/logging.cc
-    ${SOURCE_DIR}/utils/io/stream.cc
-    ${SOURCE_DIR}/utils/io/dataset/dependency.cc
-    ${SOURCE_DIR}/utils/io/instance/dependency.cc
-    ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (depparser_arceager_greedy ${LIBS})
+target_link_libraries (depparser_arceager_greedy _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils ${LIBS})
 

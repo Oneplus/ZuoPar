@@ -15,6 +15,7 @@
 #include "utils/io/dataset/dependency.h"
 #include "utils/io/instance/dependency.h"
 #include "frontend/common_pipe_cfg.h"
+#include "frontend/common_pipe_utils.h"
 #include "app/depparser/opt.h"
 #include "app/depparser/greedy_opt.h"
 
@@ -247,8 +248,8 @@ protected:
 
 class CoNLLXDependencyRepository {
 public:
-  bool setup(const std::string& path, bool insert) {
-    dataset.clear();
+  bool setup(const std::string& path, std::vector<CoNLLXDependency>& ds, bool insert) {
+    ds.clear();
     std::ifstream ifs(path.c_str());
     if (insert) {
       if (!ifs.good()) {
@@ -257,7 +258,7 @@ public:
       }
 
       _INFO << "report: loading dataset from reference file.";
-      IO::read_conllx_dependency_dataset(ifs, dataset, forms_alphabet,
+      IO::read_conllx_dependency_dataset(ifs, ds, forms_alphabet,
           lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
           deprels_alphabet);
       _INFO << "report: dataset is loaded from reference file.";
@@ -267,11 +268,11 @@ public:
         _ERROR << "#: testing halt";
         return false;
       }
-      IO::read_conllx_dependency_dataset(ifs, dataset, forms_alphabet,
+      IO::read_conllx_dependency_dataset(ifs, ds, forms_alphabet,
           lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
           deprels_alphabet, 0x1f);
     }
-    _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
+    _INFO << "report: " << ds.size() << " instance(s) is loaded.";
     _INFO << "report: " << forms_alphabet.size()    << " form(s) is detected.";
     _INFO << "report: " << lemmas_alphabet.size()   << " lemmas(s) is detected.";
     _INFO << "report: " << cpostags_alphabet.size() << " cpostag(s) is detected.";
@@ -351,6 +352,7 @@ public:
   Engine::TokenAlphabet feat_alphabet;      //! The alphabet for feat.
   Engine::TokenAlphabet deprels_alphabet;   //! The alphabet for dependency relations.
   std::vector<CoNLLXDependency> dataset;
+  std::vector<CoNLLXDependency> devel_dataset;
 };
 
 
@@ -524,144 +526,154 @@ template <
 >
 class GreedySearchCoNLLXDependencyPipe: public CoNLLXDependencyRepository {
 private:
-  //! The supported modes.
-  enum PipeMode { kPipeLearn, kPipeTest };
-
-  std::string reference_path;
-  std::string input_path;
-  std::string output_path;
-  std::string model_path;
+  static std::string signature;
   std::string root;
-  int shuffle_times;
-
-  PipeMode mode;
 
   Decoder* decoder;
   Weight* weight;
-
+  const boost::program_options::variables_map& conf;
 public:
-  GreedySearchCoNLLXDependencyPipe(const GreedyLearnOption& opt):
-    mode(kPipeLearn),
-    weight(nullptr), decoder(nullptr),
-    reference_path(opt.reference_path), model_path(opt.model_path),
-    shuffle_times(opt.shuffle_times),
-    root(opt.root) {
-    if (load_model(opt.model_path)) { _INFO << "report: model is loaded.";}
-    else                            { _INFO << "report: model is not loaded.";}
-    _INFO << "report: root = " << root;
-  }
-
-  GreedySearchCoNLLXDependencyPipe(const GreedyTestOption& opt):
-    mode(kPipeTest),
-    weight(nullptr), decoder(nullptr),
-    input_path(opt.input_path), output_path(opt.output_path), model_path(opt.model_path),
-    shuffle_times(0) {
-    if (load_model(opt.model_path)) { _INFO << "report: model is loaded.";}
-    else                            { _INFO << "report: model is not loaded.";}
+  GreedySearchCoNLLXDependencyPipe(const boost::program_options::variables_map& vm):
+    weight(new Weight), decoder(nullptr), conf(vm) {
+    root = vm["root"].as<std::string>();
+    if (vm.count("model") && load_model(vm["model"].as<std::string>())) {
+      _INFO << "report: model is loaded.";
+    } else {
+      _INFO << "report: model is not loaded.";
+    }
     _INFO << "report: root = " << root;
   }
 
   ~GreedySearchCoNLLXDependencyPipe() {
-    if (weight) { delete weight; weight = nullptr; }
-    if (decoder) { delete decoder; decoder = nullptr; }
+    if (weight)   { delete weight;  weight = nullptr; }
+    if (decoder)  { delete decoder; decoder = nullptr; }
   }
 
-  void test() {
-    if (!setup(input_path, false)) { return; }
+  static void set_signature(const std::string& name) {
+    signature = name;
+  }
 
-    decoder = new Decoder(deprels_alphabet.size(), deprels_alphabet.encode(root),
-      Decoder::kLeft, 1, true, kEarlyUpdate, nullptr);
+  double evaluate(const std::vector<CoNLLXDependency>& dataset) {
+    // evaluation not rely on the decoder.
+    std::string output = FrontEnd::get_model_name(signature, conf);
+    std::ostream* os = IO::get_ostream(output);
 
-    std::ostream* os = IO::get_ostream(output_path.c_str());
-    auto N = dataset.size();
-
-    for (auto n = 0; n < N; ++ n) {
-      const CoNLLXDependency& instance = dataset[n];
+    for (const CoNLLXDependency& instance : dataset) {
       //auto L = instance.forms.size();
-      int max_nr_actions = MaxNumberOfActionsFunction()(instance) ;
+      int max_nr_actions = MaxNumberOfActionsFunction()(instance);
       //std::vector<State> states(L* 2);
-      std::vector<State> states(max_nr_actions + 1) ; // one more state
+      std::vector<State> states(max_nr_actions + 1); // one more state
       states[0].copy(State(&instance));
-      int ended_step = 0 ;
-      for (auto step = 0 ; step < max_nr_actions ; ++ step) {
+      int ended_step = 0;
+      for (auto step = 0; step < max_nr_actions; ++step) {
         std::vector<Action> possible_actions;
         PackedScores<Action> scores;
         decoder->get_possible_actions(states[step], possible_actions);
         weight->batchly_score(states[step], possible_actions, true, scores);
 
         Action best_action; floatval_t best_score = -1e20;
-        for (auto& act: possible_actions) {
+        for (auto& act : possible_actions) {
           if (scores[act] > best_score) {
             best_action = act;
             best_score = scores[act];
           }
         }
 
-        decoder->transit(states[step], best_action, 0, &states[step+ 1]);
-        ended_step = step + 1 ; // sync ended step
-        if(states[ended_step].is_complete()){ break ;}
+        decoder->transit(states[step], best_action, 0, &states[step + 1]);
+        ended_step = step + 1; // sync ended step
+        if (states[ended_step].is_complete()){ break; }
       }
 
       CoNLLXDependency output;
-      //build_output(states[L*2-1], output, deprels_alphabet.encode(root));
       build_output(states[ended_step], output, deprels_alphabet.encode(root));
       IO::write_conllx_dependency_instance((*os), output, forms_alphabet,
-          lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
-          deprels_alphabet);
+        lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
+        deprels_alphabet);
     }
-    if (os != &(std::cout) && os != NULL) { delete os; }
+    if (os == (&(std::cout))) { return 0.; }
+    if (os != nullptr) { delete os;  }
+    return Utility::execute_script(conf["stript"].as<std::string>(), output);
+  }
+
+  void test() {
+    if (!setup(conf["input"].as<std::string>(), dataset, false)) { return; }
+
+    decoder = new Decoder(deprels_alphabet.size(), deprels_alphabet.encode(root),
+      Decoder::kLeft, 1, true, kEarlyUpdate, nullptr);
+    double score = evaluate(dataset);
+    _INFO << "test: score " << score;
   }
 
   void learn() {
-    if (!setup(reference_path, true)) { return; }
+    if (!setup(conf["train"].as<std::string>(), dataset, true)) { return; }
+    if (conf.count("devel")) { setup(conf["devel"].as<std::string>(), devel_dataset, false); }
 
+    std::string model_path = FrontEnd::get_model_name(signature, conf);
     decoder = new Decoder(deprels_alphabet.size(), deprels_alphabet.encode(root),
         Decoder::kLeft, 1, false, kEarlyUpdate, nullptr);
 
-    auto N = dataset.size();
-    auto n_samples = 0;
-    std::vector<size_t> ranks;
-    Utility::shuffle(N, shuffle_times, ranks);
+    unsigned n_samples = 0, n_seen = 0, N = dataset.size();
+    double best_score = 0.;
+    for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
+      std::random_shuffle(dataset.begin(), dataset.end());
+      _INFO << "start training at iteration#" << iter + 1;
+      for (const CoNLLXDependency& instance : dataset) {
+        ++n_seen;
+        std::vector<Action> oracle_actions;
+        std::vector<Action> possible_actions;
+        ActionUtils::get_oracle_actions(instance, oracle_actions);
 
-    for (int n = 0; n < N; ++ n) {
-      const CoNLLXDependency& instance = dataset[ranks[n]];
-      std::vector<Action> oracle_actions;
-      std::vector<Action> possible_actions;
-      ActionUtils::get_oracle_actions(instance, oracle_actions);
+        // size_t L = data.forms.size();
+        std::vector<State> states(oracle_actions.size() + 1);
+        states[0].copy(State(&instance));
+        // The third parameter is not needed, put zero to it.
+        for (auto step = 0; step < oracle_actions.size(); ++ step) {
+          ++n_samples;
+          auto& oracle_action = oracle_actions[step];
+          PackedScores<Action> scores;
+          
+          decoder->get_possible_actions(states[step], possible_actions);
+          weight->batchly_score(states[step], possible_actions, false, scores);
+          
+          Action best_action; floatval_t best_score = -1e20;
+          for (auto& act: possible_actions) {
+            if (scores[act] > best_score) {
+              best_action = act;
+              best_score = scores[act];
+            }
+          }
 
-      // size_t L = data.forms.size();
-      std::vector<State> states(oracle_actions.size() + 1);
-      states[0].copy(State(&instance));
-      // The third parameter is not needed, put zero to it.
-      for (auto step = 0; step < oracle_actions.size(); ++ step) {
-        n_samples += 1;
+          // Currently, only averaged perceptron is supported.
+          if (best_action != oracle_action) {
+            weight->update(states[step], best_action, n_samples, -1);
+            weight->update(states[step], oracle_action, n_samples, 1);
+          }
 
-        auto& oracle_action = oracle_actions[step];
-        PackedScores<Action> scores;
-
-        decoder->get_possible_actions(states[step], possible_actions);
-        weight->batchly_score(states[step], possible_actions, false, scores);
-
-        Action best_action; floatval_t best_score = -1e20;
-        for (auto& act: possible_actions) {
-          if (scores[act] > best_score) {
-            best_action = act;
-            best_score = scores[act];
+          decoder->transit(states[step], oracle_action, 0, &states[step+ 1]);
+        }
+        if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
+          _INFO << "pipe: processed #" << n_seen % N << "/" << n_seen / N << " instances.";
+        }
+        if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+          double score = evaluate(devel_dataset);
+          weight->flush(n_samples);
+          _INFO << "pipe: evaluate at instance #" << n_seen << ", score: " << score;
+          if (score > best_score) {
+            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            save_model(model_path);
+            best_score = score;
           }
         }
-
-        if (best_action != oracle_action) {
-          weight->update(states[step], best_action, n_samples, -1);
-          weight->update(states[step], oracle_action, n_samples, 1);
-        }
-
-        decoder->transit(states[step], oracle_action, 0, &states[step+ 1]);
       }
-      if ((n+ 1) % 1000 == 0) { _INFO << "report: processed " << n+1 << " instances."; }
+      weight->flush(n_samples);
+      double score = evaluate(devel_dataset);
+      _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+      if (score > best_score) {
+        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        save_model(model_path);
+        best_score = score;
+      }
     }
-    weight->flush(n_samples);
-
-    save_model(model_path);
   }
 
   void save_model(const std::string& model_path) {
