@@ -101,7 +101,7 @@ public:
         postags_alphabet, deprels_alphabet);
     }
 
-    _INFO << "pipe: processed #" << dataset.size() << " instances.";
+    _INFO << "[PIP] processed #" << dataset.size() << " instances.";
     if (os == (&(std::cout))) { return 0.; }
     delete os;
     return Utility::execute_script(conf["script"].as<std::string>(), output);
@@ -133,7 +133,7 @@ public:
     double best_score = 0.;
     std::string model_path = FrontEnd::get_model_name(signature, conf);
     for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
-      _INFO << "pipe: iteration #" << iter + 1 << ", start training.";
+      _INFO << "[PIP] iteration #" << iter + 1 << ", start training.";
       std::random_shuffle(dataset.begin(), dataset.end());
       for (const Dependency& instance : dataset) {
         ++n_seen;
@@ -150,28 +150,28 @@ public:
         learner->learn(result.first, result.second);
 
         if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-          _INFO << "pipe: processed #" << n_seen << " instances.";
+          _INFO << "[PIP] processed #" << n_seen << " instances.";
         }
         if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
           learner->flush();
           double score = evaluate(devel_dataset);
           decoder->reset_use_avg();
-          _INFO << "pipe: evaluate score: " << score;
+          _INFO << "[PIP] evaluate score: " << score;
           if (score > best_score) {
-            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
             save_model(model_path);
             best_score = score;
           }
         }
       }
       learner->flush();
-      _INFO << "pipe: iter" << iter + 1 << " #errros: " << learner->errors();
+      _INFO << "[PIP] iter" << iter + 1 << " #errros: " << learner->errors();
       learner->clear_errors();
       double score = evaluate(devel_dataset);
       decoder->reset_use_avg();
-      _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+      _INFO << "[PIP] evaluate at the end of iteration#" << iter + 1 << " score: " << score;
       if (score > best_score) {
-        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
         save_model(model_path);
         best_score = score;
       }
@@ -188,15 +188,15 @@ public:
     std::ifstream mfs(model_path);
 
     if (!mfs.good()) {
-      _WARN << "pipe: model doesn't exists.";             return false; }
+      _WARN << "[PIP] model doesn't exists.";             return false; }
     if (!forms_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load forms alphabet.";    return false; }
+      _WARN << "[PIP] failed to load forms alphabet.";    return false; }
     if (!postags_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load postags alphabet.";  return false; }
+      _WARN << "[PIP] failed to load postags alphabet.";  return false; }
     if (!deprels_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load deprels alphabet.";  return false; }
+      _WARN << "[PIP] failed to load deprels alphabet.";  return false; }
     if (!weight->load(mfs)) {
-      _WARN << "pipe: failed to load weight.";            return false; }
+      _WARN << "[PIP] failed to load weight.";            return false; }
     return true;
   }
 
@@ -208,13 +208,13 @@ public:
   void save_model(const std::string& model_path) {
     std::ofstream mfs(model_path);
     if (!mfs.good()) {
-      _WARN << "pipe: failed to save model.";
+      _WARN << "[PIP] failed to save model.";
     } else {
       forms_alphabet.save(mfs);
       postags_alphabet.save(mfs);
       deprels_alphabet.save(mfs);
       weight->save(mfs);
-      _INFO << "pipe: model saved to " << model_path;
+      _INFO << "[PIP] model saved to " << model_path;
     }
   }
 
@@ -300,19 +300,19 @@ public:
    */
   bool load_model(std::ifstream& mfs) {
     if (!mfs.good()) {
-      _WARN << "pipe: model doesn't exists.";             return false; }
+      _WARN << "[PIP] model doesn't exists.";             return false; }
     if (!forms_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load forms alphabet.";    return false; }
+      _WARN << "[PIP] failed to load forms alphabet.";    return false; }
     if (!lemmas_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load lemmas alphabet.";   return false; }
+      _WARN << "[PIP] failed to load lemmas alphabet.";   return false; }
     if (!cpostags_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load cpostag alphabet.";  return false; }
+      _WARN << "[PIP] failed to load cpostag alphabet.";  return false; }
     if (!postags_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load postags alphabet.";  return false; }
+      _WARN << "[PIP] failed to load postags alphabet.";  return false; }
     if (!feat_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load feat alphabet.";     return false; }
+      _WARN << "[PIP] failed to load feat alphabet.";     return false; }
     if (!deprels_alphabet.load(mfs)) {
-      _WARN << "pipe: failed to load deprels alphabet.";  return false; }
+      _WARN << "[PIP] failed to load deprels alphabet.";  return false; }
     return true;
   }
 
@@ -406,17 +406,20 @@ public:
 
   //! Perform learning.
   void learn() {
-    if (!setup(conf["train"].as<std::string>(), dataset, true)) { return; }
-    if (conf.count("devel")) {
-      setup(conf["devel"].as<std::string>(), devel_dataset, false);
+    if (!setup(conf["train"].as<std::string>(), dataset, true)) {
+      _ERROR << "[PIP] failed to load traininig data, training halted";
+      return;
+    }
+    if (!conf.count("devel") || !setup(conf["devel"].as<std::string>(), devel_dataset, false)) {
+      _WARN << "[PIP] development data is not loaded.";
     }
 
     deprel_t root_tag = deprels_alphabet.insert(root);
     decoder = new Decoder(deprels_alphabet.size(), root_tag, Decoder::kLeft,
-      conf["beam"].as<unsigned>(),
-      false, 
-      get_update_strategy(conf["algorithm"].as<std::string>()),
+      conf["beam"].as<unsigned>(), false,
+      get_update_strategy(conf["update"].as<std::string>()),
       weight);
+
     learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
 
     unsigned n_seen = 0, N = dataset.size();
@@ -424,7 +427,7 @@ public:
     std::string model_path = FrontEnd::get_model_name(signature, conf);
 
     for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
-      _INFO << "pipe: iteration #" << iter + 1 << ", start training.";
+      _INFO << "[PIP] iteration #" << iter + 1 << ", start training.";
       std::random_shuffle(dataset.begin(), dataset.end());
       for (const CoNLLXDependency& instance : dataset) {
         // calculate the oracle transition actions.
@@ -441,15 +444,15 @@ public:
         learner->learn(result.first, result.second);
 
         if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-          _INFO << "pipe: processed #" << n_seen % N << " / " << n_seen / N << " instances.";
+          _INFO << "[PIP] processed #" << n_seen % N << " / " << n_seen / N << " instances.";
         }
         if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
           learner->flush();
           double score = evaluate(devel_dataset);
           decoder->reset_use_avg();
-          _INFO << "pipe: evaluate score: " << score;
+          _INFO << "[PIP] evaluate score: " << score;
           if (score > best_score) {
-            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
             save_model(model_path);
             best_score = score;
           }
@@ -457,18 +460,18 @@ public:
       }
 
       learner->flush();
-      _INFO << "pipe: iter" << iter + 1 << " #errros: " << learner->errors();
+      _INFO << "[PIP] iter" << iter + 1 << " #errros: " << learner->errors();
       learner->clear_errors();
       double score = evaluate(devel_dataset);
       decoder->reset_use_avg();
-      _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+      _INFO << "[PIP] evaluate at the end of iteration#" << iter + 1 << " score: " << score;
       if (score > best_score) {
-        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
         save_model(model_path);
         best_score = score;
       }
     }
-    _INFO << "pipe: best development score: " << best_score;
+    _INFO << "[PIP] best development score: " << best_score;
   }
 
   double evaluate(const std::vector<CoNLLXDependency>& dataset) {
@@ -488,7 +491,7 @@ public:
         lemmas_alphabet, cpostags_alphabet, postags_alphabet, feat_alphabet,
         deprels_alphabet);
     }
-    _INFO << "pipe: processed #" << dataset.size() << " instance(s).";
+    _INFO << "[PIP] processed #" << dataset.size() << " instance(s).";
     if (os == (&(std::cout))) { return 0.; }
     delete os;
     return Utility::execute_script(conf["script"].as<std::string>(), output);
@@ -517,7 +520,7 @@ public:
       return false;
     }
     if (!weight->load(mfs)) {
-      _WARN << "pipe: failed to load weight.";
+      _WARN << "[PIP] failed to load weight.";
       return false;
     }
     return true;
@@ -531,11 +534,11 @@ public:
   void save_model(const std::string& model_path) {
     std::ofstream mfs(model_path);
     if (!mfs.good()) {
-      _WARN << "pipe: failed to save model.";
+      _WARN << "[PIP] failed to save model.";
     } else {
       CoNLLXDependencyRepository::save_model(mfs);
       weight->save(mfs);
-      _INFO << "pipe: model saved to " << model_path;
+      _INFO << "[PIP] model saved to " << model_path;
     }
   }
 
@@ -678,14 +681,14 @@ public:
           decoder->transit(states[step], oracle_action, 0, &states[step+ 1]);
         }
         if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-          _INFO << "pipe: processed #" << n_seen % N << "/" << n_seen / N << " instances.";
+          _INFO << "[PIP] processed #" << n_seen % N << "/" << n_seen / N << " instances.";
         }
         if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
           double score = evaluate(devel_dataset);
           weight->flush(n_samples);
-          _INFO << "pipe: evaluate at instance #" << n_seen << ", score: " << score;
+          _INFO << "[PIP] evaluate at instance #" << n_seen << ", score: " << score;
           if (score > best_score) {
-            _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+            _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
             save_model(model_path);
             best_score = score;
           }
@@ -693,9 +696,9 @@ public:
       }
       weight->flush(n_samples);
       double score = evaluate(devel_dataset);
-      _INFO << "pipe: evaluate at the end of iteration#" << iter + 1 << " score: " << score;
+      _INFO << "[PIP] evaluate at the end of iteration#" << iter + 1 << " score: " << score;
       if (score > best_score) {
-        _INFO << "pipe: NEW best model is achieved, save to " << model_path;
+        _INFO << "[PIP] NEW best model is achieved, save to " << model_path;
         save_model(model_path);
         best_score = score;
       }
@@ -705,13 +708,13 @@ public:
   void save_model(const std::string& model_path) {
     std::ofstream mfs(model_path);
     if (!mfs.good()) {
-      _WARN << "pipe: failed to save model.";
+      _WARN << "[PIP] failed to save model.";
     } else {
       CoNLLXDependencyRepository::save_model(mfs);
       weight->save(mfs);
       boost::archive::text_oarchive oa(mfs);
       oa << root;
-      _INFO << "pipe: model is saved to " << model_path;
+      _INFO << "[PIP] model is saved to " << model_path;
     }
   }
 
@@ -723,7 +726,7 @@ public:
       return false;
     }
     if (!weight->load(mfs)) {
-      _WARN << "pipe: failed to load weight.";
+      _WARN << "[PIP] failed to load weight.";
       return false;
     }
 
