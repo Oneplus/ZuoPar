@@ -68,7 +68,7 @@ void Pipe::learn() {
     _ERROR << "[PIP] failed to load training data.";
     return;
   }
-  if (conf.count("devel") && setup(conf["devel"].as<std::string>(), devel_dataset, false)) {
+  if (!conf.count("devel") || !setup(conf["devel"].as<std::string>(), devel_dataset, false)) {
     _WARN << "[PIP] failed to load development data.";
   }
   deprel_t root_tag = deprels_alphabet.encode(root);
