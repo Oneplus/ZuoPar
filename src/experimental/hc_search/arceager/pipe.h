@@ -2,7 +2,7 @@
 #define __ZUOPAR_EXPERIMENTAL_HCSEARCH_ARCEAGER_PIPE_H__
 
 #include <iostream>
-#include "experimental/hc_search/hstep_opt.h"
+#include "experimental/hc_search/evaluate.h"
 #include "app/depparser/utils.h"
 #include "app/depparser/arceager/pipe.h"
 
@@ -15,26 +15,18 @@ class Pipe: public DependencyParser::ArcEager::Pipe {
 
 public:
   //! Build pipe for training first type data.
-  Pipe(const LearnOption& opts);
-
-  //! Build pipe for preparing data for phase2.
-  Pipe(const PrepareOption& opts);
-
-  //! Build pipe for evaluation, on the UAS/LAS upperbound, averaged UAS/LAS
-  Pipe(const EvaluateOption& opts);
+  Pipe(const boost::program_options::variables_map& vm);
 
   //! The deallocator
   ~Pipe();
 
-  void run2();
+  void learn();
+  void prepare();
+  void evaluate();
 
 private:
+  void evaluate(const std::vector<CoNLLXDependency>& ds, EvaluationStatistics& stat);
   std::string language;
-
-  enum PipeMode { kPipeLearn, kPipePrepare, kPipeEvaluate };
-
-  PipeMode mode;
-  NegtiveSampleStrategy neg_sample_strategy;
   DependencyParser::DependencyParserUtils::EvaluationStrategy evaluate_strategy;
 
 private:

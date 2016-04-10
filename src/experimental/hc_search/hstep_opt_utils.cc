@@ -46,55 +46,6 @@ po::options_description build_evaluate_optparser(const std::string& usage) {
   return optparser;
 }
 
-bool _parse_language_option(const po::variables_map& vm, LanguageOption& opts) {
-  opts.language = vm["language"].as<std::string>();
-  if (opts.language != "en" && opts.language != "ch") {
-    _WARN << "parse opt: unknown language \"" << opts.language
-      << "\", reset to en";
-    opts.language = "en";
-  }
-  return true;
-}
-
-bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
-  if (!dp::parse_learn_option(vm, static_cast<dp::LearnOption&>(opts))) {
-    return false;
-  }
-
-  opts.neg_sample = vm["neg-sample"].as<std::string>();
-  if (opts.neg_sample != "baseline" && opts.neg_sample != "best" &&
-      opts.neg_sample != "random" && opts.neg_sample != "worst") {
-    _WARN << "parse opt: unknown neg-sample strategy: " << opts.neg_sample
-      << ", reset to best";
-    opts.neg_sample = "best";
-  }
-  return true;
-}
-
-bool parse_prepare_option(const po::variables_map& vm, PrepareOption& opts) {
-  if (!dp::parse_test_option(vm, static_cast<dp::TestOption&>(opts))) {
-    return false;
-  }
-
-  if (!_parse_language_option(vm, static_cast<LanguageOption&>(opts))) {
-    return false;
-  }
-
-  return true;
-}
-
-bool parse_evaluate_option(const po::variables_map& vm, EvaluateOption& opts) {
-  if (!dp::parse_test_option(vm, static_cast<dp::TestOption&>(opts))) {
-    return false;
-  }
-
-  if (!_parse_language_option(vm, static_cast<LanguageOption&>(opts))) {
-    return false;
-  }
-
-  return true;
-}
-
 } //  namespace hstep
 } //  namespace hcsearchdependencyparser
 } //  namespace experimental

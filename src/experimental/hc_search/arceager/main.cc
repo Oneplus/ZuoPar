@@ -27,14 +27,8 @@ int learn(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  hstep::LearnOption opts;
-  if (!hstep::parse_learn_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  hstep::Pipe pipe(opts);
-  pipe.run2();
+  hstep::Pipe pipe(vm);
+  pipe.learn();
   return 0;
 
 }
@@ -54,14 +48,8 @@ int prepare(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  hstep::PrepareOption opts;
-  if (!hstep::parse_prepare_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  hstep::Pipe pipe(opts);
-  pipe.run2();
+  hstep::Pipe pipe(vm);
+  pipe.prepare();
   return 0;
 }
 
@@ -80,14 +68,8 @@ int evaluate(int argc, char** argv) {
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, optparser), vm);
 
-  hstep::EvaluateOption opts;
-  if (!hstep::parse_evaluate_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
-    return 1;
-  }
-
-  hstep::Pipe pipe(opts);
-  pipe.run2();
+  hstep::Pipe pipe(vm);
+  pipe.evaluate();
   return 0;
 }
 

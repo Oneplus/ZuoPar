@@ -3,7 +3,9 @@
 
 #include <tuple>
 #include <boost/regex.hpp>
+#ifndef _MSC_VER
 #include <boost/regex/icu.hpp>
+#endif
 #include "types/dependency.h"
 
 namespace ZuoPar {
@@ -65,9 +67,11 @@ public:
 
     auto L = heads.size();
     for (auto i = (dummy ? 1: 0); i < L; ++ i) { // ignore dummy root
+#ifndef _MSC_VER
       if (boost::u32regex_match(forms[i], boost::make_u32regex("[[:P*:]]*"))) {
         continue;
       }
+#endif
       ++ nr_tokens;
       if (predicted_heads[i] == heads[i]) { ++ corr_heads; }
     }
@@ -88,9 +92,11 @@ public:
 
     auto L = heads.size();
     for (auto i = (dummy ? 1: 0); i < L; ++ i) { // ignore dummy root
+#ifndef _MSC_VER
       if (boost::u32regex_match(forms[i], boost::make_u32regex("[[:P*:]]*"))) {
         continue;
       }
+#endif
       ++ nr_tokens;
       if (predicted_heads[i] == heads[i]) {
         ++ corr_heads;

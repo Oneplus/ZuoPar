@@ -40,14 +40,14 @@ Pipe::Pipe(const LearnOption& opts)
     }
   }
 
-  _INFO << "report: (cstep.learn) ranking strategy = " << opts.ranker;
-  _INFO << "report: (cstep.learn) language = " << opts.language;
-  _INFO << "report: (cstep.learn) evaluation strategy = " << opts.evaluation;
+  _INFO << "[RPT] (cstep.learn) ranking strategy = " << opts.ranker;
+  _INFO << "[RPT] (cstep.learn) language = " << opts.language;
+  _INFO << "[RPT] (cstep.learn) evaluation strategy = " << opts.evaluation;
 
   if (load_model(model_path)) {
-    _INFO << "report: (cstep.learn) model " << model_path << " is loaded.";
+    _INFO << "[RPT] (cstep.learn) model " << model_path << " is loaded.";
   } else {
-    _INFO << "report: (cstep.learn) model " << model_path << " is not loaded.";
+    _INFO << "[RPT] (cstep.learn) model " << model_path << " is not loaded.";
   }
 }
 
@@ -61,13 +61,13 @@ Pipe::Pipe(const TestOption& opts)
   for (auto i = 0; i < alpha_tokens.size(); ++ i) {
     alphas[i] = boost::lexical_cast<floatval_t>(alpha_tokens[i]);
   }
-  _INFO << "report: (cstep.test) alphas = " << opts.alphas;
-  _INFO << "report: (cstep.test) loading model from " << model_path;
+  _INFO << "[RPT] (cstep.test) alphas = " << opts.alphas;
+  _INFO << "[RPT] (cstep.test) loading model from " << model_path;
   if (load_model(model_path)) {
-    _INFO << "report: (cstep.test) model " << model_path << " is loaded.";
-    _INFO << "report: (cstep.test) language = " << language;
+    _INFO << "[RPT] (cstep.test) model " << model_path << " is loaded.";
+    _INFO << "[RPT] (cstep.test) language = " << language;
   } else {
-    _INFO << "report: (cstep.test) model " << model_path << " is not loaded.";
+    _INFO << "[RPT] (cstep.test) model " << model_path << " is not loaded.";
   }
 }
 
@@ -182,7 +182,7 @@ bool Pipe::load_data(const std::string& filename, bool with_oracle) {
     _ERROR << "#: training halt.";
     return false;
   }
-  _INFO << "report: loading dataset from reference file.";
+  _INFO << "[RPT] loading dataset from reference file.";
 
   dataset.clear();
 
@@ -247,16 +247,16 @@ bool Pipe::load_data(const std::string& filename, bool with_oracle) {
 
     dataset.push_back(ri);
     if ((n+ 1) % display_interval == 0) {
-      _INFO << "pipe: loaded #" << (n+ 1) << " instances.";
+      _INFO << "[PIP] loaded #" << (n+ 1) << " instances.";
     }
     ++ n;
     instance = "";
   }
 
-  _INFO << "report: load #" << dataset.size() << " instances.";
-  _INFO << "report: " << forms_alphabet.size() << " form(s) is found.";
-  _INFO << "report: " << postags_alphabet.size() << " postag(s) is found.";
-  _INFO << "report: " << deprels_alphabet.size() << " deprel(s) is found.";
+  _INFO << "[RPT] load #" << dataset.size() << " instances.";
+  _INFO << "[RPT] " << forms_alphabet.size() << " form(s) is found.";
+  _INFO << "[RPT] " << postags_alphabet.size() << " postag(s) is found.";
+  _INFO << "[RPT] " << deprels_alphabet.size() << " deprel(s) is found.";
   return true;
 }
 
@@ -391,7 +391,7 @@ void Pipe::generate_training_samples() {
       }
     }
   }
-  _INFO << "report: (cstep.learn) generate #" << samples.size() << " training samples.";
+  _INFO << "[RPT] (cstep.learn) generate #" << samples.size() << " training samples.";
 }
 
 
@@ -440,15 +440,15 @@ void Pipe::learn() {
 
     learn_one_pair(inst, worst_good_tree, best_bad_tree, n+ 1);
     if ((n+ 1) % display_interval == 0) {
-      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
+      _INFO << "[PIP] processed #" << (n+ 1) << " instances.";
     }
   }
-  _INFO << "pipe: processed #" << N << " instances.";
+  _INFO << "[PIP] processed #" << N << " instances.";
 
   learner->set_timestamp(N);
   learner->flush();
 
-  _INFO << "pipe: nr errors: " << learner->errors() << "/" << N;
+  _INFO << "[PIP] nr errors: " << learner->errors() << "/" << N;
   save_model(model_path);
 }
 
@@ -472,7 +472,7 @@ bool Pipe::load_model(const std::string& model_path) {
   std::ifstream mfs(model_path);
 
   if (!mfs.good()) {
-    _WARN << "pipe: cstep model doesn't exist.";
+    _WARN << "[PIP] cstep model doesn't exist.";
     return false;
   }
 
@@ -480,19 +480,19 @@ bool Pipe::load_model(const std::string& model_path) {
   ia >> language;
 
   if (!forms_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load forms alphabet.";
+    _WARN << "[PIP] failed to load forms alphabet.";
     return false;
   }
   if (!postags_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load postags alphabet.";
+    _WARN << "[PIP] failed to load postags alphabet.";
     return false;
   }
   if (!deprels_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load deprels alphabet.";
+    _WARN << "[PIP] failed to load deprels alphabet.";
     return false;
   }
   if (!weight->load(mfs)) {
-    _WARN << "pipe: failed to load cstep weight.";
+    _WARN << "[PIP] failed to load cstep weight.";
     return false;
   }
   mfs.close();
@@ -502,7 +502,7 @@ bool Pipe::load_model(const std::string& model_path) {
 void Pipe::save_model(const std::string& model_path) {
   std::ofstream mfs(model_path);
   if (!mfs.good()) {
-    _WARN << "pipe: failed to save C-step model.";
+    _WARN << "[PIP] failed to save C-step model.";
   } else {
     boost::archive::text_oarchive oa(mfs);
     oa << language;
@@ -510,7 +510,7 @@ void Pipe::save_model(const std::string& model_path) {
     postags_alphabet.save(mfs);
     deprels_alphabet.save(mfs);
     weight->save(mfs);
-    _INFO << "pipe: C-step model saved to " << model_path;
+    _INFO << "[PIP] C-step model saved to " << model_path;
   }
   mfs.close();
 }
