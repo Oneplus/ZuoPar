@@ -35,8 +35,8 @@ po::options_description build_learn_optparser(const std::string& usage) {
 po::options_description build_multi_learn_optparser(const std::string& usage) {
   po::options_description optparser = build_learn_optparser(usage);
   optparser.add_options()
-    ("batch", po::value<int>()->default_value(16), "The size for batch.")
-    ("threads", po::value<int>()->default_value(10), "The number of threads.")
+    ("batch", po::value<unsigned>()->default_value(16), "The size for batch.")
+    ("threads", po::value<unsigned>()->default_value(10), "The number of threads.")
     ;
 
   return optparser;
