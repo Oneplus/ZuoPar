@@ -23,7 +23,6 @@ po::options_description build_learn_optparser(const std::string& usage) {
   return optparser;
 }
 
-
 po::options_description build_prepare_optparser(const std::string& usage) {
   po::options_description optparser = dp::build_test_optparser(usage);
   optparser.add_options()
@@ -44,6 +43,21 @@ po::options_description build_evaluate_optparser(const std::string& usage) {
      " ch - Chinese");
 
   return optparser;
+}
+
+void show_learn_options(const boost::program_options::variables_map& vm) {
+  FrontEnd::show_learn_options(vm);
+  _INFO << "[OPT] neg-sample: " << vm["neg-sample"].as<std::string>();
+}
+
+void show_prepare_options(const boost::program_options::variables_map& vm) {
+  FrontEnd::show_test_options(vm);
+  _INFO << "[OPT] language: " << vm["language"].as<std::string>();
+}
+
+void show_evaluate_options(const boost::program_options::variables_map& vm) {
+  FrontEnd::show_test_options(vm);
+  _INFO << "[OPT] language: " << vm["language"].as<std::string>();
 }
 
 } //  namespace hstep

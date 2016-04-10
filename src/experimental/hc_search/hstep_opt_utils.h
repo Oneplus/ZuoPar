@@ -16,6 +16,12 @@ po::options_description build_prepare_optparser(const std::string& usage);
 
 po::options_description build_evaluate_optparser(const std::string& usage);
 
+void show_learn_options(const boost::program_options::variables_map& vm);
+
+void show_prepare_options(const boost::program_options::variables_map& vm);
+
+void show_evaluate_options(const boost::program_options::variables_map& vm);
+
 } //  namespace hstep
 } //  namespace hcsearchdependencyparser
 } //  namespace experimental

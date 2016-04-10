@@ -37,15 +37,15 @@ int learn(int argc, char** argv) {
     std::cerr << optparser << std::endl;
     return 1;
   }
-  if (!ZuoPar::FrontEnd::check_required_options(vm, { "train", "script" })) {
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "train" })) {
     std::cerr << optparser << std::endl;
     return 1;
   }
-  ZuoPar::FrontEnd::show_learn_options(vm);
+  hstep::show_learn_options(vm);
   hstep::Pipe pipe(vm);
+  pipe.set_signature("hc_depparser_hstep_arcstandard");
   pipe.learn();
   return 0;
-
 }
 
 int prepare(int argc, char** argv) {
@@ -73,11 +73,11 @@ int prepare(int argc, char** argv) {
     std::cerr << optparser << std::endl;
     return 1;
   }
-  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model", "script" })) {
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model" })) {
     std::cerr << optparser << std::endl;
     return 1;
   }
-  ZuoPar::FrontEnd::show_test_options(vm);
+  hstep::show_prepare_options(vm);
   hstep::Pipe pipe(vm);
   pipe.prepare();
   return 0;
@@ -112,7 +112,7 @@ int evaluate(int argc, char** argv) {
     std::cerr << optparser << std::endl;
     return 1;
   }
-  ZuoPar::FrontEnd::show_test_options(vm);
+  hstep::show_evaluate_options(vm);
   hstep::Pipe pipe(vm);
   pipe.evaluate();
   return 0;
