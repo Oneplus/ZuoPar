@@ -3,20 +3,18 @@ add_subdirectory (arcstandard)
 
 add_executable (hc_depparser_cstep
     main.cc
+    pipe.h
     pipe.cc
+    weight.h
     weight.cc
     #knowledge.cc
+    score_context.h
     score_context.cc
+    cstep_opt_utils.h
     cstep_opt_utils.cc
-    ${SOURCE_DIR}/frontend/common_opt_utils.cc
-    ${SOURCE_DIR}/app/depparser/opt_utils.cc
-    ${SOURCE_DIR}/engine/token_alphabet.cc
-    ${SOURCE_DIR}/utils/logging.cc
-    ${SOURCE_DIR}/utils/io/stream.cc
-    ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
-target_link_libraries (hc_depparser_cstep ${LIBS} icuuc)
+target_link_libraries (hc_depparser_cstep _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils ${LIBS} icuuc)
 
 set_target_properties(hc_depparser_cstep
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}/experimental/)

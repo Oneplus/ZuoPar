@@ -2,9 +2,9 @@
 #include <cstring>
 #include <boost/program_options.hpp>
 #include "utils/logging.h"
-#include "experimental/hc_search/hstep_opt.h"
 #include "experimental/hc_search/hstep_opt_utils.h"
 #include "experimental/hc_search/arceager/pipe.h"
+#include "frontend/common_opt_utils.h"
 
 #define __NAME__ "HC-search depparser, arceager H-step"
 #define __EXE__ "./bin/experimental/hc_depparser_hstep_arceager"
@@ -25,8 +25,23 @@ int learn(int argc, char** argv) {
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
-
+  try {
+    po::store(po::parse_command_line(argc, argv, optparser), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "train", "script" })) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_learn_options(vm);
   hstep::Pipe pipe(vm);
   pipe.learn();
   return 0;
@@ -46,8 +61,24 @@ int prepare(int argc, char** argv) {
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
-
+  
+  try {
+    po::store(po::parse_command_line(argc, argv, optparser), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model", "script" })) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_test_options(vm);
   hstep::Pipe pipe(vm);
   pipe.prepare();
   return 0;
@@ -66,7 +97,23 @@ int evaluate(int argc, char** argv) {
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
+  try {
+    po::store(po::parse_command_line(argc, argv, optparser), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model", "script" })) {
+    std::cerr << optparser << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_test_options(vm);
 
   hstep::Pipe pipe(vm);
   pipe.evaluate();

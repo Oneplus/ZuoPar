@@ -3,6 +3,7 @@
 #include "utils/io/stream.h"
 #include "utils/io/instance/csv.h"
 #include "utils/misc.h"
+#include "frontend/common_pipe_utils.h"
 #include <set>
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
@@ -19,71 +20,32 @@ namespace CStep {
 
 using DependencyParser::DependencyParserUtils;
 
-Pipe::Pipe(const LearnOption& opts)
-  : weight(NULL), learner(NULL),
-  fe::CommonPipeConfigure(static_cast<const fe::LearnOption&>(opts)) {
+Pipe::Pipe(const boost::program_options::variables_map& vm)
+  : weight(new Weight), learner(NULL), conf(vm) {
+  language = vm["language"].as<std::string>();
 
-  if (opts.ranker == "gold")        { rank_strategy = kGold;   }
-  else if (opts.ranker == "coarse") { rank_strategy = kCoarse; }
-  else if (opts.ranker == "fine")   { rank_strategy = kFine;   }
-
-  language = opts.language;
-  if (opts.evaluation == "punc") {
-    evaluate_strategy = DependencyParser::DependencyParserUtils::kIncludePunctuation;
-  } else if (opts.evaluation == "conllx") {
-    evaluate_strategy = DependencyParser::DependencyParserUtils::kCoNLLx;
+  if (conf.count("model") && load_model(conf["model"].as<std::string>())) {
+    _INFO << "[RPT] (cstep.learn) model is loaded.";
   } else {
-    if (opts.language == "en") {
-      evaluate_strategy = DependencyParser::DependencyParserUtils::kChen14en;
-    } else if (opts.language == "ch") {
-      evaluate_strategy = DependencyParser::DependencyParserUtils::kChen14ch;
-    }
-  }
-
-  _INFO << "[RPT] (cstep.learn) ranking strategy = " << opts.ranker;
-  _INFO << "[RPT] (cstep.learn) language = " << opts.language;
-  _INFO << "[RPT] (cstep.learn) evaluation strategy = " << opts.evaluation;
-
-  if (load_model(model_path)) {
-    _INFO << "[RPT] (cstep.learn) model " << model_path << " is loaded.";
-  } else {
-    _INFO << "[RPT] (cstep.learn) model " << model_path << " is not loaded.";
+    _INFO << "[RPT] (cstep.learn) model is not loaded.";
   }
 }
-
-
-Pipe::Pipe(const TestOption& opts)
-  : weight(NULL), learner(NULL),
-  fe::CommonPipeConfigure(static_cast<const fe::TestOption&>(opts)){
-  boost::algorithm::split(alpha_tokens, opts.alphas, boost::is_any_of(";"),
-      boost::token_compress_on);
-  alphas.resize(alpha_tokens.size());
-  for (auto i = 0; i < alpha_tokens.size(); ++ i) {
-    alphas[i] = boost::lexical_cast<floatval_t>(alpha_tokens[i]);
-  }
-  _INFO << "[RPT] (cstep.test) alphas = " << opts.alphas;
-  _INFO << "[RPT] (cstep.test) loading model from " << model_path;
-  if (load_model(model_path)) {
-    _INFO << "[RPT] (cstep.test) model " << model_path << " is loaded.";
-    _INFO << "[RPT] (cstep.test) language = " << language;
-  } else {
-    _INFO << "[RPT] (cstep.test) model " << model_path << " is not loaded.";
-  }
-}
-
 
 Pipe::~Pipe() {
 }
 
 
 void Pipe::test() {
-  if (!load_data(input_path, false)) { return; }
+  if (!load_data(conf["input"].as<std::string>(), dataset, false)) {
+    _ERROR << "[PIP] failed to load input data.";
+    return;
+  }
   build_knowledge();
 
   std::vector<std::ostream*> ostreams;
   ostreams.resize(alphas.size());
   for (auto i = 0; i < alphas.size(); ++ i) {
-    ostreams[i] = IO::get_ostream(output_path + "." + alpha_tokens[i]);
+    ostreams[i] = IO::get_ostream(conf["output"].as<std::string>() + "." + alpha_tokens[i]);
   }
 
   for (auto& data: dataset) {
@@ -173,7 +135,8 @@ void Pipe::column_to_reranking_tree(int i, const std::vector< std::string >& hea
 }
 
 
-bool Pipe::load_data(const std::string& filename, bool with_oracle) {
+bool Pipe::load_data(const std::string& filename, std::vector<RerankingInstance>& ds,
+  bool with_oracle) {
   namespace algo = boost::algorithm;
 
   std::ifstream ifs(filename.c_str());
@@ -184,8 +147,7 @@ bool Pipe::load_data(const std::string& filename, bool with_oracle) {
   }
   _INFO << "[RPT] loading dataset from reference file.";
 
-  dataset.clear();
-
+  ds.clear();
   std::string instance, buffer;
   // Loop over the instances
   size_t n = 0;
@@ -245,15 +207,12 @@ bool Pipe::load_data(const std::string& filename, bool with_oracle) {
       }
     }
 
-    dataset.push_back(ri);
-    if ((n+ 1) % display_interval == 0) {
-      _INFO << "[PIP] loaded #" << (n+ 1) << " instances.";
-    }
+    ds.push_back(ri);
     ++ n;
     instance = "";
   }
 
-  _INFO << "[RPT] load #" << dataset.size() << " instances.";
+  _INFO << "[RPT] load #" << ds.size() << " instances.";
   _INFO << "[RPT] " << forms_alphabet.size() << " form(s) is found.";
   _INFO << "[RPT] " << postags_alphabet.size() << " postag(s) is found.";
   _INFO << "[RPT] " << deprels_alphabet.size() << " deprel(s) is found.";
@@ -262,6 +221,11 @@ bool Pipe::load_data(const std::string& filename, bool with_oracle) {
 
 
 void Pipe::build_knowledge() {
+  std::string language = "";
+  if (conf.count("language")) {
+    language = conf["language"].as<std::string>();
+  }
+
   if (language == "en") {
     // punctuation
     PUNC_POS.insert(postags_alphabet.encode("``"));
@@ -318,34 +282,38 @@ int Pipe::wrong(const CoNLLXDependency& instance,
 
   if (labeled) {
     std::tuple<int, int, int> eval;
-    if (evaluate_strategy == DependencyParserUtils::kIncludePunctuation) {
+    if (conf["evaluation"].as<std::string>() == "punc") {
       eval = DependencyParserUtils::evaluate_inc_punc(forms, postags,
-          predict_heads, predict_deprels, heads, deprels, true);
-    } else if (evaluate_strategy == DependencyParserUtils::kCoNLLx) {
-      eval = DependencyParserUtils::evaluate_conllx(forms, postags,
-          predict_heads, predict_deprels, heads, deprels, true);
-    } else if (evaluate_strategy == DependencyParserUtils::kChen14en) {
-      eval = DependencyParserUtils::evaluate_chen14en(forms, postags,
-          predict_heads, predict_deprels, heads, deprels, true);
+        predict_heads, predict_deprels, heads, deprels, true);
+    } else if (conf["evaluation"].as<std::string>() == "conllx") {
+      eval = DependencyParserUtils::evaluate_conllx(forms, postags, 
+        predict_heads, predict_deprels, heads, deprels, true);
     } else {
-      eval = DependencyParserUtils::evaluate_chen14ch(forms, postags,
+      if (conf["language"].as<std::string>() == "ch") {
+        eval = DependencyParserUtils::evaluate_chen14ch(forms, postags,
           predict_heads, predict_deprels, heads, deprels, true);
+      } else {
+        eval = DependencyParserUtils::evaluate_chen14en(forms, postags,
+          predict_heads, predict_deprels, heads, deprels, true);
+      }
     }
     return std::get<0>(eval) - std::get<2>(eval);
   } else {
     std::tuple<int, int> eval;
-    if (evaluate_strategy == DependencyParserUtils::kIncludePunctuation) { 
+    if (conf["evaluation"].as<std::string>() == "punc") { 
       eval = DependencyParserUtils::evaluate_inc_punc(
           forms, postags, predict_heads, heads, true);
-    } else if (evaluate_strategy == DependencyParserUtils::kCoNLLx) {
+    } else if (conf["evaluation"].as<std::string>() == "conllx") {
       eval = DependencyParserUtils::evaluate_conllx(
           forms, postags, predict_heads, heads, true);
-    } else if (evaluate_strategy == DependencyParserUtils::kChen14en) {
-      eval = DependencyParserUtils::evaluate_chen14en(
-          forms, postags, predict_heads, heads, true);
     } else {
-      eval = DependencyParserUtils::evaluate_chen14ch(
+      if (conf["language"].as<std::string>() == "ch") {
+        eval = DependencyParserUtils::evaluate_chen14ch(
           forms, postags, predict_heads, heads, true);
+      } else {
+        eval = DependencyParserUtils::evaluate_chen14en(
+          forms, postags, predict_heads, heads, true);
+      }
     }
     return std::get<0>(eval) - std::get<1>(eval);
   }
@@ -364,7 +332,7 @@ void Pipe::generate_training_samples() {
       losses[i] = data.trees[i].loss;
     }
 
-    if (rank_strategy == kGold) {
+    if (conf["ranker"].as<std::string>() == "gold") {
       Sample sample;
       sample.ref = &data.instance;
       sample.good.push_back(&data.oracle);
@@ -387,7 +355,7 @@ void Pipe::generate_training_samples() {
         if (sample.good.size() == 0 || sample.bad.size() == 0) { continue; }
 
         samples.push_back(sample);
-        if (rank_strategy == kCoarse) { break; }
+        if (conf["ranker"].as<std::string>() == "coarse") { break; }
       }
     }
   }
@@ -396,60 +364,73 @@ void Pipe::generate_training_samples() {
 
 
 void Pipe::learn() {
-  if (!load_data(reference_path, true)) { return; }
+  if (!load_data(conf["train"].as<std::string>(), dataset, true)) {
+    _ERROR << "[PIP] failed to load training data.";
+    return;
+  }
+  if (!conf.count("devel") || !load_data(conf["devel"].as<std::string>(), devel_dataset, false)) {
+    _WARN << "[PIP] development data is not loaded.";
+  }
   build_knowledge();
 
   generate_training_samples();
+  learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
 
-  size_t N = samples.size();
-  std::vector<size_t> ranks;
-  Utility::shuffle(N, shuffle_times, ranks);
-  learner = new Learner(weight, this->algorithm);
+  unsigned n_seen = 0, N = samples.size();
+  double best_score = 0., best_mixed_score = 0.;
+  std::string model_path = FrontEnd::get_model_name("hc_search_cstep", conf);
+  std::string model_path_mixed = model_path + ".mixed";
 
-  for (size_t n = 0; n < N; ++ n) {
-    const Sample& sample = samples[ranks[n]];
-    const CoNLLXDependency* inst = sample.ref;
+  for (unsigned iter = 0; iter < conf["maxiter"].as<unsigned>(); ++iter) {
+    _INFO << "[PIP] iteration #" << iter << ", start training.";
+    std::random_shuffle(samples.begin(), samples.end());
 
-    RerankingTree* worst_good_tree = NULL;
-    RerankingTree* best_bad_tree = NULL;
+    for (const Sample& sample : samples) {
+      ++n_seen;
+      const CoNLLXDependency* inst = sample.ref;
 
-    for (int i = 0; i < sample.good.size(); ++ i) {
-      RerankingTree* t = sample.good[i];
-      ScoreContext ctx(inst->size(), inst->forms, inst->postags, t->heads, t->deprels);
-      t->c_score = weight->score(ctx, false);
-      if (worst_good_tree == NULL || t->c_score < worst_good_tree->c_score) {
-        worst_good_tree = t;
+      RerankingTree* worst_good_tree = NULL;
+      RerankingTree* best_bad_tree = NULL;
+
+      for (int i = 0; i < sample.good.size(); ++i) {
+        RerankingTree* t = sample.good[i];
+        ScoreContext ctx(inst->size(), inst->forms, inst->postags, t->heads, t->deprels);
+        t->c_score = weight->score(ctx, false);
+        if (worst_good_tree == NULL || t->c_score < worst_good_tree->c_score) {
+          worst_good_tree = t;
+        }
+      }
+
+      for (int i = 0; i < sample.bad.size(); ++i) {
+        RerankingTree* t = sample.bad[i];
+        ScoreContext ctx(inst->size(), inst->forms, inst->postags, t->heads, t->deprels);
+        t->c_score = weight->score(ctx, false);
+        if (best_bad_tree == NULL || t->c_score > best_bad_tree->c_score) {
+          best_bad_tree = t;
+        }
+      }
+
+      if (best_bad_tree == NULL || worst_good_tree == NULL) {
+        _WARN << "best bad or worst good was not found.";
+        _INFO << "# good = " << sample.good.size() << ", # bad = " << sample.bad.size()
+          << ", id = " << n_seen;
+        continue;
+      }
+
+      learn_one_pair(inst, worst_good_tree, best_bad_tree, n_seen);
+      if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
+        _INFO << "[PIP] processed #" << n_seen % N << "/" << n_seen % N << " sample(s).";
+      }
+      if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+
       }
     }
+    _INFO << "[PIP] processed #" << N << " instances.";
+    learner->flush();
 
-    for (int i = 0; i < sample.bad.size(); ++ i) {
-      RerankingTree* t = sample.bad[i];
-      ScoreContext ctx(inst->size(), inst->forms, inst->postags, t->heads, t->deprels);
-      t->c_score = weight->score(ctx, false);
-      if (best_bad_tree == NULL || t->c_score > best_bad_tree->c_score) {
-        best_bad_tree = t;
-      }
-    }
-
-    if (best_bad_tree == NULL || worst_good_tree == NULL) {
-      _WARN << "best bad or worst good was not found.";
-      _INFO << "# good = " << sample.good.size() << ", # bad = " << sample.bad.size()
-        << ", id = " << n;
-      continue;
-    }
-
-    learn_one_pair(inst, worst_good_tree, best_bad_tree, n+ 1);
-    if ((n+ 1) % display_interval == 0) {
-      _INFO << "[PIP] processed #" << (n+ 1) << " instances.";
-    }
+    _INFO << "[PIP] nr errors: " << learner->errors() << "/" << N;
+    save_model(model_path);
   }
-  _INFO << "[PIP] processed #" << N << " instances.";
-
-  learner->set_timestamp(N);
-  learner->flush();
-
-  _INFO << "[PIP] nr errors: " << learner->errors() << "/" << N;
-  save_model(model_path);
 }
 
 void Pipe::learn_one_pair(const CoNLLXDependency* inst,
@@ -468,7 +449,6 @@ void Pipe::learn_one_pair(const CoNLLXDependency* inst,
 }
 
 bool Pipe::load_model(const std::string& model_path) {
-  weight = new Weight;
   std::ifstream mfs(model_path);
 
   if (!mfs.good()) {

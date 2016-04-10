@@ -2,9 +2,9 @@
 #include <cstring>  // strcmp
 #include <boost/program_options.hpp>
 #include "utils/logging.h"
-#include "experimental/hc_search/cstep_opt.h"
 #include "experimental/hc_search/cstep_opt_utils.h"
 #include "experimental/hc_search/pipe.h"
+#include "frontend/common_opt_utils.h"
 
 #define __NAME__ "HC-search depparser, C-step"
 #define __EXE__ "./bin/experimental/hc_depparser_cstep"
@@ -18,23 +18,32 @@ int learn(int argc, char** argv) {
   usage += "Usage: " __EXE__ " learn [options]\n\n";
   usage += "options";
 
-  po::options_description optparser = cstep::build_learn_optparser(usage);
+  po::options_description opt = cstep::build_learn_optparser(usage);
 
   if (argc == 1) {
-    std::cerr << optparser << std::endl;
+    std::cerr << opt << std::endl;
     return 1;
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
-
-  cstep::LearnOption opts;
-  if (!cstep::parse_learn_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
+  try {
+    po::store(po::parse_command_line(argc, argv, opt), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << opt << std::endl;
     return 1;
   }
-
-  cstep::Pipe pipe(opts);
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "train", "script" })) {
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_learn_options(vm);
+  cstep::Pipe pipe(vm);
   pipe.learn();
   return 0;
 }
@@ -44,23 +53,32 @@ int test(int argc, char** argv) {
   usage += "Usage: " __EXE__ " learn [options]\n\n";
   usage += "options";
 
-  po::options_description optparser = cstep::build_test_optparser(usage);
+  po::options_description opt = cstep::build_test_optparser(usage);
 
   if (argc == 1) {
-    std::cerr << optparser << std::endl;
+    std::cerr << opt << std::endl;
     return 1;
   }
 
   po::variables_map vm;
-  po::store(po::parse_command_line(argc, argv, optparser), vm);
-
-  cstep::TestOption opts;
-  if (!cstep::parse_test_option(vm, opts)) {
-    std::cerr << optparser << std::endl;
+  try {
+    po::store(po::parse_command_line(argc, argv, opt), vm);
+  } catch (const std::exception& e) {
+    std::cerr << e.what() << std::endl;
+    std::cerr << opt << std::endl;
     return 1;
   }
-
-  cstep::Pipe pipe(opts);
+  ZuoPar::Utility::init_boost_log(vm.count("verbose"));
+  if (vm.count("help")) {
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model", "script" })) {
+    std::cerr << opt << std::endl;
+    return 1;
+  }
+  ZuoPar::FrontEnd::show_test_options(vm);
+  cstep::Pipe pipe(vm);
   pipe.test();
   return 0;
 }

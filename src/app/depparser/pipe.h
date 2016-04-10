@@ -184,7 +184,6 @@ public:
    *  @param[in]  model_path  The path to the model.
    */
   bool load_model(const std::string& model_path) {
-    weight = new Weight;
     std::ifstream mfs(model_path);
 
     if (!mfs.good()) {
@@ -719,7 +718,6 @@ public:
   }
 
   bool load_model(const std::string& model_path) {
-    weight = new Weight;
     std::ifstream mfs(model_path);
 
     if (!CoNLLXDependencyRepository::load_model(mfs)) {

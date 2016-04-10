@@ -28,9 +28,9 @@ Pipe::Pipe(const LearnOption& opts)
   verb_class_path = opts.verb_class_path;
   argument_prefix = opts.argument_prefix;
   if (load_model(opts.model_path)) {
-    _INFO << "report: model is loaded.";
+    _INFO << "[RPT] model is loaded.";
   } else {
-    _INFO << "report: model is not loaded.";
+    _INFO << "[RPT] model is not loaded.";
   }
 }
 
@@ -47,9 +47,9 @@ Pipe::Pipe(const TestOption& opts)
     output_format = kCoNLL2005;
   }
   if (load_model(opts.model_path)) {
-    _INFO << "report: model is loaded.";
+    _INFO << "[RPT] model is loaded.";
   } else {
-    _INFO << "report: model is not loaded.";
+    _INFO << "[RPT] model is not loaded.";
   }
 }
 
@@ -64,32 +64,32 @@ bool Pipe::load_model(const std::string& model_path) {
   std::ifstream mfs(model_path);
 
   if (!mfs.good()) {
-    _WARN << "pipe: model doesn't exists.";
+    _WARN << "[PIP] model doesn't exists.";
     return false;
   }
 
   if (!forms_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load forms alphabet.";
+    _WARN << "[PIP] failed to load forms alphabet.";
     return false;
   }
 
   if (!postags_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load postags alphabet.";
+    _WARN << "[PIP] failed to load postags alphabet.";
     return false;
   }
 
   if (!senses_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load senses alphabet.";
+    _WARN << "[PIP] failed to load senses alphabet.";
     return false;
   }
 
   if (!tags_alphabet.load(mfs)) {
-    _WARN << "pipe: failed to load tags alphabet.";
+    _WARN << "[PIP] failed to load tags alphabet.";
     return false;
   }
 
   if (!weight->load(mfs)) {
-    _WARN << "pipe: failed to load weight.";
+    _WARN << "[PIP] failed to load weight.";
     return false;
   }
 
@@ -99,7 +99,7 @@ bool Pipe::load_model(const std::string& model_path) {
 bool Pipe::save_model(const std::string& model_path) {
   std::ofstream mfs(model_path);
   if (!mfs.good()) {
-    _WARN << "pipe: failed to save model.";
+    _WARN << "[PIP] failed to save model.";
     return false;
   } else {
     forms_alphabet.save(mfs);
@@ -107,7 +107,7 @@ bool Pipe::save_model(const std::string& model_path) {
     senses_alphabet.save(mfs);
     tags_alphabet.save(mfs);
     weight->save(mfs);
-    _INFO << "pipe: model saved to " << model_path;
+    _INFO << "[PIP] model saved to " << model_path;
   }
   return true;
 }
@@ -148,7 +148,7 @@ void Pipe::collect_argument_relations() {
 bool Pipe::load_verb_class() {
   namespace algo = boost::algorithm;
 
-  _INFO << "report: load verb class from " << verb_class_path;
+  _INFO << "[RPT] load verb class from " << verb_class_path;
   std::ifstream ifs(verb_class_path.c_str());
   if (!ifs.good()) {
     _ERROR << "#: failed to load verb class dictionary.";
@@ -190,7 +190,7 @@ bool Pipe::load_verb_class() {
     verb_classes[predicate] = val;
   }
 
-  _INFO << "report: loaded " << verb_classes.size() << " verb classes";
+  _INFO << "[RPT] loaded " << verb_classes.size() << " verb classes";
   return true;
 }
 
@@ -205,10 +205,10 @@ bool Pipe::setup() {
       _ERROR << "#: training halt";
       return false;
     }
-    _INFO << "report: loading dataset from reference file.";
+    _INFO << "[RPT] loading dataset from reference file.";
     ioutils::read_semchunks_dataset(ifs, dataset, forms_alphabet, postags_alphabet,
         senses_alphabet, tags_alphabet, predicate_tag, true);
-    _INFO << "report: dataset is loaded from reference file.";
+    _INFO << "[RPT] dataset is loaded from reference file.";
   } else {
     // not implemented.
     std::ifstream ifs(input_path.c_str());
@@ -220,13 +220,13 @@ bool Pipe::setup() {
     ioutils::read_semchunks_dataset(ifs, dataset, forms_alphabet, postags_alphabet,
         senses_alphabet, tags_alphabet, predicate_tag, true);
   }
-  _INFO << "report: predicate tg is \"" << predicate_tag << "\"";
-  _INFO << "report: argument prefix is \"" << argument_prefix << "\"";
-  _INFO << "report: " << dataset.size() << " instance(s) is loaded.";
-  _INFO << "report: " << forms_alphabet.size() << " form(s) is detected.";
-  _INFO << "report: " << postags_alphabet.size() << " postag(s) is detected.";
-  _INFO << "report: " << senses_alphabet.size() << " sense(s) is detected.";
-  _INFO << "report: " << tags_alphabet.size() << " tag(s) is detected.";
+  _INFO << "[RPT] predicate tg is \"" << predicate_tag << "\"";
+  _INFO << "[RPT] argument prefix is \"" << argument_prefix << "\"";
+  _INFO << "[RPT] " << dataset.size() << " instance(s) is loaded.";
+  _INFO << "[RPT] " << forms_alphabet.size() << " form(s) is detected.";
+  _INFO << "[RPT] " << postags_alphabet.size() << " postag(s) is detected.";
+  _INFO << "[RPT] " << senses_alphabet.size() << " sense(s) is detected.";
+  _INFO << "[RPT] " << tags_alphabet.size() << " tag(s) is detected.";
 
   if (!load_verb_class()) { return false; }
   return true;
@@ -244,8 +244,8 @@ void Pipe::run() {
     max_nr_predicates = std::max((int)instance.nr_predicates(), max_nr_predicates);
   }
 
-  _INFO << "pipe: max number of predicates: " << max_nr_predicates;
-  _INFO << "pipe: cube size: " << cube_height;
+  _INFO << "[PIP] max number of predicates: " << max_nr_predicates;
+  _INFO << "[PIP] cube size: " << cube_height;
   if (mode == kPipeLearn) {
     decoder = new Decoder(tags_alphabet.size(), beam_size, max_nr_predicates,
         cube_height, false, update_strategy, weight);
@@ -271,7 +271,7 @@ void Pipe::run() {
     if (mode == kPipeLearn) {
       ActionUtils::get_oracle_actions(instance, actions);
       for (size_t i = 0; i < actions.size(); ++ i) {
-        _TRACE << "pipe: oracle action #" << i << " " << actions[i];
+        _TRACE << "[PIP] oracle action #" << i << " " << actions[i];
       }
     }
 
@@ -292,7 +292,7 @@ void Pipe::run() {
     }
 
     if ((n+ 1)% display_interval == 0) {
-      _INFO << "pipe: processed #" << (n+ 1) << " instances.";
+      _INFO << "[PIP] processed #" << (n+ 1) << " instances.";
     }
 
     if (mode != kPipeLearn) {
@@ -309,12 +309,12 @@ void Pipe::run() {
       }
     }
   }
-  _INFO << "pipe: processed #" << N << " instances.";
+  _INFO << "[PIP] processed #" << N << " instances.";
 
   if (mode == kPipeLearn) {
     learner->set_timestamp(N);
     learner->flush();
-    _INFO << "pipe: nr errors: " << learner->errors();
+    _INFO << "[PIP] nr errors: " << learner->errors();
     save_model(model_path);
   }
 }

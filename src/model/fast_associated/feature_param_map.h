@@ -90,7 +90,8 @@ public:
    *
    *  @param[in]  extractor_  The extraction functor.
    */
-  FeatureParameterMap(extractor_t extractor_): extractor(extractor_) {
+  FeatureParameterMap(extractor_t extractor_, 
+    size_t bucket_count = 107): extractor(extractor_), rep(bucket_count) {
 #if defined(UNORDERED_MAP_IMPL) && (UNORDERED_MAP_IMPL == use_dense_hash_map)
     rep.set_empty_key(_MetaFeatureType());
 #endif
@@ -141,7 +142,7 @@ public:
     cache_t cache;
     extractor(ctx, cache);
     for (const _MetaFeatureType& c: cache) {
-#ifdef MSC_VER
+#ifdef _MSC_VER
       SparseVector3Key key = SparseVector3Key(gid, hash_value(c), hash_value(act));
 #else
       SparseVector3Key key = SparseVector3Key(gid,
@@ -231,10 +232,13 @@ public:
           param_t& param = result2->second;
           param.add(now, scale);
         } else {
-          entry[act] = param_t(scale, scale, now);
+          entry.insert({ act, param_t(scale, scale, now) });
         }
       } else {
-        rep[c][act] = param_t(scale, scale, now);
+        entry_t entry(107);
+        entry.insert({ act, param_t(scale, scale, now) });
+        rep.insert({ c, entry });
+        // rep[c][act] = param_t(scale, scale, now);
       }
     }
   }

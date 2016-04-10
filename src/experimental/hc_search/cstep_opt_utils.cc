@@ -38,38 +38,6 @@ po::options_description build_test_optparser(const std::string& usage) {
   return optparser;
 }
 
-bool parse_learn_option(const po::variables_map& vm, LearnOption& opts) {
-  if (!dp::parse_learn_option(vm, static_cast<dp::LearnOption&>(opts))) { return false; }
-  opts.language = vm["language"].as<std::string>();
-  if (opts.language != "en" && opts.language != "ch") {
-    _WARN << "parse opt: unknown language \"" << opts.language
-      << "\", reset to en";
-    opts.language = "en";
-  }
-
-  opts.evaluation = vm["evaluation"].as<std::string>();
-  if (opts.evaluation != "punc" && opts.evaluation != "conllx" &&
-      opts.evaluation != "chen14") {
-    _WARN << "parse opt: unknown evaluation strategy: \"" << opts.evaluation
-      << "\", reset to punc";
-    opts.evaluation = "punc";
-  }
-
-  opts.ranker = vm["ranker"].as<std::string>();
-  if (opts.ranker != "gold" && opts.ranker != "coarse" && opts.ranker != "fine") {
-    _WARN << "parse opt: unknown ranking method: " << opts.ranker
-      << ", reset to fine";
-    opts.ranker = "fine";
-  }
-  return true;
-}
-
-bool parse_test_option(const po::variables_map& vm, TestOption& opts) {
-  if (!dp::parse_test_option(vm, static_cast<dp::TestOption&>(opts))) { return false; }
-  opts.alphas = vm["alpha"].as<std::string>();
-  return true;
-}
-
 } //  namespace cstep
 } //  namespace hcsearchdependencyparser
 } //  namespace experimental

@@ -4,12 +4,12 @@
 #include <iostream>
 #include <fstream>
 #include <boost/tuple/tuple.hpp>
+#include <boost/program_options.hpp>
 #include "types/dependency.h"
 #include "engine/token_alphabet.h"
 #include "frontend/common_opt.h"
 #include "frontend/common_pipe_cfg.h"
 #include "app/depparser/utils.h"
-#include "experimental/hc_search/cstep_opt.h"
 #include "experimental/hc_search/weight.h"
 #include "experimental/hc_search/learner.h"
 
@@ -20,7 +20,7 @@ namespace CStep {
 
 namespace fe = ZuoPar::FrontEnd;
 
-class Pipe: public fe::CommonPipeConfigure {
+class Pipe {
 private:
   struct RerankingTree { // for one tree
     int loss;
@@ -46,27 +46,21 @@ private:
   };
 
 private:
-  enum RankingStrategy { kGold, kCoarse, kFine };
-  RankingStrategy rank_strategy;
-  DependencyParser::DependencyParserUtils::EvaluationStrategy evaluate_strategy;
-
-private:
+  const ::boost::program_options::variables_map& conf;
   Weight* weight;   //! The weight for the reranking step.
   Learner* learner; //! The learner.
   std::vector<RerankingInstance> dataset; //! The dependency
+  std::vector<RerankingInstance> devel_dataset;
   std::vector<Sample> samples; //! The samples
   Engine::TokenAlphabet forms_alphabet; //! The form alphabet.
   Engine::TokenAlphabet postags_alphabet; //! The postag alphabet.
   Engine::TokenAlphabet deprels_alphabet; //! The deprel alphabet.
-  std::string language;
   std::vector<std::string> alpha_tokens;
+  std::string language;
   std::vector<floatval_t> alphas; //  only used in testing model.
 public:
-  //! Build pipe for learning the second phase.
-  Pipe(const LearnOption& opts);
-
-  //! Build pipe for testing.
-  Pipe(const TestOption& opts);
+  //! The pipe initializer
+  Pipe(const boost::program_options::variables_map& vm);
 
   //! The deallocator
   ~Pipe();
@@ -82,7 +76,7 @@ private:
 
   void save_model(const std::string& cstep_model_path);
 
-  bool load_data(const std::string& filename, bool with_oracle);
+  bool load_data(const std::string& filename, std::vector<RerankingInstance>& ds, bool with_oracle);
 
   // Check if the input is legal.
   bool check_instance(const std::vector<std::string>& info,
