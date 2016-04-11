@@ -6,7 +6,7 @@
 namespace ZuoPar {
 namespace IO {
 
-std::istream* get_istream(const char* filename,
+std::istream* get_istream(const char* filename, bool verbose,
     std::istream* default_stream) {
   std::istream* is = NULL;
   if (filename!= NULL && strlen(filename) > 0) {
@@ -15,7 +15,8 @@ std::istream* get_istream(const char* filename,
       _WARN << "[IO] Opening file failure, use default stream";
       is = default_stream;
     } else {
-      _INFO << "[IO] Opening file stream from "<< filename << ".";
+      if (verbose)
+        _INFO << "[IO] Opening file stream from "<< filename << ".";
     }
   } else {
     _WARN << "[IO] Input file not specified, use default stream";
@@ -24,12 +25,12 @@ std::istream* get_istream(const char* filename,
   return is;
 }
 
-std::istream* get_istream(const std::string& filename,
+std::istream* get_istream(const std::string& filename, bool verbose,
     std::istream* default_stream) {
-  return get_istream(filename.c_str(), default_stream);
+  return get_istream(filename.c_str(), verbose, default_stream);
 }
 
-std::ostream* get_ostream(const char* filename,
+std::ostream* get_ostream(const char* filename, bool verbose,
     std::ostream* default_stream) {
   std::ostream* os = NULL;
   if (filename!= NULL && strlen(filename) > 0) {
@@ -38,7 +39,8 @@ std::ostream* get_ostream(const char* filename,
       _WARN << "[IO] Opening file failure, use default stream";
       os = default_stream;
     } else {
-      _INFO << "[IO] File stream from: "<< filename << " is opened.";
+      if (verbose)
+        _INFO << "[IO] File stream from: "<< filename << " is opened.";
     }
   } else {
     _WARN << "[IO] Output file not specified, use default stream";
@@ -47,9 +49,9 @@ std::ostream* get_ostream(const char* filename,
   return os;
 }
 
-std::ostream* get_ostream(const std::string& filename,
+std::ostream* get_ostream(const std::string& filename, bool verbose,
     std::ostream* default_stream) {
-  return get_ostream(filename.c_str(), default_stream);
+  return get_ostream(filename.c_str(), verbose, default_stream);
 }
 
 size_t number_of_lines(std::istream& is) {

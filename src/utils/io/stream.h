@@ -14,11 +14,11 @@ namespace IO {
  *  @param[in]  default_stream  The user specified stream.
  *  @return     std::istream    The built stream.
  */
-std::istream* get_istream(const char* filename,
+std::istream* get_istream(const char* filename, bool verboes = false,
     std::istream* default_stream = (&(std::cin)));
 
 //! std::string wrapper for get_istream
-std::istream* get_istream(const std::string& filename,
+std::istream* get_istream(const std::string& filename, bool verbose = false,
     std::istream* default_stream = (&(std::cin)));
 
 /**
@@ -29,11 +29,11 @@ std::istream* get_istream(const std::string& filename,
  *  @param[in]  default_stream  The user specified stream.
  *  @return     std::ostream    The built stream.
  */
-std::ostream* get_ostream(const char* filename,
+std::ostream* get_ostream(const char* filename, bool verbose = false,
     std::ostream* default_stream = (&(std::cout)));
 
 //! std::string wrapper for get_ostream.
-std::ostream* get_ostream(const std::string& filename,
+std::ostream* get_ostream(const std::string& filename, bool verbose = false,
     std::ostream* default_stream = (&(std::cout)));
 
 size_t number_of_lines(std::istream& is);
