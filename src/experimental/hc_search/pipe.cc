@@ -35,20 +35,10 @@ Pipe::~Pipe() {
 }
 
 
-void Pipe::test() {
-  if (!load_data(conf["input"].as<std::string>(), dataset, false)) {
-    _ERROR << "[PIP] failed to load input data.";
-    return;
-  }
-  build_knowledge();
+void Pipe::evaluate(std::vector<RerankingInstance>& ds, double set_alpha, std::map<double, double>& result) {
+  std::string output = FrontEnd::get_output_name("hc_s", conf);
 
-  std::vector<std::ostream*> ostreams;
-  ostreams.resize(alphas.size());
-  for (auto i = 0; i < alphas.size(); ++ i) {
-    ostreams[i] = IO::get_ostream(conf["output"].as<std::string>() + "." + alpha_tokens[i]);
-  }
-
-  for (auto& data: dataset) {
+  for (RerankingInstance& data : ds) {
     CoNLLXDependency& inst = data.instance;
     std::vector<RerankingTree>& trees = data.trees;
     std::vector<floatval_t> scores(trees.size(), 0.);
@@ -65,24 +55,60 @@ void Pipe::test() {
       if (i == 0 || min_c_score > t.c_score) { min_c_score = t.c_score; }
     }
 
-    for (auto a = 0; a < alphas.size(); ++ a) {
-      floatval_t alpha = alphas[a];
-      std::ostream* os = ostreams[a];
+    if (set_alpha < 0.) {
+      for (double a = 0.; a <= 1.; a += 0.005) {
+        floatval_t alpha = a;
+        std::ostream* os = IO::get_ostream(output);
 
-      for (auto i = 0; i < trees.size(); ++ i) {
-        auto& t = trees[i];
-        scores[i] = alpha* ((t.h_score-min_h_score) / (max_h_score-min_h_score))+
-          (1- alpha)* ((t.c_score-min_c_score) / (max_c_score-min_c_score));
+        for (auto i = 0; i < trees.size(); ++i) {
+          auto& t = trees[i];
+          scores[i] = alpha* ((t.h_score - min_h_score) / (max_h_score - min_h_score)) +
+            (1 - alpha)* ((t.c_score - min_c_score) / (max_c_score - min_c_score));
+        }
+
+        floatval_t best_score = -1e20; int best_i = -1;
+        for (auto i = 0; i < scores.size(); ++i) {
+          if (best_i < 0 || best_score < scores[i]) {
+            best_i = i; best_score = scores[i];
+          }
+        }
+
+        for (auto i = 1; i < inst.size(); ++i) {
+          (*os) << i << " "
+            << forms_alphabet.decode(inst.forms[i]) << "\t"
+            << forms_alphabet.decode(inst.forms[i]) << "\t"
+            << postags_alphabet.decode(inst.postags[i]) << "\t"
+            << postags_alphabet.decode(inst.postags[i]) << "\t"
+            << "_\t"
+            << trees[best_i].heads[i] << "\t"
+            << deprels_alphabet.decode(trees[best_i].deprels[i]) << std::endl;
+        }
+        (*os) << std::endl;
+
+        if (os != NULL && (os != &(std::cout))) {
+          delete os;
+          double score = Utility::execute_script(conf["script"].as<std::string>(), output);
+          result[alpha] = score;
+        }
       }
-
+    } else {
+      floatval_t alpha = set_alpha;
+      std::ostream* os = IO::get_ostream(output);
+      
+      for (auto i = 0; i < trees.size(); ++i) {
+        auto& t = trees[i];
+        scores[i] = alpha* ((t.h_score - min_h_score) / (max_h_score - min_h_score)) +
+          (1 - alpha)* ((t.c_score - min_c_score) / (max_c_score - min_c_score));
+      }
+      
       floatval_t best_score = -1e20; int best_i = -1;
-      for (auto i = 0; i < scores.size(); ++ i) {
+      for (auto i = 0; i < scores.size(); ++i) {
         if (best_i < 0 || best_score < scores[i]) {
           best_i = i; best_score = scores[i];
         }
       }
-
-      for (auto i = 1; i < inst.size(); ++ i) {
+      
+      for (auto i = 1; i < inst.size(); ++i) {
         (*os) << i << " "
           << forms_alphabet.decode(inst.forms[i]) << "\t"
           << forms_alphabet.decode(inst.forms[i]) << "\t"
@@ -93,11 +119,35 @@ void Pipe::test() {
           << deprels_alphabet.decode(trees[best_i].deprels[i]) << std::endl;
       }
       (*os) << std::endl;
+
+
+      if (os != NULL && (os != &(std::cout))) {
+        delete os; 
+        double score = Utility::execute_script(conf["script"].as<std::string>(), output);
+        result[alpha] = score;
+      }
     }
   }
-  for (auto i = 0; i < alphas.size(); ++ i) {
-    std::ostream* os = ostreams[i];
-    if (os!= &(std::cout) && os != NULL) { delete os; }
+}
+
+void Pipe::test() {
+  if (!load_data(conf["input"].as<std::string>(), dataset, false)) {
+    _ERROR << "[PIP] failed to load input data.";
+    return;
+  }
+
+  build_knowledge();
+  std::vector<std::ostream*> ostreams;
+  
+  std::map<double, double> result;
+  if (conf.count("alpha")) {
+    evaluate(dataset, conf["alpha"].as<double>(), result);
+  } else {
+    evaluate(dataset, -1., result);
+  }
+
+  for (auto& entry : result) {
+    _INFO << "[PIP] test evaluation: " << entry.first << " = " << entry.second;
   }
 }
 
@@ -247,7 +297,7 @@ void Pipe::build_knowledge() {
     VERB_POS.insert(postags_alphabet.encode("VBP"));
     VERB_POS.insert(postags_alphabet.encode("VBZ"));
     VERB_POS.insert(postags_alphabet.encode("VP"));
-    _INFO << "report(cstep): postag knowledge for English is built.";
+    _INFO << "[RPT] (cstep): postag knowledge for English is built.";
   } else if (language == "ch") {
     // Punctuation
     PUNC_POS.insert(postags_alphabet.encode("PU"));
@@ -260,9 +310,9 @@ void Pipe::build_knowledge() {
     VERB_POS.insert(postags_alphabet.encode("VA"));
     VERB_POS.insert(postags_alphabet.encode("VC"));
     VERB_POS.insert(postags_alphabet.encode("VE"));
-    _INFO << "report(cstep): postag knowledge for Chinese is built.";
+    _INFO << "[RPT] (cstep): postag knowledge for Chinese is built.";
   } else {
-    _INFO << "pipe(cstep): unknown language, no knowledge is built.";
+    _INFO << "[PIP] (cstep): unknown language, no knowledge is built.";
   }
 }
 
@@ -371,13 +421,15 @@ void Pipe::learn() {
   if (!conf.count("devel") || !load_data(conf["devel"].as<std::string>(), devel_dataset, false)) {
     _WARN << "[PIP] development data is not loaded.";
   }
-  build_knowledge();
 
+  build_knowledge();
   generate_training_samples();
+
   learner = new Learner(weight, get_algorithm(conf["algorithm"].as<std::string>()));
 
   unsigned n_seen = 0, N = samples.size();
-  double best_score = 0., best_mixed_score = 0.;
+  double best_score = 0., best_mixed_score = 0., best_mixed_alpha;
+
   std::string model_path = FrontEnd::get_model_name("hc_search_cstep", conf);
   std::string model_path_mixed = model_path + ".mixed";
 
@@ -419,18 +471,64 @@ void Pipe::learn() {
 
       learn_one_pair(inst, worst_good_tree, best_bad_tree, n_seen);
       if (n_seen % conf["report_stops"].as<unsigned>() == 0) {
-        _INFO << "[PIP] processed #" << n_seen % N << "/" << n_seen % N << " sample(s).";
+        _INFO << "[PIP] processed #" << n_seen % N << "/" << n_seen / N << " sample(s).";
       }
       if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
+        learner->flush();
+        std::map<double, double> result;
+        evaluate(devel_dataset, -1, result);
 
+        if (result[0.] > best_score) {
+          _INFO << "[PIP] NEW best model (wo/ mix) is achieved, save model to " << model_path;
+          save_model(model_path);
+          best_score = result[0.];
+        }
+
+        auto best = std::max_element(result.begin(), result.end(),
+          [](std::pair<double, double> a, std::pair<double, double> b) {
+          return a.second > b.second;  }
+        );
+        if (best->second > best_mixed_score) {
+          _INFO << "[PIP] NEW best model (w/ mix) is achieved, save model to " << model_path_mixed;
+          save_model(model_path_mixed);
+          best_mixed_score = best->second;
+          best_mixed_alpha = best->first;
+        }
+        _INFO << "[PIP] wo/ mix score: " << result[0.];
+        _INFO << "[PIP] w/ mix score: " << best->second << " alpha = " << best->first;
       }
     }
     _INFO << "[PIP] processed #" << N << " instances.";
     learner->flush();
+    _INFO << "[PIP] n errors: " << learner->errors() << "/" << N;
 
-    _INFO << "[PIP] nr errors: " << learner->errors() << "/" << N;
-    save_model(model_path);
+    std::map<double, double> result;
+    evaluate(devel_dataset, -1, result);
+
+    if (result[0.] > best_score) {
+      _INFO << "[PIP] NEW best model (wo/ mix) is achieved, save model to " << model_path;
+      save_model(model_path);
+      best_score = result[0.];
+    }
+
+    auto best = std::max_element(result.begin(), result.end(),
+      [](std::pair<double, double> a, std::pair<double, double> b) {
+      return a.second > b.second;  }
+    );
+    if (best->second > best_mixed_score) {
+      _INFO << "[PIP] NEW best model (w/ mix) is achieved, save model to " << model_path_mixed;
+      save_model(model_path_mixed);
+      best_mixed_score = best->second;
+      best_mixed_alpha = best->first;
+    }
+    _INFO << "[PIP] wo/ mix score: " << result[0.];
+    _INFO << "[PIP] w/ mix score: " << best->second << " alpha = " << best->first;
   }
+
+  _INFO << "[PIP] finish training";
+  _INFO << "[PIP] best score: " << best_score;
+  _INFO << "[PIP] best mixed score: " << best_mixed_score;
+  _INFO << "[PIP] best mixed alpha: " << best_mixed_alpha;
 }
 
 void Pipe::learn_one_pair(const CoNLLXDependency* inst,

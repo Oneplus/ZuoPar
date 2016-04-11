@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <map>
 #include <boost/tuple/tuple.hpp>
 #include <boost/program_options.hpp>
 #include "types/dependency.h"
@@ -65,13 +66,13 @@ public:
   //! The deallocator
   ~Pipe();
 
-  //!
-  void test();
-
-  //! special for learn2
-  void learn();
+  void test();    // Perform testing
+  void learn();   // Perform learning
 private:
-  //! The setup precedure for phase(2)
+  //! Perform evaluation
+  void evaluate(std::vector<RerankingInstance>& ds, double set_alpha,
+    std::map<double, double>& result);
+  
   bool load_model(const std::string& cstep_model_path);
 
   void save_model(const std::string& cstep_model_path);

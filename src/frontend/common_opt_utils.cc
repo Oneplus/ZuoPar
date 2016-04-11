@@ -20,7 +20,7 @@ po::options_description build_learn_optparser(const std::string& usage) {
     ("update", po::value<std::string>()->default_value("early"),
     "Specify the update strategy.\n"
     " naive - no update\n"
-    " early - early update (Collins 04)"
+    " early - early update (Collins 04)\n"
     " max - max violation (Huang 12)")
     ("report_stops", po::value<unsigned>()->default_value(1000), "The report frequency.")
     ("evaluate_stops", po::value<unsigned>()->default_value(5000), "The evaluation frequency.")

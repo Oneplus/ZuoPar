@@ -9,7 +9,6 @@
 #define __NAME__ "HC-search depparser, C-step"
 #define __EXE__ "./bin/experimental/hc_depparser_cstep"
 
-// namespace fe = ZuoPar::FrontEnd;
 namespace cstep = ZuoPar::Experimental::HCSearchDependencyParser::CStep;
 namespace po = boost::program_options;
 
@@ -42,7 +41,7 @@ int learn(int argc, char** argv) {
     std::cerr << opt << std::endl;
     return 1;
   }
-  ZuoPar::FrontEnd::show_learn_options(vm);
+  cstep::show_learn_options(vm);
   cstep::Pipe pipe(vm);
   pipe.learn();
   return 0;
@@ -77,7 +76,7 @@ int test(int argc, char** argv) {
     std::cerr << opt << std::endl;
     return 1;
   }
-  ZuoPar::FrontEnd::show_test_options(vm);
+  cstep::show_test_options(vm);
   cstep::Pipe pipe(vm);
   pipe.test();
   return 0;

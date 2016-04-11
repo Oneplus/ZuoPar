@@ -38,6 +38,18 @@ po::options_description build_test_optparser(const std::string& usage) {
   return optparser;
 }
 
+void show_learn_options(const boost::program_options::variables_map& vm) {
+  FrontEnd::show_learn_options(vm);
+  _INFO << "[RPT] ranker = " << vm["ranker"].as<std::string>();
+  _INFO << "[RPT] language = " << vm["language"].as<std::string>();
+  _INFO << "[RPT] evaluation = " << vm["evaluation"].as<std::string>();
+}
+
+void show_test_options(const boost::program_options::variables_map& vm) {
+  FrontEnd::show_test_options(vm);
+  _INFO << "[RPT] alpha = " << vm["alpha"].as<std::string>();
+}
+
 } //  namespace cstep
 } //  namespace hcsearchdependencyparser
 } //  namespace experimental
