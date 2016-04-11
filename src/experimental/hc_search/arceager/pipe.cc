@@ -39,7 +39,7 @@ int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
 
   if (labeled) {
     std::tuple<int, int, int> eval;
-    if (evaluate_strategy == DependencyParserUtils::kChen14en) {
+    if (conf["language"].as<std::string>() == "en") {
       eval = DependencyParserUtils::evaluate_chen14en(forms, postags,
           instance.heads, instance.deprels, heads, deprels, true);
     } else {
@@ -50,7 +50,7 @@ int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
     return std::get<0>(eval) - std::get<2>(eval);
   } else {
     std::tuple<int, int> eval;
-    if (evaluate_strategy == DependencyParserUtils::kChen14en) {
+    if (conf["language"].as<std::string>() == "en") {
       eval = DependencyParserUtils::evaluate_chen14en(
           forms, postags, instance.heads, heads, true);
     } else {

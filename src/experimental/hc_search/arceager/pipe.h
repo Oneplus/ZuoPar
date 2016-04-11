@@ -27,7 +27,6 @@ public:
 private:
   void evaluate(const std::vector<CoNLLXDependency>& ds, EvaluationStatistics& stat);
   std::string language;
-  DependencyParser::DependencyParserUtils::EvaluationStrategy evaluate_strategy;
 
 private:
   int wrong(const CoNLLXDependency& instance, bool labeled,

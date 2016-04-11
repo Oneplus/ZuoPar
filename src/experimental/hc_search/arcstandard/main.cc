@@ -79,6 +79,7 @@ int prepare(int argc, char** argv) {
   }
   hstep::show_prepare_options(vm);
   hstep::Pipe pipe(vm);
+  pipe.set_signature("hc_depparser_hstep_arcstandard");
   pipe.prepare();
   return 0;
 }
@@ -108,7 +109,7 @@ int evaluate(int argc, char** argv) {
     std::cerr << optparser << std::endl;
     return 1;
   }
-  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model", "script" })) {
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model" })) {
     std::cerr << optparser << std::endl;
     return 1;
   }

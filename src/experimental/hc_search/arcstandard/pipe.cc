@@ -38,7 +38,7 @@ int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
 
   if (labeled) {
     std::tuple<int, int, int> eval;
-    if (evaluate_strategy == DependencyParserUtils::kChen14en) {
+    if (conf["language"].as<std::string>() == "en") {
       eval = DependencyParserUtils::evaluate_chen14en(forms, postags,
           instance.heads, instance.deprels, heads, deprels, true);
     } else {
@@ -49,7 +49,7 @@ int Pipe::wrong(const CoNLLXDependency& instance, bool labeled,
     return std::get<0>(eval) - std::get<2>(eval);
   } else {
     std::tuple<int, int> eval;
-    if (evaluate_strategy == DependencyParserUtils::kChen14en) {
+    if (conf["language"].as<std::string>() == "en") {
       eval = DependencyParserUtils::evaluate_chen14en(
           forms, postags, instance.heads, heads, true);
     } else {
@@ -173,10 +173,13 @@ void Pipe::prepare() {
   std::ostream* os = IO::get_ostream(output);
 
   for (const CoNLLXDependency& instance : dataset) {
+    std::vector<as::Action> actions;
+    as::ActionUtils::get_oracle_actions(instance, actions);
+
     int max_actions = instance.size() * 2 - 1;
     as::State init_state(&instance);
     as::Decoder::const_decode_result_t result = decoder->decode(init_state,
-      std::vector<as::Action>(), max_actions);
+      actions, max_actions);
 
     std::vector<as::State*> final_results;
     decoder->get_results_in_beam(final_results, max_actions);
@@ -210,9 +213,12 @@ void Pipe::prepare() {
 void Pipe::evaluate(const std::vector<CoNLLXDependency>& ds, EvaluationStatistics& stat) {
   for (const CoNLLXDependency& instance : ds) {
     int max_actions = instance.size() * 2 - 1;
+    std::vector<as::Action> actions;
+    as::ActionUtils::get_oracle_actions(instance, actions);
+
     as::State init_state(&instance);
     as::Decoder::const_decode_result_t result = decoder->decode(init_state,
-      std::vector<as::Action>(), max_actions);
+      actions, max_actions);
 
     std::vector<as::State*> final_results;
     decoder->get_results_in_beam(final_results, max_actions);

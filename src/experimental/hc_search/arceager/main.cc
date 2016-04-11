@@ -110,7 +110,7 @@ int evaluate(int argc, char** argv) {
     std::cerr << optparser << std::endl;
     return 1;
   }
-  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model", "script" })) {
+  if (!ZuoPar::FrontEnd::check_required_options(vm, { "input", "model" })) {
     std::cerr << optparser << std::endl;
     return 1;
   }
