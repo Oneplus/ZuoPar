@@ -36,96 +36,87 @@ Pipe::~Pipe() {
 
 
 void Pipe::evaluate(std::vector<RerankingInstance>& ds, double set_alpha, std::map<double, double>& result) {
-  std::string output = FrontEnd::get_output_name("hc_s", conf);
+  std::string output = FrontEnd::get_output_name("hc_search_cstep", conf);
 
-  for (RerankingInstance& data : ds) {
+  std::vector<floatval_t> max_h_scores(ds.size());
+  std::vector<floatval_t> min_h_scores(ds.size());
+  std::vector<floatval_t> max_c_scores(ds.size());
+  std::vector<floatval_t> min_c_scores(ds.size());
+
+  for (unsigned i = 0; i < ds.size(); ++i) {
+    RerankingInstance& data = ds[i];
     CoNLLXDependency& inst = data.instance;
     std::vector<RerankingTree>& trees = data.trees;
-    std::vector<floatval_t> scores(trees.size(), 0.);
 
     floatval_t max_h_score = 0, max_c_score = 0;
     floatval_t min_h_score = 0, min_c_score = 0;
-    for (auto i = 0; i < trees.size(); ++ i) {
-      auto& t = trees[i];
+
+    for (auto j = 0; j < trees.size(); ++j) {
+      auto& t = trees[j];
       ScoreContext ctx(inst.size(), inst.forms, inst.postags, t.heads, t.deprels);
       t.c_score = weight->score(ctx, false);
-      if (i == 0 || max_h_score < t.h_score) { max_h_score = t.h_score; }
-      if (i == 0 || min_h_score > t.h_score) { min_h_score = t.h_score; }
-      if (i == 0 || max_c_score < t.c_score) { max_c_score = t.c_score; }
-      if (i == 0 || min_c_score > t.c_score) { min_c_score = t.c_score; }
+      if (j == 0 || max_h_score < t.h_score) { max_h_score = t.h_score; }
+      if (j == 0 || min_h_score > t.h_score) { min_h_score = t.h_score; }
+      if (j == 0 || max_c_score < t.c_score) { max_c_score = t.c_score; }
+      if (j == 0 || min_c_score > t.c_score) { min_c_score = t.c_score; }
+    }
+    max_h_scores[i] = max_h_score;
+    min_h_scores[i] = min_h_score;
+    max_c_scores[i] = max_c_score;
+    min_c_scores[i] = min_c_score;
+  }
+  
+  double a_start = 0., a_end = 0.;
+  if (set_alpha < 0.) { a_start = 0.; a_end = 1.; }
+  else { a_start = set_alpha; a_end = set_alpha; }
+
+  for (double a = a_start; a <= a_end; a += 0.005) {
+    floatval_t alpha = a;
+    std::ostream* os = IO::get_ostream(output);
+
+    std::vector<int> best_ids(ds.size());
+    for (unsigned i = 0; i < ds.size(); ++i) {
+      RerankingInstance& data = ds[i];
+      std::vector<RerankingTree>& trees = data.trees;
+      std::vector<floatval_t> scores(trees.size(), 0.);
+
+      for (auto j = 0; j < trees.size(); ++j) {
+        auto& t = trees[j];
+        scores[j] =
+          alpha * ((t.h_score - min_h_scores[i]) / (max_h_scores[i] - min_h_scores[i])) +
+          (1 - alpha) * ((t.c_score - min_c_scores[i]) / (max_c_scores[i] - min_c_scores[i]));
+      }
+
+      floatval_t best_score = -1e20; int best_j = -1;
+      for (auto j = 0; j < scores.size(); ++j) {
+        if (best_j < 0 || best_score < scores[j]) {
+          best_j = j; best_score = scores[j];
+        }
+      }
+      best_ids[i] = best_j;
     }
 
-    if (set_alpha < 0.) {
-      for (double a = 0.; a <= 1.; a += 0.005) {
-        floatval_t alpha = a;
-        std::ostream* os = IO::get_ostream(output);
+    for (unsigned i = 0; i < ds.size(); ++i) {
+      RerankingInstance& data = ds[i];
+      CoNLLXDependency& inst = data.instance;
+      std::vector<RerankingTree>& trees = data.trees;
 
-        for (auto i = 0; i < trees.size(); ++i) {
-          auto& t = trees[i];
-          scores[i] = alpha* ((t.h_score - min_h_score) / (max_h_score - min_h_score)) +
-            (1 - alpha)* ((t.c_score - min_c_score) / (max_c_score - min_c_score));
-        }
-
-        floatval_t best_score = -1e20; int best_i = -1;
-        for (auto i = 0; i < scores.size(); ++i) {
-          if (best_i < 0 || best_score < scores[i]) {
-            best_i = i; best_score = scores[i];
-          }
-        }
-
-        for (auto i = 1; i < inst.size(); ++i) {
-          (*os) << i << " "
-            << forms_alphabet.decode(inst.forms[i]) << "\t"
-            << forms_alphabet.decode(inst.forms[i]) << "\t"
-            << postags_alphabet.decode(inst.postags[i]) << "\t"
-            << postags_alphabet.decode(inst.postags[i]) << "\t"
-            << "_\t"
-            << trees[best_i].heads[i] << "\t"
-            << deprels_alphabet.decode(trees[best_i].deprels[i]) << std::endl;
-        }
-        (*os) << std::endl;
-
-        if (os != NULL && (os != &(std::cout))) {
-          delete os;
-          double score = Utility::execute_script(conf["script"].as<std::string>(), output);
-          result[alpha] = score;
-        }
-      }
-    } else {
-      floatval_t alpha = set_alpha;
-      std::ostream* os = IO::get_ostream(output);
-      
-      for (auto i = 0; i < trees.size(); ++i) {
-        auto& t = trees[i];
-        scores[i] = alpha* ((t.h_score - min_h_score) / (max_h_score - min_h_score)) +
-          (1 - alpha)* ((t.c_score - min_c_score) / (max_c_score - min_c_score));
-      }
-      
-      floatval_t best_score = -1e20; int best_i = -1;
-      for (auto i = 0; i < scores.size(); ++i) {
-        if (best_i < 0 || best_score < scores[i]) {
-          best_i = i; best_score = scores[i];
-        }
-      }
-      
-      for (auto i = 1; i < inst.size(); ++i) {
-        (*os) << i << " "
-          << forms_alphabet.decode(inst.forms[i]) << "\t"
-          << forms_alphabet.decode(inst.forms[i]) << "\t"
-          << postags_alphabet.decode(inst.postags[i]) << "\t"
-          << postags_alphabet.decode(inst.postags[i]) << "\t"
+      for (auto j = 1; j < inst.size(); ++j) {
+        (*os) << j << " "
+          << forms_alphabet.decode(inst.forms[j]) << "\t"
+          << forms_alphabet.decode(inst.forms[j]) << "\t"
+          << postags_alphabet.decode(inst.postags[j]) << "\t"
+          << postags_alphabet.decode(inst.postags[j]) << "\t"
           << "_\t"
-          << trees[best_i].heads[i] << "\t"
-          << deprels_alphabet.decode(trees[best_i].deprels[i]) << std::endl;
+          << trees[best_ids[i]].heads[j] << "\t"
+          << deprels_alphabet.decode(trees[best_ids[i]].deprels[j]) << std::endl;
       }
       (*os) << std::endl;
-
-
-      if (os != NULL && (os != &(std::cout))) {
-        delete os; 
-        double score = Utility::execute_script(conf["script"].as<std::string>(), output);
-        result[alpha] = score;
-      }
+    }
+    if (os != NULL && (os != &(std::cout))) {
+      delete os;
+      double score = Utility::execute_script(conf["script"].as<std::string>(), output);
+      result[alpha] = score;
     }
   }
 }
