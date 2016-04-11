@@ -12,7 +12,7 @@ parser = OptionParser(usage)
 parser.add_option("--conllx", dest="conllx", default=False, action="store_true", help="specify the conllx data format.")
 parser.add_option("--punctuation", dest="punctuation", default=False, action="store_true", help="specify to include punctuation in evaluation.")
 parser.add_option("--ignore", dest="ignore", default=None, help="ignore form")
-parser.add_option("--language", dest="language", help="specify language")
+parser.add_option("--language", dest="language", help="specify language [en,ch,universal,chen2014en,chen2014ch]")
 parser.add_option("--quite", dest="quite", default=False, action="store_true", help="specify not out details.")
 opts, args = parser.parse_args()
 
@@ -52,7 +52,10 @@ else:
     sys.exit(1)
 
 reference_dataset = open(args[0], "r").read().strip().split("\n\n")
-answer_dataset = open(args[1], "r").read().strip().split("\n\n")
+if args[1] != '-':
+    answer_dataset = open(args[1], "r").read().strip().split("\n\n")
+else:
+    answer_dataset = sys.stdin.read().strip().split('\n\n')
 
 assert len(reference_dataset) == len(answer_dataset), "Number of instance unequal."
 

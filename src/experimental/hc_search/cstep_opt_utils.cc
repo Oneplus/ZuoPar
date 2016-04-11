@@ -33,8 +33,7 @@ po::options_description build_learn_optparser(const std::string& usage) {
 po::options_description build_test_optparser(const std::string& usage) {
   po::options_description optparser = dp::build_test_optparser(usage);
   optparser.add_options()
-    ("alpha", po::value<std::string>()->default_value("0"),
-     "the interpolation on h-step and c-step score.");
+    ("alpha", po::value<double>()->default_value(0.), "the interpolation on h-step and c-step score.");
   return optparser;
 }
 
@@ -47,7 +46,7 @@ void show_learn_options(const boost::program_options::variables_map& vm) {
 
 void show_test_options(const boost::program_options::variables_map& vm) {
   FrontEnd::show_test_options(vm);
-  _INFO << "[RPT] alpha = " << vm["alpha"].as<std::string>();
+  _INFO << "[RPT] alpha = " << vm["alpha"].as<double>();
 }
 
 } //  namespace cstep

@@ -22,7 +22,10 @@ using DependencyParser::DependencyParserUtils;
 
 Pipe::Pipe(const boost::program_options::variables_map& vm)
   : weight(new Weight), learner(NULL), conf(vm) {
-  language = vm["language"].as<std::string>();
+  if (vm.count("language")) {
+    // In test, language should be overwrite when model is loaded.
+    language = vm["language"].as<std::string>();
+  }
 
   if (conf.count("model") && load_model(conf["model"].as<std::string>())) {
     _INFO << "[RPT] (cstep.learn) model is loaded.";
@@ -138,7 +141,7 @@ void Pipe::test() {
   }
 
   for (auto& entry : result) {
-    _INFO << "[PIP] test evaluation: " << entry.first << " = " << entry.second;
+    _INFO << "[PIP] test evaluation: alpha (" << entry.first << ") = " << entry.second;
   }
 }
 
@@ -466,6 +469,7 @@ void Pipe::learn() {
       }
       if (n_seen % conf["evaluate_stops"].as<unsigned>() == 0) {
         learner->flush();
+        _INFO << "[PIP] start evaluating.";
         std::map<double, double> result;
         evaluate(devel_dataset, -1, result);
 
@@ -477,7 +481,7 @@ void Pipe::learn() {
 
         auto best = std::max_element(result.begin(), result.end(),
           [](std::pair<double, double> a, std::pair<double, double> b) {
-          return a.second > b.second;  }
+          return a.second < b.second;  }
         );
         if (best->second > best_mixed_score) {
           _INFO << "[PIP] NEW best model (w/ mix) is achieved, save model to " << model_path_mixed;
@@ -491,6 +495,7 @@ void Pipe::learn() {
     }
     _INFO << "[PIP] processed #" << N << " instances.";
     learner->flush();
+    _INFO << "[PIP] start evaluating.";
     _INFO << "[PIP] n errors: " << learner->errors() << "/" << N;
 
     std::map<double, double> result;
@@ -504,7 +509,7 @@ void Pipe::learn() {
 
     auto best = std::max_element(result.begin(), result.end(),
       [](std::pair<double, double> a, std::pair<double, double> b) {
-      return a.second > b.second;  }
+      return a.second < b.second;  }
     );
     if (best->second > best_mixed_score) {
       _INFO << "[PIP] NEW best model (w/ mix) is achieved, save model to " << model_path_mixed;
