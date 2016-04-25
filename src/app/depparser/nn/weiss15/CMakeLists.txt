@@ -3,36 +3,30 @@ include_directories (
 
 add_executable (nndepparser_weiss15
     main.cc
+    pipe.h
     pipe.cc
+    opt_utils.h
     opt_utils.cc
+    classifier.h
     classifier.cc
+    model.h
     model.cc
+    search.h
     search.cc
     ${SOURCE_DIR}/app/depparser/nn/extractor.cc
     ${SOURCE_DIR}/app/depparser/nn/decoder.cc
     ${SOURCE_DIR}/app/depparser/nn/dataset.cc
-    ${SOURCE_DIR}/app/depparser/arcstandard/action.cc
-    ${SOURCE_DIR}/app/depparser/arcstandard/action_utils.cc
-    ${SOURCE_DIR}/app/depparser/arcstandard/state.cc
-    ${SOURCE_DIR}/frontend/common_opt_utils.cc
-    ${SOURCE_DIR}/engine/token_alphabet.cc
-    ${SOURCE_DIR}/utils/logging.cc
-    ${SOURCE_DIR}/utils/io/stream.cc
-    ${SOURCE_DIR}/utils/io/dataset/dependency.cc
-    ${SOURCE_DIR}/utils/io/instance/dependency.cc
-    ${SOURCE_DIR}/utils/io/instance/csv.cc
     )
 
 target_link_libraries (nndepparser_weiss15
-    boost_program_options
-    boost_log_setup
-    boost_log
-    boost_regex
-    boost_serialization
-    boost_thread
-    boost_timer
-    boost_system
+    _zuo_alphabet
+    _zuo_frontend
+    _zuo_io
+    _zuo_utils
+    _zuo_depparser_arcstandard
     openblas
     lapack
     icuuc
-    pthread)
+    pthread
+    ${LIBS}
+    )

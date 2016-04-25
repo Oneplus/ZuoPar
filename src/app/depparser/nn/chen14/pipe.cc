@@ -410,7 +410,7 @@ void Pipe::generate_training_samples() {
     get_cluster_from_dependency(dependency, cluster4, cluster6, cluster);
 
     std::vector<Action> oracle_actions;
-    ActionUtils::get_oracle_actions2(dependency, oracle_actions);
+    ActionUtils::get_oracle_actions(dependency, oracle_actions);
 
     std::vector<State> states(oracle_actions.size()+ 1);
     states[0].copy(State(&dependency));

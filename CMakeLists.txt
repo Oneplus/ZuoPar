@@ -13,10 +13,10 @@ endif()
 
 set(Boost_REALPATH ON)
 if(WIN32)
-    find_package(Boost COMPONENTS regex program_options serialization log_setup log thread system filesystem date_time chrono locale REQUIRED)
+    find_package(Boost COMPONENTS regex program_options serialization log_setup log thread system filesystem date_time timer chrono locale REQUIRED)
 else()
     add_definitions (-DBOOST_LOG_DYN_LINK)
-    find_package(Boost COMPONENTS regex program_options serialization log_setup log thread system REQUIRED)
+    find_package(Boost COMPONENTS regex program_options serialization log_setup log thread system timer REQUIRED)
 endif()
 
 # look for SparseHash

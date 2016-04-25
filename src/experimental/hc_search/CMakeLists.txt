@@ -12,6 +12,8 @@ add_executable (hc_depparser_cstep
     score_context.cc
     cstep_opt_utils.h
     cstep_opt_utils.cc
+    ${SOURCE_DIR}/app/depparser/opt_utils.h
+    ${SOURCE_DIR}/app/depparser/opt_utils.cc
     )
 
 target_link_libraries (hc_depparser_cstep _zuo_alphabet _zuo_frontend _zuo_io _zuo_utils ${LIBS} icuuc)
